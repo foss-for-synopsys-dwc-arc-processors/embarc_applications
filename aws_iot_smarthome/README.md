@@ -24,6 +24,8 @@ This application is designed to show how to connect only 1 EMSK and [AWS IoT Clo
 Prepare you own AWS IoT account, and create required thing.
 Before compiling this example, you need to change macro **AWS_IOT_MQTT_HOST** in `src/aws_iot_config.h` to your own aws iot cloud mqtt host, and create an aws iot thing named **SmartHome**, you can refer to [Gettting Started with AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/iot-gs.html) for details, and generate certificates and download them and rename them to the ones under `src/cert/smarthome/`.
 
+We also provided an application note about [Using a Smart Home Iot Application with EMSK](https://www.embarc.org/pdf/embARC_appnote_how_to_use_smart_home_iot.pdf).
+
 Copy `src/cert/` folder to root folder of the EMSK SD card, in SD card, the cert folder should be `cert/`.
 
 The hardware resources are allocated as following table.
