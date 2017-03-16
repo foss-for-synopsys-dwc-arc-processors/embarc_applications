@@ -86,6 +86,7 @@
  *     ![ScreenShot of embARC IoT Web App for Smart Home Demo](/doc/documents/pic/images/example/emsk/emsk_freertos_iot_aws_smarthome_demo_webapp.jpg)
  *
  * ### Extra Comments
+ *     [Related Application Note](https://www.embarc.org/pdf/embARC_appnote_how_to_use_smart_home_iot.pdf)
  *
  */
 
