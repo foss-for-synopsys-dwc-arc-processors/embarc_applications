@@ -75,7 +75,7 @@ Here take **EMSK2.2 - ARC EM7D** with Metaware Toolset for example to show how t
 
 2. To build this applicaiton, select the proper board version, core configuration and build with selected toolchain using this command `gmake BD_VER=22 CUR_CORE=arcem7d TOOLCHAIN=mw` :
   ```
-  embarc_osp\embarc_applications\aws_iot_smarthome\src>gmake BD_VER=22 CUR_CORE=arcem7d TOOLCHAIN=mw
+  embarc_osp\application\aws_iot_smarthome\src>gmake BD_VER=22 CUR_CORE=arcem7d TOOLCHAIN=mw
   "Creating Directory : " obj_emsk_22/mw_arcem7d
   "Compiling          : " main.c
   "Compiling          : " ../../../board/board.c
