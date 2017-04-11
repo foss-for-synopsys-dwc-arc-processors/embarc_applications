@@ -333,14 +333,15 @@ int main(void)
 		rc = aws_iot_shadow_connect(&mqttClient, &scp);
 
 		if (SUCCESS != rc) {
+			IOT_ERROR("Failed to connect to AWS_IOT_MQTT_HOST: %s", sp.pHost);
 			IOT_ERROR("Shadow Connection Error %d", rc);
-			IOT_INFO("\r\nPlease check the following things:")
 			IOT_INFO("\r\nPlease check the following things:")
 			IOT_INFO("1. Whether the AWS_IOT_MQTT_HOST in aws_iot_config.h is changed according to your aws account.");
 			IOT_INFO("2. Whether the rootCA, clientCRT and clientKey files are replaced according to your aws account.");
 			IOT_INFO("3. Whether the modified rootCA(%s), clientCRT(%s) and clientKey(%s) files are copied to the right folder(%s) in your SDCard.",\
 			 cafileName, clientCRTName, clientKeyName, CERT_ROOTDIR);
 			IOT_INFO("4. If everything is modified and setup correctly, just wait for a while for connection retry.\r\n");
+			vTaskDelay(1000);
 			continue;
 		} else {
 			IOT_INFO("Shadow Connection OK");

@@ -76,16 +76,24 @@ Here take **EMSK2.2 - ARC EM7D** with Metaware Toolset for example to show how t
 2. To build this applicaiton, select the proper board version, core configuration and build with selected toolchain using this command `gmake BD_VER=22 CUR_CORE=arcem7d TOOLCHAIN=mw` :
   ```
   embarc_osp\application\aws_iot_smarthome\src>gmake BD_VER=22 CUR_CORE=arcem7d TOOLCHAIN=mw
-  "Creating Directory : " obj_emsk_22/mw_arcem7d
-  "Compiling          : " main.c
-  "Compiling          : " ../../../board/board.c
-  "Creating Directory : " obj_emsk_22/mw_arcem7d/emsk
-  "Compiling          : " ../../../device/designware/iic/dw_iic.c
-  "Compiling          : " ../../../device/designware/spi/dw_spi.c
+  "Creating Directory    : " obj_emsk_22/mw_arcem7d/application/.
+  "Creating Directory    : " obj_emsk_22/mw_arcem7d/arc
   ... ...
-  "Archiving          : " obj_emsk_22/mw_arcem7d/liblibclib.a
-  "Archiving          : " obj_emsk_22/mw_arcem7d/libembarc.a
-  "Linking            : " obj_emsk_22/mw_arcem7d/freertos_iot_aws_smarthomedemo_mw_arcem7d.elf
+  "Assembling            : " ../../../../arc/startup/arc_startup.s
+  "Compiling             : " ../../../../arc/startup/arc_cxx_support.c
+  "Generating Linkfile   : " obj_emsk_22/mw_arcem7d/linker_mw.ldf
+  "Compiling             : " main.c
+  "Compiling             : " ../../../../device/designware/spi/dw_spi.c
+  "Compiling             : " ../../../../device/designware/iic/dw_iic.c
+  "Compiling             : " ../../../../device/designware/uart/dw_uart.c
+  "Compiling             : " ../../../../device/microchip/mrf24g/mrf24g_adapter.c
+  ... ...
+  "Archiving             : " obj_emsk_22/mw_arcem7d/libmidcommon.a
+  "Archiving             : " obj_emsk_22/mw_arcem7d/libmidaws.a
+  "Archiving             : " obj_emsk_22/mw_arcem7d/libmidlwip.a
+  "Archiving             : " obj_emsk_22/mw_arcem7d/libmidfatfs.a
+  "Archiving             : " obj_emsk_22/mw_arcem7d/libembarc.a
+  "Linking               : " obj_emsk_22/mw_arcem7d/freertos_iot_aws_smarthomedemo_mw_arcem7d.elf
   ```
   All object files are generated under the `obj_emsk_22/mw_arcem7d` folder according to your choice.
   The application elf file is also generated in that folder.
