@@ -86,7 +86,8 @@
  *     ![ScreenShot of embARC IoT Web App for Smart Home Demo](/doc/documents/pic/images/example/emsk/emsk_freertos_iot_aws_smarthome_demo_webapp.jpg)
  *
  * ### Extra Comments
- *     [Related Application Note](https://www.embarc.org/pdf/embARC_appnote_how_to_use_smart_home_iot.pdf)
+ *     - [Related Application Note](https://www.embarc.org/pdf/embARC_appnote_how_to_use_smart_home_iot.pdf)
+ *     - You may need to wait several times for connecting to aws iot cloud if everything is setup correctly.
  *
  */
 
@@ -542,7 +543,9 @@ int main(void)
 			IOT_INFO("\r\nPlease check the following things:")
 			IOT_INFO("1. Whether the AWS_IOT_MQTT_HOST in aws_iot_config.h is changed according to your aws account.");
 			IOT_INFO("2. Whether the rootCA, clientCRT and clientKey files are replaced according to your aws account.");
-			IOT_INFO("3. Whether the modified rootCA, clientCRT and clientKey files are copied to your SDCard.\r\n");
+			IOT_INFO("3. Whether the modified rootCA(%s), clientCRT(%s) and clientKey(%s) files are copied to the right folder(%s) in your SDCard.",\
+			 cafileName, clientCRTName, clientKeyName, CERT_ROOTDIR);
+			IOT_INFO("4. If everything is modified and setup correctly, just wait for a while for connection retry.\r\n");
 			continue;
 		} else {
 			IOT_INFO("Shadow Connection OK");
