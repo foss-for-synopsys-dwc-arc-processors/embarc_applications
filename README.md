@@ -21,4 +21,4 @@ Here are steps to use this repo.
         * This smarthome demo implements 3 different nodes to talk to AWS IoT Cloud.
 
 ## How to contribute to it
-We welcome embARC Applications community contributions. Please check out the Contributing to embARC OSP for guidelines on how to proceed. Users participating in the embARC Community and its sub-projects codebases and issue trackers are expected to follow the embARC code of conduct.
+We welcome embARC Applications community contributions. Please check out the [Contributing to embARC OSP](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/blob/master/.github/CONTRIBUTING.md) for guidelines on how to proceed. Users participating in the embARC Community and its sub-projects codebases and issue trackers are expected to follow the [embARC code of conduct](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/blob/master/.github/CODE_OF_CONDUCT.md).
