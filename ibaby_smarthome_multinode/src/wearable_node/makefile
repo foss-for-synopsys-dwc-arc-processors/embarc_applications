@@ -1,5 +1,5 @@
 # Application name
-APPL ?= iBaby_wearable_node
+APPL ?= wearable_node
 
 # Selected OS
 OS_SEL ?= liteos
@@ -19,7 +19,7 @@ STACKSZ ?= 81920
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../../../..
+EMBARC_ROOT = ../../../../..
 
 MID_SEL = common lwip-contrib wakaama fatfs lwip
 

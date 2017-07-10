@@ -1,62 +1,45 @@
-# AWS IoT Smarthome Application
-This application is designed to show how to connect 3 EMSKs and [AWS IoT Cloud](https://aws.amazon.com/iot/?nc1=h_ls) using embARC. The connection between EMSK and AWS IoT Cloud is secured by TLS.
+# iBaby Smarthome Application
+This application is designed to show how to connect 1 or more EMSKs and iBaby Smarthome Gateway using embARC. The connection between EMSK and Gateway is based on LwM2M protocol. All iBaby nodes indirectly interact with AWS IoT through the Gateway.
 
 ## Hardware and Software Setup
 ### Required Hardware
-- 3 [DesignWare ARC EM Starter Kit(EMSK)](https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit)
-- 3 [Digilent PMOD WiFi(MRF24WG0MA)](http://store.digilentinc.com/pmodwifi-wifi-interface-802-11g/)
-- 1 [Digilent PMOD TMP2](http://store.digilentinc.com/pmod-tmp2-temperature-sensor/)
-- 3 SD Card
+- 1 [DesignWare ARC EM Starter Kit(EMSK)](https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit)
+- 1 [Digilent PMOD WiFi(MRF24WG0MA)](http://store.digilentinc.com/pmodwifi-wifi-interface-802-11g/)
+- 1 [Acceleration sensor MPU6050](http://store.digilentinc.com/pmod-tmp2-temperature-sensor/)
+- 1 [Heartrate sensor MAX30102](http://store.digilentinc.com/pmod-tmp2-temperature-sensor/)
+- 1 [Temperature sensor MLX90614](http://store.digilentinc.com/pmod-tmp2-temperature-sensor/)
+- 1 SD Card
 - WiFi Hotspot(SSID:**embARC**, Password:**qazwsxedc**, WPA/WPA2 encypted)
 
 ### Required Software
 - Metaware or ARC GNU Toolset
 - Serial port terminal, such as putty, tera-term or minicom
+- iBaby Smarthome Gateway
+- iBaby Freeboard UI
 
 ### Hardware Connection
-1. EMSK 1 simulate **frontdoor** node, it will publish frontdoor lock status and temperature sensor value to AWS IoT Cloud.
-   - Connect PMOD WiFi to J5, connect PMOD TMP2 to J2.
-2. EMSK 2 simulate **livingroom** node, it will publish livingroom lights status to AWS IoT Cloud.
-   - Connect PMOD WiFi to J5.
-2. EMSK 2 simulate **kitchen** node, it will publish kitchen lights status to AWS IoT Cloud.
-   - Connect PMOD WiFi to J5.
-3. Configure your EMSKs with proper core configuration.
+1. EMSK 1 implement **wearable** node, as an intelligent foot ring for baby, it will publish baby's status to AWS IoT Cloud via the Gateway, including body temperature, heartrate, sleep-wake state, motion intensity and some warning information. We can view all data on the Freeboard UI.
+   - Connect PMOD WiFi to J5, connect 3 sensor modules to J4.
+2. Configure your EMSKs with proper core configuration.
 
 ## User Manual
 ### Before running this application
-Similiar to the [AWS IoT Smarthome Application - Single Node](aws_iot_smarthome/README.md), you need to create 3 different things for different EMSK nodes and generate the certs for different nodes, and modify specific `aws_iot_config.h` for different nodes.
+Firstly, you need a AWS account, and create several things for ibaby nodes, generate and save the certs for different nodes, and modify specific `config.js` for different nodes.
 
-|  EMSK Simulated Node      |    AWS IoT Thing      |     Source Folder      |          Cert Folder                |
-| ------------------------- | --------------------- | ---------------------- | ----------------------------------- |
-|      frontdoor            |   frontdoor           | src/frontDoor          | src/cert/frontdoor                  |
-|      kitchen              |   kitchen             | src/kitchen            | src/cert/kitchen                    |
-|      livingroom           |   livingRoom          | src/livingRoom         | src/cert/livingRoom                 |
+Secondly, run the iBaby Smarthome Gateway, open the browser and type IP address of the Gateway to access user interface.
 
-Copy `src/cert/` folder to root folder of the EMSK SD card, in SD card, the cert folder should be `cert/`.
+|  EMSK Implemented Node   |    AWS IoT Thing      |     Source Folder      |
+| ------------------------ | --------------------- | ---------------------- |
+|      wearable node       |        ibaby          |   src/wearable_node    |
 
 The hardware resources are allocated as following table.
 
-|  Hardware Resource  |            Represent                                          |
+|  Hardware Resource  |            Function                                           |
 | ------------------- | ------------------------------------------------------------- |
-|  BUTTON R           | Livingroom Lights Control                                     |
-|  LED 0-1            | Livingroom Lights Status(On or Off)                           |
-|  BUTTON L           | Kitchen Lights Control                                        |
-|  LED 2-3            | Kitchen Lights Status(On or Off)                              |
-|  BUTTON X           | Front Door Lock Control                                       |
-|  LED 4-5            | Front Door Lock Status(On or Off)                             |
-|  LED 7              | WiFi connection status(On for connected, Off for not)         |
-|  LED X              | Node working status(toggling in 2s period if working well)    |
-|  PMOD TMP2          | Temperature Sensor                                            |
+|  MPU6050 module     | Acceleration sensor                                           |
+|  MAX30102 module    | Heartrate sensor                                              |
+|  MLX90614 module    | Body temperature sensopr                                      |
 |  PMOD WiFi          | Provide WiFi Connection                                       |
-
-EMSK can send the status of the Room Temperature, FrontDoor Lock status, LivingRoom Light status and Kitchen Light status to the AWS IoT and interact with AWS IoT Cloud with using embARC.
-
-Open [dashboard website](http://foss-for-synopsys-dwc-arc-processors.github.io/freeboard/), and load `dashboard-smarthome-multithings.json` dashboard configuration file in current folder, and then you can control and monitor this multiple nodes.
-
-After loading this configuration file, you also need to click at the setting icon, and then click on the aws datasource, and then change the **AWS IOT ENDPOINT**, **REGION**, **ACCESS KEY**, **SECRET KEY** to your own aws ones.
-![embARC AWS Smart Home Dashboard Setting - Step1](doc/screenshots/webapp_setting1.jpg)
-![embARC AWS Smart Home Dashboard Setting - Step2](doc/screenshots/webapp_setting2.jpg)
-
 
 ### Run this application
 Here take **EMSK2.2 - ARC EM7D** with Metaware Toolset for example to show how to run this application.
@@ -65,7 +48,4 @@ Here take **EMSK2.2 - ARC EM7D** with Metaware Toolset for example to show how t
 
 2. Open your serial terminal such as Tera-Term on PC, and configure it to right COM port and *115200bps*.
 
-3. Interact using EMSK and Dashboard.
-  - You can press the **button L/R/X** on specific board to see the led changes on board and also on dashboard web app.
-  - You can also click the lights of **DESIRED STATUS** pane on the dashboard app, and see the led changes on board and dashboard web app.
-  ![AWS IoT Smarthome Multiple Nodes Web App](doc/screenshots/webapp.jpg)
+3. Interact using EMSK and Freeboard.
