@@ -89,33 +89,6 @@ static void timer1_stop(void)
 #endif/* USED_TIMER1 */
 
 
-/** LiteOS task create function, packaging LiteOS API */
-extern int LOS_TSKCreate(TSK_ENTRY_FUNC pfnTaskEntry,
-                  char *pcName,
-                  const uint16_t uwStackSize,
-                  UINT32 usTaskPrio,
-                  UINT32 *puwTaskID)
-{
-    TSK_INIT_PARAM_S stInitParam;
-
-    LOS_TaskLock();
-
-    stInitParam.pfnTaskEntry = pfnTaskEntry;
-    stInitParam.usTaskPrio = usTaskPrio;
-    stInitParam.pcName = pcName;
-    stInitParam.uwStackSize = uwStackSize;
-    stInitParam.uwResved   = LOS_TASK_STATUS_DETACHED;
-
-    if (LOS_TaskCreate(puwTaskID, &stInitParam) != LOS_OK) {
-        EMBARC_PRINTF("LiteOS: Create task %s error\r\n", pcName);
-        return E_SYS;
-    }
-
-    LOS_TaskUnlock();
-
-    return E_OK;
-}
-
 #if PRINT_DEBUG_MA
 /** print message for debug major function */
 static void print_msg_ma(void)
@@ -579,7 +552,7 @@ static void task_lwm2m_client(void *par)
 		lwm2m_client_conn_stat = 0;
 		cpu_unlock_restore(cpu_status);
 
-		LOS_TaskSuspend(task_lwm2m_client_handle);
+		vTaskSuspend(task_lwm2m_client_handle);
 	}
 }
 /** function for initialize and start lwm2m client */
@@ -618,12 +591,14 @@ static int lwm2m_client_start(void)
 	EMBARC_PRINTF("Start lwm2m client.\n"); 
 
 	/* create or resume task for lwm2mClient to realize communication with iBaby Gateway */
-	if (LOS_TSKCreate((TSK_ENTRY_FUNC)task_lwm2m_client, "lwm2m client", STACK_DEPTH_LWM2M, TSKPRI_HIGH, 
-		&task_lwm2m_client_handle) != E_OK){
-        EMBARC_PRINTF("create task_lwm2m_client failed\r\n");
-        return E_SYS;
-    }else {
-		LOS_TaskResume(task_lwm2m_client_handle);
+    if (xTaskCreate(task_lwm2m_client, "lwm2m client", STACK_DEPTH_LWM2M, NULL, TSKPRI_HIGH, 
+		&task_lwm2m_client_handle) != pdPASS){
+		EMBARC_PRINTF("Error: Create task_lwm2m_client failed\r\n");
+		return E_SYS;
+	}
+
+    else {
+		vTaskResume(task_lwm2m_client_handle);
 		return E_OK;
 	}
 
@@ -644,15 +619,15 @@ extern void task_function(void * par)
 	lwm2m_client_start();
 	#endif
 
-	LOS_TaskDelay(DELAY_TIME_SLICE * 10); 
+	vTaskDelay(DELAY_TIME_SLICE * 10); 
 
 	/*  initialize accelerometer before read */
 	imu_sensor_init(IMU_I2C_SLAVE_ADDRESS);
-	LOS_TaskDelay(DELAY_TIME_SLICE * 2); 
+	vTaskDelay(DELAY_TIME_SLICE * 2); 
 
 	/* initialize heartrate sensor before read */
 	heart_rate_sensor_init(HEART_RATE_I2C_SLAVE_ADDRESS);
-	LOS_TaskDelay(DELAY_TIME_SLICE * 2); 
+	vTaskDelay(DELAY_TIME_SLICE * 2); 
 	
 	for(;;) {
 
@@ -778,7 +753,7 @@ extern void task_function(void * par)
 		#endif/* PRINT_DEBUG_MA */
 	
 
-		LOS_TaskDelay(DELAY_TIME_SLICE); 
+		vTaskDelay(DELAY_TIME_SLICE); 
 
 		/* 
 		 * stop timer1 and print out the time of task running 

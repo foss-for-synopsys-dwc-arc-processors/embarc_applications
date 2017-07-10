@@ -86,23 +86,17 @@ static void timer1_stop(void);
 
 
 /**
- * \name	macro for LiteOS task
+ * \name	macro for Freertos task
  * @{
  */
 #define STACK_DEPTH_FUNC  (6000)/*!< stack depth : word(4*bytes) */
 #define STACK_DEPTH_LWM2M (20480)/*!< stack depth : word(4*bytes) */
 
 /*!< priority */
-#define TSKPRI_HIGHEST (LOS_TASK_PRIORITY_HIGHEST+1)/*!< highest priority */
-#define TSKPRI_HIGH    (LOS_TASK_PRIORITY_HIGHEST+2)/*!< high priority */
-#define TSKPRI_MID     (LOS_TASK_PRIORITY_HIGHEST+3)/*!< middle priority */
-#define TSKPRI_LOW     (LOS_TASK_PRIORITY_HIGHEST+4)/*!< low priority */
-
-extern int LOS_TSKCreate(TSK_ENTRY_FUNC pfnTaskEntry,
-				  char *pcName,//const char * const pcName,
-                  const uint16_t uwStackSize,
-                  UINT32 usTaskPrio,
-                  UINT32 *puwTaskID);
+#define TSKPRI_HIGHEST (configMAX_PRIORITIES-1)/*!< highest priority */
+#define TSKPRI_HIGH    (configMAX_PRIORITIES-2)/*!< high priority */
+#define TSKPRI_MID     (configMAX_PRIORITIES-3)/*!< middle priority */
+#define TSKPRI_LOW     (configMAX_PRIORITIES-4)/*!< low priority */
 /** @} end of name */
 
 /**
@@ -113,7 +107,7 @@ extern int LOS_TSKCreate(TSK_ENTRY_FUNC pfnTaskEntry,
 #define THOLD_CNT_SEN (150)  /*!< count value of 5s : 150 * 1/30s */
 static int  cnt_sen;         /*!< counter for temperature, heartrate acqusition */
 extern void task_function(void * par);
-static UINT32 task_function_handle;
+static TaskHandle_t task_function_handle = NULL;
 /** @} end of name */
 
 /**
@@ -160,7 +154,7 @@ static int lwm2m_client_start_flag = 0;/*!< flag of start of lwM2M client */
 
 static int lwm2m_client_start(void);
 static void task_lwm2m_client(void *par);
-static UINT32 task_lwm2m_client_handle;
+static TaskHandle_t task_lwm2m_client_handle = NULL;
 #endif/* LWM2M_CLIENT */
 /** @} end of name */
 

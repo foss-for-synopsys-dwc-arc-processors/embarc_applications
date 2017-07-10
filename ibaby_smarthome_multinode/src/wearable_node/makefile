@@ -2,11 +2,11 @@
 APPL ?= wearable_node
 
 # Selected OS
-OS_SEL ?= liteos
+OS_SEL ?= freertos
 
 BOARD ?= emsk
-BD_VER ?= 22
-CUR_CORE ?= arcem7d
+BD_VER ?= 23
+CUR_CORE ?= arcem11d
 TOOLCHAIN ?= gnu
 
 ##
@@ -19,7 +19,7 @@ STACKSZ ?= 81920
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../../../../..
+EMBARC_ROOT = ../../../..
 
 MID_SEL = common lwip-contrib wakaama fatfs lwip
 

@@ -35,7 +35,7 @@
  * \defgroup	EMBARC_APP_IBABY		embARC iBaby Wearable Node
  * \ingroup	EMBARC_APPS_TOTAL
  * \ingroup	EMBARC_APPS_BOARD_EMSK
- * \ingroup	EMBARC_APPS_OS_LITEOS
+ * \ingroup	EMBARC_APPS_OS_FREERTOS
  * \ingroup	EMBARC_APPS_MID_LWIP
  * \ingroup	EMBARC_APPS_MID_FATFS
  * \brief	embARC iBaby Wearable Node
@@ -88,7 +88,7 @@
 #include "task_function.h"
 
 /**
- * \brief  main entry, call LiteOS API, create and start functional task
+ * \brief  main entry, call Freertos API, create and start functional task
  */
 int main(void)
 {
@@ -114,12 +114,11 @@ int main(void)
 	}
 	
 	/* create task for function */
-	if (LOS_TSKCreate((TSK_ENTRY_FUNC)task_function, "task_function", STACK_DEPTH_FUNC, TSKPRI_MID, 
-		&task_function_handle) != E_OK)
-    {
-        EMBARC_PRINTF("Error: Create task_function failed\r\n");
-        return E_SYS;
-    }
+	if (xTaskCreate(task_function, "task_function", STACK_DEPTH_FUNC, NULL, TSKPRI_MID, 
+		NULL) != pdPASS){
+		EMBARC_PRINTF("Error: Create task_function failed\r\n");
+		return E_SYS;
+	}
 	
 	return E_OK;
 }
