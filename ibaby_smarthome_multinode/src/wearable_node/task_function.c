@@ -1,5 +1,5 @@
 /* ------------------------------------------
- * Copyright (c) 2016, Synopsys, Inc. All rights reserved.
+ * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -26,18 +26,22 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.06
- * \date 2017-06-26
- * \author Xiangcai Huang(HuangXiangcai666@163.com)
+ * \version 2017.07
+ * \date 2017-07-11
+ * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 
 /**
- * \defgroup	TASK_FUNCTION_OBJ
- * \ingroup	EMBARC_APP_IBABY
- * \brief	source code of functional task for iBaby wearable node
+ * \defgroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE		embARC iBaby Smarthome Node Wearable Node
+ * \ingroup	EMBARC_APPS_TOTAL
+ * \ingroup	EMBARC_APPS_OS_FREERTOS
+ * \ingroup	EMBARC_APPS_MID_LWIP
+ * \ingroup	EMBARC_APPS_MID_WAKAAMA
+ * \ingroup	EMBARC_APPS_MID_FATFS
+ * \brief	embARC iBaby Smarthome Node Wearable Node
  * \details
- *		Realize all function of iBaby wearable node, including data acquisition, processing and 
- *    data interaction with iBaby Gateway(lwm2m Server) as lwm2m Client.
+ *		Implement all function of iBaby wearable node, including data acquisition, processing and 
+ *    interaction with iBaby Smarthome Gateway(LwM2M Server) as LwM2M Client.
  *
  *      Manual function including body temperature detecting, heartrate detecting and posture, 
  *    motion intensity, awake event detecting in real time during sleep.
@@ -45,12 +49,12 @@
 
 /**
  * \file
- * \ingroup	TASK_FUNCTION_OBJ
- * \brief	functional task for iBaby wearable node
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \brief	Functional Task for iBaby Wearable Node
  */
 
 /**
- * \addtogroup	EMBARC_APP_IBABY
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
  * @{
  */
 /* custom HAL */

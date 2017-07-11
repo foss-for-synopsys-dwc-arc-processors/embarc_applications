@@ -1,5 +1,5 @@
 /* ------------------------------------------
- * Copyright (c) 2016, Synopsys, Inc. All rights reserved.
+ * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -26,18 +26,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.06
- * \date 2017-06-26
- * \author Xiangcai Huang(HuangXiangcai666@163.com)
+ * \version 2017.07
+ * \date 2017-07-11
+ * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	TASK_FUNCTION_OBJ
- * \brief	header file of functional task for iBaby wearable node
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \brief	Header File of Functio Task for iBaby Wearable Node
  */
 
 /**
- * \addtogroup	EMBARC_APP_IBABY
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
  * @{
  */
 #ifndef TASK_FUNCTION_H
@@ -274,6 +274,6 @@ static bool func_detect_dw(float acc_temp);
 /** @} end of name */
 
 
-#endif/* _TASK_FUNCTION_OBJ_ */
+#endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */
 
-/** @} end of group TASK_FUNCTION_OBJ */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE */

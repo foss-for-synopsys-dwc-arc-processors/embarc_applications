@@ -32,21 +32,21 @@
 --------------------------------------------- */
 
 /**
- * \defgroup	BOARD_EMSK_DRV_IMU	EMSK  Sensor Driver
- * \ingroup	BOARD_EMSK_DRIVER
- * \brief	EMSK PMOD acceleration Sensor Driver
+ * \defgroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER        embARC iBaby Smarthome Node Wearable Node Driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	emsk acceleration sensor driver for ibaby wearable node
  * \details
- *		Realize driver for PMOD acceleration sensor using Designware IIC driver.
+ *		realize driver for acceleration sensor using designware iic driver
  */
 
 /**
  * \file
- * \ingroup	BOARD_EMSK_DRV_IMU
- * \brief	emsk pmod acceleration sensor driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	emsk acceleration sensor driver for ibaby wearable node
  */
 
 /**
- * \addtogroup	BOARD_EMSK_DRV_IMU
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
 
@@ -280,5 +280,5 @@ error_exit:
 	return ercd;
 }
 
-/** @} end of group BOARD_EMSK_IMU */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */
 

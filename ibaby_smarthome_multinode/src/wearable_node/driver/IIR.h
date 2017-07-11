@@ -32,12 +32,12 @@
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	BOARD_EMSK_IIR
- * \brief	header file of emsk IIR
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	header file of EMSK IIR
  */
 
 /**
- * \addtogroup	BOARD_EMSK_IIR
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
  #ifndef __MICENVIIR_H__
@@ -52,6 +52,6 @@ typedef struct __IirParams
 
 float IirTick(IirParams *, float *, float);
 
-#endif /* _EMSK_IIR_H_ */
+#endif /* _WEARABLE_NODE_DRIVER_IIR_H_ */
 
-/** @} end of group BOARD_EMSK_IIR */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

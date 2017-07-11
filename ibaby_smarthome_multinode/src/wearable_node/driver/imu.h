@@ -32,12 +32,12 @@
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	BOARD_EMSK_IMU
- * \brief	header file of emsk pmod acceleration sensor driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	acceleration sensor driver related header file
  */
 
 /**
- * \addtogroup	BOARD_EMSK_IMU
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
 #ifndef _IMU_H_
@@ -72,6 +72,6 @@ int32_t imu_sensor_init(uint32_t slv_addr);
 int32_t imu_sensor_read(imu_values* imu_val);
 int32_t accel_sensor_read(acc_values* accel_val);
 
-#endif  /* _EMSK_IMU_H_ */
+#endif  /* _WEARABLE_NODE_DRIVER_IMU_H_ */
 
-/** @} end of group BOARD_EMSK_IMU */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

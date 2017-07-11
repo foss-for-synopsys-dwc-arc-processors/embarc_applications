@@ -32,21 +32,21 @@
 --------------------------------------------- */
 
 /**
- * \defgroup  EMSK
- * \ingroup BOARD_EMSK_FFT
- * \brief Fast fourier transform function for heartrate data processing
+ * \defgroup  EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER        embARC iBaby Smarthome Node Wearable Node Driver
+ * \ingroup EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief fast fourier transform function for heartrate data processing
  * \details
- *    Fast fourier transform function for heartrate data processing.
+ *    fast fourier transform function for heartrate data processing.
  */
 
 /**
  * \file
- * \ingroup BOARD_EMSK_FFT
- * \brief Fast fourier transform function
+ * \ingroup EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief fast fourier transform function
  */
 
 /**
- * \addtogroup  BOARD_EMSK_DRV
+ * \addtogroup  EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
 #include "fft.h"
@@ -153,7 +153,7 @@ float find_max(Cplx16 *D)
   return rtn_freq;
 }
 
-/** @} end of group BOARD_EMSK_FFT */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */
 
 
 

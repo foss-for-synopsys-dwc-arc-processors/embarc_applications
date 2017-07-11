@@ -32,23 +32,24 @@
 --------------------------------------------- */
 
 /**
- * \defgroup	BOARD_EMSK_DRV_MAX	EMSK Heartrate Sensor Driver
- * \ingroup	BOARD_EMSK_DRIVER
- * \brief	EMSK PMOD Heartrate Sensor Driver
+ * \defgroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER        embARC iBaby Smarthome Node Wearable Node Driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	emsk heartrate sensor driver for ibaby wearable node
  * \details
- *		Realize driver for PMOD Heartrate sensor using Designware IIC driver.
+ *		realize driver for heartrate sensor using designware iic driver
  */
 
 /**
  * \file
- * \ingroup	BOARD_EMSK_DRV_MAX
- * \brief	emsk pmod heartrate sensor driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	emsk heartrate sensor driver for ibaby wearable node
  */
 
 /**
- * \addtogroup	BOARD_EMSK_DRV_MAX
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
+
 #include "arc.h"
 #include "arc_builtin.h"
 #include "embARC_toolchain.h"
@@ -348,4 +349,4 @@ error_exit:
 	return ercd;
 }
 
-/** @} end of group BOARD_EMSK_DRV_MAX */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

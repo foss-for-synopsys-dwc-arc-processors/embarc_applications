@@ -32,12 +32,12 @@
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	BOARD_EMSK_DRV_TEMP
- * \brief	header file of emsk pmod temperature sensor driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	temperature sensor driver related header file
  */
 
 /**
- * \addtogroup	BOARD_EMSK_DRV_TEMP
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
 #ifndef _TMP112_H_
@@ -53,6 +53,6 @@ static const float tmp112_unit = 0.0625; //convert to ℃
 int32_t tmp_sensor_init(uint32_t slv_addr);
 int32_t tmp_sensor_read(uint32_t *tmp);
 
-#endif /* _EMSK_TEMPERATURE_H_ */
+#endif /* _WEARABLE_NODE_DRIVER_TMP_H */
 
-/** @} end of group BOARD_EMSK_DRV_TEMP */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

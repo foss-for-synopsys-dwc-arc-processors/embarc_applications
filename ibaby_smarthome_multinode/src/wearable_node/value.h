@@ -1,5 +1,5 @@
 /* ------------------------------------------
- * Copyright (c) 2016, Synopsys, Inc. All rights reserved.
+ * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -26,18 +26,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.06
- * \date 2017-06-26
- * \author Xiangcai Huang(HuangXiangcai666@163.com)
+ * \version 2017.07
+ * \date 2017-07-11
+ * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 /**
  * \file
- * \ingroup VALUE_OBJ
- * \brief   header file of common settings and reported data
+ * \brief   Header File of Settings and Reported Data
  */
 
 /**
- * \addtogroup    EMBARC_APP_IBABY
+ * \addtogroup    EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
  * @{
  */
 #ifndef VALUE_H
@@ -47,7 +46,7 @@
  * \name    macros about common setting
  * @{
  */
-#define LWM2M_CLIENT   (1)/*!< set 1 to be lwm2m client */
+#define LWM2M_CLIENT   (0)/*!< set 1 to be lwm2m client */
 #define USED_TIMER1    (0)/*!< set 1 to use timer1 for task timing */
 
 #define PRINT_DEBUG_MA (1)/*!< set 1 to print message for debug major function */
@@ -74,7 +73,7 @@
 
 /* lwm2mServer's port and IP */
 static char *p_port   = (char *)"5683";
-static char *p_server = (char *)"192.168.1.127";
+static char *p_server = (char *)"10.120.158.127";
 /* name of lwm2m client node */
 static char *p_client_name = (char *)"wn";
 /* counter for number of files transported in OTA by lwm2m */
@@ -102,6 +101,6 @@ data_wearable_node data_report_wn_old;
 /** @} end of name */
 
 
-#endif/* _VALUE_H_ */
+#endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */
 
-/** @} end of group VALUE_OBJ */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE */

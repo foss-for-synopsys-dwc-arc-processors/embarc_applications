@@ -32,21 +32,21 @@
 --------------------------------------------- */
 
 /**
- * \defgroup    EMSK
- * \ingroup BOARD_EMSK_IIR
- * \brief   EMSK IIR
+ * \defgroup    EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \ingroup EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief   driver for emsk iir interface
  * \details
- *      emsk IIR.
+ *      driver for emsk iir interface
  */
 
 /**
  * \file
- * \ingroup BOARD_EMSK_IIR
- * \brief   emsk IIR
+ * \ingroup EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief   driver for emsk iir interface
  */
 
 /**
- * \addtogroup  BOARD_EMSK_IIR
+ * \addtogroup  EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
 #include "IIR.h"
@@ -68,4 +68,4 @@ float IirTick(IirParams *params, float *zs, float in)
     return out;
 }
 
-/** @} end of group BOARD_EMSK_IIR */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

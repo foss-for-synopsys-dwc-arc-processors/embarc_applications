@@ -1,5 +1,5 @@
 /* ------------------------------------------
- * Copyright (c) 2016, Synopsys, Inc. All rights reserved.
+ * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -26,19 +26,19 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.06
- * \date 2017-06-26
- * \author Xiangcai Huang(HuangXiangcai666@163.com)
+ * \version 2017.07
+ * \date 2017-07-11
+ * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 
 /**
- * \defgroup	EMBARC_APP_IBABY		embARC iBaby Wearable Node
+ * \defgroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE		embARC iBaby Smarthome Node Wearable Node
  * \ingroup	EMBARC_APPS_TOTAL
- * \ingroup	EMBARC_APPS_BOARD_EMSK
  * \ingroup	EMBARC_APPS_OS_FREERTOS
  * \ingroup	EMBARC_APPS_MID_LWIP
+ * \ingroup	EMBARC_APPS_MID_WAKAAMA
  * \ingroup	EMBARC_APPS_MID_FATFS
- * \brief	embARC iBaby Wearable Node
+ * \brief	embARC iBaby Smarthome Node Wearable Node
  *
  * \details
  * ### Extra Required Tools
@@ -50,21 +50,21 @@
  *     [MLX90614](https://detail.tmall.com/item.htm?spm=a230r.1.14.1.HWvJo4&id=530583718297&cm_id=140105335569ed55e27b&abbucket=15)
  *
  * ### Design Concept
- *     The Hardware modules should be connected to \ref EMBARC_BOARD_CONNECTION "EMSK".
- *     This example achieves the function of wearable equipment with using embARC.
+ *     All sensor modules should be connected to \ref EMBARC_BOARD_CONNECTION "EMSK".
+ *     This application is designed to show how to connect EMSK and iBaby Smarthome Gateway using embARC. 
  *
  * ### Usage Manual
  *     Before compiling this example, you need to change some macro in value.h to customize your own project.
  *
- *     It can report the following information to the iBaby Gateway.
+ *     It can report the following information to the iBaby Smarthome Gateway.
  *     - the Body Temperature (uint32_t) - Wearable module connected to J4 (Based on Temperature sensor)
  *     - the Heartrate (uint32_t) - Wearable module connected to J4 (Based on Heartrate sensor)
- *     - the Motion Intensity in 1min (int) - Wearable module connected to J4 (Based on Accelerometer)
- *     - the Sleep-Wake state (uint) - Wearable module connected to J4 (Based on Accelerometer)
- *     - the Awake Event (uint) - Wearable module connected to J4 (Based on Accelerometer)
- *     - 3 flags of Warning (bool) - Warning of Body Temperature abnormal, Heartrate abnormal, sleep downward
+ *     - the Motion Intensity in 1min (int) - Wearable module connected to J4 (Based on Acceleration sensor)
+ *     - the Sleep-Wake state (uint) - Wearable module connected to J4 (Based on Acceleration sensor)
+ *     - the Awake Event (uint) - Wearable module connected to J4 (Based on Acceleration sensor)
+ *     - 3 flags of Warning (bool) - Warning of Body Temperature abnormal, Heartrate abnormal, sleep on his stomach
  *
- *     EMSK can send the above data to iBaby Gateway with lwm2m.
+ *     EMSK can send the above data to iBaby Gateway Smarthome with LwM2M.
  *
  * ### Extra Comments
  *
@@ -72,12 +72,12 @@
 
 /**
  * \file
- * \ingroup	EMBARC_APP_IBABY
- * \brief	main source of iBaby Wearable node
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \brief	main source of iBaby Smarthome Node Wearable Node
  */
 
 /**
- * \addtogroup	EMBARC_APP_IBABY
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
  * @{
  */
 /* embARC HAL */

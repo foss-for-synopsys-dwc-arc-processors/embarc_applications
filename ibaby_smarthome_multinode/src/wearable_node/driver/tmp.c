@@ -32,23 +32,24 @@
 --------------------------------------------- */
 
 /**
- * \defgroup	BOARD_EMSK_DRV_TMP	EMSK Temperature Sensor Driver
- * \ingroup	BOARD_EMSK_DRIVER
- * \brief	EMSK PMOD Temperature Sensor Driver
+ * \defgroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER        embARC iBaby Smarthome Node Wearable Node Driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	emsk temperature sensor driver for ibaby wearable node
  * \details
- *		Realize driver for PMOD temperature sensor using Designware IIC driver.
+ *		realize driver for temperature sensor using designware iic driver
  */
 
 /**
  * \file
- * \ingroup	BOARD_EMSK_DRV_PMODTEMP
- * \brief	emsk pmod temperature sensor driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	emsk temperature sensor driver for ibaby wearable node
  */
 
 /**
- * \addtogroup	BOARD_EMSK_DRV_TEMP
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
+
 #include "arc.h"
 #include "arc_builtin.h"
 #include "embARC_toolchain.h"
@@ -219,4 +220,4 @@ error_exit:
 	return ercd;
 }
 
-/** @} end of group BOARD_EMSK_DRV_TEMP */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

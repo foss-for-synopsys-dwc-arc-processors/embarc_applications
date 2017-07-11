@@ -32,12 +32,12 @@
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	BOARD_EMSK_DRV_MAX
- * \brief	header file of emsk pmod heartrate sensor driver
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	heartrate sensor driver related header file
  */
 
 /**
- * \addtogroup	BOARD_EMSK_DRV_MAX
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
 #ifndef _MAX30102_H_
@@ -55,6 +55,6 @@ int32_t heart_rate_sensor_read(int* heart_rate);
 float band_pass(float in);
 int find_trough_num(int* in, int len);
 extern int dat_num,dat_rdy;
-#endif /* _EMSK_MAX_H_ */
+#endif /* _WEARABLE_NODE_DRIVER_MAX_H_ */
 
-/** @} end of group BOARD_EMSK_DRV_MAX */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

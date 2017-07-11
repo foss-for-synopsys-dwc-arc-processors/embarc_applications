@@ -32,12 +32,12 @@
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	BOARD_EMSK_FFT
- * \brief	header file of Fast fourier transform function
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \brief	Fast fourier transform function related functions header
  */
 
 /**
- * \addtogroup	BOARD_EMSK_FFT
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
 #ifndef _fft_H_
@@ -73,9 +73,9 @@ extern void calc_w(Cplx16 *W);
 extern void fft(Cplx16 *D, Cplx16 *W);
 extern float find_max(Cplx16 *D);
 
-#endif /* _EMSK_FFT_H_ */
+#endif /* _WEARABLE_NODE_DRIVER_FFT_H_ */
 
-/** @} end of group BOARD_EMSK_FFT */
+/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */
 
 
 
