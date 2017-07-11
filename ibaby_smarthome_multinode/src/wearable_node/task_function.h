@@ -59,16 +59,10 @@
 #include "fft.h"
 #include "value.h"
 
-/**
- * \name	macro of led
- * @{
- */
-#define LED_LEDWARN (0x01)     /*!< Indicator Light of Warning */
-
-#define LED_ON  (0xff)
-#define LED_OFF (0x0)
-/** @} end of name */
-
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
 /**
  * \name	macro of timer1
  * @{
@@ -83,49 +77,10 @@ static void timer1_start(void);
 static void timer1_stop(void);
 #endif/* USED_TIMER1 */
 /** @} end of name */
-
-
-/**
- * \name	macro for Freertos task
- * @{
- */
-#define STACK_DEPTH_FUNC  (6000)/*!< stack depth : word(4*bytes) */
-#define STACK_DEPTH_LWM2M (20480)/*!< stack depth : word(4*bytes) */
-
-/*!< priority */
-#define TSKPRI_HIGHEST (configMAX_PRIORITIES-1)/*!< highest priority */
-#define TSKPRI_HIGH    (configMAX_PRIORITIES-2)/*!< high priority */
-#define TSKPRI_MID     (configMAX_PRIORITIES-3)/*!< middle priority */
-#define TSKPRI_LOW     (configMAX_PRIORITIES-4)/*!< low priority */
-/** @} end of name */
-
-/**
- * \name	macro for heartrate data processing
- * @{
- */
-#define DELAY_TIME_SLICE (3) /*!< 33：sampling frequency : 30Hz(32.7ms) */
-#define THOLD_CNT_SEN (150)  /*!< count value of 5s : 150 * 1/30s */
-static int  cnt_sen;         /*!< counter for temperature, heartrate acqusition */
-extern void task_function(void * par);
-static TaskHandle_t task_function_handle = NULL;
-/** @} end of name */
-
-/**
- * \name	macro for print function
- * @{
- */
-#if PRINT_DEBUG_MA
-static void print_msg_ma(void);/*!< print message for debug major function */
-#endif/* PRINT_DEBUG_MA */
-
-#if PRINT_DEBUG_AW
-static void print_msg_aw(void);/*!< print message for debug awake event detecting function */
-#endif/* PRINT_DEBUG_AW */
-
-#if PRINT_DEBUG_SL
-static void print_msg_sl(uint state);/*!< print message for debug sleep-wake state monitoring function */
-#endif/* PRINT_DEBUG_SL */
-/** @} end of name */
+/*
+*  end of this part
+**************************************************************
+*/
 
 /**
  * \name	macro for lwm2m client
@@ -158,11 +113,49 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #endif/* LWM2M_CLIENT */
 /** @} end of name */
 
-
 /**
- * \name	macro for special function of wearable node
+ * \name	macro for print function
  * @{
  */
+#if PRINT_DEBUG_FUNC
+static void print_msg_func(void);/*!< print message for debug major function */
+#endif/* PRINT_DEBUG_FUNC */
+
+#if PRINT_DEBUG_AWAKE
+static void print_msg_awake(void);/*!< print message for debug awake event detecting function */
+#endif/* PRINT_DEBUG_AWAKE */
+
+#if PRINT_DEBUG_SLEEP
+static void print_msg_sleep(uint state);/*!< print message for debug sleep-wake state monitoring function */
+#endif/* PRINT_DEBUG_SLEEP */
+/** @} end of name */
+
+
+/**
+ * \name	macro for Freertos task
+ * @{
+ */
+#define STACK_DEPTH_FUNC  (6000) /*!< stack depth : word(4*bytes) */
+#define STACK_DEPTH_LWM2M (20480)/*!< stack depth : word(4*bytes) */
+
+/*!< priority */
+#define TSKPRI_HIGHEST (configMAX_PRIORITIES-1)/*!< highest priority */
+#define TSKPRI_HIGH    (configMAX_PRIORITIES-2)/*!< high priority */
+#define TSKPRI_MID     (configMAX_PRIORITIES-3)/*!< middle priority */
+#define TSKPRI_LOW     (configMAX_PRIORITIES-4)/*!< low priority */
+/** @} end of name */
+
+/**
+ * \name	macro for function of wearable node
+ * @{
+ */
+#define DELAY_TIME_SLICE (3) /*!< 33：sampling frequency : 30Hz(32.7ms) */
+#define THOLD_CNT_SEN (150)  /*!< count value of 5s : 150 * 1/30s */
+static int  cnt_sen;         /*!< counter for temperature, heartrate acqusition */
+extern void task_function(void * par);
+static TaskHandle_t task_function_handle = NULL;
+
+
 #define WARN_BTEMP_L  (320)  /*!< lower value of warning body temperature */
 #define WARN_BTEMP_H  (380)  /*!< upper value of warning body temperature */
 #define WARN_HR_MIN   (50)   /*!< lower value of warning heartrate */
@@ -173,11 +166,12 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 
 /*!< variable of read heartrate data */
 static int cnt_h, flag_h;
-static int hrate_group[FFT_LEN],hrate_temp;
+static int hrate_group[FFT_LEN], hrate_temp;
 static int sum_h;
 
 /* function for deal with heartrate by filter */
 static void filter_hrate(uint32_t* hrate);
+
 
 static acc_values acc_vals;   /*!< accleration */
 
@@ -224,35 +218,32 @@ static bool flag_old_v;            /*!< flag of change direction of value */
 
 
 /*!< parameters of awake event detecting */
-#if FUNC_DETECT_AWAKE
 #define AWAKE   (1)/*!< wake up event */
 #define NOEVENT (0)/*!< no event */
 
 #define THOLD_CNT_AW   (150) /*!< threshold of counter(5s) for executing awake event detecting algorithm */
 #define THOLD_INTEN_AW (1000)/*!< threshold of motion intensity */
-#define LEN_STA_QUEUE  (7)  /*!< length of state queue used to detect awake event */
+#define LEN_STA_QUEUE  (7)   /*!< length of state queue used to detect awake event */
 #define LEN_STA_WAKE   (2)   /*!< length of state queue indicated baby awake */
 #define LEN_STA_SLEEP  (3)
 #define PAR_STA_AW     (0.75)/*!< proportion of wake-state in total queue indicated baby awake */
-static int  inten_motion_aw;        /*!< motion intensity in 5s */
+static int  inten_aw;               /*!< motion intensity in 5s */
 static int  cnt_aw;                 /*!< executing algorithm counter */
 static int  state_aw[LEN_STA_QUEUE];/*!< state for LEN_STA_QUEUE * 5s */
 static bool flag_start_aw;          /*!< flag of awake event detecting start */
 
-static uint func_detect_aw(int inten_temp);
-#endif/* FUNC_DETECT_AWAKE */
+static uint func_detect_awake(int inten_temp);
 
 
 /*!< parameters of sleep monitoring algorithm */
-#if FUNC_MONITOR_SLEEP
 #define SLEEP   (1)/*!< sleep state */
 #define WAKE    (0)/*!< wake state */
 
 #define THOLD_CNT_SL (150)/*!< threshold of counter(1min：1760) for executing sleep monitoring algorithm */
 
 /*!< sparameters of Webster sleep-wake determine method */
-#define P  (0.01)/*!< 0.0046:coefficient of scale */
-#define K0 (0.04)  /*!< coefficient of relationship */
+#define P  (0.01) /*!< 0.0046:coefficient of scale */
+#define K0 (0.04) /*!< coefficient of relationship */
 #define K1 (0.22)
 #define K2 (1)
 #define K3 (0.24)
@@ -263,13 +254,9 @@ static int   inten_sl[5];   /*!< motion intensity for 5 * 1min */
 static float score_sl;      /*!< score of motion */
 static bool  flag_start_sl; /*!< flag of sleep monitoring start */
 
-static uint func_detect_sl(int inten_temp);
-#endif/* FUNC_MONITOR_SLEEP */
+static uint func_detect_state(int inten_temp);
 
-
-#if FUNC_DETECT_DOWN
-static bool func_detect_dw(float acc_temp);
-#endif/* FUNC_DETECT_DOWN */
+static bool func_detect_downward(float acc_temp);
 
 /** @} end of name */
 

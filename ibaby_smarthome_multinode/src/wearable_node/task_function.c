@@ -60,6 +60,10 @@
 /* custom HAL */
 #include "task_function.h"
 
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
 #if USED_TIMER1
 /** arc timer 1 interrupt routine */
 static void timer1_isr(void *ptr)
@@ -91,30 +95,29 @@ static void timer1_stop(void)
 	EMBARC_PRINTF("****************************************\r\n\r\n");
 }
 #endif/* USED_TIMER1 */
+/*
+*  end of this part
+**************************************************************
+*/
 
 
-#if PRINT_DEBUG_MA
-/** print message for debug major function */
-static void print_msg_ma(void)
+#if PRINT_DEBUG_FUNC
+/** print message for primary function */
+static void print_msg_func(void)
 {
-	char str[50];
+	char str[150];
 
-	EMBARC_PRINTF("\n");
-	EMBARC_PRINTF("****************************************\r\n");
-	EMBARC_PRINTF("*        iBaby system v1.3.1           *\r\n");     
-	EMBARC_PRINTF("*        iBaby wearable node           *\r\n");     
-	EMBARC_PRINTF("****************************************\r\n");
-
-	sprintf(str, "* Body heartrate   : %dbpm\r\n", data_report_wn.hrate);
-	EMBARC_PRINTF(str);
-
-	sprintf(str, "* Body temperature : %d.%d'C\r\n", data_report_wn.btemp/10, data_report_wn.btemp%10);
-	EMBARC_PRINTF(str);
-
-	sprintf(str, "* Motion intensity : %d\r\n", data_report_wn.inten_motion_sl);
+	EMBARC_PRINTF("\n************ Manual function ************\r\n");
+	sprintf(str,
+		"* Body heartrate   : %dbpm\r\n\
+		 * Body temperature : %d.%d'C\r\n\
+		 * Motion intensity : %d\r\n", 
+		 data_report_wn.hrate,
+		 data_report_wn.btemp/10, data_report_wn.btemp%10,
+		 data_report_wn.motion_intensity);
 	EMBARC_PRINTF(str);
 	
-	if (data_report_wn.state_sl == SLEEP)
+	if (data_report_wn.state == SLEEP)
 		EMBARC_PRINTF("* State : sleep\r\n");
 	else
 		EMBARC_PRINTF("* State : wake\r\n");
@@ -122,30 +125,25 @@ static void print_msg_ma(void)
 	if (data_report_wn.warn_btemp)
 		EMBARC_PRINTF("* Warn of abnormal body temperature\r\n");
 
-	if (data_report_wn.warn_hrate_abnor)
+	if (data_report_wn.warn_hrate)
 		EMBARC_PRINTF("* Warn of abnormal body heartrate\r\n");
 
 	if (data_report_wn.warn_downward)
-		EMBARC_PRINTF("* Warn of fall down/sleep downward\r\n");
+		EMBARC_PRINTF("* Warn of sleep on his stomach\r\n");
 
-	if (data_report_wn.event_aw == AWAKE)
+	if (data_report_wn.event_awake == AWAKE)
 		EMBARC_PRINTF("* Baby awake!\r\n");
-	
-	#if (!USED_TIMER1)
-	EMBARC_PRINTF("****************************************\r\n\r\n");
-	#endif
 }
-#endif /* PRINT_DEBUG_MA */
+#endif /* PRINT_DEBUG_FUNC */
 
-#if PRINT_DEBUG_AW
+#if PRINT_DEBUG_AWAKE
 /** print message for debug awake event detecting function */
-static void print_msg_aw(void)
+static void print_msg_awake(void)
 {
 	char str[50];
 
-	EMBARC_PRINTF("\n");
-	EMBARC_PRINTF("************ Awake detecting ************\r\n");
-	sprintf(str, "* Motion intensity in 5s : %d\n", inten_motion_aw);
+	EMBARC_PRINTF("\n************ Awake detecting ************\r\n");
+	sprintf(str, "* Motion intensity in 5s : %d\n", inten_aw);
 	EMBARC_PRINTF(str);
 
 	for (uint i = 0; i < LEN_STA_QUEUE; ++i)
@@ -163,19 +161,18 @@ static void print_msg_aw(void)
 		}
 	}
 	EMBARC_PRINTF("\n");
-	if (data_report_wn.event_aw == AWAKE)
+	if (data_report_wn.event_awake == AWAKE)
 		EMBARC_PRINTF("* Baby awake!\n");
 }
-#endif /* PRINT_DEBUG_AW */
+#endif /* PRINT_DEBUG_AWAKE */
 
-#if PRINT_DEBUG_SL
+#if PRINT_DEBUG_SLEEP
 /** print message for debug Sleep-Wake state monitoring function */
-static void print_msg_sl(uint state)
+static void print_msg_sleep(uint state)
 {
 	char str[50];
 
-	EMBARC_PRINTF("\n");//send data to serial assistant
-	EMBARC_PRINTF("************ Sleep monitoring ************\r\n");
+	EMBARC_PRINTF("\n************ Sleep monitoring ************\r\n");
 	for (uint i = 0; i < 5; ++i)
 	{
 		if (i==2 || i==3)
@@ -183,25 +180,24 @@ static void print_msg_sl(uint state)
 		sprintf(str, "* Intensity %d : %d\t\t", i, inten_sl[i]/100);
 		EMBARC_PRINTF(str);
 	}
-	EMBARC_PRINTF("\n");
-	sprintf(str, "* Intensity score in 5min : %f\n", score_sl);
+	sprintf(str, "\n* Intensity score in 5min : %f\n", score_sl);
 	EMBARC_PRINTF(str);
 	if (!state)
 		EMBARC_PRINTF("* State of 2min ago : wake\r\n\r\n");
 	else
 		EMBARC_PRINTF("* State of 2min ago : sleep\r\n\r\n");
 }
-#endif /* PRINT_DEBUG_SL */
+#endif /* PRINT_DEBUG_SLEEP */
 
 /* function for deal with heartrate by filter */
 static void filter_hrate(uint32_t* hrate)
 {
 	/* ignore the wrong data in the beginning */
 	if(dat_num < 9)
-			heart_rate_sensor_read(NULL);
+			hrate_sensor_read(NULL);
 	else if(dat_num < FFT_LEN + 9)
 	{
-		heart_rate_sensor_read(&hrate_group[dat_num-9]);
+		hrate_sensor_read(&hrate_group[dat_num-9]);
 		if(dat_rdy && dat_num > 9)
 		{
 			//EMBARC_PRINTF("hrate : %d\n", hrate_group[dat_num-10]);
@@ -415,9 +411,8 @@ static int process_acc_val(acc_values acc_temp)
 	return svm_new;
 }
 
-#if FUNC_DETECT_AWAKE
 /** function for awake event detecting */
-static uint func_detect_aw(int inten_temp)
+static uint func_detect_awake(int inten_temp)
 {
 	bool flag_break_aw = false;
 	uint cnt_sl_aw = 0;
@@ -466,8 +461,8 @@ static uint func_detect_aw(int inten_temp)
 	cnt_wk_aw = 0;
 
 	/* print out message for debug */
-	#if PRINT_DEBUG_AW
-	print_msg_aw();
+	#if PRINT_DEBUG_AWAKE
+	print_msg_awake();
 	#endif
 
 	/* update motion intensity for LEN_STA_QUEUE * 5s */
@@ -478,11 +473,9 @@ static uint func_detect_aw(int inten_temp)
 
 	return event;
 }
-#endif/* FUNC_DETECT_AWAKE */
 
-#if FUNC_MONITOR_SLEEP
 /** function for sleep-wake state detecting */
-static uint func_detect_sl(int inten_temp)
+static uint func_detect_state(int inten_temp)
 {
 	uint state; /* state : SLEEP or WAKE */
 
@@ -505,8 +498,8 @@ static uint func_detect_sl(int inten_temp)
 		state = SLEEP;
 
 	/* print out message for debug */
-	#if PRINT_DEBUG_SL
-	print_msg_sl(state);
+	#if PRINT_DEBUG_SLEEP
+	print_msg_sleep(state);
 	#endif
 
 	/* update motion intensity for 5 * 1min */
@@ -515,11 +508,9 @@ static uint func_detect_sl(int inten_temp)
 
 	return state;
 }
-#endif/* FUNC_MONITOR_SLEEP */
 
-#if FUNC_DETECT_DOWN
 /** function for sleep downward state detecting */
-static bool func_detect_dw(float acc_temp)
+static bool func_detect_downward(float acc_temp)
 {
 	bool warn;
 
@@ -530,7 +521,6 @@ static bool func_detect_dw(float acc_temp)
 
 	return warn;
 }
-#endif/* FUNC_DETECT_DOWN */
 
 
 
@@ -616,8 +606,6 @@ static int lwm2m_client_start(void)
 /** task for major function */
 extern void task_function(void * par)
 {
-	char str[50];
-
 	#if LWM2M_CLIENT
 	/* try to start lwm2m client */
 	lwm2m_client_start();
@@ -626,145 +614,138 @@ extern void task_function(void * par)
 	vTaskDelay(DELAY_TIME_SLICE * 10); 
 
 	/*  initialize accelerometer before read */
-	imu_sensor_init(IMU_I2C_SLAVE_ADDRESS);
+	acc_sensor_init(IMU_I2C_SLAVE_ADDRESS);
 	vTaskDelay(DELAY_TIME_SLICE * 2); 
 
 	/* initialize heartrate sensor before read */
-	heart_rate_sensor_init(HEART_RATE_I2C_SLAVE_ADDRESS);
+	hrate_sensor_init(HEART_RATE_I2C_SLAVE_ADDRESS);
 	vTaskDelay(DELAY_TIME_SLICE * 2); 
 	
 	for(;;) {
-
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
 		/* 
 		 * start timer1 for calculating the time of task running 
 		 */
 		#if USED_TIMER1
 		timer1_start();
 		#endif
+/*
+*  end of this part
+**************************************************************
+*/
 
+		/* read acceleration data every 33ms */
+		acc_sensor_read(&acc_vals);
 
-		/*
-		 * code for wearable node 
-		 */
-		#if USED_ACC_SEN
-		/* read acceleration 33ms*/
-		accel_sensor_read(&acc_vals);
-
-		/* process raw data and calculate SVM(parameter of motion intensity) in one slice time(33ms) */
+		/* process raw data and calculate SVM(representation of motion intensity) in 33ms */
 		svm_val = process_acc_val(acc_vals);
-		#endif /* USED_ACC_SEN */
 
 		/*
 		 * awake event detecting algorithm
 		 */
-		#if FUNC_DETECT_AWAKE
-		if (cnt_aw < THOLD_CNT_AW)//5s
+		if (cnt_aw < THOLD_CNT_AW)
 		{
 			/* summation of SVM in 5s */
-			inten_motion_aw += svm_val;
+			inten_aw += svm_val;
 			cnt_aw++;
 		}else{
-			/* remove the error value in the first minute */
+			/* remove the error value in the beginning */
 			if (!flag_start_aw)
 			{
-				inten_motion_aw = 0;
+				inten_aw = 0;
 				flag_start_aw = true;
 			}
 
 			/* detect awake event */
-			data_report_wn.event_aw = func_detect_aw(inten_motion_aw);
+			data_report_wn.event_awake = func_detect_awake(inten_aw);
 
-			inten_motion_aw = 0;
+			inten_aw = 0;
 			cnt_aw = 0;
 		}
-		#endif /* FUNC_DETECT_AWAKE */
 
 		/*
 		 * sleep monitoring algorithm base on indigital integration method 
 		 */
-		#if FUNC_MONITOR_SLEEP
-		if (cnt_sl < THOLD_CNT_SL)//1min
+		if (cnt_sl < THOLD_CNT_SL)
 		{
 			/* summation of SVM in 1 min */
-			data_report_wn.inten_motion_sl += svm_val;
+			data_report_wn.motion_intensity += svm_val;
 			cnt_sl++;
 		}else{
-			/* remove the error value in the first minute */
+			/* remove the error value in the beginning */
 			if (!flag_start_sl)
 			{
-				data_report_wn.inten_motion_sl = 0;
+				data_report_wn.motion_intensity = 0;
 				flag_start_sl = true;
 			}
 
 			/* sleep-wake state monitoring */
-			data_report_wn.state_sl = func_detect_sl(data_report_wn.inten_motion_sl);
+			data_report_wn.state = func_detect_state(data_report_wn.motion_intensity);
 
-			data_report_wn.inten_motion_sl = 0;
+			data_report_wn.motion_intensity = 0;
 			cnt_sl = 0;
 		}
-		#endif /* FUNC_MONITOR_SLEEP */
 
 
 		/* initialize the flag_warn */
-		data_report_wn.warn_hrate_abnor = false;
-	    data_report_wn.warn_btemp       = false;
-	    data_report_wn.warn_downward    = false;
+		data_report_wn.warn_hrate    = false;
+	    data_report_wn.warn_btemp    = false;
+	    data_report_wn.warn_downward = false;
 
 	    /*
-		 * detect warn of sleep downward
+		 * detect warn of sleep on his stomach
 		 */
-		#if FUNC_DETECT_DOWN
-		/* detect sleep downward event */
-		data_report_wn.warn_downward = func_detect_dw(acc_vals.accl_z);
-		#endif/* FUNC_DETECT_DOWN */
+		/* detect sleep on his stomach event */
+		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
 
-	    #if USED_BTEMP_SEN
-		/* read body temperature */
-		tmp_sensor_read(&data_report_wn.btemp);
+
+		/* read body temperature data */
+		btemp_sensor_read(&data_report_wn.btemp);
 
 		if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L)
-				data_report_wn.warn_btemp = true;
-		#endif /* USED_BTEMP_SEN */
+			data_report_wn.warn_btemp = true;
 
-		#if USED_HRATE_SEN
+
+		/* read heartrate data and process them by fft and filter */
 		filter_hrate(&data_report_wn.hrate);
 
 		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX)
-				data_report_wn.warn_hrate_abnor = true;
-		#endif /* USED_HRATE_SEN */
-
-
-		/* control LED_WARN to work */
-		if (data_report_wn.warn_btemp || 
-			data_report_wn.warn_hrate_abnor || 
-			data_report_wn.warn_downward)
-			led_write(LED_ON,  LED_LEDWARN);
-		else
-			led_write(LED_OFF, LED_LEDWARN);
+			data_report_wn.warn_hrate = true;
 		
 
 		/* 
-		 * print out messages for debug 
+		 * print out messages for primary function 
 		 */
-		#if PRINT_DEBUG_MA
-		if (cnt_sen < THOLD_CNT_SL * 2 + 5)
+		#if PRINT_DEBUG_FUNC
+		if (cnt_sen < THOLD_CNT_SEN)
 		{
 			cnt_sen++;
 		}else{
 			cnt_sen = 0;
-			print_msg_ma();
+			print_msg_func();
 		}
-		#endif/* PRINT_DEBUG_MA */
+		#endif/* PRINT_DEBUG_FUNC */
 	
 
 		vTaskDelay(DELAY_TIME_SLICE); 
 
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
 		/* 
 		 * stop timer1 and print out the time of task running 
 		 */		
 		#if USED_TIMER1
 		timer1_stop();
 		#endif
+/*
+*  end of this part
+**************************************************************
+*/
 
 	}
 

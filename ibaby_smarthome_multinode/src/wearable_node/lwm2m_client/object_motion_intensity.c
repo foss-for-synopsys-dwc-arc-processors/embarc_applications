@@ -88,9 +88,9 @@
 #define PRV_TLV_BUFFER_SIZE 64
 
 
-#define LWM2M_SLEEP_STATU_OBJECT_ID       3300
+#define LWM2M_ACT_STENGTH_OBJECT_ID       3323
 
-#define SLEEP_STATU_ID           5700   //sensorvalue
+#define ACT_STRENGTH_ID          5700
 
 #define LWM2M_EMSK_INSTANCE_ID  0
 
@@ -107,19 +107,20 @@ typedef struct _prv_instance_
      */
     struct _prv_instance_ * next;   // matches lwm2m_list_t::next
     uint16_t shortID;               // matches lwm2m_list_t::id
-    bool state_sl;
+    uint32_t motion_intensity;
 } prv_instance_t;
+
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
                              prv_instance_t * targetP)
 {
     // There are no multiple instance resources
-    tlvP->type = LWM2M_TYPE_RESOURCE;  
+    tlvP->type = LWM2M_TYPE_RESOURCE; 
         switch (tlvP->id)
         {
-        case SLEEP_STATU_ID:
-            targetP->state_sl = data_report_wn.state_sl;
-            lwm2m_tlv_encode_bool(targetP->state_sl, tlvP);
+        case ACT_STRENGTH_ID:
+            targetP->motion_intensity = data_report_wn.motion_intensity;
+            lwm2m_tlv_encode_int(targetP->motion_intensity, tlvP);
             if (0 != tlvP->length) return COAP_205_CONTENT;
             else return COAP_500_INTERNAL_SERVER_ERROR;
             break;
@@ -146,8 +147,7 @@ static uint8_t prv_read(uint16_t instanceId,
         if (*numDataP == 0)
         {
             uint16_t resList[] = {
-                    
-                    SLEEP_STATU_ID
+                    ACT_STRENGTH_ID
                     
             };
             int nbRes = sizeof(resList)/sizeof(uint16_t);
@@ -182,7 +182,7 @@ static uint8_t prv_write(uint16_t instanceId,
 
 static uint8_t prv_delete(uint16_t id,lwm2m_object_t * objectP)
 {
-    return COAP_405_METHOD_NOT_ALLOWED;
+   return COAP_405_METHOD_NOT_ALLOWED;
 }
 
 static uint8_t prv_create(uint16_t instanceId,
@@ -190,7 +190,7 @@ static uint8_t prv_create(uint16_t instanceId,
                           lwm2m_tlv_t * dataArray,
                           lwm2m_object_t * objectP)
 {
-   return COAP_405_METHOD_NOT_ALLOWED;
+    return COAP_405_METHOD_NOT_ALLOWED;
 }
 
 static uint8_t prv_exec(uint16_t instanceId,
@@ -213,12 +213,10 @@ static void prv_close(lwm2m_object_t * objectP)
     }
 }
 
-
-
-void display_sleepsta_object(lwm2m_object_t * object)
+void display_act_object(lwm2m_object_t * object)
 {
 #ifdef WITH_LOGS
-    EMBARC_PRINTF("  /%u: sleepsta object, instances:\r\n", object->objID);
+    EMBARC_PRINTF("  /%u: Act object, instances:\r\n", object->objID);
     prv_instance_t * instance = (prv_instance_t *)object->instanceList;
     while (instance != NULL)
     {
@@ -230,33 +228,34 @@ void display_sleepsta_object(lwm2m_object_t * object)
 #endif
 }
 
-lwm2m_object_t * get_sleepsta_object(void)
+lwm2m_object_t * get_act_object(void)
 {
-    lwm2m_object_t * sleepstaObj;
-     
-    sleepstaObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
+    lwm2m_object_t * actObj;
 
-    if (NULL != sleepstaObj)
+    actObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
+
+    if (NULL != actObj)
     {
         int i;    
         
         prv_instance_t * targetP;
 
-        memset(sleepstaObj, 0, sizeof(lwm2m_object_t));
+        memset(actObj, 0, sizeof(lwm2m_object_t));
 
-        sleepstaObj->objID = LWM2M_SLEEP_STATU_OBJECT_ID;
+        actObj->objID = LWM2M_ACT_STENGTH_OBJECT_ID;
         for (i=0 ; i < 1 ; i++)
         {
             targetP = (prv_instance_t *)lwm2m_malloc(sizeof(prv_instance_t));
             if (NULL == targetP) {
-                lwm2m_free(sleepstaObj);
+                lwm2m_free(actObj);
                 return NULL;
             }
             memset(targetP, 0, sizeof(prv_instance_t));
             
             targetP->shortID = LWM2M_EMSK_INSTANCE_ID + i;
-            targetP->state_sl = data_report_wn.state_sl;
-            sleepstaObj->instanceList = LWM2M_LIST_ADD(sleepstaObj->instanceList, targetP);
+            targetP->motion_intensity = data_report_wn.motion_intensity;
+            actObj->instanceList = LWM2M_LIST_ADD(actObj->instanceList, targetP);
+            
                     
         }
         /*
@@ -266,14 +265,14 @@ lwm2m_object_t * get_sleepsta_object(void)
          * - The other one (deleteFunc) delete an instance by removing it from the instance list (and freeing the memory
          *   allocated to it)
          */
-        sleepstaObj->readFunc    = prv_read;
-        sleepstaObj->writeFunc   = prv_write;
-        sleepstaObj->createFunc  = prv_create;
-        sleepstaObj->deleteFunc  = prv_delete;
-        sleepstaObj->executeFunc = prv_exec;
-        sleepstaObj->closeFunc   = prv_close;
+        actObj->readFunc    = prv_read;
+        actObj->writeFunc   = prv_write;
+        actObj->createFunc  = prv_create;
+        actObj->deleteFunc  = prv_delete;
+        actObj->executeFunc = prv_exec;
+        actObj->closeFunc   = prv_close;
         
     }
-
-    return sleepstaObj;
+    
+    return actObj;
 }

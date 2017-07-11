@@ -191,7 +191,7 @@ error_exit:
  * \retval	E_OK	init success
  * \retval	!E_OK	init failed
  */
-int32_t imu_sensor_init(uint32_t slv_addr)
+int32_t acc_sensor_init(uint32_t slv_addr)
 {
 	int32_t ercd = E_OK;
 
@@ -258,7 +258,7 @@ error_exit:
  * \retval	E_OK	read success
  * \retval	!E_OK	read failed
  */
-int32_t accel_sensor_read(acc_values* accel_val)
+int32_t acc_sensor_read(acc_values* accel_val)
 {
 	int32_t ercd = E_OK;
 	char str[20];

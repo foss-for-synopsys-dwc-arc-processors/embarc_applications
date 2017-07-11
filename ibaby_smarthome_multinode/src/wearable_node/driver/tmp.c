@@ -167,7 +167,7 @@ error_exit:
  * \retval	E_OK	init success
  * \retval	!E_OK	init failed
  */
-int32_t tmp_sensor_init(uint32_t slv_addr)
+int32_t btemp_sensor_init(uint32_t slv_addr)
 {
 	int32_t ercd = E_OK;
 
@@ -195,7 +195,7 @@ error_exit:
  * \retval	E_OK	read success
  * \retval	!E_OK	read failed
  */
-int32_t tmp_sensor_read(uint32_t *tmp)
+int32_t btemp_sensor_read(uint32_t *tmp)
 {
 	int32_t ercd = E_OK;
 	int i = 0;

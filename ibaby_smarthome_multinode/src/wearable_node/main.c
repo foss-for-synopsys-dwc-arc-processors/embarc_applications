@@ -92,22 +92,27 @@
  */
 int main(void)
 {
+	EMBARC_PRINTF("*********************************************************\r\n\
+				   *                 iBaby Smarthome Nodes                 *\r\n\
+				   *                     Wearable Node                     *\r\n\
+				   *********************************************************\r\n");
+
 	/* initialize body temperature sensor */
-	if (tmp_sensor_init(TMP112_ADDRESS) != E_OK)
+	if (btemp_sensor_init(TMP112_ADDRESS) != E_OK)
 	{
 		EMBARC_PRINTF("Error: body temperature sensor init failed\r\n");
 		return E_SYS;
 	}
 
 	/* initialize heartrate sensor */
-	if (heart_rate_sensor_init(MAX30102_ADDRESS) != E_OK)
+	if (hrate_sensor_init(MAX30102_ADDRESS) != E_OK)
 	{
 		EMBARC_PRINTF("Error: heartrate sensor init failed\r\n");
 		return E_SYS;
 	}
 
 	/* initialize acceleration sensor */
-	if (imu_sensor_init(IMU_I2C_SLAVE_ADDRESS) != E_OK)
+	if (acc_sensor_init(IMU_I2C_SLAVE_ADDRESS) != E_OK)
 	{
 		EMBARC_PRINTF("Error: acceleration sensor init failed\r\n");
 		return E_SYS;

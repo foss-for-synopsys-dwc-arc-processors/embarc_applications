@@ -50,8 +50,8 @@
 
 static const float tmp112_unit = 0.0625; //convert to ℃
 
-int32_t tmp_sensor_init(uint32_t slv_addr);
-int32_t tmp_sensor_read(uint32_t *tmp);
+int32_t btemp_sensor_init(uint32_t slv_addr);
+int32_t btemp_sensor_read(uint32_t *tmp);
 
 #endif /* _WEARABLE_NODE_DRIVER_TMP_H */
 

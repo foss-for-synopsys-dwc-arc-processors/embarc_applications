@@ -387,30 +387,30 @@ static void prv_update(void * user_data)
         }
 
         /* update sleep status value */
-        if (data_report_wn.state_sl != data_report_wn_old.state_sl)
+        if (data_report_wn.state != data_report_wn_old.state)
         {
             lwm2m_stringToUri("/3300/0/5700", 12, &uri);
-            valueLength = sprintf(value, "%d", data_report_wn.state_sl);
+            valueLength = sprintf(value, "%d", data_report_wn.state);
             handle_value_changed(context, &uri, value, valueLength);
-            data_report_wn_old.state_sl = data_report_wn.state_sl;
+            data_report_wn_old.state = data_report_wn.state;
         }
 
         /* update motion intensity value */
-        if (data_report_wn.inten_motion_sl != data_report_wn_old.inten_motion_sl)
+        if (data_report_wn.motion_intensity != data_report_wn_old.motion_intensity)
         {
             lwm2m_stringToUri("/3323/0/5700", 12, &uri);
-            valueLength = sprintf(value, "%d", data_report_wn.inten_motion_sl);
+            valueLength = sprintf(value, "%d", data_report_wn.motion_intensity);
             handle_value_changed(context, &uri, value, valueLength);
-            data_report_wn_old.inten_motion_sl = data_report_wn.inten_motion_sl;
+            data_report_wn_old.motion_intensity = data_report_wn.motion_intensity;
         }
 
         /* update warning of heartrate value */
-        if (data_report_wn.warn_hrate_abnor != data_report_wn_old.warn_hrate_abnor)
+        if (data_report_wn.warn_hrate != data_report_wn_old.warn_hrate)
         {
             lwm2m_stringToUri("/3338/0/5800", 12, &uri);
-            valueLength = sprintf(value, "%d", data_report_wn.warn_hrate_abnor);
+            valueLength = sprintf(value, "%d", data_report_wn.warn_hrate);
             handle_value_changed(context, &uri, value, valueLength);
-            data_report_wn_old.warn_hrate_abnor = data_report_wn.warn_hrate_abnor;
+            data_report_wn_old.warn_hrate = data_report_wn.warn_hrate;
         }
 
         /* update warning of body temperature value */
@@ -432,12 +432,12 @@ static void prv_update(void * user_data)
         }
 
         /* update notify of baby awake event value */
-        if (data_report_wn.event_aw != data_report_wn_old.event_aw)
+        if (data_report_wn.event_awake != data_report_wn_old.event_awake)
         {
             lwm2m_stringToUri("/3342/0/5800", 12, &uri);
-            valueLength = sprintf(value, "%d", data_report_wn.event_aw);
+            valueLength = sprintf(value, "%d", data_report_wn.event_awake);
             handle_value_changed(context, &uri, value, valueLength);
-            data_report_wn_old.event_aw = data_report_wn.event_aw;
+            data_report_wn_old.event_awake = data_report_wn.event_awake;
         }
       
         /* set it for next update value delay time */

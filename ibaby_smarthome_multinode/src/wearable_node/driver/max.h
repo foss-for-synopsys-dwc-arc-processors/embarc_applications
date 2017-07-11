@@ -50,8 +50,8 @@
 
 static const float heart_rate_unit = 60.f / 100.f / 62.5f; //16384 --> 62.5/LSB  convert to bpm
 
-int32_t heart_rate_sensor_init(uint32_t slv_addr);
-int32_t heart_rate_sensor_read(int* heart_rate);
+int32_t hrate_sensor_init(uint32_t slv_addr);
+int32_t hrate_sensor_read(int* heart_rate);
 float band_pass(float in);
 int find_trough_num(int* in, int len);
 extern int dat_num,dat_rdy;

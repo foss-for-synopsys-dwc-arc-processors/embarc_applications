@@ -88,9 +88,9 @@
 #define PRV_TLV_BUFFER_SIZE 64
 
 
-#define LWM2M_AWAKE_STA_OBJECT_ID          3342
+#define LWM2M_SLEEP_STATU_OBJECT_ID       3300
 
-#define WARN_AWAKE_ID          5800
+#define SLEEP_STATU_ID           5700   //sensorvalue
 
 #define LWM2M_EMSK_INSTANCE_ID  0
 
@@ -107,7 +107,7 @@ typedef struct _prv_instance_
      */
     struct _prv_instance_ * next;   // matches lwm2m_list_t::next
     uint16_t shortID;               // matches lwm2m_list_t::id
-    bool event_aw;
+    bool state;
 } prv_instance_t;
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
@@ -115,12 +115,11 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 {
     // There are no multiple instance resources
     tlvP->type = LWM2M_TYPE_RESOURCE;  
-        
         switch (tlvP->id)
         {
-        case WARN_AWAKE_ID:
-            targetP->event_aw = data_report_wn.event_aw;
-            lwm2m_tlv_encode_bool(targetP->event_aw, tlvP);
+        case SLEEP_STATU_ID:
+            targetP->state = data_report_wn.state;
+            lwm2m_tlv_encode_bool(targetP->state, tlvP);
             if (0 != tlvP->length) return COAP_205_CONTENT;
             else return COAP_500_INTERNAL_SERVER_ERROR;
             break;
@@ -148,7 +147,8 @@ static uint8_t prv_read(uint16_t instanceId,
         {
             uint16_t resList[] = {
                     
-                    WARN_AWAKE_ID
+                    SLEEP_STATU_ID
+                    
             };
             int nbRes = sizeof(resList)/sizeof(uint16_t);
 
@@ -190,7 +190,7 @@ static uint8_t prv_create(uint16_t instanceId,
                           lwm2m_tlv_t * dataArray,
                           lwm2m_object_t * objectP)
 {
-    return COAP_405_METHOD_NOT_ALLOWED;
+   return COAP_405_METHOD_NOT_ALLOWED;
 }
 
 static uint8_t prv_exec(uint16_t instanceId,
@@ -214,10 +214,11 @@ static void prv_close(lwm2m_object_t * objectP)
 }
 
 
-void display_awakestatus_object(lwm2m_object_t * object)
+
+void display_sleepsta_object(lwm2m_object_t * object)
 {
 #ifdef WITH_LOGS
-    EMBARC_PRINTF("  /%u: awakestatus object, instances:\r\n", object->objID);
+    EMBARC_PRINTF("  /%u: sleepsta object, instances:\r\n", object->objID);
     prv_instance_t * instance = (prv_instance_t *)object->instanceList;
     while (instance != NULL)
     {
@@ -229,35 +230,34 @@ void display_awakestatus_object(lwm2m_object_t * object)
 #endif
 }
 
-lwm2m_object_t * get_awakestatus_object(void)
+lwm2m_object_t * get_sleepsta_object(void)
 {
-    lwm2m_object_t * awakestatusObj;
+    lwm2m_object_t * sleepstaObj;
      
-    awakestatusObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
+    sleepstaObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
 
-    if (NULL != awakestatusObj)
+    if (NULL != sleepstaObj)
     {
         int i;    
         
         prv_instance_t * targetP;
 
-        memset(awakestatusObj, 0, sizeof(lwm2m_object_t));
+        memset(sleepstaObj, 0, sizeof(lwm2m_object_t));
 
-        awakestatusObj->objID = LWM2M_AWAKE_STA_OBJECT_ID;
+        sleepstaObj->objID = LWM2M_SLEEP_STATU_OBJECT_ID;
         for (i=0 ; i < 1 ; i++)
         {
             targetP = (prv_instance_t *)lwm2m_malloc(sizeof(prv_instance_t));
             if (NULL == targetP) {
-                lwm2m_free(awakestatusObj);
+                lwm2m_free(sleepstaObj);
                 return NULL;
             }
             memset(targetP, 0, sizeof(prv_instance_t));
             
             targetP->shortID = LWM2M_EMSK_INSTANCE_ID + i;
-            targetP->event_aw = data_report_wn.event_aw;
-            awakestatusObj->instanceList = LWM2M_LIST_ADD(awakestatusObj->instanceList, targetP);
-            
-           
+            targetP->state = data_report_wn.state;
+            sleepstaObj->instanceList = LWM2M_LIST_ADD(sleepstaObj->instanceList, targetP);
+                    
         }
         /*
          * From a single instance object, two more functions are available.
@@ -266,14 +266,14 @@ lwm2m_object_t * get_awakestatus_object(void)
          * - The other one (deleteFunc) delete an instance by removing it from the instance list (and freeing the memory
          *   allocated to it)
          */
-        awakestatusObj->readFunc    = prv_read;
-        awakestatusObj->writeFunc   = prv_write;
-        awakestatusObj->createFunc  = prv_create;
-        awakestatusObj->deleteFunc  = prv_delete;
-        awakestatusObj->executeFunc = prv_exec;
-        awakestatusObj->closeFunc   = prv_close;
+        sleepstaObj->readFunc    = prv_read;
+        sleepstaObj->writeFunc   = prv_write;
+        sleepstaObj->createFunc  = prv_create;
+        sleepstaObj->deleteFunc  = prv_delete;
+        sleepstaObj->executeFunc = prv_exec;
+        sleepstaObj->closeFunc   = prv_close;
         
     }
-  
-    return awakestatusObj;
+
+    return sleepstaObj;
 }

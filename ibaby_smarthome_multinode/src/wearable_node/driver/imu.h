@@ -68,9 +68,9 @@ typedef struct __accValues
     float accl_x, accl_y, accl_z;
 } acc_values;
 
-int32_t imu_sensor_init(uint32_t slv_addr);
+int32_t acc_sensor_init(uint32_t slv_addr);
 int32_t imu_sensor_read(imu_values* imu_val);
-int32_t accel_sensor_read(acc_values* accel_val);
+int32_t acc_sensor_read(acc_values* accel_val);
 
 #endif  /* _WEARABLE_NODE_DRIVER_IMU_H_ */
 

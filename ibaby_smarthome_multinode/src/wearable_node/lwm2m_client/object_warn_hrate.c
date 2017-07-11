@@ -109,7 +109,7 @@ typedef struct _prv_instance_
      */
     struct _prv_instance_ * next;   // matches lwm2m_list_t::next
     uint16_t shortID;               // matches lwm2m_list_t::id
-    bool warn_hrate_abnor;
+    bool warn_hrate;
 } prv_instance_t;
 
 
@@ -122,8 +122,8 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
         switch (tlvP->id)
         {
         case WARN_HRATE_ID:
-            targetP->warn_hrate_abnor = data_report_wn.warn_hrate_abnor;
-            lwm2m_tlv_encode_bool(targetP->warn_hrate_abnor, tlvP);
+            targetP->warn_hrate = data_report_wn.warn_hrate;
+            lwm2m_tlv_encode_bool(targetP->warn_hrate, tlvP);
             if (0 != tlvP->length) return COAP_205_CONTENT;
             else return COAP_500_INTERNAL_SERVER_ERROR;
             break;
@@ -258,7 +258,7 @@ lwm2m_object_t * get_hratestatus_object(void)
             memset(targetP, 0, sizeof(prv_instance_t));
             
             targetP->shortID = LWM2M_EMSK_INSTANCE_ID + i;
-            targetP->warn_hrate_abnor = data_report_wn.warn_hrate_abnor;
+            targetP->warn_hrate = data_report_wn.warn_hrate;
             hratestatusObj->instanceList = LWM2M_LIST_ADD(hratestatusObj->instanceList, targetP);
             
            

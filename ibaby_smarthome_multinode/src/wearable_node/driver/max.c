@@ -283,7 +283,7 @@ error_exit:
  * \retval	E_OK	init success
  * \retval	!E_OK	init failed
  */
-int32_t heart_rate_sensor_init(uint32_t slv_addr)
+int32_t hrate_sensor_init(uint32_t slv_addr)
 {
 	int32_t ercd = E_OK;
 	emsk_heart_rate_sensor = iic_get_dev(BOARD_TEMP_SENSOR_IIC_ID);
@@ -314,7 +314,7 @@ error_exit:
  */ 
 int dat_num=0,dat_rdy=0;  
 
-int32_t heart_rate_sensor_read(int* hrate)
+int32_t hrate_sensor_read(int* hrate)
 {
 	int32_t ercd = E_OK;
 	char str[20];
