@@ -72,10 +72,10 @@
  * @{
  */ 
 /* lwm2mServer's port and IP */
-static char *p_port   = (char *)"5683";
-static char *p_server = (char *)"10.120.158.127";
+const static char *p_port   = (char *)"5683";
+const static char *p_server = (char *)"10.120.158.127";
 /* name of lwm2m client node */
-static char *p_client_name = (char *)"wn";
+const static char *p_client_name = (char *)"wn";
 /* counter for number of files transported in OTA by LwM2M */
 static int count_file;
 

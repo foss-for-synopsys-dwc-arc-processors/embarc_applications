@@ -103,7 +103,7 @@ static void timer1_stop(void)
 
 #if PRINT_DEBUG_FUNC
 /** print message for primary function */
-static void print_msg_func(void)
+extern void print_msg_func(void)
 {
 	char str[150];
 
@@ -138,7 +138,7 @@ static void print_msg_func(void)
 
 #if PRINT_DEBUG_AWAKE
 /** print message for debug awake event detecting function */
-static void print_msg_awake(void)
+extern void print_msg_awake(void)
 {
 	char str[50];
 
@@ -168,7 +168,7 @@ static void print_msg_awake(void)
 
 #if PRINT_DEBUG_SLEEP
 /** print message for debug Sleep-Wake state monitoring function */
-static void print_msg_sleep(uint state)
+extern void print_msg_sleep(uint state)
 {
 	char str[50];
 
@@ -190,7 +190,7 @@ static void print_msg_sleep(uint state)
 #endif /* PRINT_DEBUG_SLEEP */
 
 /* function for deal with heartrate by filter */
-static void process_hrate(uint32_t* hrate)
+extern void process_hrate(uint32_t* hrate)
 {
 	/* ignore the wrong data in the beginning */
 	if(dat_num < 9)
@@ -367,7 +367,7 @@ static int filter_svm(int val_new, int val_old,
 }
 
 /** function for processing accelerate raw data */
-static int process_acc(acc_values acc_temp)
+extern int process_acc(acc_values acc_temp)
 {
 	int  x_new, y_new, z_new;   /* latest value */
 	int  svm_new;               /* SVM : signal vector magnitude for difference */
@@ -428,7 +428,7 @@ static int process_acc(acc_values acc_temp)
 }
 
 /** function for awake event detecting */
-static uint func_detect_awake(int inten_temp)
+extern uint func_detect_awake(int inten_temp)
 {
 	bool flag_break_aw = false;
 	uint cnt_sl_aw = 0;
@@ -491,7 +491,7 @@ static uint func_detect_awake(int inten_temp)
 }
 
 /** function for sleep-wake state detecting */
-static uint func_detect_state(int inten_temp)
+extern uint func_detect_state(int inten_temp)
 {
 	uint state; /* state : SLEEP or WAKE */
 
@@ -526,7 +526,7 @@ static uint func_detect_state(int inten_temp)
 }
 
 /** function for sleep downward state detecting */
-static bool func_detect_downward(float acc_temp)
+extern bool func_detect_downward(float acc_temp)
 {
 	bool warn;
 
@@ -566,7 +566,7 @@ static void task_lwm2m_client(void *par)
 	}
 }
 /** function for initialize and start lwm2m client */
-static int lwm2m_client_start(void)
+extern int lwm2m_client_start(void)
 {
 	int c_quit = 0;
 	task_lwm2m_client_handle = 0;
@@ -619,154 +619,4 @@ static int lwm2m_client_start(void)
 }
 #endif/* LWM2M_CLIENT */
 
-/** task for major function */
-extern void task_function(void * par)
-{
-	#if LWM2M_CLIENT
-	/* try to start lwm2m client */
-	lwm2m_client_start();
-	#endif
-
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-	vTaskDelay(DELAY_TIME_SLICE * 10); 
-
-	/*  initialize accelerometer before read */
-	acc_sensor_init(IMU_I2C_SLAVE_ADDRESS);
-	vTaskDelay(DELAY_TIME_SLICE * 2); 
-
-	/* initialize heartrate sensor before read */
-	hrate_sensor_init(HEART_RATE_I2C_SLAVE_ADDRESS);
-	vTaskDelay(DELAY_TIME_SLICE * 2);
-/*
-*  end of this part
-**************************************************************
-*/
-	
-	for(;;) {
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-		/* 
-		 * start timer1 for calculating the time of task running 
-		 */
-		#if USED_TIMER1
-		timer1_start();
-		#endif
-/*
-*  end of this part
-**************************************************************
-*/
-
-		/* read acceleration data every 33ms */
-		acc_sensor_read(&acc_vals);
-
-		/* process raw data and calculate SVM(representation of motion intensity) in 33ms */
-		svm_val = process_acc(acc_vals);
-
-		/*
-		 * awake event detecting algorithm
-		 */
-		if (cnt_aw < THOLD_CNT_AW)
-		{
-			/* summation of SVM in 5s */
-			inten_aw += svm_val;
-			cnt_aw++;
-		}else{
-			/* remove the error value in the beginning */
-			if (!flag_start_aw)
-			{
-				inten_aw = 0;
-				flag_start_aw = true;
-			}
-
-			/* detect awake event */
-			data_report_wn.event_awake = func_detect_awake(inten_aw);
-
-			/* 
-			 * print out messages for primary function 
-			 */
-			#if PRINT_DEBUG_FUNC
-				print_msg_func();
-			#endif/* PRINT_DEBUG_FUNC */
-
-			inten_aw = 0;
-			cnt_aw = 0;
-		}
-
-		/*
-		 * sleep monitoring algorithm based on indigital integration method 
-		 */
-		if (cnt_sl < THOLD_CNT_SL)
-		{
-			/* summation of SVM in 1 min */
-			data_report_wn.motion_intensity += svm_val;
-			cnt_sl++;
-		}else{
-			/* remove the error value in the beginning */
-			if (!flag_start_sl)
-			{
-				data_report_wn.motion_intensity = 0;
-				flag_start_sl = true;
-			}
-
-			/* sleep-wake state monitoring */
-			data_report_wn.state = func_detect_state(data_report_wn.motion_intensity);
-
-			data_report_wn.motion_intensity = 0;
-			cnt_sl = 0;
-		}
-
-
-		/* initialize the flag_warn */
-		data_report_wn.warn_hrate    = false;
-	    data_report_wn.warn_btemp    = false;
-	    data_report_wn.warn_downward = false;
-
-	    /*
-		 * detect warn of sleep on his stomach
-		 */
-		/* detect sleep downward event */
-		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
-
-
-		/* read body temperature data */
-		btemp_sensor_read(&data_report_wn.btemp);
-
-		if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L)
-			data_report_wn.warn_btemp = true;
-
-
-		/* read heartrate data and process them by fft and filter */
-		process_hrate(&data_report_wn.hrate);
-
-		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX)
-			data_report_wn.warn_hrate = true;
-	
-
-		vTaskDelay(DELAY_TIME_SLICE); 
-
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-		/* 
-		 * stop timer1 and print out the time of task running 
-		 */		
-		#if USED_TIMER1
-		timer1_stop();
-		#endif
-/*
-*  end of this part
-**************************************************************
-*/
-
-	}
-
-}
-
 /** @} */
-
