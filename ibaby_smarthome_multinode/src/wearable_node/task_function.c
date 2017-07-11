@@ -107,7 +107,7 @@ static void print_msg_func(void)
 {
 	char str[150];
 
-	EMBARC_PRINTF("\n************ Manual function ************\r\n");
+	EMBARC_PRINTF("\n************ Primary function ************\r\n");
 	sprintf(str,
 		"* Body heartrate   : %dbpm\r\n\
 		 * Body temperature : %d.%d'C\r\n\
@@ -190,7 +190,7 @@ static void print_msg_sleep(uint state)
 #endif /* PRINT_DEBUG_SLEEP */
 
 /* function for deal with heartrate by filter */
-static void filter_hrate(uint32_t* hrate)
+static void process_hrate(uint32_t* hrate)
 {
 	/* ignore the wrong data in the beginning */
 	if(dat_num < 9)
@@ -289,7 +289,7 @@ static int filter_acc(int val_new, int val_old,
 		flag_new = false;
 	if (flag_new == *flag_old)
 	{
-		(*cnt)++;//must type () on both sides of "*cnt", or it will give you wrong result!
+		(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
 		if (fabs(val_diff) > THOLD_ACC_DIFF)
 			*cnt += CNT_ACC_STEP;
 		if (*cnt > THOLD_ACC_CNT)
@@ -327,14 +327,14 @@ static int filter_svm(int val_new, int val_old,
 	val_diff = val_new - val_old;
 	if (val_diff)
 	{
-		// calculate low pass filter coefficient for SVM 
+		/* calculate low pass filter coefficient for SVM */
 		if (val_diff > 0)
 			flag_new = true;
 		else
 			flag_new = false;
 		if (flag_new == *flag_old)
 		{
-			(*cnt)++;//must type () on both sides of "*cnt", or it will give you wrong result!
+			(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
 			if (fabs(val_diff) > THOLD_SVM_DIFF)
 				*cnt += CNT_SVM_STEP;
 
@@ -353,7 +353,7 @@ static int filter_svm(int val_new, int val_old,
 		*par = PAR_SVM_BASE;
 	}
 
-	// calculate output of low pass filter
+	/* calculate output of low pass filter */
 	if (!val_diff)
 		val_new = val_old;
 	else
@@ -367,7 +367,7 @@ static int filter_svm(int val_new, int val_old,
 }
 
 /** function for processing accelerate raw data */
-static int process_acc_val(acc_values acc_temp)
+static int process_acc(acc_values acc_temp)
 {
 	int  x_new, y_new, z_new;   /* latest value */
 	int  svm_new;               /* SVM : signal vector magnitude for difference */
@@ -389,24 +389,40 @@ static int process_acc_val(acc_values acc_temp)
 	y_old = y_new;
 	z_old = z_new;
 
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
  	/* print out message for debug */
 	#if SEND_DEBUG_SVM1_5S
 	char str[50];
 	sprintf(str, "%d.", svm_new);//send data to matlab
 	EMBARC_PRINTF(str);
 	#endif
+/*
+*  end of this part
+**************************************************************
+*/
 
 	/* deal with SVM by filter */
 	svm_new = filter_svm(svm_new, svm_old, &flag_old_v, &cnt_v, &par_v);
 
 	svm_old = svm_new;
 
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
 	/* print out message for debug */
 	#if SEND_DEBUG_SVM2_5S
 	char str[50];
 	sprintf(str, "%d.", svm_new);//send data to matlab
 	EMBARC_PRINTF(str);
 	#endif
+/*
+*  end of this part
+**************************************************************
+*/
 
 	return svm_new;
 }
@@ -537,7 +553,7 @@ static void task_lwm2m_client(void *par)
 		if (lwm2mclient(&c_info) == 0) 
 			EMBARC_PRINTF("LwM2M client end successfully\r\n");
 		else
-			EMBARC_PRINTF("LwM2M client end failed\r\n");
+			EMBARC_PRINTF("Error: LwM2M client end failed\r\n");
 
 		cpu_status = cpu_lock_save();
 		if (c_info.server != NULL)     free((void *)(c_info.server));
@@ -557,24 +573,24 @@ static int lwm2m_client_start(void)
 	
 	/* check to see if wifi works */
     if (!lwip_pmwifi_isup()) {
-		EMBARC_PRINTF("Wifi is not ready for lwM2M client.\r\n");
+		EMBARC_PRINTF("Error: Wifi is not ready for lwM2M client.\r\n");
 		goto error_exit;
     }
    
     /* exit lwm2mClient */
     if (c_quit == 1) {
-		EMBARC_PRINTF("Try to exit existing client.\r\n");
+		EMBARC_PRINTF("Error: Try to exit existing client.\r\n");
 		handle_sigint(2);
 		goto error_exit;
 	}
 	
 	if (lwm2m_client_conn_stat == 1) {
-		EMBARC_PRINTF("LwM2M client is already running.\r\n");
+		EMBARC_PRINTF("Error: LwM2M client is already running.\r\n");
 		goto error_exit;
 	}
     
     if (p_server == NULL) {
-		EMBARC_PRINTF("Server Url is not specified, please check it.\r\n");
+		EMBARC_PRINTF("Error: Server Url is not specified, please check it.\r\n");
 		goto error_exit;
 	}
     c_info.server = p_server;
@@ -584,7 +600,7 @@ static int lwm2m_client_start(void)
     lwm2m_client_start_flag = 1;
 	EMBARC_PRINTF("Start lwm2m client.\n"); 
 
-	/* create or resume task for lwm2mClient to realize communication with iBaby Gateway */
+	/* create or resume task for lwm2mClient to realize communication with iBaby Smarthome Gateway */
     if (xTaskCreate(task_lwm2m_client, "lwm2m client", STACK_DEPTH_LWM2M, NULL, TSKPRI_HIGH, 
 		&task_lwm2m_client_handle) != pdPASS){
 		EMBARC_PRINTF("Error: Create task_lwm2m_client failed\r\n");
@@ -611,6 +627,10 @@ extern void task_function(void * par)
 	lwm2m_client_start();
 	#endif
 
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
 	vTaskDelay(DELAY_TIME_SLICE * 10); 
 
 	/*  initialize accelerometer before read */
@@ -619,7 +639,11 @@ extern void task_function(void * par)
 
 	/* initialize heartrate sensor before read */
 	hrate_sensor_init(HEART_RATE_I2C_SLAVE_ADDRESS);
-	vTaskDelay(DELAY_TIME_SLICE * 2); 
+	vTaskDelay(DELAY_TIME_SLICE * 2);
+/*
+*  end of this part
+**************************************************************
+*/
 	
 	for(;;) {
 /*
@@ -641,7 +665,7 @@ extern void task_function(void * par)
 		acc_sensor_read(&acc_vals);
 
 		/* process raw data and calculate SVM(representation of motion intensity) in 33ms */
-		svm_val = process_acc_val(acc_vals);
+		svm_val = process_acc(acc_vals);
 
 		/*
 		 * awake event detecting algorithm
@@ -662,12 +686,19 @@ extern void task_function(void * par)
 			/* detect awake event */
 			data_report_wn.event_awake = func_detect_awake(inten_aw);
 
+			/* 
+			 * print out messages for primary function 
+			 */
+			#if PRINT_DEBUG_FUNC
+				print_msg_func();
+			#endif/* PRINT_DEBUG_FUNC */
+
 			inten_aw = 0;
 			cnt_aw = 0;
 		}
 
 		/*
-		 * sleep monitoring algorithm base on indigital integration method 
+		 * sleep monitoring algorithm based on indigital integration method 
 		 */
 		if (cnt_sl < THOLD_CNT_SL)
 		{
@@ -698,7 +729,7 @@ extern void task_function(void * par)
 	    /*
 		 * detect warn of sleep on his stomach
 		 */
-		/* detect sleep on his stomach event */
+		/* detect sleep downward event */
 		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
 
 
@@ -710,24 +741,10 @@ extern void task_function(void * par)
 
 
 		/* read heartrate data and process them by fft and filter */
-		filter_hrate(&data_report_wn.hrate);
+		process_hrate(&data_report_wn.hrate);
 
 		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX)
 			data_report_wn.warn_hrate = true;
-		
-
-		/* 
-		 * print out messages for primary function 
-		 */
-		#if PRINT_DEBUG_FUNC
-		if (cnt_sen < THOLD_CNT_SEN)
-		{
-			cnt_sen++;
-		}else{
-			cnt_sen = 0;
-			print_msg_func();
-		}
-		#endif/* PRINT_DEBUG_FUNC */
 	
 
 		vTaskDelay(DELAY_TIME_SLICE); 

@@ -113,12 +113,13 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #endif/* LWM2M_CLIENT */
 /** @} end of name */
 
+
 /**
  * \name	macro for print function
  * @{
  */
 #if PRINT_DEBUG_FUNC
-static void print_msg_func(void);/*!< print message for debug major function */
+static void print_msg_func(void); /*!< print message for debug major function */
 #endif/* PRINT_DEBUG_FUNC */
 
 #if PRINT_DEBUG_AWAKE
@@ -145,13 +146,12 @@ static void print_msg_sleep(uint state);/*!< print message for debug sleep-wake 
 #define TSKPRI_LOW     (configMAX_PRIORITIES-4)/*!< low priority */
 /** @} end of name */
 
+
 /**
  * \name	macro for function of wearable node
  * @{
  */
 #define DELAY_TIME_SLICE (3) /*!< 33：sampling frequency : 30Hz(32.7ms) */
-#define THOLD_CNT_SEN (150)  /*!< count value of 5s : 150 * 1/30s */
-static int  cnt_sen;         /*!< counter for temperature, heartrate acqusition */
 extern void task_function(void * par);
 static TaskHandle_t task_function_handle = NULL;
 
@@ -170,7 +170,7 @@ static int hrate_group[FFT_LEN], hrate_temp;
 static int sum_h;
 
 /* function for deal with heartrate by filter */
-static void filter_hrate(uint32_t* hrate);
+static void process_hrate(uint32_t* hrate);
 
 
 static acc_values acc_vals;   /*!< accleration */
@@ -180,7 +180,7 @@ static int x_old, y_old, z_old;   /*!< last value */
 static int svm_val, svm_old;      /*!< SVM : signal vector magnitude for difference */
 
 /** function for processing accelerate raw data */
-static int process_acc_val(acc_values acc_temp);
+static int process_acc(acc_values acc_temp);
 
 /* function for deal with acclerate by filter */
 static int filter_acc(int val_new, int val_old, bool *flag_old, char *cnt, unsigned char *par);
