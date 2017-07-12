@@ -85,7 +85,7 @@
 #include "embARC_debug.h"
 
 #include "value.h"
-#include "task_function.h"
+#include "function.h"
 
 #define DELAY_TIME_SLICE (29)/*!< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
 

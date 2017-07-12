@@ -149,8 +149,8 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define THOLD_SVM_CNT  (50) /*!< threshold of counter, coefficient enlarge */
 
 /*!< parameters of limiting filter */
-#define MAX_LIMIT_SVM (200)/*!< upper limit of svm */
-#define MIN_LIMIT_SVM (5)  /*!< lower limit of svm */
+#define MAX_LIMIT_SVM (200) /*!< upper limit of svm */
+#define MIN_LIMIT_SVM (5)   /*!< lower limit of svm */
 
 /*!< parameters of awake event detecting */
 #define AWAKE   (1) /*!< wake up event */
