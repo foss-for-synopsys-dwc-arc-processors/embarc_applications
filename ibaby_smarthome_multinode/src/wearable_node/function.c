@@ -255,7 +255,7 @@ extern void process_hrate(uint32_t* hrate)
 			else if(cnt_h == 0)
 			{
 					cnt_h++;
-					hrate_temp = 700;
+					hrate_temp = 750;
 
 			}
 			dat_num = 0;

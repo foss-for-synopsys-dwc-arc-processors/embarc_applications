@@ -157,9 +157,9 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define NOEVENT (0) /*!< no event */
 
 #define THOLD_INTEN_AW (1000)/*!< threshold of motion intensity */
-#define LEN_STA_QUEUE  (7)   /*!< length of state queue used to detect awake event */
-#define LEN_STA_WAKE   (2)   /*!< length of state queue indicated baby awake */
-#define LEN_STA_SLEEP  (3)
+#define LEN_STA_QUEUE  (20)  /*!< length of state queue used to detect awake event */
+#define LEN_STA_WAKE   (5)   /*!< length of state queue indicated baby awake */
+#define LEN_STA_SLEEP  (LEN_STA_QUEUE - LEN_STA_WAKE)
 #define PAR_STA_AW     (0.75)/*!< proportion of wake-state in total queue indicated baby awake */
 
 /*!< parameters of sleep monitoring algorithm */
