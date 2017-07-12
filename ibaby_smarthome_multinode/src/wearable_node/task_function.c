@@ -109,9 +109,7 @@ static void print_msg_func(void)
 
 	EMBARC_PRINTF("\n************ Primary function ************\r\n");
 	sprintf(str,
-		"* Body heartrate   : %dbpm\r\n\
-		 * Body temperature : %d.%d'C\r\n\
-		 * Motion intensity : %d\r\n", 
+		"* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
 		 data_report_wn.hrate,
 		 data_report_wn.btemp/10, data_report_wn.btemp%10,
 		 data_report_wn.motion_intensity);

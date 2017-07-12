@@ -93,10 +93,10 @@
 int main(void)
 {
 	EMBARC_PRINTF("\
-		*********************************************************\r\n\
-		*                 iBaby Smarthome Nodes                 *\r\n\
-		*                     Wearable Node                     *\r\n\
-		*********************************************************\r\n");
+*********************************************************\r\n\
+*                 iBaby Smarthome Nodes                 *\r\n\
+*                     Wearable Node                     *\r\n\
+*********************************************************\r\n");
 
 	/* initialize body temperature sensor */
 	if (btemp_sensor_init(TMP112_ADDRESS) != E_OK)
