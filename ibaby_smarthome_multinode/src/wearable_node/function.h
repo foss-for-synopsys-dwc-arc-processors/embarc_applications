@@ -43,6 +43,7 @@
 #ifndef TASK_FUNCTION_H
 #define TASK_FUNCTION_H
 
+
 /* standard C HAL */
 #include <math.h>
 
@@ -88,7 +89,7 @@
 //#define T1_COUNT_UNIT_MS  (20000) /*!< counting accuracy of Timer1: 1ms */
 #define T1_COUNT_UNIT_LMS (2000)  /*!< counting accuracy of Timer1: 0.1ms */
 
-static int t1_count;/*!< counter for timer1 */
+static int t1_count; /*!< counter for timer1 */
 
 extern void timer1_start(void);
 extern void timer1_stop(void);
@@ -174,6 +175,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define K3 (0.24)
 #define K4 (0.06)
 
+
 /*!< variable of heartrate data processing */
 static int cnt_h, flag_h;
 static int hrate_group[FFT_LEN], hrate_temp;
@@ -206,7 +208,6 @@ static int filter_acc(int val_new, int val_old, bool *flag_old, char *cnt, unsig
 
 /* function for deal with SVM by filter */
 static int filter_svm(int val_new, int val_old, bool *flag_old, char *cnt, unsigned char *par);
-
 
 
 #if PRINT_DEBUG_FUNC

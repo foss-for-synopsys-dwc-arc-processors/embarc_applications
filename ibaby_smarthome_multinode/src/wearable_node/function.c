@@ -60,6 +60,7 @@
 /* custom HAL */
 #include "function.h"
 
+
 /*
 **************************************************************
 *  This part will be deleted in release version
@@ -108,6 +109,7 @@ extern void print_msg_func(void)
 	char str[150];
 
 	EMBARC_PRINTF("\r\n************ Primary function ************\r\n");
+
 	sprintf(str,
 		"* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
 		 data_report_wn.hrate,
@@ -115,22 +117,31 @@ extern void print_msg_func(void)
 		 data_report_wn.motion_intensity);
 	EMBARC_PRINTF(str);
 	
-	if (data_report_wn.state == SLEEP)
+	if (data_report_wn.state == SLEEP) {
 		EMBARC_PRINTF("* State : sleep\r\n");
-	else
+	} else {
 		EMBARC_PRINTF("* State : wake\r\n");
+	}
 
 	if (data_report_wn.warn_btemp)
+	{
 		EMBARC_PRINTF("* Warn of abnormal body temperature\r\n");
+	}
 
 	if (data_report_wn.warn_hrate)
+	{
 		EMBARC_PRINTF("* Warn of abnormal body heartrate\r\n");
+	}
 
 	if (data_report_wn.warn_downward)
+	{
 		EMBARC_PRINTF("* Warn of sleep on his stomach\r\n");
+	}
 
 	if (data_report_wn.event_awake == AWAKE)
+	{
 		EMBARC_PRINTF("* Baby awake!\r\n");
+	}
 
 	EMBARC_PRINTF("\r\n");
 }
@@ -143,26 +154,31 @@ extern void print_msg_awake(void)
 	char str[50];
 
 	EMBARC_PRINTF("\r\n************ Awake detecting ************\r\n");
+
 	sprintf(str, "* Motion intensity in 5s : %d\r\n", inten_aw);
 	EMBARC_PRINTF(str);
 
 	for (uint i = 0; i < LEN_STA_QUEUE; ++i)
 	{
 		if (i!=0 && !(i%3))
-			EMBARC_PRINTF("\r\n");
-		
-		if (state_aw[i])
 		{
+			EMBARC_PRINTF("\r\n");
+		}
+		
+		if (state_aw[i]) {
 			sprintf(str, "* state %d : sleep\t", i);
 			EMBARC_PRINTF(str);
-		}else{
+		} else {
 			sprintf(str, "* state %d : wake\t", i);
 			EMBARC_PRINTF(str);
 		}
 	}
 	EMBARC_PRINTF("\r\n");
+
 	if (data_report_wn.event_awake == AWAKE)
+	{
 		EMBARC_PRINTF("* Baby awake!\r\n\r\n");
+	}
 }
 #endif /* PRINT_DEBUG_AWAKE */
 
@@ -173,19 +189,26 @@ extern void print_msg_sleep(uint state)
 	char str[50];
 
 	EMBARC_PRINTF("\r\n************ Sleep monitoring ************\r\n");
+
 	for (uint i = 0; i < 5; ++i)
 	{
 		if (i==2 || i==3)
+		{
 			EMBARC_PRINTF("\r\n");
+		}
 		sprintf(str, "* Intensity %d : %d\t\t", i, inten_sl[i]/100);
 		EMBARC_PRINTF(str);
 	}
+
 	sprintf(str, "\r\n* Intensity score in 5min : %f\r\n", score_sl);
 	EMBARC_PRINTF(str);
+
 	if (!state)
+	{
 		EMBARC_PRINTF("* State of 2min ago : wake\r\n\r\n");
-	else
+	} else {
 		EMBARC_PRINTF("* State of 2min ago : sleep\r\n\r\n");
+	}
 }
 #endif /* PRINT_DEBUG_SLEEP */
 
@@ -194,28 +217,30 @@ extern void process_hrate(uint32_t* hrate)
 {
 	/* ignore the wrong data in the beginning */
 	if(dat_num < 9)
+	{
 			hrate_sensor_read(NULL);
+	}
 	else if(dat_num < FFT_LEN + 9)
 	{
 		hrate_sensor_read(&hrate_group[dat_num-9]);
+
 		if(dat_rdy && dat_num > 9)
 		{
-			if(hrate_group[dat_num-10] < 10000 || hrate_group[dat_num-10] > 120000)
-			{
+			if(hrate_group[dat_num-10] < 10000 || hrate_group[dat_num-10] > 120000) {
 				dat_num = 0;
 				sum_h = 0;
 				cnt_h = 0;
-			}
-			else 
-			{
+			} else {
 				sum_h += hrate_group[dat_num-10];
 			}
+			
 			dat_rdy = 0;
 		}
 	}
 	else if(dat_num == FFT_LEN + 9)
 	{
 		sum_h = sum_h / FFT_LEN;
+
 		for(int i = 0; i < FFT_LEN - 1; i++)
 		{
 			if(fabs(hrate_group[i] - hrate_group[i+1]) > 1000)
@@ -226,136 +251,165 @@ extern void process_hrate(uint32_t* hrate)
 				hrate_temp = 0;
 			}
 		}
+
 		if(!flag_h)
 		{
 			for(int i = 0; i < FFT_LEN; i++)
-			{	
+			{
 				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_h);
-				if(fabs(hrate_group[i]) < 1000)
-				{
+
+				if(fabs(hrate_group[i]) < 1000) {
 					x[i].R = hrate_group[i] * 30;
-				}
-				else 
-				{
+				} else {
 					i = FFT_LEN - 1;
 					dat_num = 0;
 					cnt_h = 0;
 					hrate_temp = 0;
 				}
-
 			}
-		}	
+		}
 
 		if(dat_num)
 		{
 			calc_w(w);
-			fft(x,w);
+
+			fft(x, w);
+
 			if(cnt_h > 0)
+			{
 				hrate_temp = hrate_temp + ((float)(find_max(x) * 60 * FFT_DELTA) * 10 - hrate_temp) / 6;
+			}
 			else if(cnt_h == 0)
 			{
 					cnt_h++;
 					hrate_temp = 750;
-
 			}
-			dat_num = 0;
 
+			dat_num = 0;
 		}
+
 		sum_h = 0;
 		flag_h = 0;
 	}
 
-	*hrate = (uint32_t)(hrate_temp/10);
+	*hrate = (uint32_t)(hrate_temp / 10);
 }
 
 /* function for deal with acclerate by filter */
-static int filter_acc(int val_new, int val_old, 
-	bool *flag_old, char *cnt, unsigned char *par)
+static int filter_acc(int val_new, 
+					  int val_old,
+					  bool *flag_old,
+					  char *cnt,
+					  unsigned char *par)
 {
 	int val_diff;
 	bool flag_new;
 
 	/* calculate low pass filter coefficient for x axis acceleration */ 
 	val_diff = val_new - val_old;
-	if (val_diff > 0)
+
+	if (val_diff > 0) {
 		flag_new = true;
-	else
+	} else {
 		flag_new = false;
-	if (flag_new == *flag_old)
-	{
+	}
+
+	if (flag_new == *flag_old) {
 		(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
+
 		if (fabs(val_diff) > THOLD_ACC_DIFF)
+		{
 			*cnt += CNT_ACC_STEP;
+		}
+
 		if (*cnt > THOLD_ACC_CNT)
 		{
 			*par += PAR_ACC_STEP;
 			*cnt = 0;
 		}
-	}else{
+	} else {
 		*cnt  = 0;
 		*par = PAR_ACC_BASE;
 	}
+
 	*flag_old = flag_new;
 
 	/* calculate output of low pass filter */
-	if (!val_diff)
+	if (!val_diff) {
 		val_new = val_old;
-	else
+	} else {
 		val_new = val_old + val_diff*(*par)/256;
+	}
 
 	return val_new;
 }
 
 /* function for deal with SVM by filter */
-static int filter_svm(int val_new, int val_old, 
-	bool *flag_old, char *cnt, unsigned char *par)
+static int filter_svm(int val_new,
+					  int val_old,
+					  bool *flag_old,
+					  char *cnt,
+					  unsigned char *par)
 {
 	int val_diff;
 	bool flag_new;
 
 	/* deal with SVM by limiting filter */
 	if (val_new > MAX_LIMIT_SVM)
+	{
 		val_new = MAX_LIMIT_SVM;
+	}
 
 	/* deal with SVM by low pass filter */
 	val_diff = val_new - val_old;
+
 	if (val_diff)
 	{
 		/* calculate low pass filter coefficient for SVM */
-		if (val_diff > 0)
+		if (val_diff > 0) {
 			flag_new = true;
-		else
+		} else {
 			flag_new = false;
+		}
+
 		if (flag_new == *flag_old)
 		{
 			(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
+
 			if (fabs(val_diff) > THOLD_SVM_DIFF)
+			{
 				*cnt += CNT_SVM_STEP;
+			}
 
 			if (*cnt > THOLD_SVM_CNT)
 			{
 				*par += PAR_SVM_STEP;
 				*cnt = 0;
 			}
-		}else{
+		} else {
 			*cnt = 0;
 			*par = PAR_SVM_BASE;
 		}
+
 		*flag_old = flag_new;
-	}else{
+
+	} else {
 		*cnt = 0;
 		*par = PAR_SVM_BASE;
 	}
 
 	/* calculate output of low pass filter */
-	if (!val_diff)
+	if (!val_diff) {
 		val_new = val_old;
-	else
+	} else {
 		val_new = val_old + val_diff*(*par)/256;
+	}
 
 	/* deal with SVM by limiting filter */
 	if (val_new < MIN_LIMIT_SVM)
+	{
 		val_new = 0;
+	}
 
 	return val_new;
 }
@@ -390,6 +444,7 @@ extern int process_acc(acc_values acc_temp)
  	/* print out message for debug */
 	#if SEND_DEBUG_SVM1_5S
 	char str[50];
+
 	sprintf(str, "%d.", svm_new);//send data to matlab
 	EMBARC_PRINTF(str);
 	#endif
@@ -410,6 +465,7 @@ extern int process_acc(acc_values acc_temp)
 	/* print out message for debug */
 	#if SEND_DEBUG_SVM2_5S
 	char str[50];
+
 	sprintf(str, "%d.", svm_new);//send data to matlab
 	EMBARC_PRINTF(str);
 	#endif
@@ -430,10 +486,11 @@ extern uint func_detect_awake(int inten_temp)
 	uint event = NOEVENT;/* flag of event : NOEVENT or AWAKE */
 
 	/* judge current status */
-	if (inten_temp > THOLD_INTEN_AW)
+	if (inten_temp > THOLD_INTEN_AW) {
 		state_aw[0] = 0;//now in wake state
-	else
+	} else {
 		state_aw[0] = 1;//now in sleep state
+	}
 
 	/* the number of sleep state in front of the state queue */
 	for (uint i = LEN_STA_QUEUE-1; i > LEN_STA_WAKE-1; --i)
@@ -443,30 +500,38 @@ extern uint func_detect_awake(int inten_temp)
 			flag_break_aw = false;
 			break;
 		}
+
 		if (state_aw[i])
-			cnt_sl_aw++;
-		if (cnt_sl_aw > LEN_STA_SLEEP * PAR_STA_AW)
 		{
+			cnt_sl_aw++;
+		}
+
+		if (cnt_sl_aw > LEN_STA_SLEEP * PAR_STA_AW) {
 			cnt_sl_aw = 0;
+
 			/* statistics the number of wake state in back of the state queue */
 			for (uint i = 0; i < LEN_STA_WAKE; ++i)
 			{
 				if (!state_aw[i])
+				{
 					cnt_wk_aw++;
+				}
 
-				if(cnt_wk_aw > LEN_STA_WAKE * PAR_STA_AW){
+				if(cnt_wk_aw > LEN_STA_WAKE * PAR_STA_AW) {
 					/* wake up event detected */
 					event = AWAKE;
+
 					/* go exit from for loop */
 					flag_break_aw = true;
-				}else{
+				} else {
 					event = NOEVENT;
 				}
 			}
-		}else{
+		} else {
 			event = NOEVENT;
 		}
 	}
+
 	cnt_sl_aw = 0;
 	cnt_wk_aw = 0;
 
@@ -492,6 +557,7 @@ extern uint func_detect_state(int inten_temp)
 	/* print out message for debug */
 	#if SEND_DEBUG_INTEN_1M
 	char str[50];
+
 	sprintf(str, "%d.", inten_temp);//send data to matlab
 	EMBARC_PRINTF(str);
 	#endif
@@ -502,10 +568,11 @@ extern uint func_detect_state(int inten_temp)
 	score_sl = P * (K4*inten_sl[4] + K3*inten_sl[3] + K2*inten_sl[2] + K1*inten_sl[1] + K0*inten_sl[0]) / 100;
 
 	/* determine the state of 2min ago by score */
-	if (score_sl > 1)
+	if (score_sl > 1) {
 		state = WAKE;
-	else
+	} else {
 		state = SLEEP;
+	}
 
 	/* print out message for debug */
 	#if PRINT_DEBUG_SLEEP
@@ -514,7 +581,9 @@ extern uint func_detect_state(int inten_temp)
 
 	/* update motion intensity for 5 * 1min */
 	for (uint i = 4; i > 0; --i)
+	{
 		inten_sl[i] = inten_sl[i-1];
+	}
 
 	return state;
 }
@@ -524,15 +593,14 @@ extern bool func_detect_downward(float acc_temp)
 {
 	bool warn;
 
-	if (acc_temp < WARN_ACCL_Z)
+	if (acc_temp < WARN_ACCL_Z) {
 		warn = true;
-	else
+	} else {
 		warn = false;
+	}
 
 	return warn;
 }
-
-
 
 #if LWM2M_CLIENT
 /** task for lwm2m client */
@@ -544,10 +612,11 @@ static void task_lwm2m_client(void *par)
 		lwm2m_client_conn_stat = 1;
 
 		/* get into sub function(lwm2mclient) to do all work about data interaction with gateway(lwm2m server) */
-		if (lwm2mclient(&c_info) == 0) 
+		if (lwm2mclient(&c_info) == 0) {
 			EMBARC_PRINTF("LwM2M client end successfully\r\n");
-		else
+		} else {
 			EMBARC_PRINTF("Error: LwM2M client end failed\r\n");
+		}
 
 		cpu_status = cpu_lock_save();
 		if (c_info.server != NULL)     free((void *)(c_info.server));
@@ -587,6 +656,7 @@ extern int lwm2m_client_start(void)
 		EMBARC_PRINTF("Error: Server Url is not specified, please check it.\r\n");
 		goto error_exit;
 	}
+
     c_info.server = p_server;
 	c_info.ep_name = p_client_name;
 	c_info.serverPort = p_port;
@@ -599,9 +669,7 @@ extern int lwm2m_client_start(void)
 		&task_lwm2m_client_handle) != pdPASS){
 		EMBARC_PRINTF("Error: Create task_lwm2m_client failed\r\n");
 		return E_SYS;
-	}
-
-    else {
+	} else {
 		vTaskResume(task_lwm2m_client_handle);
 		return E_OK;
 	}

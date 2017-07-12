@@ -87,6 +87,7 @@
 #include "value.h"
 #include "function.h"
 
+
 #define DELAY_TIME_SLICE (29)/*!< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
 
 #define THOLD_CNT_AW (150)   /*!< threshold of counter(5s) for executing awake event detecting algorithm */
@@ -98,10 +99,8 @@
 #define WARN_HR_MAX  (150)   /*!< upper value of warning heartrate */
 
 static int  svm_val;         /*!< SVM : signal vector magnitude for difference */
-
 static int  cnt_aw;          /*!< executing algorithm counter */
 static bool flag_start_aw;   /*!< flag of awake event detecting start */
-
 static int  cnt_sl;          /*!< counter for sleep monitoring */
 static bool flag_start_sl;   /*!< flag of sleep monitoring start */
 
@@ -163,15 +162,13 @@ int main(void)
 *  end of this part
 **************************************************************
 */
-	
+
 	for(;;) {
 /*
 **************************************************************
 *  This part will be deleted in release version
 */
-		/* 
-		 * start timer1 for calculating the time of task running 
-		 */
+		/* start timer1 for calculating the time of task running */
 		#if USED_TIMER1
 		timer1_start();
 		#endif
@@ -186,15 +183,12 @@ int main(void)
 		/* process raw data and calculate SVM(representation of motion intensity) in 33ms */
 		svm_val = process_acc(acc_vals);
 
-		/*
-		 * awake event detecting algorithm
-		 */
-		if (cnt_aw < THOLD_CNT_AW)
-		{
+		/* awake event detecting algorithm */
+		if (cnt_aw < THOLD_CNT_AW) {
 			/* summation of SVM in 5s */
 			inten_aw += svm_val;
 			cnt_aw++;
-		}else{
+		} else {
 			/* remove the error value in the beginning */
 			if (!flag_start_aw)
 			{
@@ -205,9 +199,7 @@ int main(void)
 			/* detect awake event */
 			data_report_wn.event_awake = func_detect_awake(inten_aw);
 
-			/* 
-			 * print out messages for primary function 
-			 */
+			/* print out messages for primary function */
 			#if PRINT_DEBUG_FUNC
 				print_msg_func();
 			#endif/* PRINT_DEBUG_FUNC */
@@ -216,15 +208,12 @@ int main(void)
 			cnt_aw = 0;
 		}
 
-		/*
-		 * sleep monitoring algorithm based on indigital integration method 
-		 */
-		if (cnt_sl < THOLD_CNT_SL)
-		{
+		/* sleep monitoring algorithm based on indigital integration method */
+		if (cnt_sl < THOLD_CNT_SL) {
 			/* summation of SVM in 1 min */
 			data_report_wn.motion_intensity += svm_val;
 			cnt_sl++;
-		}else{
+		} else {
 			/* remove the error value in the beginning */
 			if (!flag_start_sl)
 			{
@@ -239,42 +228,38 @@ int main(void)
 			cnt_sl = 0;
 		}
 
-
 		/* initialize the flag_warn */
 		data_report_wn.warn_hrate    = false;
 	    data_report_wn.warn_btemp    = false;
 	    data_report_wn.warn_downward = false;
 
-	    /*
-		 * detect warn of sleep on his stomach
-		 */
+	    /* detect warn of sleep on his stomach */
 		/* detect sleep downward event */
 		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
-
 
 		/* read body temperature data */
 		btemp_sensor_read(&data_report_wn.btemp);
 
 		if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L)
+		{
 			data_report_wn.warn_btemp = true;
-
+		}
 
 		/* read heartrate data and process them by fft and filter */
 		process_hrate(&data_report_wn.hrate);
 
 		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX)
+		{
 			data_report_wn.warn_hrate = true;
+		}
 	
-
 		vTaskDelay(DELAY_TIME_SLICE); 
 
 /*
 **************************************************************
 *  This part will be deleted in release version
 */
-		/* 
-		 * stop timer1 and print out the time of task running 
-		 */		
+		/* stop timer1 and print out the time of task running */		
 		#if USED_TIMER1
 		timer1_stop();
 		#endif

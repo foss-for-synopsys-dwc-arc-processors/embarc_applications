@@ -42,6 +42,7 @@
 #ifndef VALUE_H
 #define VALUE_H
 
+
 /**
  * \name    macros about common setting
  * @{
@@ -74,8 +75,10 @@
 /* lwm2mServer's port and IP */
 const static char *p_port   = (char *)"5683";
 const static char *p_server = (char *)"192.168.43.199";
+
 /* name of lwm2m client node */
 const static char *p_client_name = (char *)"wn";
+
 /* counter for number of files transported in OTA by LwM2M */
 static int count_file;
 
@@ -96,6 +99,7 @@ typedef struct{
 
 /* current value of reporting data */
 data_wearable_node data_report_wn;
+
 /* the last value of reporting data */
 data_wearable_node data_report_wn_old;
 /** @} end of name */
