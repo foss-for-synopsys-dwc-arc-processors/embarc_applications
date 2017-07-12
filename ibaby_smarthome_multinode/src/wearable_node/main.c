@@ -113,7 +113,7 @@ int main(void)
 {
 	acc_values acc_vals;  /*!< accleration storage */
 
-	EMBARC_PRINTF("\
+	EMBARC_PRINTF("\r\n\
 *********************************************************\r\n\
 *                 iBaby Smarthome Nodes                 *\r\n\
 *                     Wearable Node                     *\r\n\

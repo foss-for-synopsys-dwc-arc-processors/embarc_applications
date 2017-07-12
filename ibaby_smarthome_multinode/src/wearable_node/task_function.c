@@ -91,7 +91,7 @@ extern void timer1_stop(void)
 	dec = t1_count - (t1_count/10) * 10;
 
 	EMBARC_PRINTF("************     timing     ************\r\n");
-	EMBARC_PRINTF("* timer1 counter : %d.%d ms\n", t1_count/10, dec);
+	EMBARC_PRINTF("* timer1 counter : %d.%d ms\r\n", t1_count/10, dec);
 	EMBARC_PRINTF("****************************************\r\n\r\n");
 }
 #endif/* USED_TIMER1 */
@@ -107,7 +107,7 @@ extern void print_msg_func(void)
 {
 	char str[150];
 
-	EMBARC_PRINTF("\n************ Primary function ************\r\n");
+	EMBARC_PRINTF("\r\n************ Primary function ************\r\n");
 	sprintf(str,
 		"* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
 		 data_report_wn.hrate,
@@ -131,6 +131,8 @@ extern void print_msg_func(void)
 
 	if (data_report_wn.event_awake == AWAKE)
 		EMBARC_PRINTF("* Baby awake!\r\n");
+
+	EMBARC_PRINTF("\r\n");
 }
 #endif /* PRINT_DEBUG_FUNC */
 
@@ -140,14 +142,14 @@ extern void print_msg_awake(void)
 {
 	char str[50];
 
-	EMBARC_PRINTF("\n************ Awake detecting ************\r\n");
-	sprintf(str, "* Motion intensity in 5s : %d\n", inten_aw);
+	EMBARC_PRINTF("\r\n************ Awake detecting ************\r\n");
+	sprintf(str, "* Motion intensity in 5s : %d\r\n", inten_aw);
 	EMBARC_PRINTF(str);
 
 	for (uint i = 0; i < LEN_STA_QUEUE; ++i)
 	{
 		if (i!=0 && !(i%3))
-			EMBARC_PRINTF("\n");
+			EMBARC_PRINTF("\r\n");
 		
 		if (state_aw[i])
 		{
@@ -158,9 +160,9 @@ extern void print_msg_awake(void)
 			EMBARC_PRINTF(str);
 		}
 	}
-	EMBARC_PRINTF("\n");
+	EMBARC_PRINTF("\r\n");
 	if (data_report_wn.event_awake == AWAKE)
-		EMBARC_PRINTF("* Baby awake!\n");
+		EMBARC_PRINTF("* Baby awake!\r\n\r\n");
 }
 #endif /* PRINT_DEBUG_AWAKE */
 
@@ -170,15 +172,15 @@ extern void print_msg_sleep(uint state)
 {
 	char str[50];
 
-	EMBARC_PRINTF("\n************ Sleep monitoring ************\r\n");
+	EMBARC_PRINTF("\r\n************ Sleep monitoring ************\r\n");
 	for (uint i = 0; i < 5; ++i)
 	{
 		if (i==2 || i==3)
-			EMBARC_PRINTF("\n");
+			EMBARC_PRINTF("\r\n");
 		sprintf(str, "* Intensity %d : %d\t\t", i, inten_sl[i]/100);
 		EMBARC_PRINTF(str);
 	}
-	sprintf(str, "\n* Intensity score in 5min : %f\n", score_sl);
+	sprintf(str, "\r\n* Intensity score in 5min : %f\r\n", score_sl);
 	EMBARC_PRINTF(str);
 	if (!state)
 		EMBARC_PRINTF("* State of 2min ago : wake\r\n\r\n");
@@ -590,7 +592,7 @@ extern int lwm2m_client_start(void)
 	c_info.serverPort = p_port;
 
     lwm2m_client_start_flag = 1;
-	EMBARC_PRINTF("Start lwm2m client.\n"); 
+	EMBARC_PRINTF("Start lwm2m client.\r\n"); 
 
 	/* create or resume task for lwm2mClient to realize communication with iBaby Smarthome Gateway */
     if (xTaskCreate(task_lwm2m_client, "lwm2m client", STACK_DEPTH_LWM2M, NULL, TSKPRI_HIGH, 

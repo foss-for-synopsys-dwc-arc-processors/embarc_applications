@@ -46,7 +46,7 @@
  * \name    macros about common setting
  * @{
  */
-#define LWM2M_CLIENT      (0)/*!< set 1 to be lwm2m client */
+#define LWM2M_CLIENT      (1)/*!< set 1 to be lwm2m client */
 
 #define PRINT_DEBUG_FUNC  (1)/*!< set 1 to print message for debug major function */
 #define PRINT_DEBUG_AWAKE (0)/*!< set 1 to print message for debug awake event detecting function */
@@ -73,7 +73,7 @@
  */ 
 /* lwm2mServer's port and IP */
 const static char *p_port   = (char *)"5683";
-const static char *p_server = (char *)"10.120.158.127";
+const static char *p_server = (char *)"192.168.43.199";
 /* name of lwm2m client node */
 const static char *p_client_name = (char *)"wn";
 /* counter for number of files transported in OTA by LwM2M */
