@@ -120,22 +120,19 @@ int main(void)
 *********************************************************\r\n");
 
 	/* initialize body temperature sensor */
-	if (btemp_sensor_init(TMP112_ADDRESS) != E_OK)
-	{
+	if (btemp_sensor_init(TMP112_ADDRESS) != E_OK) {
 		EMBARC_PRINTF("Error: body temperature sensor init failed\r\n");
 		return E_SYS;
 	}
 
 	/* initialize heartrate sensor */
-	if (hrate_sensor_init(MAX30102_ADDRESS) != E_OK)
-	{
+	if (hrate_sensor_init(MAX30102_ADDRESS) != E_OK) {
 		EMBARC_PRINTF("Error: heartrate sensor init failed\r\n");
 		return E_SYS;
 	}
 
 	/* initialize acceleration sensor */
-	if (acc_sensor_init(IMU_I2C_SLAVE_ADDRESS) != E_OK)
-	{
+	if (acc_sensor_init(IMU_I2C_SLAVE_ADDRESS) != E_OK) {
 		EMBARC_PRINTF("Error: acceleration sensor init failed\r\n");
 		return E_SYS;
 	}
@@ -190,8 +187,7 @@ int main(void)
 			cnt_aw++;
 		} else {
 			/* remove the error value in the beginning */
-			if (!flag_start_aw)
-			{
+			if (!flag_start_aw) {
 				inten_aw = 0;
 				flag_start_aw = true;
 			}
@@ -215,8 +211,7 @@ int main(void)
 			cnt_sl++;
 		} else {
 			/* remove the error value in the beginning */
-			if (!flag_start_sl)
-			{
+			if (!flag_start_sl) {
 				data_report_wn.motion_intensity = 0;
 				flag_start_sl = true;
 			}
@@ -230,26 +225,24 @@ int main(void)
 
 		/* initialize the flag_warn */
 		data_report_wn.warn_hrate    = false;
-	    data_report_wn.warn_btemp    = false;
-	    data_report_wn.warn_downward = false;
+		data_report_wn.warn_btemp    = false;
+		data_report_wn.warn_downward = false;
 
-	    /* detect warn of sleep on his stomach */
+		/* detect warn of sleep on his stomach */
 		/* detect sleep downward event */
 		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
 
 		/* read body temperature data */
 		btemp_sensor_read(&data_report_wn.btemp);
 
-		if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L)
-		{
+		if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L) {
 			data_report_wn.warn_btemp = true;
 		}
 
 		/* read heartrate data and process them by fft and filter */
 		process_hrate(&data_report_wn.hrate);
 
-		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX)
-		{
+		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX) {
 			data_report_wn.warn_hrate = true;
 		}
 	

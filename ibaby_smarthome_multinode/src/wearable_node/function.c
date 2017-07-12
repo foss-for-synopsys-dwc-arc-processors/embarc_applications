@@ -123,23 +123,19 @@ extern void print_msg_func(void)
 		EMBARC_PRINTF("* State : wake\r\n");
 	}
 
-	if (data_report_wn.warn_btemp)
-	{
+	if (data_report_wn.warn_btemp) {
 		EMBARC_PRINTF("* Warn of abnormal body temperature\r\n");
 	}
 
-	if (data_report_wn.warn_hrate)
-	{
+	if (data_report_wn.warn_hrate) {
 		EMBARC_PRINTF("* Warn of abnormal body heartrate\r\n");
 	}
 
-	if (data_report_wn.warn_downward)
-	{
+	if (data_report_wn.warn_downward) {
 		EMBARC_PRINTF("* Warn of sleep on his stomach\r\n");
 	}
 
-	if (data_report_wn.event_awake == AWAKE)
-	{
+	if (data_report_wn.event_awake == AWAKE) {
 		EMBARC_PRINTF("* Baby awake!\r\n");
 	}
 
@@ -158,10 +154,8 @@ extern void print_msg_awake(void)
 	sprintf(str, "* Motion intensity in 5s : %d\r\n", inten_aw);
 	EMBARC_PRINTF(str);
 
-	for (uint i = 0; i < LEN_STA_QUEUE; ++i)
-	{
-		if (i!=0 && !(i%3))
-		{
+	for (uint i = 0; i < LEN_STA_QUEUE; ++i) {
+		if (i!=0 && !(i%3)) {
 			EMBARC_PRINTF("\r\n");
 		}
 		
@@ -175,8 +169,7 @@ extern void print_msg_awake(void)
 	}
 	EMBARC_PRINTF("\r\n");
 
-	if (data_report_wn.event_awake == AWAKE)
-	{
+	if (data_report_wn.event_awake == AWAKE) {
 		EMBARC_PRINTF("* Baby awake!\r\n\r\n");
 	}
 }
@@ -190,10 +183,8 @@ extern void print_msg_sleep(uint state)
 
 	EMBARC_PRINTF("\r\n************ Sleep monitoring ************\r\n");
 
-	for (uint i = 0; i < 5; ++i)
-	{
-		if (i==2 || i==3)
-		{
+	for (uint i = 0; i < 5; ++i) {
+		if (i==2 || i==3) {
 			EMBARC_PRINTF("\r\n");
 		}
 		sprintf(str, "* Intensity %d : %d\t\t", i, inten_sl[i]/100);
@@ -203,8 +194,7 @@ extern void print_msg_sleep(uint state)
 	sprintf(str, "\r\n* Intensity score in 5min : %f\r\n", score_sl);
 	EMBARC_PRINTF(str);
 
-	if (!state)
-	{
+	if (!state) {
 		EMBARC_PRINTF("* State of 2min ago : wake\r\n\r\n");
 	} else {
 		EMBARC_PRINTF("* State of 2min ago : sleep\r\n\r\n");
@@ -216,16 +206,15 @@ extern void print_msg_sleep(uint state)
 extern void process_hrate(uint32_t* hrate)
 {
 	/* ignore the wrong data in the beginning */
-	if(dat_num < 9)
+	if(dat_num < 9) 
 	{
 			hrate_sensor_read(NULL);
 	}
-	else if(dat_num < FFT_LEN + 9)
+	else if(dat_num < FFT_LEN + 9) 
 	{
 		hrate_sensor_read(&hrate_group[dat_num-9]);
 
-		if(dat_rdy && dat_num > 9)
-		{
+		if(dat_rdy && dat_num > 9) {
 			if(hrate_group[dat_num-10] < 10000 || hrate_group[dat_num-10] > 120000) {
 				dat_num = 0;
 				sum_h = 0;
@@ -241,10 +230,8 @@ extern void process_hrate(uint32_t* hrate)
 	{
 		sum_h = sum_h / FFT_LEN;
 
-		for(int i = 0; i < FFT_LEN - 1; i++)
-		{
-			if(fabs(hrate_group[i] - hrate_group[i+1]) > 1000)
-			{
+		for(int i = 0; i < FFT_LEN - 1; i++) {
+			if(fabs(hrate_group[i] - hrate_group[i+1]) > 1000) {
 				flag_h = 1;
 				dat_num = 0;
 				cnt_h = 0;
@@ -252,10 +239,8 @@ extern void process_hrate(uint32_t* hrate)
 			}
 		}
 
-		if(!flag_h)
-		{
-			for(int i = 0; i < FFT_LEN; i++)
-			{
+		if(!flag_h) {
+			for(int i = 0; i < FFT_LEN; i++) {
 				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_h);
 
 				if(fabs(hrate_group[i]) < 1000) {
@@ -269,8 +254,7 @@ extern void process_hrate(uint32_t* hrate)
 			}
 		}
 
-		if(dat_num)
-		{
+		if(dat_num) {
 			calc_w(w);
 
 			fft(x, w);
@@ -317,13 +301,11 @@ static int filter_acc(int val_new,
 	if (flag_new == *flag_old) {
 		(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
 
-		if (fabs(val_diff) > THOLD_ACC_DIFF)
-		{
+		if (fabs(val_diff) > THOLD_ACC_DIFF) {
 			*cnt += CNT_ACC_STEP;
 		}
 
-		if (*cnt > THOLD_ACC_CNT)
-		{
+		if (*cnt > THOLD_ACC_CNT) {
 			*par += PAR_ACC_STEP;
 			*cnt = 0;
 		}
@@ -355,16 +337,14 @@ static int filter_svm(int val_new,
 	bool flag_new;
 
 	/* deal with SVM by limiting filter */
-	if (val_new > MAX_LIMIT_SVM)
-	{
+	if (val_new > MAX_LIMIT_SVM) {
 		val_new = MAX_LIMIT_SVM;
 	}
 
 	/* deal with SVM by low pass filter */
 	val_diff = val_new - val_old;
 
-	if (val_diff)
-	{
+	if (val_diff) {
 		/* calculate low pass filter coefficient for SVM */
 		if (val_diff > 0) {
 			flag_new = true;
@@ -372,17 +352,14 @@ static int filter_svm(int val_new,
 			flag_new = false;
 		}
 
-		if (flag_new == *flag_old)
-		{
+		if (flag_new == *flag_old) {
 			(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
 
-			if (fabs(val_diff) > THOLD_SVM_DIFF)
-			{
+			if (fabs(val_diff) > THOLD_SVM_DIFF) {
 				*cnt += CNT_SVM_STEP;
 			}
 
-			if (*cnt > THOLD_SVM_CNT)
-			{
+			if (*cnt > THOLD_SVM_CNT) {
 				*par += PAR_SVM_STEP;
 				*cnt = 0;
 			}
@@ -406,8 +383,7 @@ static int filter_svm(int val_new,
 	}
 
 	/* deal with SVM by limiting filter */
-	if (val_new < MIN_LIMIT_SVM)
-	{
+	if (val_new < MIN_LIMIT_SVM) {
 		val_new = 0;
 	}
 
@@ -493,16 +469,13 @@ extern uint func_detect_awake(int inten_temp)
 	}
 
 	/* the number of sleep state in front of the state queue */
-	for (uint i = LEN_STA_QUEUE-1; i > LEN_STA_WAKE-1; --i)
-	{
-		if (flag_break_aw)
-		{
+	for (uint i = LEN_STA_QUEUE-1; i > LEN_STA_WAKE-1; --i) {
+		if (flag_break_aw) {
 			flag_break_aw = false;
 			break;
 		}
 
-		if (state_aw[i])
-		{
+		if (state_aw[i]) {
 			cnt_sl_aw++;
 		}
 
@@ -510,10 +483,8 @@ extern uint func_detect_awake(int inten_temp)
 			cnt_sl_aw = 0;
 
 			/* statistics the number of wake state in back of the state queue */
-			for (uint i = 0; i < LEN_STA_WAKE; ++i)
-			{
-				if (!state_aw[i])
-				{
+			for (uint i = 0; i < LEN_STA_WAKE; ++i) {
+				if (!state_aw[i]) {
 					cnt_wk_aw++;
 				}
 
@@ -541,8 +512,7 @@ extern uint func_detect_awake(int inten_temp)
 	#endif
 
 	/* update motion intensity for LEN_STA_QUEUE * 5s */
-	for (uint i = LEN_STA_QUEUE-1; i > 0; --i)
-	{
+	for (uint i = LEN_STA_QUEUE-1; i > 0; --i) {
 		state_aw[i] = state_aw[i-1];
 	}
 
@@ -580,8 +550,7 @@ extern uint func_detect_state(int inten_temp)
 	#endif
 
 	/* update motion intensity for 5 * 1min */
-	for (uint i = 4; i > 0; --i)
-	{
+	for (uint i = 4; i > 0; --i) {
 		inten_sl[i] = inten_sl[i-1];
 	}
 
@@ -666,7 +635,7 @@ extern int lwm2m_client_start(void)
 
 	/* create or resume task for lwm2mClient to realize communication with iBaby Smarthome Gateway */
     if (xTaskCreate(task_lwm2m_client, "lwm2m client", STACK_DEPTH_LWM2M, NULL, TSKPRI_HIGH, 
-		&task_lwm2m_client_handle) != pdPASS){
+		&task_lwm2m_client_handle) != pdPASS) {
 		EMBARC_PRINTF("Error: Create task_lwm2m_client failed\r\n");
 		return E_SYS;
 	} else {
