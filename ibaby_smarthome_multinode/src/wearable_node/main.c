@@ -87,12 +87,12 @@
 #include "value.h"
 #include "task_function.h"
 
-#define DELAY_TIME_SLICE (3) /*!< 33：sampling frequency : 30Hz(32.7ms) */
+#define DELAY_TIME_SLICE (29)/*!< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
 
 #define THOLD_CNT_AW (150)   /*!< threshold of counter(5s) for executing awake event detecting algorithm */
-#define THOLD_CNT_SL (150)   /*!< threshold of counter(1min：1760) for executing sleep monitoring algorithm */
+#define THOLD_CNT_SL (1760)  /*!< threshold of counter(1min：1760) for executing sleep monitoring algorithm */
 
-#define WARN_BTEMP_L (320)   /*!< lower value of warning body temperature */
+#define WARN_BTEMP_L (350)   /*!< lower value of warning body temperature */
 #define WARN_BTEMP_H (380)   /*!< upper value of warning body temperature */
 #define WARN_HR_MIN  (50)    /*!< lower value of warning heartrate */
 #define WARN_HR_MAX  (150)   /*!< upper value of warning heartrate */
@@ -114,10 +114,10 @@ int main(void)
 	acc_values acc_vals;  /*!< accleration storage */
 
 	EMBARC_PRINTF("\
-		*********************************************************\r\n\
-		*                 iBaby Smarthome Nodes                 *\r\n\
-		*                     Wearable Node                     *\r\n\
-		*********************************************************\r\n");
+*********************************************************\r\n\
+*                 iBaby Smarthome Nodes                 *\r\n\
+*                     Wearable Node                     *\r\n\
+*********************************************************\r\n");
 
 	/* initialize body temperature sensor */
 	if (btemp_sensor_init(TMP112_ADDRESS) != E_OK)

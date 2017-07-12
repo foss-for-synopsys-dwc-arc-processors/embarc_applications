@@ -5,7 +5,7 @@ APPL ?= wearable_node
 OS_SEL ?= freertos
 
 BOARD ?= emsk
-BD_VER ?= 23
+BD_VER ?= 22
 CUR_CORE ?= arcem11d
 TOOLCHAIN ?= gnu
 

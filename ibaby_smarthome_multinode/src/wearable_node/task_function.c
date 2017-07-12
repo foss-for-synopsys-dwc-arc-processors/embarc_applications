@@ -73,7 +73,7 @@ static void timer1_isr(void *ptr)
 }
 
 /** print message for debug major function */
-static void timer1_start(void)
+extern void timer1_start(void)
 {
 	t1_count = 0;
 
@@ -83,7 +83,7 @@ static void timer1_start(void)
 }
 
 /** print message for debug major function */
-static void timer1_stop(void)
+extern void timer1_stop(void)
 {
 	uint32_t dec;
 
@@ -109,9 +109,7 @@ extern void print_msg_func(void)
 
 	EMBARC_PRINTF("\n************ Primary function ************\r\n");
 	sprintf(str,
-		"* Body heartrate   : %dbpm\r\n\
-		 * Body temperature : %d.%d'C\r\n\
-		 * Motion intensity : %d\r\n", 
+		"* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
 		 data_report_wn.hrate,
 		 data_report_wn.btemp/10, data_report_wn.btemp%10,
 		 data_report_wn.motion_intensity);
@@ -200,7 +198,6 @@ extern void process_hrate(uint32_t* hrate)
 		hrate_sensor_read(&hrate_group[dat_num-9]);
 		if(dat_rdy && dat_num > 9)
 		{
-			//EMBARC_PRINTF("hrate : %d\n", hrate_group[dat_num-10]);
 			if(hrate_group[dat_num-10] < 10000 || hrate_group[dat_num-10] > 120000)
 			{
 				dat_num = 0;
@@ -232,7 +229,6 @@ extern void process_hrate(uint32_t* hrate)
 			for(int i = 0; i < FFT_LEN; i++)
 			{	
 				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_h);
-				//EMBARC_PRINTF("hrate_fir : %d\n", hrate_group[i]);
 				if(fabs(hrate_group[i]) < 1000)
 				{
 					x[i].R = hrate_group[i] * 30;
@@ -265,13 +261,9 @@ extern void process_hrate(uint32_t* hrate)
 		}
 		sum_h = 0;
 		flag_h = 0;
-
-		// EMBARC_PRINTF("hrate_temp : %d cnt ；%d\n", hrate_temp,cnt_h);
 	}
 
-	*hrate = (uint32_t)(hrate_temp/10); 
-
-	// EMBARC_PRINTF("hrate_temp : %d\n", hrate_temp);
+	*hrate = (uint32_t)(hrate_temp/10);
 }
 
 /* function for deal with acclerate by filter */

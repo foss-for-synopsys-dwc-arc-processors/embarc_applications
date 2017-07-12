@@ -85,13 +85,13 @@
  * @{
  */
 #if USED_TIMER1
-//#define T1_COUNT_UNIT_MS  (30000) /*!< counting accuracy of Timer1: 1ms */
-#define T1_COUNT_UNIT_LMS (3000)  /*!< counting accuracy of Timer1: 0.1ms */
+//#define T1_COUNT_UNIT_MS  (20000) /*!< counting accuracy of Timer1: 1ms */
+#define T1_COUNT_UNIT_LMS (2000)  /*!< counting accuracy of Timer1: 0.1ms */
 
 static int t1_count;/*!< counter for timer1 */
 
-static void timer1_start(void);
-static void timer1_stop(void);
+extern void timer1_start(void);
+extern void timer1_stop(void);
 #endif/* USED_TIMER1 */
 /** @} end of name */
 /*
@@ -167,7 +167,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define WAKE    (0) /*!< wake state */
 
 /*!< sparameters of Webster sleep-wake determine method */
-#define P  (0.01) /*!< 0.0046:coefficient of scale */
+#define P  (0.0046) /*!< 0.0046:coefficient of scale */
 #define K0 (0.04) /*!< coefficient of relationship */
 #define K1 (0.22)
 #define K2 (1)
