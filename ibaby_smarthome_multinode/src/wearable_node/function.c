@@ -280,11 +280,11 @@ extern void process_hrate(uint32_t* hrate)
 }
 
 /* function for deal with acclerate by filter */
-static int filter_acc(int val_new, 
-					  int val_old,
-					  bool *flag_old,
-					  char *cnt,
-					  unsigned char *par)
+static int filter_acc(int val_new,
+	int val_old,
+	bool *flag_old,
+	char *cnt,
+	unsigned char *par)
 {
 	int val_diff;
 	bool flag_new;
@@ -328,10 +328,10 @@ static int filter_acc(int val_new,
 
 /* function for deal with SVM by filter */
 static int filter_svm(int val_new,
-					  int val_old,
-					  bool *flag_old,
-					  char *cnt,
-					  unsigned char *par)
+	int val_old,
+	bool *flag_old,
+	char *cnt,
+	unsigned char *par)
 {
 	int val_diff;
 	bool flag_new;
@@ -604,13 +604,13 @@ extern int lwm2m_client_start(void)
 	task_lwm2m_client_handle = 0;
 	
 	/* check to see if wifi works */
-    if (!lwip_pmwifi_isup()) {
+	if (!lwip_pmwifi_isup()) {
 		EMBARC_PRINTF("Error: Wifi is not ready for lwM2M client.\r\n");
 		goto error_exit;
-    }
-   
-    /* exit lwm2mClient */
-    if (c_quit == 1) {
+	}
+
+	/* exit lwm2mClient */
+	if (c_quit == 1) {
 		EMBARC_PRINTF("Error: Try to exit existing client.\r\n");
 		handle_sigint(2);
 		goto error_exit;
@@ -620,8 +620,8 @@ extern int lwm2m_client_start(void)
 		EMBARC_PRINTF("Error: LwM2M client is already running.\r\n");
 		goto error_exit;
 	}
-    
-    if (p_server == NULL) {
+
+	if (p_server == NULL) {
 		EMBARC_PRINTF("Error: Server Url is not specified, please check it.\r\n");
 		goto error_exit;
 	}
@@ -634,7 +634,7 @@ extern int lwm2m_client_start(void)
 	EMBARC_PRINTF("Start lwm2m client.\r\n"); 
 
 	/* create or resume task for lwm2mClient to realize communication with iBaby Smarthome Gateway */
-    if (xTaskCreate(task_lwm2m_client, "lwm2m client", STACK_DEPTH_LWM2M, NULL, TSKPRI_HIGH, 
+	if (xTaskCreate(task_lwm2m_client, "lwm2m client", STACK_DEPTH_LWM2M, NULL, TSKPRI_HIGH, 
 		&task_lwm2m_client_handle) != pdPASS) {
 		EMBARC_PRINTF("Error: Create task_lwm2m_client failed\r\n");
 		return E_SYS;
