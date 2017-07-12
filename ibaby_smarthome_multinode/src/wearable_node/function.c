@@ -281,10 +281,10 @@ extern void process_hrate(uint32_t* hrate)
 
 /* function for deal with acclerate by filter */
 static int filter_acc(int val_new,
-	int val_old,
-	bool *flag_old,
-	char *cnt,
-	unsigned char *par)
+                      int val_old,
+                      bool *flag_old,
+                      char *cnt,
+                      unsigned char *par)
 {
 	int val_diff;
 	bool flag_new;
@@ -328,10 +328,10 @@ static int filter_acc(int val_new,
 
 /* function for deal with SVM by filter */
 static int filter_svm(int val_new,
-	int val_old,
-	bool *flag_old,
-	char *cnt,
-	unsigned char *par)
+                      int val_old,
+                      bool *flag_old,
+                      char *cnt,
+                      unsigned char *par)
 {
 	int val_diff;
 	bool flag_new;
@@ -626,11 +626,11 @@ extern int lwm2m_client_start(void)
 		goto error_exit;
 	}
 
-    c_info.server = p_server;
+	c_info.server = p_server;
 	c_info.ep_name = p_client_name;
 	c_info.serverPort = p_port;
 
-    lwm2m_client_start_flag = 1;
+	lwm2m_client_start_flag = 1;
 	EMBARC_PRINTF("Start lwm2m client.\r\n"); 
 
 	/* create or resume task for lwm2mClient to realize communication with iBaby Smarthome Gateway */
