@@ -204,7 +204,7 @@ typedef struct _Cplx16
 
 
 /*!< variable of heartrate data processing */
-Cplx16 fft_que[FFT_LEN];    /*!< value of discrete points after fft */
+Cplx16 fft_que[FFT_LEN];   /*!< value of discrete points after fft */
 Cplx16 par_w[FFT_LEN / 2]; /*!< parameters of fft */
 
 static int  cnt_hrate;           /*!< number of heartrate data counter */

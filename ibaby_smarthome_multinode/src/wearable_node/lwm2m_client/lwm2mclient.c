@@ -955,7 +955,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
         {
             if (errno != EINTR)
             {
-              EMBARC_PRINTF("Error in select(): %d\r\n", errno);
+                EMBARC_PRINTF("Error in select(): %d\r\n", errno);
             }
         }
         else if (result > 0)

@@ -42,25 +42,24 @@
 #ifndef VALUE_H
 #define VALUE_H
 
-
 /**
  * \name    macros about common setting
  * @{
  */
-#define LWM2M_CLIENT      (1)/*!< set 1 to be lwm2m client */
+#define LWM2M_CLIENT      (1) /*!< set 1 to be lwm2m client */
 
-#define PRINT_DEBUG_FUNC  (1)/*!< set 1 to print message for debug major function */
-#define PRINT_DEBUG_AWAKE (0)/*!< set 1 to print message for debug awake event detecting function */
-#define PRINT_DEBUG_SLEEP (0)/*!< set 1 to print message for debug sleep-wake state monitoring function */
+#define PRINT_DEBUG_FUNC  (1) /*!< set 1 to print message for debug major function */
+#define PRINT_DEBUG_AWAKE (0) /*!< set 1 to print message for debug awake event detecting function */
+#define PRINT_DEBUG_SLEEP (0) /*!< set 1 to print message for debug sleep-wake state monitoring function */
 
 /*
 **************************************************************
 *  This part will be deleted in release version
 */
-#define USED_TIMER1         (0)/*!< set 1 to use timer1 for task timing */
-#define SEND_DEBUG_SVM1_5S  (0)/*!< set 1 to send svm before svm filter to matlab by serial port every 5s */
-#define SEND_DEBUG_SVM2_5S  (0)/*!< set 1 to send svm after svm filter to matlab by serial port every 5s */
-#define SEND_DEBUG_INTEN_1M (0)/*!< set 1 to send motion intensity to matlab by serial port every 1min */
+#define USED_TIMER1         (0) /*!< set 1 to use timer1 for task timing */
+#define SEND_DEBUG_SVM1_5S  (0) /*!< set 1 to send svm before svm filter to matlab by serial port every 5s */
+#define SEND_DEBUG_SVM2_5S  (0) /*!< set 1 to send svm after svm filter to matlab by serial port every 5s */
+#define SEND_DEBUG_INTEN_1M (0) /*!< set 1 to send motion intensity to matlab by serial port every 1min */
 /*
 *  end of this part
 **************************************************************
@@ -86,16 +85,16 @@ static int count_file;
 /*!< struct of iBaby wearable node data reporting to iBaby Gateway */
 typedef struct{
 	uint32_t btemp;       /*!< body temperature */
-    uint32_t hrate;       /*!< heartrate */
+	uint32_t hrate;       /*!< heartrate */
 
 	int  motion_intensity;/*!< motion intensity in 1min */
 	uint state;           /*!< Sleep-Wake state : SLEEP or WAKE */
 	uint event_awake;     /*!< flag of Awake Event : NOEVENT or AWAKE */
 
-    bool warn_hrate;      /*!< warning flag of heartrate abnormal */
-    bool warn_btemp;      /*!< warning flag of body temperature abnormal */
-    bool warn_downward;   /*!< warning flag of sleep downward */
-}data_wearable_node;
+	bool warn_hrate;      /*!< warning flag of heartrate abnormal */
+	bool warn_btemp;      /*!< warning flag of body temperature abnormal */
+	bool warn_downward;   /*!< warning flag of sleep downward */
+} data_wearable_node;
 
 /* current value of reporting data */
 data_wearable_node data_report_wn;

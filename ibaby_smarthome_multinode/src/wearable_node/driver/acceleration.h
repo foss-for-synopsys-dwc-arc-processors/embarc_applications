@@ -58,14 +58,14 @@ static const float accl_unit = 5.9855042e-4f; /*!< m/sq.s/LSB @ fs=2g */
 
 typedef struct __imuValues
 {
-    float accl_x, accl_y, accl_z;
-    float temp;
-    float angv_x, angv_y, angv_z;
+	float accl_x, accl_y, accl_z;
+	float temp;
+	float angv_x, angv_y, angv_z;
 } imu_values;
 
 typedef struct __accValues
 {
-    float accl_x, accl_y, accl_z;
+	float accl_x, accl_y, accl_z;
 } acc_values;
 
 static int32_t imu_sensor_read(imu_values* imu_val);

@@ -89,10 +89,10 @@ static uint32_t tmp_sensor_slvaddr;
 /* store register data */
 union _fifo_data						
 {
-    uint8_t buf[2];
-    struct {
-    	uint8_t tmp_h, tmp_l;
-    };
+	uint8_t buf[2];
+	struct {
+		uint8_t tmp_h, tmp_l;
+	};
 } fifo_data;
 
 /* configure oneshot mode */

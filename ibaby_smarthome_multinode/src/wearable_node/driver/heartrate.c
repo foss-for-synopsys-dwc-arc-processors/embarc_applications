@@ -72,54 +72,54 @@
 /* MAX30102 registers */
 #define MAX30102_REG_INT_STATUS_1            0x00 /* Interrupt status 1 */       
 #define MAX30102_REG_INT_STATUS_2            0x01 /* Interrupt status 2 */
-#define MAX30102_REG_INT_ENABLE_1 			 0x02 /* Interrupt enable 1 */
-#define MAX30102_REG_INT_ENABLE_2 			 0x03 /* Interrupt enable 2 */
-#define MAX30102_REG_FIFO_WR_PTR			 0x04 /* FIFO write pointer */
-#define MAX30102_REG_OVF_COUNTER    		 0x05 /* FIFO overflow counter */
-#define MAX30102_REG_FIFO_RD_PTR			 0x06 /* FIFO read pointer */
-#define MAX30102_REG_FIFO_DATA 				 0x07 /* FIFO data */
-#define MAX30102_REG_FIFO_CONFIG			 0x08 /* FIFO configuration */
-#define MAX30102_REG_MODE_CONFIG			 0x09 /* Mode configuration */
-#define MAX30102_REG_SPO2_CONFIG			 0x0A /* SpO2 configuration */
-#define MAX30102_REG_LED_PULSE_AMP_1  		 0x0C /* LED pulse amplitude 1 */
-#define MAX30102_REG_LED_PULSE_AMP_2  		 0x0D /* LED pulse amplitude 2 */
-#define MAX30102_REG_PM_LED_PULSE_AMP		 0x10 /* Proximity mode led pulse amplitude */
-#define MAX30102_REG_MULTI_LED_MODE_CRTL_1	 0x11 /* Multi-LED mode control registers 1 */
-#define MAX30102_REG_MULTI_LED_MODE_CRTL_2	 0x12 /* Multi-LED mode control registers 2 */
-#define MAX30102_REG_DIE_TEMP_INTEGER		 0x1F /* Die temp integer */
-#define MAX30102_REG_DIE_TEMP_FRACTION		 0x20 /* Die temp fraction */
-#define MAX30102_REG_DIE_TEMP_CONFIG		 0x21 /* Die temp configuration */
-#define MAX30102_REG_PM_INT_THRESHOLD  		 0x30 /* Proximity interrupt threshold */
+#define MAX30102_REG_INT_ENABLE_1            0x02 /* Interrupt enable 1 */
+#define MAX30102_REG_INT_ENABLE_2            0x03 /* Interrupt enable 2 */
+#define MAX30102_REG_FIFO_WR_PTR             0x04 /* FIFO write pointer */
+#define MAX30102_REG_OVF_COUNTER             0x05 /* FIFO overflow counter */
+#define MAX30102_REG_FIFO_RD_PTR             0x06 /* FIFO read pointer */
+#define MAX30102_REG_FIFO_DATA               0x07 /* FIFO data */
+#define MAX30102_REG_FIFO_CONFIG             0x08 /* FIFO configuration */
+#define MAX30102_REG_MODE_CONFIG             0x09 /* Mode configuration */
+#define MAX30102_REG_SPO2_CONFIG             0x0A /* SpO2 configuration */
+#define MAX30102_REG_LED_PULSE_AMP_1         0x0C /* LED pulse amplitude 1 */
+#define MAX30102_REG_LED_PULSE_AMP_2         0x0D /* LED pulse amplitude 2 */
+#define MAX30102_REG_PM_LED_PULSE_AMP        0x10 /* Proximity mode led pulse amplitude */
+#define MAX30102_REG_MULTI_LED_MODE_CRTL_1   0x11 /* Multi-LED mode control registers 1 */
+#define MAX30102_REG_MULTI_LED_MODE_CRTL_2   0x12 /* Multi-LED mode control registers 2 */
+#define MAX30102_REG_DIE_TEMP_INTEGER        0x1F /* Die temp integer */
+#define MAX30102_REG_DIE_TEMP_FRACTION       0x20 /* Die temp fraction */
+#define MAX30102_REG_DIE_TEMP_CONFIG         0x21 /* Die temp configuration */
+#define MAX30102_REG_PM_INT_THRESHOLD        0x30 /* Proximity interrupt threshold */
 
 /* MAX30102_REG_STATUS definition */
-#define MAX30102_STATUS_PWR_RDY     	  (1)
-#define MAX30102_STATUS_PROX_INT    	  (1 << 4)
-#define MAX30102_STATUS_ALC_OVF     	  (1 << 5)
-#define MAX30102_STATUS_PPG_RDY        	  (1 << 6)
-#define MAX30102_STATUS_A_FULL      	  (1 << 7)
+#define MAX30102_STATUS_PWR_RDY           (1)
+#define MAX30102_STATUS_PROX_INT          (1 << 4)
+#define MAX30102_STATUS_ALC_OVF           (1 << 5)
+#define MAX30102_STATUS_PPG_RDY           (1 << 6)
+#define MAX30102_STATUS_A_FULL            (1 << 7)
 #define MAX30102_STATUS_DIE_TEMP_RDY      (1 << 1)
 
 /* MAX30102_REG_CONFIG definition */
-#define MAX30102_CONFIG_FIFO_A_FULL(x)    		(x & 0xf)
+#define MAX30102_CONFIG_FIFO_A_FULL(x)          (x & 0xf)
 #define MAX30102_CONFIG_FIFO_ROL_LOVER_EN       (1 << 4)
-#define MAX30102_CONFIG_SMP_AVE(x)          	((x & 0x7) << 4)
-#define MAX30102_CONFIG_MODE(x)      			(x & 0x7)
-#define MAX30102_CONFIG_RESET			        (1 << 6)
-#define MAX30102_CONFIG_SHDN				    (1 << 7)
-#define MAX30102_CONFIG_LED_PW(x)				(x & 0x3)
-#define MAX30102_CONFIG_SPO2_SR(x)				((x & 0x7) << 2)
-#define MAX30102_CONFIG_SPO2_ADC_REG(x)			((x & 0x3) << 5)
-#define MAX30102_CONFIG_LED_PA_1(x)				(x & 0xFF)
-#define MAX30102_CONFIG_LED_PA_2(x)				(x & 0xFF)
-#define MAX30102_CONFIG_PM_LED_PA(x)			(x & 0xFF)
+#define MAX30102_CONFIG_SMP_AVE(x)              ((x & 0x7) << 4)
+#define MAX30102_CONFIG_MODE(x)                 (x & 0x7)
+#define MAX30102_CONFIG_RESET                   (1 << 6)
+#define MAX30102_CONFIG_SHDN                    (1 << 7)
+#define MAX30102_CONFIG_LED_PW(x)               (x & 0x3)
+#define MAX30102_CONFIG_SPO2_SR(x)              ((x & 0x7) << 2)
+#define MAX30102_CONFIG_SPO2_ADC_REG(x)         ((x & 0x3) << 5)
+#define MAX30102_CONFIG_LED_PA_1(x)             (x & 0xFF)
+#define MAX30102_CONFIG_LED_PA_2(x)             (x & 0xFF)
+#define MAX30102_CONFIG_PM_LED_PA(x)            (x & 0xFF)
 
 /* MAX30102_CONFIG_FIFO_A_FULL(x) options */
 #define MAX30102_CONFIG_FIFO_A_0_FULL     0      /* EMPTY DATA SAMPLES IN FIFO:0 / UNREAD:32 */
-#define MAX30102_CONFIG_FIFO_A_1_FULL     1		 /* EMPTY DATA SAMPLES IN FIFO:1 / UNREAD:31 */
-#define MAX30102_CONFIG_FIFO_A_2_FULL     2		 /* EMPTY DATA SAMPLES IN FIFO:2 / UNREAD:30 */
-#define MAX30102_CONFIG_FIFO_A_3_FULL     3		 /* EMPTY DATA SAMPLES IN FIFO:3 / UNREAD:29 */
-//define  ...									 /* ... */
-#define MAX30102_CONFIG_FIFO_A_F_FULL     15	 /* EMPTY DATA SAMPLES IN FIFO:15 / UNREAD:17 */
+#define MAX30102_CONFIG_FIFO_A_1_FULL     1      /* EMPTY DATA SAMPLES IN FIFO:1 / UNREAD:31 */
+#define MAX30102_CONFIG_FIFO_A_2_FULL     2      /* EMPTY DATA SAMPLES IN FIFO:2 / UNREAD:30 */
+#define MAX30102_CONFIG_FIFO_A_3_FULL     3      /* EMPTY DATA SAMPLES IN FIFO:3 / UNREAD:29 */
+//define  ...                                    /* ... */
+#define MAX30102_CONFIG_FIFO_A_F_FULL     15     /* EMPTY DATA SAMPLES IN FIFO:15 / UNREAD:17 */
 
 /* MAX30102_CONFIG_SMP_AVE(x) options */
 #define MAX30102_CONFIG_SMP_1_AVE   0     /* NO 1.of samples averaged per FIFO sample */
@@ -153,8 +153,8 @@
 /* MAX30102_CONFIG_SPO2_ADC_REG(x) options */
 #define MAX30102_CONFIG_SPO2_ADC_0_REG      0 /* ADC LSB SIZE:7.81  FULL SCALE:2048 */
 #define MAX30102_CONFIG_SPO2_ADC_1_REG      1 /* ADC LSB SIZE:15.63 FULL SCALE:4096 */
-#define MAX30102_CONFIG_SPO2_ADC_2_REG  	2 /* ADC LSB SIZE:31.25 FULL SCALE:8192 */
-#define MAX30102_CONFIG_SPO2_ADC_3_REG  	3 /* ADC LSB SIZE:62.5  FULL SCALE:16384 */
+#define MAX30102_CONFIG_SPO2_ADC_2_REG      2 /* ADC LSB SIZE:31.25 FULL SCALE:8192 */
+#define MAX30102_CONFIG_SPO2_ADC_3_REG      3 /* ADC LSB SIZE:62.5  FULL SCALE:16384 */
 
 
 static DEV_IIC *emsk_heart_rate_sensor;
@@ -167,29 +167,29 @@ static uint32_t heart_rate_sensor_slvaddr;
 /* store register data */
 union _fifo_data
 {
-    uint8_t buf[3];
-    struct {
-    	uint8_t red_h, red_m, red_l;
-    };
+	uint8_t buf[3];
+	struct {
+		uint8_t red_h, red_m, red_l;
+	};
 } fifo_data;
 
 /* configure fifo register,using the auto increase function	*/
 uint8_t hrate_init_fifo_seq[] = {
-        MAX30102_REG_FIFO_WR_PTR,
-        0x00,
-        0x00,
-        0x00
+	MAX30102_REG_FIFO_WR_PTR,
+	0x00,
+	0x00,
+	0x00
 };
 
 /* configure related register,using the auto increase function */
 uint8_t hrate_init_seq[] = {
-		MAX30102_REG_FIFO_CONFIG,
-        MAX30102_CONFIG_FIFO_A_FULL(15) | MAX30102_CONFIG_SMP_AVE(0), /* 0x08 A_FULL int:0 average:32 */
-        MAX30102_CONFIG_MODE(2), /* 0x09: Heart rate mode */
-        MAX30102_CONFIG_SPO2_ADC_REG(2) | MAX30102_CONFIG_LED_PW(3) | MAX30102_CONFIG_SPO2_SR(0), 
-		/* 0x0A: ADC resolution 16 bits, sps 50 */
-        0x00,  /* 0x0B: reserved */
-		0x28   /*0x0C: LED current 6.4mA */
+	MAX30102_REG_FIFO_CONFIG,
+	MAX30102_CONFIG_FIFO_A_FULL(15) | MAX30102_CONFIG_SMP_AVE(0), /* 0x08 A_FULL int:0 average:32 */
+	MAX30102_CONFIG_MODE(2), /* 0x09: Heart rate mode */
+	MAX30102_CONFIG_SPO2_ADC_REG(2) | MAX30102_CONFIG_LED_PW(3) | MAX30102_CONFIG_SPO2_SR(0), 
+	/* 0x0A: ADC resolution 16 bits, sps 50 */
+	0x00,  /* 0x0B: reserved */
+	0x28   /*0x0C: LED current 6.4mA */
 };
 
 /* configure interrupt register,using the auto increase function */
@@ -197,7 +197,6 @@ uint8_t hrate_int_enable[] = {
 	MAX30102_REG_INT_ENABLE_1,
 	MAX30102_STATUS_PPG_RDY | MAX30102_STATUS_A_FULL,
 	0x00,
-
 };
 
 #if MAX30102_DRIVER_FILTER
