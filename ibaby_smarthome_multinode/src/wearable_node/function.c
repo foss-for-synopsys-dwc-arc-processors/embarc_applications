@@ -153,7 +153,7 @@ extern void print_msg_awake(void)
 	EMBARC_PRINTF(str);
 
 	for (uint i = 0; i < LEN_STA_QUEUE; ++i) {
-		if (i!=0 && !(i%3)) {
+		if (i != 0 && !(i%3)) {
 			EMBARC_PRINTF("\r\n");
 		}
 		
@@ -181,7 +181,7 @@ extern void print_msg_sleep(uint state)
 
 	EMBARC_PRINTF("\r\n************ Sleep monitoring ************\r\n");
 	for (uint i = 0; i < 5; ++i) {
-		if (i==2 || i==3) {
+		if (i == 2 || i == 3) {
 			EMBARC_PRINTF("\r\n");
 		}
 		sprintf(str, "* Intensity %d : %d\t\t", i, inten_sl[i]/100);
