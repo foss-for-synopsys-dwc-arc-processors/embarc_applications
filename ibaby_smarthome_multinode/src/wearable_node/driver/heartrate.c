@@ -62,7 +62,7 @@
 #include "board.h"
 #include <stdio.h>
 
-#include "max.h"
+#include "heartrate.h"
 #include "IIR.h"
 
 /*! MAX30102 registers */

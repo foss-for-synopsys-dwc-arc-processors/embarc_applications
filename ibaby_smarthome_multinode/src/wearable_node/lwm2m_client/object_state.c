@@ -77,22 +77,18 @@
 #include <ctype.h>
 #include "dev_iic.h"
 #include "board.h"
-#include "imu.h"
 #include "value.h"
-
 
 #include "embARC.h"
 #include "embARC_debug.h"
 
+
 #define PRV_RESOURCE_3_SIZE 190
 #define PRV_TLV_BUFFER_SIZE 64
 
-
-#define LWM2M_SLEEP_STATU_OBJECT_ID       3300
-
-#define SLEEP_STATU_ID           5700   //sensorvalue
-
-#define LWM2M_EMSK_INSTANCE_ID  0
+#define LWM2M_SLEEP_STATU_OBJECT_ID 3300
+#define LWM2M_EMSK_INSTANCE_ID      0
+#define SLEEP_STATU_ID              5700
 
 /*
  * Multiple instance objects can use userdata to store data that will be shared between the different instances.
@@ -105,20 +101,21 @@ typedef struct _prv_instance_
      * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
      * is the instance scope user data (uint8_t test in this case)
      */
-    struct _prv_instance_ * next;   // matches lwm2m_list_t::next
-    uint16_t shortID;               // matches lwm2m_list_t::id
+    struct _prv_instance_ * next;   /* matches lwm2m_list_t::next */
+    uint16_t shortID;               /* matches lwm2m_list_t::id */
     bool state;
 } prv_instance_t;
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
                              prv_instance_t * targetP)
 {
-    // There are no multiple instance resources
+    /* There are no multiple instance resources */
     tlvP->type = LWM2M_TYPE_RESOURCE;  
         switch (tlvP->id)
         {
         case SLEEP_STATU_ID:
             targetP->state = data_report_wn.state;
+
             lwm2m_tlv_encode_bool(targetP->state, tlvP);
             if (0 != tlvP->length) return COAP_205_CONTENT;
             else return COAP_500_INTERNAL_SERVER_ERROR;
@@ -146,9 +143,7 @@ static uint8_t prv_read(uint16_t instanceId,
         if (*numDataP == 0)
         {
             uint16_t resList[] = {
-                    
                     SLEEP_STATU_ID
-                    
             };
             int nbRes = sizeof(resList)/sizeof(uint16_t);
 
@@ -159,8 +154,8 @@ static uint8_t prv_read(uint16_t instanceId,
             {
                 (*dataArrayP)[i].id = resList[i];
             }
-
         }
+
         i = 0;
         do
         {

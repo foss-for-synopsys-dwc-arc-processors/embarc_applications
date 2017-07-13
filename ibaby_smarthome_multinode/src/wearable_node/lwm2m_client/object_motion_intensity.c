@@ -77,22 +77,18 @@
 #include <ctype.h>
 #include "dev_iic.h"
 #include "board.h"
-#include "imu.h"
 #include "value.h"
-
 
 #include "embARC.h"
 #include "embARC_debug.h"
 
+
 #define PRV_RESOURCE_3_SIZE 190
 #define PRV_TLV_BUFFER_SIZE 64
 
-
-#define LWM2M_ACT_STENGTH_OBJECT_ID       3323
-
-#define ACT_STRENGTH_ID          5700
-
-#define LWM2M_EMSK_INSTANCE_ID  0
+#define LWM2M_ACT_STENGTH_OBJECT_ID 3323
+#define LWM2M_EMSK_INSTANCE_ID      0
+#define ACT_STRENGTH_ID             5700
 
 /*
  * Multiple instance objects can use userdata to store data that will be shared between the different instances.
@@ -105,8 +101,8 @@ typedef struct _prv_instance_
      * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
      * is the instance scope user data (uint8_t test in this case)
      */
-    struct _prv_instance_ * next;   // matches lwm2m_list_t::next
-    uint16_t shortID;               // matches lwm2m_list_t::id
+    struct _prv_instance_ * next;   /* matches lwm2m_list_t::next */
+    uint16_t shortID;               /* matches lwm2m_list_t::id */
     uint32_t motion_intensity;
 } prv_instance_t;
 
@@ -114,7 +110,7 @@ typedef struct _prv_instance_
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
                              prv_instance_t * targetP)
 {
-    // There are no multiple instance resources
+    /* There are no multiple instance resources */
     tlvP->type = LWM2M_TYPE_RESOURCE; 
         switch (tlvP->id)
         {

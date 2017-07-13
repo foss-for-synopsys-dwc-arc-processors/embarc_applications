@@ -33,26 +33,30 @@
 /**
  * \file
  * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
- * \brief	temperature sensor driver related header file
+ * \brief	heartrate sensor driver related header file
  */
 
 /**
  * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
-#ifndef _TMP112_H_
-#define _TMP112_H_
+#ifndef _HEARTRATE_H_
+#define _HEARTRATE_H_
 
-/***I2C address of PmodTemp4**/
-#define TMP112_ADDRESS  0x48
+/***I2C address of PmodHrate4**/
+#define MAX30102_ADDRESS  0x57
 
-#define TMP_I2C_SLAVE_ADDRESS     TMP112_ADDRESS
+#define HEART_RATE_I2C_SLAVE_ADDRESS     MAX30102_ADDRESS
 
-static const float tmp112_unit = 0.0625; //convert to ℃
+static const float heart_rate_unit = 60.f / 100.f / 62.5f; //16384 --> 62.5/LSB  convert to bpm
 
-int32_t btemp_sensor_init(uint32_t slv_addr);
-int32_t btemp_sensor_read(uint32_t *tmp);
+int32_t hrate_sensor_init(uint32_t slv_addr);
+int32_t hrate_sensor_read(int* heart_rate);
+float band_pass(float in);
+int find_trough_num(int* in, int len);
 
-#endif /* _WEARABLE_NODE_DRIVER_TMP_H */
+extern int data_num, data_rdy;
+
+#endif /* _WEARABLE_NODE_DRIVER_HEARTRATE_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

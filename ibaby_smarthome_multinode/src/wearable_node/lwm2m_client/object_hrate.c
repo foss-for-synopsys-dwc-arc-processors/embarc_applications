@@ -76,15 +76,13 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
+
 #define PRV_RESOURCE_3_SIZE 190
 #define PRV_TLV_BUFFER_SIZE 64
 
-
-#define LWM2M_HRATE_OBJECT_ID          3346
-
-#define LWM2M_HEARTRATE_ID      5700
-
-#define LWM2M_EMSK_INSTANCE_ID  0
+#define LWM2M_HRATE_OBJECT_ID  3346
+#define LWM2M_EMSK_INSTANCE_ID 0
+#define LWM2M_HEARTRATE_ID     5700
 
 /*
  * Multiple instance objects can use userdata to store data that will be shared between the different instances.
@@ -97,8 +95,8 @@ typedef struct _prv_instance_
      * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
      * is the instance scope user data (uint8_t test in this case)
      */
-    struct _prv_instance_ * next;   // matches lwm2m_list_t::next
-    uint16_t shortID;               // matches lwm2m_list_t::id
+    struct _prv_instance_ * next;   /* matches lwm2m_list_t::next */
+    uint16_t shortID;               /* matches lwm2m_list_t::id */
     uint32_t   hrate;
 } prv_instance_t;
 
@@ -106,14 +104,14 @@ typedef struct _prv_instance_
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
                              prv_instance_t * targetP)
 {
-    // There are no multiple instance resources
+    /* There are no multiple instance resources */
     tlvP->type = LWM2M_TYPE_RESOURCE;
     switch (tlvP->id)
     {
         
     case LWM2M_HEARTRATE_ID:
-        targetP->hrate = data_report_wn.hrate;//hrate;
-        // EMBARC_PRINTF("Hrate:%d\n",targetP->hrate);
+        targetP->hrate = data_report_wn.hrate;
+
         lwm2m_tlv_encode_float(targetP->hrate, tlvP);
         if (0 != tlvP->length) return COAP_205_CONTENT;
         else return COAP_500_INTERNAL_SERVER_ERROR;
@@ -225,7 +223,6 @@ void display_hrate_object(lwm2m_object_t * object)
 lwm2m_object_t * get_hrate_object(void)
 {
     lwm2m_object_t * hrateObj;
-    //uint32_t temp_val;
      
     hrateObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
 

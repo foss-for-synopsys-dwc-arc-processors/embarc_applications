@@ -61,7 +61,7 @@
 
 #include "dev_iic.h"
 #include "board.h"
-#include "imu.h"
+#include "acceleration.h"
 #include <stdio.h>
 
 #define DRIVER_TEST                      0    /*!< driver test */ 

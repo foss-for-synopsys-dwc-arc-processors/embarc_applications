@@ -33,51 +33,45 @@
 /**
  * \file
  * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
- * \brief	Fast fourier transform function related functions header
+ * \brief	acceleration sensor driver related header file
  */
 
 /**
  * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
-#ifndef _fft_H_
-#define _fft_H_
+#ifndef _ACCELERATION_H_
+#define _ACCELERATION_H_
 
-typedef struct
-{ 
-  float real;
-  float imag;
-}compx;
+/**
+ * I2C address of PmodIMU4 can be selected via AD0: 0x68, 0x69
+ * AD0 connect to GND is 0x68
+ */
+/* MPU6050 address */
+#define MPU6050_A0_PIN      0	/*!< I2C Serial Bus Address Selection Pin */
+#define MPU6050_ADDRESS     (0x68 + MPU6050_A0_PIN)
 
-#define DTT             0.02
+#define IMU_I2C_SLAVE_ADDRESS	MPU6050_ADDRESS
 
-#define FFT_M 			9
-#define FFT_LEN 		(1 << FFT_M  + FFT_M)
-#define NUM_TAPS		FFT_LEN			
+static const float gyro_unit = 1.0642252e-3f;  // rad/s/LSB @ fs=2000deg/s
+static const float accl_unit = 5.9855042e-4f;  // m/sq.s/LSB @ fs=2g
 
-
-#define S16MAX	 32767
-#define S16MIN	-32767
-#define PI 3.1415926535897932385
-
-typedef struct _Cplx16
+typedef struct __imuValues
 {
-    int R;
-    int I;
-} Cplx16;
+    float accl_x, accl_y, accl_z;
+    float temp;
+    float angv_x, angv_y, angv_z;
+} imu_values;
 
-extern Cplx16 fft_que[FFT_LEN];
-extern Cplx16 coff_w[FFT_LEN / 2];
+typedef struct __accValues
+{
+    float accl_x, accl_y, accl_z;
+} acc_values;
 
-extern void calc_coff_w(Cplx16 *W);
-extern void fft(Cplx16 *D, Cplx16 *W);
-extern float find_max(Cplx16 *D);
+int32_t acc_sensor_init(uint32_t slv_addr);
+int32_t imu_sensor_read(imu_values* imu_val);
+int32_t acc_sensor_read(acc_values* accel_val);
 
-#endif /* _WEARABLE_NODE_DRIVER_FFT_H_ */
+#endif  /* _WEARABLE_NODE_DRIVER_ACCELERATION_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */
-
-
-
-
-

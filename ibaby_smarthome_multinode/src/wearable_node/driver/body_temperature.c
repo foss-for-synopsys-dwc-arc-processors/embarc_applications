@@ -56,7 +56,7 @@
 #include "embARC_error.h"
 
 #include "dev_iic.h"
-#include "tmp.h"
+#include "body_temperature.h"
 #include "board.h"
 
 /* embARC HAL */

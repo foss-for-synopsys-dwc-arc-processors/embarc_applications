@@ -33,45 +33,26 @@
 /**
  * \file
  * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
- * \brief	acceleration sensor driver related header file
+ * \brief	temperature sensor driver related header file
  */
 
 /**
  * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
  * @{
  */
-#ifndef _IMU_H_
-#define _IMU_H_
+#ifndef _BODY_TEMPERATURE_H_
+#define _BODY_TEMPERATURE_H_
 
-/**
- * I2C address of PmodIMU4 can be selected via AD0: 0x68, 0x69
- * AD0 connect to GND is 0x68
- */
-/* MPU6050 address */
-#define MPU6050_A0_PIN      0	/*!< I2C Serial Bus Address Selection Pin */
-#define MPU6050_ADDRESS     (0x68 + MPU6050_A0_PIN)
+/***I2C address of PmodTemp4**/
+#define TMP112_ADDRESS  0x48
 
-#define IMU_I2C_SLAVE_ADDRESS	MPU6050_ADDRESS
+#define TMP_I2C_SLAVE_ADDRESS     TMP112_ADDRESS
 
-static const float gyro_unit = 1.0642252e-3f;  // rad/s/LSB @ fs=2000deg/s
-static const float accl_unit = 5.9855042e-4f;  // m/sq.s/LSB @ fs=2g
+static const float tmp112_unit = 0.0625; //convert to ℃
 
-typedef struct __imuValues
-{
-    float accl_x, accl_y, accl_z;
-    float temp;
-    float angv_x, angv_y, angv_z;
-} imu_values;
+int32_t btemp_sensor_init(uint32_t slv_addr);
+int32_t btemp_sensor_read(uint32_t *tmp);
 
-typedef struct __accValues
-{
-    float accl_x, accl_y, accl_z;
-} acc_values;
-
-int32_t acc_sensor_init(uint32_t slv_addr);
-int32_t imu_sensor_read(imu_values* imu_val);
-int32_t acc_sensor_read(acc_values* accel_val);
-
-#endif  /* _WEARABLE_NODE_DRIVER_IMU_H_ */
+#endif /* _WEARABLE_NODE_DRIVER_BODY_TEMPERATURE_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

@@ -70,10 +70,9 @@
 #include "lwip_pmwifi.h"
 
 /* custom HAL */
-#include "imu.h"
-#include "max.h"
-#include "tmp.h"
-#include "fft.h"
+#include "acceleration.h"
+#include "heartrate.h"
+#include "body_temperature.h"
 #include "value.h"
 
 
@@ -133,11 +132,21 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
  */
 #define WARN_ACCL_Z (-8) /*!< lower value of warning acceleration */
 
-#define FFT_DELTA 	(1 / (FFT_LEN * DTT))
-#define MIN_HRATE_VAL     (10000)
-#define MAX_HRATE_VAL     (120000)
-#define THOLD_HRATE_DIFF  (1000)
-#define DEFAULT_HRATE_VAL (750)
+/*!< parameters of fast fourier transform function */
+#define FFT_DELTA (1 / (FFT_LEN * DTT))
+#define DTT       (0.02)                 /*!< error coefficient */
+#define FFT_M 	  (9)                    /*!< series of fast fourier transform */
+#define FFT_LEN   (1 << FFT_M  + FFT_M)  /*!< amount of discrete points */
+#define NUM_TAPS  (FFT_LEN)
+#define S16MAX	  (32767)                /*!< upper value of 16bits */
+#define S16MIN	  (-32767)               /*!< lower value of 16bits */
+#define PI        (3.1415926535897932385)/*!< value of pi */
+
+/*!< parameters of heartrate sensor processing function */
+#define MIN_HRATE_VAL     (10000)  /*!< upper limit of heartrate */
+#define MAX_HRATE_VAL     (120000) /*!< lower limit of heartrate */
+#define THOLD_HRATE_DIFF  (1000)   /*!< threshold of heartrate value variation range */
+#define DEFAULT_HRATE_VAL (750)    /*!< default value of heartrate */
 
 /*!< parameters of low pass filter for latest acceleration value */
 #define PAR_ACC_BASE   (30) /*!< base value of low pass filter coefficient */
@@ -180,10 +189,29 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define K4 (0.06)
 
 
+/*!< typedef for heartrate data processing */
+typedef struct
+{ 
+	float real;
+	float imag;
+}compx;
+
+typedef struct _Cplx16
+{
+	int R;
+	int I;
+}Cplx16;
+
+
 /*!< variable of heartrate data processing */
-static int cnt_hrate, flag_hrate;
-static int hrate_group[FFT_LEN], hrate_temp;
-static int sum_hrate;
+Cplx16 fft_que[FFT_LEN];    /*!< value of discrete points after fft */
+Cplx16 par_w[FFT_LEN / 2]; /*!< parameters of fft */
+
+static int  cnt_hrate;           /*!< number of heartrate data counter */
+static bool flag_hrate;          /*!< flag of starting to report heartrate */
+static int  hrate_group[FFT_LEN];/*!< temporary value of heartrate */
+static int  hrate_temp;          /*!< temporary value of heartrate */
+static int  sum_hrate;           /*!< summation of heartrate value */
 
 /*!< variable of low pass filter for raw acceleration data */
 static char cnt_x, cnt_y, cnt_z;                /*!< low pass filter counter */
@@ -216,35 +244,45 @@ static int filter_svm(int val_new, int val_old, bool *flag_old, char *cnt, unsig
 
 #if PRINT_DEBUG_FUNC
 /*!< print message for debug major function */
-extern void print_msg_func(void);
+extern void  print_msg_func(void);
 #endif/* PRINT_DEBUG_FUNC */
 
 #if PRINT_DEBUG_AWAKE
 /*!< print message for debug awake event detecting function */
-extern void print_msg_awake(void);
+extern void  print_msg_awake(void);
 #endif/* PRINT_DEBUG_AWAKE */
 
 #if PRINT_DEBUG_SLEEP
 /*!< print message for debug sleep-wake state monitoring function */
-extern void print_msg_sleep(uint state);
+extern void  print_msg_sleep(uint state);
 #endif/* PRINT_DEBUG_SLEEP */
 
-extern int  lwm2m_client_start(void);
+/** function for starting lwm2mClient */
+extern int   lwm2m_client_start(void);
+
+/** function for calculate parameters for fast fourier transform */
+extern void  calc_par_w(Cplx16 *W);
+
+/** function for fast fourier transform */
+extern void  fft(Cplx16 *D, Cplx16 *W);
+
+/** function for find the max value */
+extern float find_max(Cplx16 *D);
 
 /** function for deal with heartrate by filter */
-extern void process_hrate(uint32_t* hrate);
+extern void  process_hrate(uint32_t* hrate);
 
 /** function for processing acceleration raw data */
-extern int  process_acc(acc_values acc_temp);
+extern int   process_acc(acc_values acc_temp);
 
 /** function for awake event detecting */
-extern uint func_detect_awake(int inten_temp);
+extern uint  func_detect_awake(int inten_temp);
 
 /** function for sleep-wake state detecting */
-extern uint func_detect_state(int inten_temp);
+extern uint  func_detect_state(int inten_temp);
 
 /** function for sleep downward state detecting */
-extern bool func_detect_downward(float acc_temp);
+extern bool  func_detect_downward(float acc_temp);
 
 /** @} end of name */
 

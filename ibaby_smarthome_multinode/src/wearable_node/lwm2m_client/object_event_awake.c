@@ -77,22 +77,18 @@
 #include <ctype.h>
 #include "dev_iic.h"
 #include "board.h"
-#include "imu.h"
 #include "value.h"
-
 
 #include "embARC.h"
 #include "embARC_debug.h"
 
+
 #define PRV_RESOURCE_3_SIZE 190
 #define PRV_TLV_BUFFER_SIZE 64
 
-
-#define LWM2M_AWAKE_STA_OBJECT_ID          3342
-
-#define WARN_AWAKE_ID          5800
-
-#define LWM2M_EMSK_INSTANCE_ID  0
+#define LWM2M_AWAKE_STA_OBJECT_ID 3342
+#define LWM2M_EMSK_INSTANCE_ID    0
+#define WARN_AWAKE_ID             5800
 
 /*
  * Multiple instance objects can use userdata to store data that will be shared between the different instances.
@@ -105,15 +101,16 @@ typedef struct _prv_instance_
      * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
      * is the instance scope user data (uint8_t test in this case)
      */
-    struct _prv_instance_ * next;   // matches lwm2m_list_t::next
-    uint16_t shortID;               // matches lwm2m_list_t::id
+    struct _prv_instance_ * next;   /* matches lwm2m_list_t::next */
+    uint16_t shortID;               /* matches lwm2m_list_t::id */
     bool event_awake;
 } prv_instance_t;
+
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
                              prv_instance_t * targetP)
 {
-    // There are no multiple instance resources
+    /* There are no multiple instance resources */
     tlvP->type = LWM2M_TYPE_RESOURCE;  
         
         switch (tlvP->id)
@@ -161,6 +158,7 @@ static uint8_t prv_read(uint16_t instanceId,
             }
 
         }
+
         i = 0;
         do
         {
@@ -169,7 +167,6 @@ static uint8_t prv_read(uint16_t instanceId,
         } while (i < *numDataP && result == COAP_205_CONTENT);
 
         return result;
-   
 }
 
 static uint8_t prv_write(uint16_t instanceId,
@@ -256,8 +253,6 @@ lwm2m_object_t * get_awakestatus_object(void)
             targetP->shortID = LWM2M_EMSK_INSTANCE_ID + i;
             targetP->event_awake = data_report_wn.event_awake;
             awakestatusObj->instanceList = LWM2M_LIST_ADD(awakestatusObj->instanceList, targetP);
-            
-           
         }
         /*
          * From a single instance object, two more functions are available.

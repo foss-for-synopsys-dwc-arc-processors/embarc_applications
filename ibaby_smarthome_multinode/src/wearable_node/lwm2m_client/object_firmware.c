@@ -36,7 +36,6 @@
 
 #include "liblwm2m.h"
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,8 +46,8 @@
 
 #include "value.h"
 
-// ---- private object "Firmware" specific defines ----
-// Resource Id's:
+
+/** Resource Id's: */
 #define RES_M_PACKAGE                   0
 #define RES_M_PACKAGE_URI               1
 #define RES_M_UPDATE                    2
@@ -75,13 +74,13 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
     uint8_t result;
     firmware_data_t * data = (firmware_data_t*)(objectP->userData);
 
-    // this is a single instance object
+    /* this is a single instance object */
     if (instanceId != 0)
     {
         return COAP_404_NOT_FOUND;
     }
 
-    // is the server asking for the full object ?
+    /* is the server asking for the full object? */
     if (*numDataP == 0)
     {
         *dataArrayP = lwm2m_tlv_new(3);
@@ -104,7 +103,7 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
             break;
 
         case RES_M_STATE:
-            // firmware update state (int)
+            /* firmware update state (int) */
             lwm2m_tlv_encode_int(data->state, *dataArrayP + i);
             (*dataArrayP)[i].type = LWM2M_TYPE_RESOURCE;
 
@@ -162,7 +161,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
     uint8_t buff[4096];
     uint32_t blen = sizeof(buff);
 
-    // this is a single instance object
+    /* this is a single instance object */
     if (instanceId != 0)
     {
         return COAP_404_NOT_FOUND;
@@ -175,9 +174,9 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
         switch (dataArray[i].id)
         {
         case RES_M_PACKAGE:
-            // inline firmware binary
+            /* inline firmware binary */
 
-            //get the sum number of the temp files
+            /* get the sum number of the temp files */
             j = 0;
             for (;;)
             {
@@ -193,7 +192,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
             }
             sumstr[j] = '\n';
 
-            //get the number of this temp file
+            /* get the number of this temp file */
             j = 0;
             for (;;)
             {
@@ -211,13 +210,12 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
             filesum = atoi(sumstr);
             filenum = atoi(numstr);
-            // printf("filesum = %d\n", filesum);
             printf("filenum = %d\n", filenum);
 
-            //doesn't support temp format file create
+            /* doesn't support temp format file create */
             sprintf(tempname, "boot%d.bin", filenum);
 
-            //receive and save temp file as boot0.bin
+            /* receive and save temp file as boot0.bin */
             if(data->state == 1 || data->state == 3){
                 if((err = f_open(&tempfile, tempname, FA_WRITE | FA_CREATE_ALWAYS))){
                     printf("create temp file %s err : %d\n", tempname, err);
@@ -236,7 +234,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
                 printf("count_file = %d\n\n", count_file);
             }
 
-            //merge all temp file into boot.bin and replace previous one
+            /* merge all temp file into boot.bin and replace previous one */
             if (count_file == filesum)
             {
                 count_file = 0;
@@ -260,17 +258,19 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
                     for (;;)
                     {
-                        res = f_read(&tempfile, buff, blen, &br);/* Read a chunk of source file */
-                        if (res || br == 0) break;                   /* error or eof */
-                        res = f_write(&dstfile, buff, br, &bw);   /* Write it to the destination file */
-                        if (res || bw < br) break;                   /* error or disk full */
+                        /* Read a chunk of source file */
+                        res = f_read(&tempfile, buff, blen, &br);
+                        if (res || br == 0) break; /* error or eof */
+
+                        /* Write it to the destination file */
+                        res = f_write(&dstfile, buff, br, &bw);
+                        if (res || bw < br) break; /* error or disk full */
                     }
-                    // printf("merge the single file %s successfully\r\n", tempname);
                     count_file++;
 
                     f_close(&tempfile);
 
-                    //delete temp file like boot0.bin
+                    /* delete temp file like boot0.bin */
                     if(f_unlink(tempname) != FR_OK) 
                         printf("delete file %s failed\n", tempname);
                 }
@@ -294,7 +294,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
             break;
 
         case RES_M_PACKAGE_URI:
-            // URL for download the firmware
+            /* URL for download the firmware */
             result = COAP_204_CHANGED;
             break;
 
@@ -328,7 +328,7 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
 {
     firmware_data_t * data = (firmware_data_t*)(objectP->userData);
 
-    // this is a single instance object
+    /* this is a single instance object */
     if (instanceId != 0)
     {
         return COAP_404_NOT_FOUND;
@@ -336,20 +336,20 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
 
     if (length != 0) return COAP_400_BAD_REQUEST;
 
-    // for execute callback, resId is always set.
+    /* for execute callback, resId is always set */
     switch (resourceId)
     {
     case RES_M_UPDATE:
         if (data->state == 1)
         {
             EMBARC_PRINTF("\n\t FIRMWARE UPDATE\r\n\n");
-            // trigger your firmware download and update logic
+            /* trigger your firmware download and update logic */
             data->state = 2;
             return COAP_204_CHANGED;
         }
         else
         {
-            // firmware update already running
+            /* firmware update already running */
             return COAP_400_BAD_REQUEST;
         }
     default:

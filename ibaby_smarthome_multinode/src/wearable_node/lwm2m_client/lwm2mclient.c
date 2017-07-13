@@ -207,11 +207,11 @@ static void * prv_connect_server(uint16_t secObjInstID, void * userData)
     uri = get_server_uri(dataP->securityObjP, secObjInstID);
     if (uri == NULL) return NULL;
 
-    // parse uri in the form "coaps://[host]:[port]"  compare previous n ch between s1 and s2
+    /* parse uri in the form "coaps://[host]:[port]"  compare previous n ch between s1 and s2 */
     if (0==strncmp(uri, "coaps://", strlen("coaps://"))) {
-        host = uri+strlen("coaps://");      //an pointer to host
+        host = uri+strlen("coaps://");
     }
-    else if (0==strncmp(uri, "coap://",  strlen("coap://"))) {
+    else if (0==strncmp(uri, "coap://", strlen("coap://"))) {
         host = uri+strlen("coap://");
     }
     else {
@@ -229,9 +229,8 @@ static void * prv_connect_server(uint16_t secObjInstID, void * userData)
     if (*ptr != 0) goto exit;
 
     EMBARC_PRINTF("Trying to connect to LWM2M Server at %s:%d\r\n", host, port);
-    /*
-    *  Happen Error here
-    */
+
+    /* will happen error here if the size of heap is not large enough */
     newConnP = connection_create(dataP->connList, dataP->sock, host, port);
     if (newConnP == NULL)
     {
@@ -343,7 +342,8 @@ static void prv_update(void * user_data)
             case STATE_DEREG_PENDING:
             case STATE_REG_FAILED:
                 break;
-            case STATE_REGISTERED: /* keep alive */
+            case STATE_REGISTERED: 
+                /* keep alive */
                 if (lwm2m_update_registration(lwm2mH, targetP->shortID) != 0) {
                     EMBARC_PRINTF("Registration update error\n");
                 }
@@ -517,7 +517,7 @@ static void prv_display_objects(char * buffer,
 }
 
 static void prv_display_backup(char * buffer,
-        void * user_data)
+                               void * user_data)
 {
     if (NULL != backupObjectArray) {
         int i;
@@ -585,9 +585,7 @@ static void prv_backup_objects(lwm2m_context_t * context)
         memset(backupObjectArray[i], 0, sizeof(lwm2m_object_t));
     }
 
-    /*
-     * Backup content of objects 0 (security) and 1 (server)
-     */
+    /* Backup content of objects 0 (security) and 1 (server) */
     for (i = 0; i < context->numObject; i++) {
         lwm2m_object_t * object = context->objectList[i];
         if (NULL != object) {
@@ -610,9 +608,7 @@ static void prv_restore_objects(lwm2m_context_t * context)
 {
     uint16_t i;
 
-    /*
-     * Restore content  of objects 0 (security) and 1 (server)
-     */
+    /* Restore content  of objects 0 (security) and 1 (server) */
     for (i = 0; i < context->numObject; i++) {
         lwm2m_object_t * object = context->objectList[i];
         if (NULL != object) {
@@ -708,7 +704,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
     client_data_t data;
     int result;
     lwm2m_context_t * lwm2mH = NULL;
-    const char * server = "gateway";//"leshan.eclipse.org";
+    const char * server = "gateway";
     const char * serverPort = LWM2M_STANDARD_PORT_STR;
     const char * name = "wn";
     int lifetime = 3000;
@@ -737,9 +733,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
 
     memset(&data, 0, sizeof(client_data_t));
 
-    /*
-     *This call an internal function that create an IPV6 socket on the port 5683.
-     */
+    /* This call an internal function that create an IPV6 socket on the port 5683 */
     EMBARC_PRINTF("Trying to open a socket for LwM2M Connection\r\n");
     data.sock = create_socket(0, 56830);
     if (data.sock < 0)
@@ -1010,8 +1004,6 @@ int lwm2mclient(lwm2m_client_info *client_info)
                     /*
                      * Display it in the STDERR
                      */
-                    // output_buffer(buffer, numBytes);
-
                     connP = connection_find(data.connList, &addr, addrLen);
                    
                    if (connP != NULL)
