@@ -173,9 +173,9 @@ static uint8_t prv_delete(uint16_t id,lwm2m_object_t * objectP)
 }
 
 static uint8_t prv_create(uint16_t instanceId,
-						  int numData,
-						  lwm2m_tlv_t * dataArray,
-						  lwm2m_object_t * objectP)
+                          int numData,
+                          lwm2m_tlv_t * dataArray,
+                          lwm2m_object_t * objectP)
 {
 	return COAP_405_METHOD_NOT_ALLOWED;
 }

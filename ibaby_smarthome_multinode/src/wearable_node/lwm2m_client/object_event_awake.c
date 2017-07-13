@@ -144,8 +144,7 @@ static uint8_t prv_read(uint16_t instanceId,
 		if (*numDataP == 0)
 		{
 			uint16_t resList[] = {
-					
-					WARN_AWAKE_ID
+				WARN_AWAKE_ID
 			};
 			int nbRes = sizeof(resList)/sizeof(uint16_t);
 
