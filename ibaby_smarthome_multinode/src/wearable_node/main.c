@@ -98,19 +98,17 @@
 #define WARN_HR_MIN  (50)    /*!< lower value of warning heartrate */
 #define WARN_HR_MAX  (150)   /*!< upper value of warning heartrate */
 
-static int  svm_val;         /*!< SVM : signal vector magnitude for difference */
-static int  cnt_aw;          /*!< executing algorithm counter */
-static bool flag_start_aw;   /*!< flag of awake event detecting start */
-static int  cnt_sl;          /*!< counter for sleep monitoring */
-static bool flag_start_sl;   /*!< flag of sleep monitoring start */
-
 
 /**
  * \brief  main entry, call Freertos API, create and start functional task
  */
 int main(void)
 {
-
+	int  svm_val;         /*!< SVM : signal vector magnitude for difference */
+	int  cnt_aw;          /*!< executing algorithm counter */
+	bool flag_start_aw;   /*!< flag of awake event detecting start */
+	int  cnt_sl;          /*!< counter for sleep monitoring */
+	bool flag_start_sl;   /*!< flag of sleep monitoring start */
 	acc_values acc_vals;  /*!< accleration storage */
 
 	EMBARC_PRINTF("\r\n\
@@ -177,30 +175,30 @@ int main(void)
 		/* read acceleration data every 33ms */
 		acc_sensor_read(&acc_vals);
 
-		/* process raw data and calculate SVM(representation of motion intensity) in 33ms */
+		/* process raw accelerationdata and calculate SVM(representation of motion intensity) in 33ms */
 		svm_val = process_acc(acc_vals);
 
 		/* awake event detecting algorithm */
 		if (cnt_aw < THOLD_CNT_AW) {
 			/* summation of SVM in 5s */
-			inten_aw += svm_val;
+			sum_svm_5s += svm_val;
 			cnt_aw++;
 		} else {
 			/* remove the error value in the beginning */
 			if (!flag_start_aw) {
-				inten_aw = 0;
+				sum_svm_5s = 0;
 				flag_start_aw = true;
 			}
 
 			/* detect awake event */
-			data_report_wn.event_awake = func_detect_awake(inten_aw);
+			data_report_wn.event_awake = func_detect_awake(sum_svm_5s);
 
 			/* print out messages for primary function */
 			#if PRINT_DEBUG_FUNC
 				print_msg_func();
 			#endif/* PRINT_DEBUG_FUNC */
 
-			inten_aw = 0;
+			sum_svm_5s = 0;
 			cnt_aw = 0;
 		}
 

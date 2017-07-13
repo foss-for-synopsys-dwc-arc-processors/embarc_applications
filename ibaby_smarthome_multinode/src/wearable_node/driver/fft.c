@@ -55,16 +55,16 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
-Cplx16 x[FFT_LEN];
-Cplx16 w[FFT_LEN / 2];
+Cplx16 fft_que[FFT_LEN];
+Cplx16 coff_w[FFT_LEN / 2];
 
 void hanning(Cplx16 *D)
 {
     int i;
-    float a[num_taps];
-    for (i = 0; i < num_taps; i++)
+    float a[NUM_TAPS];
+    for (i = 0; i < NUM_TAPS; i++)
     {
-        a[i] = 0.5 * (1.0 - cos(2.0 * PI * i / (num_taps - 1)));
+        a[i] = 0.5 * (1.0 - cos(2.0 * PI * i / (NUM_TAPS - 1)));
         D[i].R = a[i] * D[i].R;
     }
 }
@@ -78,7 +78,7 @@ int bit_reverse(int x)
     return rtn;
 }
 
-void calc_w(Cplx16 *W)
+void calc_coff_w(Cplx16 *W)
 {
     int i;
     double arg, argStep;

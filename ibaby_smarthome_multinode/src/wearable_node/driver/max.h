@@ -54,7 +54,9 @@ int32_t hrate_sensor_init(uint32_t slv_addr);
 int32_t hrate_sensor_read(int* heart_rate);
 float band_pass(float in);
 int find_trough_num(int* in, int len);
-extern int dat_num,dat_rdy;
+
+extern int data_num, data_rdy;
+
 #endif /* _WEARABLE_NODE_DRIVER_MAX_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

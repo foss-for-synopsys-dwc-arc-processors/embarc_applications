@@ -151,7 +151,7 @@ extern void print_msg_awake(void)
 
 	EMBARC_PRINTF("\r\n************ Awake detecting ************\r\n");
 
-	sprintf(str, "* Motion intensity in 5s : %d\r\n", inten_aw);
+	sprintf(str, "* Motion intensity in 5s : %d\r\n", sum_svm_5s);
 	EMBARC_PRINTF(str);
 
 	for (uint i = 0; i < LEN_STA_QUEUE; ++i) {
@@ -205,67 +205,76 @@ extern void print_msg_sleep(uint state)
 /* function for deal with heartrate by filter */
 extern void process_hrate(uint32_t* hrate)
 {
-	/* ignore the wrong data in the beginning */
-	if(dat_num < 9) {
-			hrate_sensor_read(NULL);
-	} else if(dat_num < FFT_LEN + 9) {
-		hrate_sensor_read(&hrate_group[dat_num-9]);
+	// dat_num -> data_num
+	// dat_rdy -> data_rdy
+	// sum_h   -> sum_hrate
+	// cnt_h   -> cnt_hrate
+	// flag_h  -> flag_hrate
+	// w -> fft_que_in
+	// x -> fft_que
 
-		if(dat_rdy && dat_num > 9) {
-			if(hrate_group[dat_num-10] < 10000 || hrate_group[dat_num-10] > 120000) {
-				dat_num = 0;
-				sum_h = 0;
-				cnt_h = 0;
+	/* ignore the wrong data in the beginning */
+	if(data_num < FFT_M) {
+			hrate_sensor_read(NULL);
+	} else if(data_num < FFT_LEN) {
+		hrate_sensor_read(&hrate_group[data_num-FFT_M]);
+
+		if(data_rdy && data_num > FFT_M) {
+			if(hrate_group[data_num-FFT_M-1] < MIN_HRATE_VAL 
+				|| hrate_group[data_num-FFT_M-1] > MAX_HRATE_VAL) {
+				data_num = 0;
+				sum_hrate = 0;
+				cnt_hrate = 0;
 			} else {
-				sum_h += hrate_group[dat_num-10];
+				sum_hrate += hrate_group[data_num-FFT_M-1];
 			}
 			
-			dat_rdy = 0;
+			data_rdy = 0;
 		}
-	} else if(dat_num == FFT_LEN + 9) {
-		sum_h = sum_h / FFT_LEN;
+	} else if(data_num == FFT_LEN + FFT_M) {
+		sum_hrate = sum_hrate / FFT_LEN;
 
 		for(int i = 0; i < FFT_LEN - 1; i++) {
-			if(fabs(hrate_group[i] - hrate_group[i+1]) > 1000) {
-				flag_h = 1;
-				dat_num = 0;
-				cnt_h = 0;
+			if(fabs(hrate_group[i] - hrate_group[i+1]) > THOLD_HRATE_DIFF) {
+				flag_hrate = 1;
+				data_num = 0;
+				cnt_hrate = 0;
 				hrate_temp = 0;
 			}
 		}
 
-		if(!flag_h) {
+		if(!flag_hrate) {
 			for(int i = 0; i < FFT_LEN; i++) {
-				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_h);
+				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_hrate);
 
-				if(fabs(hrate_group[i]) < 1000) {
-					x[i].R = hrate_group[i] * 30;
+				if(fabs(hrate_group[i]) < THOLD_HRATE_DIFF) {
+					fft_que[i].R = hrate_group[i] * 30;
 				} else {
 					i = FFT_LEN - 1;
-					dat_num = 0;
-					cnt_h = 0;
+					data_num = 0;
+					cnt_hrate = 0;
 					hrate_temp = 0;
 				}
 			}
 		}
 
-		if(dat_num) {
-			calc_w(w);
+		if(data_num) {
+			calc_coff_w(coff_w);
 
-			fft(x, w);
+			fft(fft_que, coff_w);
 
-			if(cnt_h > 0) {
-				hrate_temp = hrate_temp + ((float)(find_max(x) * 60 * FFT_DELTA) * 10 - hrate_temp) / 6;
-			} else if(cnt_h == 0) {
-					cnt_h++;
-					hrate_temp = 750;
+			if(cnt_hrate > 0) {
+				hrate_temp += ((float)(find_max(fft_que) * 60 * FFT_DELTA) * 10 - hrate_temp) / 6;
+			} else if(cnt_hrate == 0) {
+					cnt_hrate++;
+					hrate_temp = DEFAULT_HRATE_VAL;
 			}
 
-			dat_num = 0;
+			data_num = 0;
 		}
 
-		sum_h = 0;
-		flag_h = 0;
+		sum_hrate = 0;
+		flag_hrate = 0;
 	}
 
 	*hrate = (uint32_t)(hrate_temp / 10);

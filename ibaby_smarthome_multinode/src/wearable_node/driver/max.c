@@ -312,7 +312,7 @@ error_exit:
  * \retval E_OK  	read success
  * \retval !E_OK 	read failed
  */ 
-int dat_num=0,dat_rdy=0;  
+int data_num = 0, data_rdy = 0;
 
 int32_t hrate_sensor_read(int* hrate)
 {
@@ -339,8 +339,8 @@ int32_t hrate_sensor_read(int* hrate)
 		} else {
 			ercd = E_OK;
 			*hrate = ((fifo_data.red_h&&0x3)<<16) | (fifo_data.red_m<<8) | fifo_data.red_l;
-			dat_num++;
-			dat_rdy = 1;
+			data_num++;
+			data_rdy = 1;
 		}
 		int_rdy = 0;
 	}

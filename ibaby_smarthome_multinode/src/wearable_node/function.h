@@ -133,7 +133,11 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
  */
 #define WARN_ACCL_Z (-8) /*!< lower value of warning acceleration */
 
-#define FFT_DELTA 	1 / (FFT_LEN * dtT)
+#define FFT_DELTA 	(1 / (FFT_LEN * DTT))
+#define MIN_HRATE_VAL     (10000)
+#define MAX_HRATE_VAL     (120000)
+#define THOLD_HRATE_DIFF  (1000)
+#define DEFAULT_HRATE_VAL (750)
 
 /*!< parameters of low pass filter for latest acceleration value */
 #define PAR_ACC_BASE   (30) /*!< base value of low pass filter coefficient */
@@ -177,9 +181,9 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 
 
 /*!< variable of heartrate data processing */
-static int cnt_h, flag_h;
+static int cnt_hrate, flag_hrate;
 static int hrate_group[FFT_LEN], hrate_temp;
-static int sum_h;
+static int sum_hrate;
 
 /*!< variable of low pass filter for raw acceleration data */
 static char cnt_x, cnt_y, cnt_z;                /* low pass filter counter */
@@ -196,7 +200,7 @@ static unsigned char par_v; /* low pass filter coefficient */
 static bool flag_old_v;     /*!< flag of change direction of value */
 
 /*!< variable of detecting awake event */
-int  inten_aw;                       /*!< motion intensity in 5s */
+int  sum_svm_5s;                     /*!< motion intensity in 5s */
 static int  state_aw[LEN_STA_QUEUE]; /*!< state for LEN_STA_QUEUE * 5s */
 
 /*!< variable of sleep monitoring */

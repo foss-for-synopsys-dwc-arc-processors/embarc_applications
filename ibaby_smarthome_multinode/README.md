@@ -42,6 +42,11 @@ The hardware resources are allocated as following table.
 |  PMOD WiFi          | Provide WiFi Connection                                       |
 
 ### Run this application
+Modify the setting of the pmod because we will use the IIC1 instead of IIC0 to connect with 3 sensors, in /board/emsk/emsk.h:
+
+		#define BOARD_ADC_IIC_ID			DW_IIC_1_ID
+		#define BOARD_TEMP_SENSOR_IIC_ID	DW_IIC_1_ID
+
 Here take **EMSK2.2 - ARC EM7D** with Metaware Toolset for example to show how to run this application.
 
 1. We need to use embARC 2nd bootloader to automatically load application binary for different EMSK and run.

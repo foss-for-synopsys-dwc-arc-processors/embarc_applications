@@ -49,11 +49,11 @@ typedef struct
   float imag;
 }compx;
 
-#define dtT             0.02
+#define DTT             0.02
 
 #define FFT_M 			9
-#define FFT_LEN 		(1 << FFT_M)
-#define num_taps		FFT_LEN			
+#define FFT_LEN 		(1 << FFT_M  + FFT_M)
+#define NUM_TAPS		FFT_LEN			
 
 
 #define S16MAX	 32767
@@ -66,10 +66,10 @@ typedef struct _Cplx16
     int I;
 } Cplx16;
 
-extern Cplx16 x[FFT_LEN];
-extern Cplx16 w[FFT_LEN / 2];
+extern Cplx16 fft_que[FFT_LEN];
+extern Cplx16 coff_w[FFT_LEN / 2];
 
-extern void calc_w(Cplx16 *W);
+extern void calc_coff_w(Cplx16 *W);
 extern void fft(Cplx16 *D, Cplx16 *W);
 extern float find_max(Cplx16 *D);
 
