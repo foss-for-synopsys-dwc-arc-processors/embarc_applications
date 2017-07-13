@@ -299,8 +299,8 @@ extern void process_hrate(uint32_t* hrate)
 {
 	/* ignore the wrong data in the beginning */
 	if(data_num < FFT_M) {
-		hrate_sensor_read(NULL);
-	} else if(data_num < FFT_LEN) {
+		hrate_sensor_read(NULL);	
+	} else if(data_num < FFT_LEN + FFT_M) {
 		/* read raw heartrate data */
 		hrate_sensor_read(&hrate_group[data_num-FFT_M]);
 
@@ -316,7 +316,7 @@ extern void process_hrate(uint32_t* hrate)
 			
 			data_rdy = 0;
 		}
-	} else if(data_num == FFT_LEN + FFT_M) {
+	} else if(data_num == FFT_LEN  + FFT_M) {
 		sum_hrate = sum_hrate / FFT_LEN;
 
 		for(int i = 0; i < FFT_LEN - 1; i++) {
@@ -331,6 +331,8 @@ extern void process_hrate(uint32_t* hrate)
 		if(!flag_hrate) {
 			for(int i = 0; i < FFT_LEN; i++) {
 				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_hrate);
+
+				// EMBARC_PRINTF("\nhrate_fir : %d\n\n", hrate_group[i]);
 
 				if(fabs(hrate_group[i]) < THOLD_HRATE_DIFF) {
 					fft_que[i].R = hrate_group[i] * 30;

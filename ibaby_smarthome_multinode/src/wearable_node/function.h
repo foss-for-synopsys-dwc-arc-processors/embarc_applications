@@ -136,7 +136,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define FFT_DELTA (1 / (FFT_LEN * DTT))
 #define DTT       (0.02)                 /*!< error coefficient */
 #define FFT_M 	  (9)                    /*!< series of fast fourier transform */
-#define FFT_LEN   (1 << FFT_M  + FFT_M)  /*!< amount of discrete points */
+#define FFT_LEN   (1 << FFT_M)           /*!< amount of discrete points */
 #define NUM_TAPS  (FFT_LEN)
 #define S16MAX	  (32767)                /*!< upper value of 16bits */
 #define S16MIN	  (-32767)               /*!< lower value of 16bits */
