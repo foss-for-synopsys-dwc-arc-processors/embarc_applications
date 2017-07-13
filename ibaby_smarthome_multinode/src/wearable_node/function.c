@@ -111,10 +111,10 @@ extern void print_msg_func(void)
 	EMBARC_PRINTF("\r\n************ Primary function ************\r\n");
 
 	sprintf(str,
-		"* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
-		 data_report_wn.hrate,
-		 data_report_wn.btemp/10, data_report_wn.btemp%10,
-		 data_report_wn.motion_intensity);
+            "* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
+            data_report_wn.hrate,
+            data_report_wn.btemp/10, data_report_wn.btemp%10,
+            data_report_wn.motion_intensity);
 	EMBARC_PRINTF(str);
 	
 	if (data_report_wn.state == SLEEP) {
@@ -206,12 +206,9 @@ extern void print_msg_sleep(uint state)
 extern void process_hrate(uint32_t* hrate)
 {
 	/* ignore the wrong data in the beginning */
-	if(dat_num < 9) 
-	{
+	if(dat_num < 9) {
 			hrate_sensor_read(NULL);
-	}
-	else if(dat_num < FFT_LEN + 9) 
-	{
+	} else if(dat_num < FFT_LEN + 9) {
 		hrate_sensor_read(&hrate_group[dat_num-9]);
 
 		if(dat_rdy && dat_num > 9) {
@@ -225,9 +222,7 @@ extern void process_hrate(uint32_t* hrate)
 			
 			dat_rdy = 0;
 		}
-	}
-	else if(dat_num == FFT_LEN + 9)
-	{
+	} else if(dat_num == FFT_LEN + 9) {
 		sum_h = sum_h / FFT_LEN;
 
 		for(int i = 0; i < FFT_LEN - 1; i++) {
@@ -259,12 +254,9 @@ extern void process_hrate(uint32_t* hrate)
 
 			fft(x, w);
 
-			if(cnt_h > 0)
-			{
+			if(cnt_h > 0) {
 				hrate_temp = hrate_temp + ((float)(find_max(x) * 60 * FFT_DELTA) * 10 - hrate_temp) / 6;
-			}
-			else if(cnt_h == 0)
-			{
+			} else if(cnt_h == 0) {
 					cnt_h++;
 					hrate_temp = 750;
 			}
