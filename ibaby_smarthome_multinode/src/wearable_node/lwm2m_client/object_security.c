@@ -451,9 +451,9 @@ void display_security_object(lwm2m_object_t * object)
 	while (instance != NULL)
 	{
 		EMBARC_PRINTF("    /%u/%u: instanceId: %u, uri: %s, isBootstrap: %s, shortId: %u, clientHoldOffTime: %u\r\n",
-				object->objID, instance->instanceId,
-				instance->instanceId, instance->uri, instance->isBootstrap ? "true" : "false",
-				instance->shortID, instance->clientHoldOffTime);
+			object->objID, instance->instanceId,
+			instance->instanceId, instance->uri, instance->isBootstrap ? "true" : "false",
+			instance->shortID, instance->clientHoldOffTime);
 		instance = (security_instance_t *)instance->next;
 	}
 #endif

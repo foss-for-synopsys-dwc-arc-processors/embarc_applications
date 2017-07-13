@@ -391,23 +391,23 @@ static uint8_t prv_device_read(uint16_t instanceId,
 	if (*numDataP == 0)
 	{
 		uint16_t resList[] = {
-				RES_O_MANUFACTURER,
-				RES_O_MODEL_NUMBER,
-				RES_O_SERIAL_NUMBER,
-				RES_O_FIRMWARE_VERSION,
-				/*E: RES_M_REBOOT, */
-				/*E: RES_O_FACTORY_RESET, */
-				RES_O_AVL_POWER_SOURCES,
-				RES_O_POWER_SOURCE_VOLTAGE,
-				RES_O_POWER_SOURCE_CURRENT,
-				RES_O_BATTERY_LEVEL,
-				RES_O_MEMORY_FREE,
-				RES_M_ERROR_CODE,
-				/*E: RES_O_RESET_ERROR_CODE, */
-				RES_O_CURRENT_TIME,
-				RES_O_UTC_OFFSET,
-				RES_O_TIMEZONE,
-				RES_M_BINDING_MODES
+			RES_O_MANUFACTURER,
+			RES_O_MODEL_NUMBER,
+			RES_O_SERIAL_NUMBER,
+			RES_O_FIRMWARE_VERSION,
+			/*E: RES_M_REBOOT, */
+			/*E: RES_O_FACTORY_RESET, */
+			RES_O_AVL_POWER_SOURCES,
+			RES_O_POWER_SOURCE_VOLTAGE,
+			RES_O_POWER_SOURCE_CURRENT,
+			RES_O_BATTERY_LEVEL,
+			RES_O_MEMORY_FREE,
+			RES_M_ERROR_CODE,
+			/*E: RES_O_RESET_ERROR_CODE, */
+			RES_O_CURRENT_TIME,
+			RES_O_UTC_OFFSET,
+			RES_O_TIMEZONE,
+			RES_M_BINDING_MODES
 		};
 		int nbRes = sizeof(resList)/sizeof(uint16_t);
 
@@ -543,7 +543,7 @@ void display_device_object(lwm2m_object_t * object)
 	if (NULL != data)
 	{
 		EMBARC_PRINTF("    time: %d, time_offset: %s\r\n",
-				(long long) data->time, data->time_offset);
+			(long long) data->time, data->time_offset);
 	}
 #endif
 }
@@ -622,50 +622,48 @@ uint8_t device_change(lwm2m_tlv_t * dataArray,
 	switch (dataArray->id)
 	{
 	case RES_O_BATTERY_LEVEL:
+		int64_t value;
+		if (1 == lwm2m_tlv_decode_int(dataArray, &value))
+		{
+			if ((0 <= value) && (100 >= value))
 			{
-				int64_t value;
-				if (1 == lwm2m_tlv_decode_int(dataArray, &value))
-				{
-					if ((0 <= value) && (100 >= value))
-					{
-						((device_data_t*)(objectP->userData))->battery_level = value;
-						result = COAP_204_CHANGED;
-					}
-					else
-					{
-						result = COAP_400_BAD_REQUEST;
-					}
-				}
-				else
-				{
-					result = COAP_400_BAD_REQUEST;
-				}
-			}
-			break;
-		case RES_M_ERROR_CODE:
-			if (1 == lwm2m_tlv_decode_int(dataArray, &((device_data_t*)(objectP->userData))->error))
-			{
+				((device_data_t*)(objectP->userData))->battery_level = value;
 				result = COAP_204_CHANGED;
 			}
 			else
 			{
 				result = COAP_400_BAD_REQUEST;
 			}
-			break;
-		case RES_O_MEMORY_FREE:
-			if (1 == lwm2m_tlv_decode_int(dataArray, &((device_data_t*)(objectP->userData))->free_memory))
-			{
-				result = COAP_204_CHANGED;
-			}
-			else
-			{
-				result = COAP_400_BAD_REQUEST;
-			}
-			break;
-		default:
-			result = COAP_405_METHOD_NOT_ALLOWED;
-			break;
 		}
+		else
+		{
+			result = COAP_400_BAD_REQUEST;
+		}
+		break;
+	case RES_M_ERROR_CODE:
+		if (1 == lwm2m_tlv_decode_int(dataArray, &((device_data_t*)(objectP->userData))->error))
+		{
+			result = COAP_204_CHANGED;
+		}
+		else
+		{
+			result = COAP_400_BAD_REQUEST;
+		}
+		break;
+	case RES_O_MEMORY_FREE:
+		if (1 == lwm2m_tlv_decode_int(dataArray, &((device_data_t*)(objectP->userData))->free_memory))
+		{
+			result = COAP_204_CHANGED;
+		}
+		else
+		{
+			result = COAP_400_BAD_REQUEST;
+		}
+		break;
+	default:
+		result = COAP_405_METHOD_NOT_ALLOWED;
+		break;
+	}
 
 	return result;
 }

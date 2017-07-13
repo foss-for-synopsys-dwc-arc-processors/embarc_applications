@@ -113,18 +113,18 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 	/* There are no multiple instance resources */
 	tlvP->type = LWM2M_TYPE_RESOURCE;  
 		
-		switch (tlvP->id)
-		{
-		case WARN_AWAKE_ID:
-			targetP->event_awake = data_report_wn.event_awake;
-			lwm2m_tlv_encode_bool(targetP->event_awake, tlvP);
-			if (0 != tlvP->length) return COAP_205_CONTENT;
-			else return COAP_500_INTERNAL_SERVER_ERROR;
-			break;
-		
-		default:
-			return COAP_404_NOT_FOUND;
-		}
+	switch (tlvP->id)
+	{
+	case WARN_AWAKE_ID:
+		targetP->event_awake = data_report_wn.event_awake;
+		lwm2m_tlv_encode_bool(targetP->event_awake, tlvP);
+		if (0 != tlvP->length) return COAP_205_CONTENT;
+		else return COAP_500_INTERNAL_SERVER_ERROR;
+		break;
+	
+	default:
+		return COAP_404_NOT_FOUND;
+	}
 
 	
 }
@@ -141,31 +141,31 @@ static uint8_t prv_read(uint16_t instanceId,
 	targetP = (prv_instance_t *)lwm2m_list_find(objectP->instanceList, instanceId);
 	if (NULL == targetP) return COAP_404_NOT_FOUND;
 
-		if (*numDataP == 0)
+	if (*numDataP == 0)
+	{
+		uint16_t resList[] = {
+			WARN_AWAKE_ID
+		};
+		int nbRes = sizeof(resList)/sizeof(uint16_t);
+
+		*dataArrayP = lwm2m_tlv_new(nbRes);
+		if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+		*numDataP = nbRes;
+		for (i = 0 ; i < nbRes ; i++)
 		{
-			uint16_t resList[] = {
-				WARN_AWAKE_ID
-			};
-			int nbRes = sizeof(resList)/sizeof(uint16_t);
-
-			*dataArrayP = lwm2m_tlv_new(nbRes);
-			if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
-			*numDataP = nbRes;
-			for (i = 0 ; i < nbRes ; i++)
-			{
-				(*dataArrayP)[i].id = resList[i];
-			}
-
+			(*dataArrayP)[i].id = resList[i];
 		}
 
-		i = 0;
-		do
-		{
-			result = prv_get_value((*dataArrayP) + i, targetP);
-			i++;
-		} while (i < *numDataP && result == COAP_205_CONTENT);
+	}
 
-		return result;
+	i = 0;
+	do
+	{
+		result = prv_get_value((*dataArrayP) + i, targetP);
+		i++;
+	} while (i < *numDataP && result == COAP_205_CONTENT);
+
+	return result;
 }
 
 static uint8_t prv_write(uint16_t instanceId,
@@ -218,8 +218,8 @@ void display_awakestatus_object(lwm2m_object_t * object)
 	while (instance != NULL)
 	{
 		EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
-				object->objID, instance->shortID,
-				instance->shortID, instance->btn);
+			object->objID, instance->shortID,
+			instance->shortID, instance->btn);
 		instance = (prv_instance_t *)instance->next;
 	}
 #endif
@@ -266,7 +266,6 @@ lwm2m_object_t * get_awakestatus_object(void)
 		awakestatusObj->deleteFunc  = prv_delete;
 		awakestatusObj->executeFunc = prv_exec;
 		awakestatusObj->closeFunc   = prv_close;
-		
 	}
   
 	return awakestatusObj;

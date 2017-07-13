@@ -216,8 +216,8 @@ void display_btempstatus_object(lwm2m_object_t * object)
 	while (instance != NULL)
 	{
 		EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
-				object->objID, instance->shortID,
-				instance->shortID, instance->btn);
+			object->objID, instance->shortID,
+			instance->shortID, instance->btn);
 		instance = (prv_instance_t *)instance->next;
 	}
 #endif

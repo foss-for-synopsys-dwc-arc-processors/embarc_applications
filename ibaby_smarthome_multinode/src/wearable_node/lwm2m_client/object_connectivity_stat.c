@@ -111,12 +111,12 @@ static uint8_t prv_read(uint16_t instanceId, int * numDataP, lwm2m_tlv_t** dataA
 	if (*numDataP == 0)
 	{
 		uint16_t resList[] = {
-				RES_O_SMS_TX_COUNTER,
-				RES_O_SMS_RX_COUNTER,
-				RES_O_TX_DATA,
-				RES_O_RX_DATA,
-				RES_O_MAX_MESSAGE_SIZE,
-				RES_O_AVERAGE_MESSAGE_SIZE
+			RES_O_SMS_TX_COUNTER,
+			RES_O_SMS_RX_COUNTER,
+			RES_O_TX_DATA,
+			RES_O_RX_DATA,
+			RES_O_MAX_MESSAGE_SIZE,
+			RES_O_AVERAGE_MESSAGE_SIZE
 		};
 		int nbRes = sizeof(resList) / sizeof(uint16_t);
 

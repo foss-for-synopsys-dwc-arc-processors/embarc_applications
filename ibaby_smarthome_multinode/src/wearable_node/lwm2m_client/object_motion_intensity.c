@@ -98,13 +98,13 @@
  */
 typedef struct _prv_instance_
 {
-		/*
-		 * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
-		 * is the instance scope user data (uint8_t test in this case)
-		 */
-		struct _prv_instance_ * next;   /* matches lwm2m_list_t::next */
-		uint16_t shortID;               /* matches lwm2m_list_t::id */
-		uint32_t motion_intensity;
+	/*
+	 * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
+	 * is the instance scope user data (uint8_t test in this case)
+	 */
+	struct _prv_instance_ * next;   /* matches lwm2m_list_t::next */
+	uint16_t shortID;               /* matches lwm2m_list_t::id */
+	uint32_t motion_intensity;
 } prv_instance_t;
 
 
@@ -113,20 +113,18 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 {
 	/* There are no multiple instance resources */
 	tlvP->type = LWM2M_TYPE_RESOURCE; 
-			switch (tlvP->id)
-			{
-			case ACT_STRENGTH_ID:
-					targetP->motion_intensity = data_report_wn.motion_intensity;
-					lwm2m_tlv_encode_int(targetP->motion_intensity, tlvP);
-					if (0 != tlvP->length) return COAP_205_CONTENT;
-					else return COAP_500_INTERNAL_SERVER_ERROR;
-					break;
-			
-			default:
-					return COAP_404_NOT_FOUND;
-			}
-
-		
+	switch (tlvP->id)
+	{
+	case ACT_STRENGTH_ID:
+		targetP->motion_intensity = data_report_wn.motion_intensity;
+		lwm2m_tlv_encode_int(targetP->motion_intensity, tlvP);
+		if (0 != tlvP->length) return COAP_205_CONTENT;
+		else return COAP_500_INTERNAL_SERVER_ERROR;
+		break;
+	
+	default:
+		return COAP_404_NOT_FOUND;
+	}	
 }
 
 static uint8_t prv_read(uint16_t instanceId,
@@ -141,31 +139,31 @@ static uint8_t prv_read(uint16_t instanceId,
 	targetP = (prv_instance_t *)lwm2m_list_find(objectP->instanceList, instanceId);
 	if (NULL == targetP) return COAP_404_NOT_FOUND;
 
-			if (*numDataP == 0)
-			{
-					uint16_t resList[] = {
-									ACT_STRENGTH_ID
-									
-					};
-					int nbRes = sizeof(resList)/sizeof(uint16_t);
+	if (*numDataP == 0)
+	{
+		uint16_t resList[] = {
+			ACT_STRENGTH_ID
+						
+		};
+		int nbRes = sizeof(resList)/sizeof(uint16_t);
 
-					*dataArrayP = lwm2m_tlv_new(nbRes);
-					if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
-					*numDataP = nbRes;
-					for (i = 0 ; i < nbRes ; i++)
-					{
-							(*dataArrayP)[i].id = resList[i];
-					}
+		*dataArrayP = lwm2m_tlv_new(nbRes);
+		if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+		*numDataP = nbRes;
+		for (i = 0 ; i < nbRes ; i++)
+		{
+			(*dataArrayP)[i].id = resList[i];
+		}
 
-			}
-			i = 0;
-			do
-			{
-					result = prv_get_value((*dataArrayP) + i, targetP);
-					i++;
-			} while (i < *numDataP && result == COAP_205_CONTENT);
+	}
+	i = 0;
+	do
+	{
+		result = prv_get_value((*dataArrayP) + i, targetP);
+		i++;
+	} while (i < *numDataP && result == COAP_205_CONTENT);
 
-			return result;
+	return result;
 	 
 }
 
@@ -205,8 +203,8 @@ static void prv_close(lwm2m_object_t * objectP)
 	LWM2M_LIST_FREE(objectP->instanceList);
 	if (objectP->userData != NULL)
 	{
-			lwm2m_free(objectP->userData);
-			objectP->userData = NULL;
+		lwm2m_free(objectP->userData);
+		objectP->userData = NULL;
 	}
 }
 
@@ -217,10 +215,10 @@ void display_act_object(lwm2m_object_t * object)
 	prv_instance_t * instance = (prv_instance_t *)object->instanceList;
 	while (instance != NULL)
 	{
-			EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
-							object->objID, instance->shortID,
-							instance->shortID, instance->btn);
-			instance = (prv_instance_t *)instance->next;
+		EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
+						object->objID, instance->shortID,
+						instance->shortID, instance->btn);
+		instance = (prv_instance_t *)instance->next;
 	}
 #endif
 }
@@ -242,18 +240,16 @@ lwm2m_object_t * get_act_object(void)
 		actObj->objID = LWM2M_ACT_STENGTH_OBJECT_ID;
 		for (i=0 ; i < 1 ; i++)
 		{
-				targetP = (prv_instance_t *)lwm2m_malloc(sizeof(prv_instance_t));
-				if (NULL == targetP) {
-						lwm2m_free(actObj);
-						return NULL;
-				}
-				memset(targetP, 0, sizeof(prv_instance_t));
-				
-				targetP->shortID = LWM2M_EMSK_INSTANCE_ID + i;
-				targetP->motion_intensity = data_report_wn.motion_intensity;
-				actObj->instanceList = LWM2M_LIST_ADD(actObj->instanceList, targetP);
-				
-								
+			targetP = (prv_instance_t *)lwm2m_malloc(sizeof(prv_instance_t));
+			if (NULL == targetP) {
+					lwm2m_free(actObj);
+					return NULL;
+			}
+			memset(targetP, 0, sizeof(prv_instance_t));
+			
+			targetP->shortID = LWM2M_EMSK_INSTANCE_ID + i;
+			targetP->motion_intensity = data_report_wn.motion_intensity;
+			actObj->instanceList = LWM2M_LIST_ADD(actObj->instanceList, targetP);					
 		}
 		/*
 		 * From a single instance object, two more functions are available.

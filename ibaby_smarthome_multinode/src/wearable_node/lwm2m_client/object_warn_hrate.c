@@ -143,7 +143,6 @@ static uint8_t prv_read(uint16_t instanceId,
 		if (*numDataP == 0)
 		{
 			uint16_t resList[] = {
-					
 				WARN_HRATE_ID
 			};
 			int nbRes = sizeof(resList)/sizeof(uint16_t);
@@ -155,7 +154,6 @@ static uint8_t prv_read(uint16_t instanceId,
 			{
 				(*dataArrayP)[i].id = resList[i];
 			}
-
 		}
 
 		i = 0;

@@ -132,30 +132,30 @@ static uint8_t prv_read(uint16_t instanceId,
 	targetP = (prv_instance_t *)lwm2m_list_find(objectP->instanceList, instanceId);
 	if (NULL == targetP) return COAP_404_NOT_FOUND;
 
-		if (*numDataP == 0)
-		{
-			uint16_t resList[] = {
-					LWM2M_BODYTEMP_ID
-			};
-			int nbRes = sizeof(resList)/sizeof(uint16_t);
+	if (*numDataP == 0)
+	{
+		uint16_t resList[] = {
+				LWM2M_BODYTEMP_ID
+		};
+		int nbRes = sizeof(resList)/sizeof(uint16_t);
 
-			*dataArrayP = lwm2m_tlv_new(nbRes);
-			if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
-			*numDataP = nbRes;
-			for (i = 0 ; i < nbRes ; i++)
-			{
-				(*dataArrayP)[i].id = resList[i];
-			}
+		*dataArrayP = lwm2m_tlv_new(nbRes);
+		if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+		*numDataP = nbRes;
+		for (i = 0 ; i < nbRes ; i++)
+		{
+			(*dataArrayP)[i].id = resList[i];
 		}
+	}
 
-		i = 0;
-		do
-		{
-			result = prv_get_value((*dataArrayP) + i, targetP);
-			i++;
-		} while (i < *numDataP && result == COAP_205_CONTENT);
+	i = 0;
+	do
+	{
+		result = prv_get_value((*dataArrayP) + i, targetP);
+		i++;
+	} while (i < *numDataP && result == COAP_205_CONTENT);
 
-		return result;
+	return result;
    
 }
 
