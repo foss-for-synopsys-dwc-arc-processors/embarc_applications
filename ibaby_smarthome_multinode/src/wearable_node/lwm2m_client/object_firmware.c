@@ -66,9 +66,9 @@ typedef struct
 
 
 static uint8_t prv_firmware_read(uint16_t instanceId,
-								 int * numDataP,
-								 lwm2m_tlv_t ** dataArrayP,
-								 lwm2m_object_t * objectP)
+                                 int * numDataP,
+                                 lwm2m_tlv_t ** dataArrayP,
+                                 lwm2m_object_t * objectP)
 {
 	int i;
 	uint8_t result;
@@ -141,9 +141,9 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
 }
 
 static uint8_t prv_firmware_write(uint16_t instanceId,
-								  int numData,
-								  lwm2m_tlv_t * dataArray,
-								  lwm2m_object_t * objectP)
+                                  int numData,
+                                  lwm2m_tlv_t * dataArray,
+                                  lwm2m_object_t * objectP)
 {
 	int i,j;
 	bool bvalue;
@@ -321,10 +321,10 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 }
 
 static uint8_t prv_firmware_execute(uint16_t instanceId,
-									uint16_t resourceId,
-									uint8_t * buffer,
-									int length,
-									lwm2m_object_t * objectP)
+                                    uint16_t resourceId,
+                                    uint8_t * buffer,
+                                    int length,
+                                    lwm2m_object_t * objectP)
 {
 	firmware_data_t * data = (firmware_data_t*)(objectP->userData);
 

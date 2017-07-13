@@ -56,7 +56,7 @@ typedef struct _server_instance_
 } server_instance_t;
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
-							 server_instance_t * targetP)
+                             server_instance_t * targetP)
 {
 	/* There are no multiple instance resources */
 	tlvP->type = LWM2M_TYPE_RESOURCE;
@@ -112,9 +112,9 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 }
 
 static uint8_t prv_server_read(uint16_t instanceId,
-							   int * numDataP,
-							   lwm2m_tlv_t ** dataArrayP,
-							   lwm2m_object_t * objectP)
+                               int * numDataP,
+                               lwm2m_tlv_t ** dataArrayP,
+                               lwm2m_object_t * objectP)
 {
 	server_instance_t * targetP;
 	uint8_t result;
@@ -180,9 +180,9 @@ static uint8_t prv_set_int_value(lwm2m_tlv_t * dataArray, uint32_t * data) {
 }
 
 static uint8_t prv_server_write(uint16_t instanceId,
-								int numData,
-								lwm2m_tlv_t * dataArray,
-								lwm2m_object_t * objectP)
+                                int numData,
+                                lwm2m_tlv_t * dataArray,
+                                lwm2m_object_t * objectP)
 {
 	server_instance_t * targetP;
 	int i;
@@ -299,10 +299,10 @@ static uint8_t prv_server_write(uint16_t instanceId,
 }
 
 static uint8_t prv_server_execute(uint16_t instanceId,
-								  uint16_t resourceId,
-								  uint8_t * buffer,
-								  int length,
-								  lwm2m_object_t * objectP)
+                                  uint16_t resourceId,
+                                  uint8_t * buffer,
+                                  int length,
+                                  lwm2m_object_t * objectP)
 
 {
 	server_instance_t * targetP;
@@ -325,7 +325,7 @@ static uint8_t prv_server_execute(uint16_t instanceId,
 }
 
 static uint8_t prv_server_delete(uint16_t id,
-								 lwm2m_object_t * objectP)
+                                 lwm2m_object_t * objectP)
 {
 	server_instance_t * serverInstance;
 
@@ -338,9 +338,9 @@ static uint8_t prv_server_delete(uint16_t id,
 }
 
 static uint8_t prv_server_create(uint16_t instanceId,
-								 int numData,
-								 lwm2m_tlv_t * dataArray,
-								 lwm2m_object_t * objectP)
+                                 int numData,
+                                 lwm2m_tlv_t * dataArray,
+                                 lwm2m_object_t * objectP)
 {
 	server_instance_t * serverInstance;
 	uint8_t result;
@@ -422,7 +422,7 @@ void display_server_object(lwm2m_object_t * object)
 }
 
 lwm2m_object_t * get_server_object(int serverId, const char* binding,
-								   int lifetime, bool storing)
+                                   int lifetime, bool storing)
 {
 	lwm2m_object_t * serverObj;
 

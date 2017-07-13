@@ -124,7 +124,7 @@ typedef struct
  * bug: +12:30 is considered a valid value by this function
  */
 static int prv_check_time_offset(char * buffer,
-								 int length)
+                                 int length)
 {
 	int min_index;
 
@@ -163,7 +163,7 @@ static int prv_check_time_offset(char * buffer,
 }
 
 static uint8_t prv_set_value(lwm2m_tlv_t * tlvP,
-							 device_data_t * devDataP)
+                             device_data_t * devDataP)
 {
 	/* a simple switch structure is used to respond at the specified resource asked */
 	switch (tlvP->id)
@@ -374,9 +374,9 @@ static uint8_t prv_set_value(lwm2m_tlv_t * tlvP,
 }
 
 static uint8_t prv_device_read(uint16_t instanceId,
-							   int * numDataP,
-							   lwm2m_tlv_t ** dataArrayP,
-							   lwm2m_object_t * objectP)
+                               int * numDataP,
+                               lwm2m_tlv_t ** dataArrayP,
+                               lwm2m_object_t * objectP)
 {
 	uint8_t result;
 	int i;
@@ -431,9 +431,9 @@ static uint8_t prv_device_read(uint16_t instanceId,
 }
 
 static uint8_t prv_device_write(uint16_t instanceId,
-								int numData,
-								lwm2m_tlv_t * dataArray,
-								lwm2m_object_t * objectP)
+                                int numData,
+                                lwm2m_tlv_t * dataArray,
+                                lwm2m_object_t * objectP)
 {
 	int i;
 	uint8_t result;
@@ -491,10 +491,10 @@ static uint8_t prv_device_write(uint16_t instanceId,
 }
 
 static uint8_t prv_device_execute(uint16_t instanceId,
-								  uint16_t resourceId,
-								  uint8_t * buffer,
-								  int length,
-								  lwm2m_object_t * objectP)
+                                  uint16_t resourceId,
+                                  uint8_t * buffer,
+                                  int length,
+                                  lwm2m_object_t * objectP)
 {
 	/* this is a single instance object */
 	if (instanceId != 0)
@@ -615,7 +615,7 @@ lwm2m_object_t * get_object_device()
 }
 
 uint8_t device_change(lwm2m_tlv_t * dataArray,
-					  lwm2m_object_t * objectP)
+                      lwm2m_object_t * objectP)
 {
 	uint8_t result;
 

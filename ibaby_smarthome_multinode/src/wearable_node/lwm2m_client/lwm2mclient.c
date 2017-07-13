@@ -126,9 +126,9 @@ static lwm2m_object_t * prv_find_object(lwm2m_context_t * contextP, uint16_t Id)
 }
 
 void handle_value_changed(lwm2m_context_t * lwm2mH,
-						  lwm2m_uri_t * uri,
-						  const char * value,
-						  size_t valueLength)
+                          lwm2m_uri_t * uri,
+                          const char * value,
+                          size_t valueLength)
 {
 	lwm2m_object_t * object = prv_find_object(lwm2mH, uri->objectId);
 
@@ -247,9 +247,9 @@ exit:
 }
 
 static uint8_t prv_buffer_send(void * sessionH,
-							   uint8_t * buffer,
-							   size_t length,
-							   void * userdata)
+                               uint8_t * buffer,
+                               size_t length,
+                               void * userdata)
 {
 	connection_t * connP = (connection_t*) sessionH;
 
@@ -449,7 +449,7 @@ static void prv_update(void * user_data)
 #ifdef LWM2M_BOOTSTRAP
 
 static void prv_initiate_bootstrap(char * buffer,
-								   void * user_data)
+                                   void * user_data)
 {
 	lwm2m_context_t * lwm2mH = (lwm2m_context_t *)user_data;
 	if ((lwm2mH->bsState != BOOTSTRAP_CLIENT_HOLD_OFF)
@@ -459,7 +459,7 @@ static void prv_initiate_bootstrap(char * buffer,
 }
 
 static void prv_display_objects(char * buffer,
-								void * user_data)
+                                void * user_data)
 {
 	lwm2m_context_t * lwm2mH = (lwm2m_context_t *)user_data;
 	int i;
@@ -517,7 +517,7 @@ static void prv_display_objects(char * buffer,
 }
 
 static void prv_display_backup(char * buffer,
-							   void * user_data)
+                               void * user_data)
 {
 	if (NULL != backupObjectArray) {
 		int i;
@@ -650,7 +650,7 @@ static void prv_connections_free(lwm2m_context_t * context)
 }
 
 static void update_bootstrap_info(lwm2m_bootstrap_state_t * previousBootstrapState,
-		lwm2m_context_t * context)
+                                  lwm2m_context_t * context)
 {
 	if (*previousBootstrapState != context->bsState)
 	{

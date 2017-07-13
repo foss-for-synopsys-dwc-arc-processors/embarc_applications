@@ -102,7 +102,7 @@ typedef struct _prv_instance_
 
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
-							 prv_instance_t * targetP)
+                             prv_instance_t * targetP)
 {
 	/* There are no multiple instance resources */
 	tlvP->type = LWM2M_TYPE_RESOURCE;
@@ -125,9 +125,9 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 }
 
 static uint8_t prv_read(uint16_t instanceId,
-						int * numDataP,
-						lwm2m_tlv_t ** dataArrayP,
-						lwm2m_object_t * objectP)
+                        int * numDataP,
+                        lwm2m_tlv_t ** dataArrayP,
+                        lwm2m_object_t * objectP)
 {
 	prv_instance_t * targetP;
 	uint8_t result;
@@ -165,9 +165,9 @@ static uint8_t prv_read(uint16_t instanceId,
 }
 
 static uint8_t prv_write(uint16_t instanceId,
-						 int numData,
-						 lwm2m_tlv_t * dataArray,
-						 lwm2m_object_t * objectP)
+                         int numData,
+                         lwm2m_tlv_t * dataArray,
+                         lwm2m_object_t * objectP)
 {
 	return COAP_204_CHANGED;
 }
@@ -178,18 +178,18 @@ static uint8_t prv_delete(uint16_t id,lwm2m_object_t * objectP)
 }
 
 static uint8_t prv_create(uint16_t instanceId,
-						  int numData,
-						  lwm2m_tlv_t * dataArray,
-						  lwm2m_object_t * objectP)
+                          int numData,
+                          lwm2m_tlv_t * dataArray,
+                          lwm2m_object_t * objectP)
 {
 	return COAP_405_METHOD_NOT_ALLOWED;
 }
 
 static uint8_t prv_exec(uint16_t instanceId,
-						uint16_t resourceId,
-						uint8_t * buffer,
-						int length,
-						lwm2m_object_t * objectP)
+                        uint16_t resourceId,
+                        uint8_t * buffer,
+                        int length,
+                        lwm2m_object_t * objectP)
 {
 	return COAP_405_METHOD_NOT_ALLOWED;
 	

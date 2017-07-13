@@ -58,8 +58,8 @@
 
 
 lwm2m_context_t * lwm2m_init(lwm2m_connect_server_callback_t connectCallback,
-		lwm2m_buffer_send_callback_t bufferSendCallback,
-		void * userData)
+                             lwm2m_buffer_send_callback_t bufferSendCallback,
+                             void * userData)
 {
 	lwm2m_context_t * contextP;
 
@@ -209,11 +209,11 @@ void lwm2m_close(lwm2m_context_t * contextP)
 
 #ifdef LWM2M_CLIENT_MODE
 int lwm2m_configure(lwm2m_context_t * contextP,
-					const char * endpointName,
-					const char * msisdn,
-					const char * altPath,
-					uint16_t numObject,
-					lwm2m_object_t * objectList[])
+                    const char * endpointName,
+                    const char * msisdn,
+                    const char * altPath,
+                    uint16_t numObject,
+                    lwm2m_object_t * objectList[])
 {
 	int i;
 	uint8_t found;
@@ -286,7 +286,7 @@ int lwm2m_configure(lwm2m_context_t * contextP,
 
 
 int lwm2m_step(lwm2m_context_t * contextP,
-			   time_t * timeoutP)
+               time_t * timeoutP)
 {
 	lwm2m_transaction_t * transacP;
 	time_t tv_sec;

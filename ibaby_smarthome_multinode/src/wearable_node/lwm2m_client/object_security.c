@@ -72,7 +72,7 @@ typedef struct _security_instance_
 } security_instance_t;
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
-							 security_instance_t * targetP)
+                             security_instance_t * targetP)
 {
 	/* There are no multiple instance ressources */
 	tlvP->type = LWM2M_TYPE_RESOURCE;
@@ -162,9 +162,9 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 }
 
 static uint8_t prv_security_read(uint16_t instanceId,
-								 int * numDataP,
-								 lwm2m_tlv_t ** dataArrayP,
-								 lwm2m_object_t * objectP)
+                                 int * numDataP,
+                                 lwm2m_tlv_t ** dataArrayP,
+                                 lwm2m_object_t * objectP)
 {
 	security_instance_t * targetP;
 	uint8_t result;
@@ -177,17 +177,17 @@ static uint8_t prv_security_read(uint16_t instanceId,
 	if (*numDataP == 0)
 	{
 		uint16_t resList[] = {LWM2M_SECURITY_URI_ID,
-							  LWM2M_SECURITY_BOOTSTRAP_ID,
-							  LWM2M_SECURITY_SECURITY_ID,
-							  LWM2M_SECURITY_PUBLIC_KEY_ID,
-							  LWM2M_SECURITY_SERVER_PUBLIC_KEY_ID,
-							  LWM2M_SECURITY_SECRET_KEY_ID,
-							  LWM2M_SECURITY_SMS_SECURITY_ID,
-							  LWM2M_SECURITY_SMS_KEY_PARAM_ID,
-							  LWM2M_SECURITY_SMS_SECRET_KEY_ID,
-							  LWM2M_SECURITY_SMS_SERVER_NUMBER_ID,
-							  LWM2M_SECURITY_SHORT_SERVER_ID,
-							  LWM2M_SECURITY_HOLD_OFF_ID};
+                              LWM2M_SECURITY_BOOTSTRAP_ID,
+                              LWM2M_SECURITY_SECURITY_ID,
+                              LWM2M_SECURITY_PUBLIC_KEY_ID,
+                              LWM2M_SECURITY_SERVER_PUBLIC_KEY_ID,
+                              LWM2M_SECURITY_SECRET_KEY_ID,
+                              LWM2M_SECURITY_SMS_SECURITY_ID,
+                              LWM2M_SECURITY_SMS_KEY_PARAM_ID,
+                              LWM2M_SECURITY_SMS_SECRET_KEY_ID,
+                              LWM2M_SECURITY_SMS_SERVER_NUMBER_ID,
+                              LWM2M_SECURITY_SHORT_SERVER_ID,
+                              LWM2M_SECURITY_HOLD_OFF_ID};
 		int nbRes = sizeof(resList)/sizeof(uint16_t);
 
 		*dataArrayP = lwm2m_tlv_new(nbRes);
@@ -212,9 +212,9 @@ static uint8_t prv_security_read(uint16_t instanceId,
 #ifdef LWM2M_BOOTSTRAP
 
 static uint8_t prv_security_write(uint16_t instanceId,
-								  int numData,
-								  lwm2m_tlv_t * dataArray,
-								  lwm2m_object_t * objectP)
+                                  int numData,
+                                  lwm2m_tlv_t * dataArray,
+                                  lwm2m_object_t * objectP)
 {
 	security_instance_t * targetP;
 	int i;
@@ -353,7 +353,7 @@ static uint8_t prv_security_write(uint16_t instanceId,
 }
 
 static uint8_t prv_security_delete(uint16_t id,
-								   lwm2m_object_t * objectP)
+                                   lwm2m_object_t * objectP)
 {
 	security_instance_t * targetP;
 
@@ -370,9 +370,9 @@ static uint8_t prv_security_delete(uint16_t id,
 }
 
 static uint8_t prv_security_create(uint16_t instanceId,
-								   int numData,
-								   lwm2m_tlv_t * dataArray,
-								   lwm2m_object_t * objectP)
+                                   int numData,
+                                   lwm2m_tlv_t * dataArray,
+                                   lwm2m_object_t * objectP)
 {
 	security_instance_t * targetP;
 	uint8_t result;
@@ -504,7 +504,7 @@ lwm2m_object_t * get_security_object(int serverId, const char* serverUri, bool i
 }
 
 char * get_server_uri(lwm2m_object_t * objectP,
-					  uint16_t secObjInstID)
+                      uint16_t secObjInstID)
 {
 	security_instance_t * targetP = (security_instance_t *)LWM2M_LIST_FIND(objectP->instanceList, secObjInstID);
 

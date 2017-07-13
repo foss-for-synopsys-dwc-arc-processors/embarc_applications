@@ -34,9 +34,9 @@
 #ifdef LWM2M_EMBEDDED_MODE
 
 static void prv_value_change(void* context,
-							 const char* uriPath,
-							 const char * value,
-							 size_t valueLength)
+                             const char* uriPath,
+                             const char * value,
+                             size_t valueLength)
 {
 	lwm2m_uri_t uri;
 	if (lwm2m_stringToUri((char *)uriPath, strlen(uriPath), &uri))
