@@ -110,10 +110,10 @@ extern void print_msg_func(void)
 
 	EMBARC_PRINTF("\r\n************ Primary function ************\r\n");
 	sprintf(str,
-            "* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
-            data_report_wn.hrate,
-            data_report_wn.btemp/10, data_report_wn.btemp%10,
-            data_report_wn.motion_intensity);
+                "* Body heartrate   : %dbpm\r\n* Body temperature : %d.%d'C\r\n* Motion intensity : %d\r\n", 
+                data_report_wn.hrate,
+                data_report_wn.btemp/10, data_report_wn.btemp%10,
+                data_report_wn.motion_intensity);
 	EMBARC_PRINTF(str);
 	
 	if (data_report_wn.state == SLEEP) {
@@ -331,9 +331,7 @@ extern void process_hrate(uint32_t* hrate)
 		if(!flag_hrate) {
 			for(int i = 0; i < FFT_LEN; i++) {
 				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_hrate);
-
-				// EMBARC_PRINTF("\nhrate_fir : %d\n\n", hrate_group[i]);
-
+				
 				if(fabs(hrate_group[i]) < THOLD_HRATE_DIFF) {
 					fft_que[i].R = hrate_group[i] * 30;
 				} else {

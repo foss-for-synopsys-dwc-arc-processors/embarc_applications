@@ -127,13 +127,13 @@ static uint8_t prv_server_read(uint16_t instanceId,
 	if (*numDataP == 0)
 	{
 		uint16_t resList[] = {
-				LWM2M_SERVER_SHORT_ID_ID,
-				LWM2M_SERVER_LIFETIME_ID,
-				LWM2M_SERVER_MIN_PERIOD_ID,
-				LWM2M_SERVER_MAX_PERIOD_ID,
-				LWM2M_SERVER_TIMEOUT_ID,
-				LWM2M_SERVER_STORING_ID,
-				LWM2M_SERVER_BINDING_ID
+			LWM2M_SERVER_SHORT_ID_ID,
+			LWM2M_SERVER_LIFETIME_ID,
+			LWM2M_SERVER_MIN_PERIOD_ID,
+			LWM2M_SERVER_MAX_PERIOD_ID,
+			LWM2M_SERVER_TIMEOUT_ID,
+			LWM2M_SERVER_STORING_ID,
+			LWM2M_SERVER_BINDING_ID
 		};
 		int nbRes = sizeof(resList)/sizeof(uint16_t);
 
@@ -413,9 +413,9 @@ void display_server_object(lwm2m_object_t * object)
 	while (serverInstance != NULL)
 	{
 		EMBARC_PRINTF("    /%u/%u: instanceId: %u, shortServerId: %u, lifetime: %u, storing: %s, binding: %s\r\n",
-				object->objID, serverInstance->instanceId,
-				serverInstance->instanceId, serverInstance->shortServerId, serverInstance->lifetime,
-				serverInstance->storing ? "true" : "false", serverInstance->binding);
+			object->objID, serverInstance->instanceId,
+			serverInstance->instanceId, serverInstance->shortServerId, serverInstance->lifetime,
+			serverInstance->storing ? "true" : "false", serverInstance->binding);
 		serverInstance = (server_instance_t *)serverInstance->next;
 	}
 #endif

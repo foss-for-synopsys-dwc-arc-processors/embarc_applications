@@ -177,17 +177,17 @@ static uint8_t prv_security_read(uint16_t instanceId,
 	if (*numDataP == 0)
 	{
 		uint16_t resList[] = {LWM2M_SECURITY_URI_ID,
-                              LWM2M_SECURITY_BOOTSTRAP_ID,
-                              LWM2M_SECURITY_SECURITY_ID,
-                              LWM2M_SECURITY_PUBLIC_KEY_ID,
-                              LWM2M_SECURITY_SERVER_PUBLIC_KEY_ID,
-                              LWM2M_SECURITY_SECRET_KEY_ID,
-                              LWM2M_SECURITY_SMS_SECURITY_ID,
-                              LWM2M_SECURITY_SMS_KEY_PARAM_ID,
-                              LWM2M_SECURITY_SMS_SECRET_KEY_ID,
-                              LWM2M_SECURITY_SMS_SERVER_NUMBER_ID,
-                              LWM2M_SECURITY_SHORT_SERVER_ID,
-                              LWM2M_SECURITY_HOLD_OFF_ID};
+                      LWM2M_SECURITY_BOOTSTRAP_ID,
+                      LWM2M_SECURITY_SECURITY_ID,
+                      LWM2M_SECURITY_PUBLIC_KEY_ID,
+                      LWM2M_SECURITY_SERVER_PUBLIC_KEY_ID,
+                      LWM2M_SECURITY_SECRET_KEY_ID,
+                      LWM2M_SECURITY_SMS_SECURITY_ID,
+                      LWM2M_SECURITY_SMS_KEY_PARAM_ID,
+                      LWM2M_SECURITY_SMS_SECRET_KEY_ID,
+                      LWM2M_SECURITY_SMS_SERVER_NUMBER_ID,
+                      LWM2M_SECURITY_SHORT_SERVER_ID,
+                      LWM2M_SECURITY_HOLD_OFF_ID};
 		int nbRes = sizeof(resList)/sizeof(uint16_t);
 
 		*dataArrayP = lwm2m_tlv_new(nbRes);

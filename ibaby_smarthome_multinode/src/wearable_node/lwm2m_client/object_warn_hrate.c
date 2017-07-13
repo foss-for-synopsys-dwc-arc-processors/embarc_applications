@@ -113,19 +113,19 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 	/* There are no multiple instance resources */
 	tlvP->type = LWM2M_TYPE_RESOURCE;
    
-		switch (tlvP->id)
-		{
-		case WARN_HRATE_ID:
-			targetP->warn_hrate = data_report_wn.warn_hrate;
+	switch (tlvP->id)
+	{
+	case WARN_HRATE_ID:
+		targetP->warn_hrate = data_report_wn.warn_hrate;
 
-			lwm2m_tlv_encode_bool(targetP->warn_hrate, tlvP);
-			if (0 != tlvP->length) return COAP_205_CONTENT;
-			else return COAP_500_INTERNAL_SERVER_ERROR;
-			break;
-		
-		default:
-			return COAP_404_NOT_FOUND;
-		}
+		lwm2m_tlv_encode_bool(targetP->warn_hrate, tlvP);
+		if (0 != tlvP->length) return COAP_205_CONTENT;
+		else return COAP_500_INTERNAL_SERVER_ERROR;
+		break;
+	
+	default:
+		return COAP_404_NOT_FOUND;
+	}
 }
 
 static uint8_t prv_read(uint16_t instanceId,
@@ -144,7 +144,7 @@ static uint8_t prv_read(uint16_t instanceId,
 		{
 			uint16_t resList[] = {
 					
-					WARN_HRATE_ID
+				WARN_HRATE_ID
 			};
 			int nbRes = sizeof(resList)/sizeof(uint16_t);
 
@@ -217,8 +217,8 @@ void display_hratestatus_object(lwm2m_object_t * object)
 	while (instance != NULL)
 	{
 		EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
-				object->objID, instance->shortID,
-				instance->shortID, instance->btn);
+			object->objID, instance->shortID,
+			instance->shortID, instance->btn);
 		instance = (prv_instance_t *)instance->next;
 	}
 #endif
