@@ -622,6 +622,7 @@ uint8_t device_change(lwm2m_tlv_t * dataArray,
 	switch (dataArray->id)
 	{
 	case RES_O_BATTERY_LEVEL:
+	{
 		int64_t value;
 		if (1 == lwm2m_tlv_decode_int(dataArray, &value))
 		{
@@ -640,6 +641,7 @@ uint8_t device_change(lwm2m_tlv_t * dataArray,
 			result = COAP_400_BAD_REQUEST;
 		}
 		break;
+	}
 	case RES_M_ERROR_CODE:
 		if (1 == lwm2m_tlv_decode_int(dataArray, &((device_data_t*)(objectP->userData))->error))
 		{

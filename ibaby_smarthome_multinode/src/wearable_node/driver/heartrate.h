@@ -48,14 +48,22 @@
 
 #define HEART_RATE_I2C_SLAVE_ADDRESS     MAX30102_ADDRESS
 
+typedef struct __IirParams
+{
+    short order;
+    float *num;
+    float *den;
+} IirParams;
+
+extern int data_num, data_rdy;
+
+static float IirTick(IirParams *, float *, float);
+static int find_trough_num(int* in, int len);
 static const float heart_rate_unit = 60.f / 100.f / 62.5f; /* 16384 --> 62.5/LSB  convert to bpm */
 
 extern int32_t hrate_sensor_init(uint32_t slv_addr);
 extern int32_t hrate_sensor_read(int* heart_rate);
 extern float band_pass(float in);
-static int find_trough_num(int* in, int len);
-
-extern int data_num, data_rdy;
 
 #endif /* _WEARABLE_NODE_DRIVER_HEARTRATE_H_ */
 

@@ -66,7 +66,6 @@
 
 /* custom HAL */
 #include "heartrate.h"
-#include "IIR.h"
 
 
 /* MAX30102 registers */
@@ -212,6 +211,25 @@ float iir2num[3] = {0.982385f, -1.964770f, 0.982385f};
 float iir2den[2] = {-1.964461f, 0.965081f};
 IirParams iirs1 = {2, iir1num, iir1den};
 IirParams iirs2 = {2, iir2num, iir2den};
+
+static float IirTick(IirParams *params, float *zs, float in)
+{
+    int i;
+    float out;
+
+    out = zs[0] + in * params->num[0];
+
+    for(i = 0; i < params->order - 1; i++) {
+        zs[i] = zs[i + 1]
+            + (in * params->num[i + 1])
+            - (out * params->den[i]);
+    }
+
+    zs[i] = (in * params->num[i + 1])
+        - (out * params->den[i]);
+
+    return out;
+}
 
 extern float band_pass(float in)
 {
