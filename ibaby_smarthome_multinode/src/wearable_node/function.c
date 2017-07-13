@@ -205,18 +205,11 @@ extern void print_msg_sleep(uint state)
 /* function for deal with heartrate by filter */
 extern void process_hrate(uint32_t* hrate)
 {
-	// dat_num -> data_num
-	// dat_rdy -> data_rdy
-	// sum_h   -> sum_hrate
-	// cnt_h   -> cnt_hrate
-	// flag_h  -> flag_hrate
-	// w -> fft_que_in
-	// x -> fft_que
-
 	/* ignore the wrong data in the beginning */
 	if(data_num < FFT_M) {
 			hrate_sensor_read(NULL);
 	} else if(data_num < FFT_LEN) {
+		/* read raw heartrate data */
 		hrate_sensor_read(&hrate_group[data_num-FFT_M]);
 
 		if(data_rdy && data_num > FFT_M) {
@@ -259,11 +252,14 @@ extern void process_hrate(uint32_t* hrate)
 		}
 
 		if(data_num) {
+			/* calculate parameters for fast fourier transform */
 			calc_coff_w(coff_w);
 
+			/* fast fourier transform function */
 			fft(fft_que, coff_w);
 
 			if(cnt_hrate > 0) {
+				/* get heartrate value after average filter */
 				hrate_temp += ((float)(find_max(fft_que) * 60 * FFT_DELTA) * 10 - hrate_temp) / 6;
 			} else if(cnt_hrate == 0) {
 					cnt_hrate++;
@@ -300,7 +296,7 @@ static int filter_acc(int val_new,
 	}
 
 	if (flag_new == *flag_old) {
-		(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
+		(*cnt)++;
 
 		if (fabs(val_diff) > THOLD_ACC_DIFF) {
 			*cnt += CNT_ACC_STEP;
@@ -354,7 +350,7 @@ static int filter_svm(int val_new,
 		}
 
 		if (flag_new == *flag_old) {
-			(*cnt)++;// notify: must type () on both sides of "*cnt", or it will give you wrong result
+			(*cnt)++;
 
 			if (fabs(val_diff) > THOLD_SVM_DIFF) {
 				*cnt += CNT_SVM_STEP;
@@ -394,8 +390,8 @@ static int filter_svm(int val_new,
 /** function for processing accelerate raw data */
 extern int process_acc(acc_values acc_temp)
 {
-	int  x_new, y_new, z_new;   /* latest value */
-	int  svm_new;               /* SVM : signal vector magnitude for difference */
+	int  x_new, y_new, z_new; /* latest value */
+	int  svm_new;             /* SVM : signal vector magnitude for difference */
 
 	x_new = (int)(100*acc_temp.accl_x);
 	y_new = (int)(100*acc_temp.accl_y);
@@ -422,7 +418,8 @@ extern int process_acc(acc_values acc_temp)
 	#if SEND_DEBUG_SVM1_5S
 	char str[50];
 
-	sprintf(str, "%d.", svm_new);//send data to matlab
+	/* send data to matlab */
+	sprintf(str, "%d.", svm_new);
 	EMBARC_PRINTF(str);
 	#endif
 /*
@@ -443,7 +440,8 @@ extern int process_acc(acc_values acc_temp)
 	#if SEND_DEBUG_SVM2_5S
 	char str[50];
 
-	sprintf(str, "%d.", svm_new);//send data to matlab
+	/* send data to matlab */
+	sprintf(str, "%d.", svm_new);
 	EMBARC_PRINTF(str);
 	#endif
 /*
@@ -464,9 +462,11 @@ extern uint func_detect_awake(int inten_temp)
 
 	/* judge current status */
 	if (inten_temp > THOLD_INTEN_AW) {
-		state_aw[0] = 0;//now in wake state
+		/* in wake state now */
+		state_aw[0] = 0;
 	} else {
-		state_aw[0] = 1;//now in sleep state
+		/* in sleep state now */
+		state_aw[0] = 1;
 	}
 
 	/* the number of sleep state in front of the state queue */
@@ -525,15 +525,24 @@ extern uint func_detect_state(int inten_temp)
 {
 	uint state; /* state : SLEEP or WAKE */
 
+/*
+**************************************************************
+*  This part will be deleted in release version
+*/
 	/* print out message for debug */
 	#if SEND_DEBUG_INTEN_1M
 	char str[50];
 
-	sprintf(str, "%d.", inten_temp);//send data to matlab
+	/* send data to matlab */
+	sprintf(str, "%d.", inten_temp);
 	EMBARC_PRINTF(str);
 	#endif
+/*
+*  end of this part
+**************************************************************
+*/
 
-	inten_sl[0] = inten_temp;/* motion intensity in 1min */
+	inten_sl[0] = inten_temp; /* motion intensity in 1min */
 
 	/* calculate the score of 2min ago(inten_sl[2]) by Webster sleep-wake determine method */
 	score_sl = P * (K4*inten_sl[4] + K3*inten_sl[3] + K2*inten_sl[2] + K1*inten_sl[1] + K0*inten_sl[0]) / 100;

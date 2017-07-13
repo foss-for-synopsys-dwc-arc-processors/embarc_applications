@@ -88,15 +88,15 @@
 #include "function.h"
 
 
-#define DELAY_TIME_SLICE (29)/*!< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
+#define DELAY_TIME_SLICE (29)/**< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
 
-#define THOLD_CNT_AW (150)   /*!< threshold of counter(5s) for executing awake event detecting algorithm */
-#define THOLD_CNT_SL (1760)  /*!< threshold of counter(1min：1760) for executing sleep monitoring algorithm */
+#define THOLD_CNT_AW (150)   /**< threshold of counter(5s) for executing awake event detecting algorithm */
+#define THOLD_CNT_SL (1760)  /**< threshold of counter(1min：1760) for executing sleep monitoring algorithm */
 
-#define WARN_BTEMP_L (350)   /*!< lower value of warning body temperature */
-#define WARN_BTEMP_H (380)   /*!< upper value of warning body temperature */
-#define WARN_HR_MIN  (50)    /*!< lower value of warning heartrate */
-#define WARN_HR_MAX  (150)   /*!< upper value of warning heartrate */
+#define WARN_BTEMP_L (350)   /**< lower value of warning body temperature */
+#define WARN_BTEMP_H (380)   /**< upper value of warning body temperature */
+#define WARN_HR_MIN  (50)    /**< lower value of warning heartrate */
+#define WARN_HR_MAX  (150)   /**< upper value of warning heartrate */
 
 
 /**
@@ -104,12 +104,12 @@
  */
 int main(void)
 {
-	int  svm_val;         /*!< SVM : signal vector magnitude for difference */
-	int  cnt_aw;          /*!< executing algorithm counter */
-	bool flag_start_aw;   /*!< flag of awake event detecting start */
-	int  cnt_sl;          /*!< counter for sleep monitoring */
-	bool flag_start_sl;   /*!< flag of sleep monitoring start */
-	acc_values acc_vals;  /*!< accleration storage */
+	int  svm_val;         /* SVM : signal vector magnitude for difference */
+	int  cnt_aw;          /* executing algorithm counter */
+	bool flag_start_aw;   /* flag of awake event detecting start */
+	int  cnt_sl;          /* counter for sleep monitoring */
+	bool flag_start_sl;   /* flag of sleep monitoring start */
+	acc_values acc_vals;  /* accleration storage */
 
 	EMBARC_PRINTF("\r\n\
 *********************************************************\r\n\
@@ -226,8 +226,10 @@ int main(void)
 		data_report_wn.warn_btemp    = false;
 		data_report_wn.warn_downward = false;
 
-		/* detect warn of sleep on his stomach */
-		/* detect sleep downward event */
+		/* 
+		* detect warn of sleep on his stomach
+		* detect sleep downward event
+		*/
 		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
 
 		/* read body temperature data */

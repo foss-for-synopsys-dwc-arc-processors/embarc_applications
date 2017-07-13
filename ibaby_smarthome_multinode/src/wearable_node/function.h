@@ -118,7 +118,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
  * \name	local macro for Freertos task
  * @{
  */
-#define STACK_DEPTH_LWM2M (20480)/*!< stack depth for lwm2mClient : word(4*bytes) */
+#define STACK_DEPTH_LWM2M (20480) /*!< stack depth for lwm2mClient : word(4*bytes) */
 
 /*!< priority */
 #define TSKPRI_HIGH (configMAX_PRIORITIES-2) /*!< high priority */
@@ -173,7 +173,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 
 /*!< sparameters of Webster sleep-wake determine method */
 #define P  (0.0046) /*!< 0.0046:coefficient of scale */
-#define K0 (0.04) /*!< coefficient of relationship */
+#define K0 (0.04)   /*!< coefficient of relationship */
 #define K1 (0.22)
 #define K2 (1)
 #define K3 (0.24)
@@ -186,8 +186,8 @@ static int hrate_group[FFT_LEN], hrate_temp;
 static int sum_hrate;
 
 /*!< variable of low pass filter for raw acceleration data */
-static char cnt_x, cnt_y, cnt_z;                /* low pass filter counter */
-static unsigned char par_x, par_y, par_z;       /* low pass filter coefficient */
+static char cnt_x, cnt_y, cnt_z;                /*!< low pass filter counter */
+static unsigned char par_x, par_y, par_z;       /*!< low pass filter coefficient */
 static bool flag_old_x, flag_old_y, flag_old_z; /*!< flag of last change direction of value */
 
 /*!< variable of calculating intensity of motion in one sampling period */
@@ -195,8 +195,8 @@ static int x_old, y_old, z_old; /*!< last value */
 static int svm_old;             /*!< SVM : signal vector magnitude for difference */
 
 /*!< variable of low pass filter for svm data */
-static char cnt_v;          /* low pass filter counter */
-static unsigned char par_v; /* low pass filter coefficient */
+static char cnt_v;          /*!< low pass filter counter */
+static unsigned char par_v; /*!< low pass filter coefficient */
 static bool flag_old_v;     /*!< flag of change direction of value */
 
 /*!< variable of detecting awake event */
@@ -231,7 +231,7 @@ extern void print_msg_sleep(uint state);
 
 extern int  lwm2m_client_start(void);
 
-/* function for deal with heartrate by filter */
+/** function for deal with heartrate by filter */
 extern void process_hrate(uint32_t* hrate);
 
 /** function for processing acceleration raw data */
