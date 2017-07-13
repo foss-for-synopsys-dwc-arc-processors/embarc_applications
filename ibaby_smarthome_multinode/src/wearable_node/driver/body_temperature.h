@@ -43,15 +43,15 @@
 #ifndef _BODY_TEMPERATURE_H_
 #define _BODY_TEMPERATURE_H_
 
-/***I2C address of PmodTemp4**/
+/*!< I2C address of PmodTemp4 */
 #define TMP112_ADDRESS  0x48
 
 #define TMP_I2C_SLAVE_ADDRESS     TMP112_ADDRESS
 
-static const float tmp112_unit = 0.0625; //convert to ℃
+static const float tmp112_unit = 0.0625; /*!< convert to ℃ */
 
-int32_t btemp_sensor_init(uint32_t slv_addr);
-int32_t btemp_sensor_read(uint32_t *tmp);
+extern int32_t btemp_sensor_init(uint32_t slv_addr);
+extern int32_t btemp_sensor_read(uint32_t *tmp);
 
 #endif /* _WEARABLE_NODE_DRIVER_BODY_TEMPERATURE_H_ */
 

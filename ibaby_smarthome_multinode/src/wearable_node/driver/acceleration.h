@@ -48,13 +48,13 @@
  * AD0 connect to GND is 0x68
  */
 /* MPU6050 address */
-#define MPU6050_A0_PIN      0	/*!< I2C Serial Bus Address Selection Pin */
+#define MPU6050_A0_PIN      0 /*!< I2C Serial Bus Address Selection Pin */
 #define MPU6050_ADDRESS     (0x68 + MPU6050_A0_PIN)
 
 #define IMU_I2C_SLAVE_ADDRESS	MPU6050_ADDRESS
 
-static const float gyro_unit = 1.0642252e-3f;  // rad/s/LSB @ fs=2000deg/s
-static const float accl_unit = 5.9855042e-4f;  // m/sq.s/LSB @ fs=2g
+static const float gyro_unit = 1.0642252e-3f; /*!< rad/s/LSB @ fs=2000deg/s */
+static const float accl_unit = 5.9855042e-4f; /*!< m/sq.s/LSB @ fs=2g */
 
 typedef struct __imuValues
 {
@@ -68,9 +68,10 @@ typedef struct __accValues
     float accl_x, accl_y, accl_z;
 } acc_values;
 
-int32_t acc_sensor_init(uint32_t slv_addr);
-int32_t imu_sensor_read(imu_values* imu_val);
-int32_t acc_sensor_read(acc_values* accel_val);
+static int32_t imu_sensor_read(imu_values* imu_val);
+
+extern int32_t acc_sensor_init(uint32_t slv_addr);
+extern int32_t acc_sensor_read(acc_values* accel_val);
 
 #endif  /* _WEARABLE_NODE_DRIVER_ACCELERATION_H_ */
 

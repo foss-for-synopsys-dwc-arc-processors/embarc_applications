@@ -50,7 +50,7 @@ typedef struct __IirParams
     float *den;
 } IirParams;
 
-float IirTick(IirParams *, float *, float);
+extern float IirTick(IirParams *, float *, float);
 
 #endif /* _WEARABLE_NODE_DRIVER_IIR_H_ */
 

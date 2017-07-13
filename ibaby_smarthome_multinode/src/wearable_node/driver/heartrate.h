@@ -43,17 +43,17 @@
 #ifndef _HEARTRATE_H_
 #define _HEARTRATE_H_
 
-/***I2C address of PmodHrate4**/
+/*!< I2C address of PmodHrate4 */
 #define MAX30102_ADDRESS  0x57
 
 #define HEART_RATE_I2C_SLAVE_ADDRESS     MAX30102_ADDRESS
 
-static const float heart_rate_unit = 60.f / 100.f / 62.5f; //16384 --> 62.5/LSB  convert to bpm
+static const float heart_rate_unit = 60.f / 100.f / 62.5f; /* 16384 --> 62.5/LSB  convert to bpm */
 
-int32_t hrate_sensor_init(uint32_t slv_addr);
-int32_t hrate_sensor_read(int* heart_rate);
-float band_pass(float in);
-int find_trough_num(int* in, int len);
+extern int32_t hrate_sensor_init(uint32_t slv_addr);
+extern int32_t hrate_sensor_read(int* heart_rate);
+extern float band_pass(float in);
+static int find_trough_num(int* in, int len);
 
 extern int data_num, data_rdy;
 

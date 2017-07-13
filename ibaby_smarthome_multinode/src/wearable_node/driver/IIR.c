@@ -51,17 +51,20 @@
  */
 #include "IIR.h"
  
-float IirTick(IirParams *params, float *zs, float in)
+extern float IirTick(IirParams *params, float *zs, float in)
 {
     int i;
     float out;
+
     out = zs[0] + in * params->num[0];
+    
     for(i = 0; i < params->order - 1; i++)
     {
         zs[i] = zs[i + 1]
              + (in * params->num[i + 1])
              - (out * params->den[i]);
     }
+
     zs[i] = (in * params->num[i + 1])
          - (out * params->den[i]);
     

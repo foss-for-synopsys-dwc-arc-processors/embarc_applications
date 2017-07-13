@@ -50,57 +50,59 @@
  * @{
  */
 
+/* standard C HAL */
+#include <stdio.h>
+
+/* embARC HAL */
 #include "arc.h"
 #include "arc_builtin.h"
 #include "embARC_toolchain.h"
 #include "embARC_error.h"
-
 #include "dev_iic.h"
-#include "body_temperature.h"
 #include "board.h"
 
-/* embARC HAL */
 #include "embARC.h"
 #include "embARC_debug.h"
 #include "dev_iic.h"
 #include "board.h"
-#include <stdio.h>
 
-#define TMP112_DRIVER_TEST 		0
-/*! tmp112 registers */
-#define TMP112_REG_TMP			0x00	//Temperature Register
-#define TMP112_REG_CONG			0x01	//Configuration Register
-#define TMP112_REG_TLOW			0x02	//T Low Register
-#define TMP112_REG_THIGH		0x03	//T High Register
+/* custom HAL */
+#include "body_temperature.h"
+
+
+/* tmp112 registers */
+#define TMP112_REG_TMP			0x00 /* Temperature Register */
+#define TMP112_REG_CONG			0x01 /* Configuration Register */
+#define TMP112_REG_TLOW			0x02 /* T Low Register */
+#define TMP112_REG_THIGH		0x03 /* T High Register */
 
 /* ADT7420_REG_CONFIG definition */
-#define TMP112_CONFIG_OS			   	(1 << 7)
-#define TMP112_CONFIG_CC(x)           	((x & 0x3) << 5)
-#define TMP112_CONFIG_SD          		(1 << 0)
+#define TMP112_CONFIG_OS        (1 << 7)
+#define TMP112_CONFIG_CC(x)     ((x & 0x3) << 5)
+#define TMP112_CONFIG_SD        (1 << 0)
 
 static DEV_IIC *emsk_tmp_sensor;
 static uint32_t tmp_sensor_slvaddr;
 
 #define EMSK_TMP_SENSOR_CHECK_EXP_NORTN(EXPR)		CHECK_EXP_NOERCD(EXPR, error_exit)
 
-/*  	store register data 	*/
+/* store register data */
 union _fifo_data						
 {
     uint8_t buf[2];
-    struct
-    {
+    struct {
     	uint8_t tmp_h, tmp_l;
     };
 } fifo_data;
 
-/* 	 configure oneshot mode 	*/
+/* configure oneshot mode */
 uint8_t tmp_oneshot_enable[] = {
 	TMP112_REG_CONG,
 	TMP112_CONFIG_OS,
 	0x00
 };
 
-/* 	 configure shutdown mode 	*/
+/* configure shutdown mode */
 uint8_t tmp_shutdown_enable[] = {
 	TMP112_REG_CONG,
 	TMP112_CONFIG_SD,
@@ -114,7 +116,7 @@ uint8_t tmp_shutdown_enable[] = {
  * \retval	>=0	write success, return bytes written
  * \retval	!E_OK	write failed
  */
-int32_t tmp112_reg_write(uint8_t *seq, uint8_t len)
+static int32_t tmp112_reg_write(uint8_t *seq, uint8_t len)
 {
 	int32_t ercd = E_PAR;
 
@@ -122,7 +124,7 @@ int32_t tmp112_reg_write(uint8_t *seq, uint8_t len)
 
 	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor!=NULL);
 
-	/** make sure set the temp sensor's slave address */
+	/* make sure set the temp sensor's slave address */
 	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(tmp_sensor_slvaddr));
 
 	ercd = emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_NEXT_COND, CONV2VOID(IIC_MODE_STOP));
@@ -140,7 +142,7 @@ error_exit:
  * \retval	>=0	read success, return bytes read
  * \retval	!E_OK	read failed
  */
-int32_t tmp112_reg_read(uint8_t seq,uint8_t *val,uint8_t len)
+static int32_t tmp112_reg_read(uint8_t seq,uint8_t *val,uint8_t len)
 {
 	int32_t ercd = E_PAR;
 
@@ -148,10 +150,11 @@ int32_t tmp112_reg_read(uint8_t seq,uint8_t *val,uint8_t len)
 
 	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor!=NULL);
 
-	/** make sure set the temp sensor's slave address */
+	/* make sure set the temp sensor's slave address */
 	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(tmp_sensor_slvaddr));
 	/* write register address then read register value */
 	ercd = emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_NEXT_COND, CONV2VOID(IIC_MODE_RESTART));
+
 	ercd = emsk_tmp_sensor->iic_write(&seq, 1);
 	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_NEXT_COND, CONV2VOID(IIC_MODE_STOP));
 	ercd = emsk_tmp_sensor->iic_read(val, len);
@@ -167,7 +170,7 @@ error_exit:
  * \retval	E_OK	init success
  * \retval	!E_OK	init failed
  */
-int32_t btemp_sensor_init(uint32_t slv_addr)
+extern int32_t btemp_sensor_init(uint32_t slv_addr)
 {
 	int32_t ercd = E_OK;
 
@@ -180,7 +183,7 @@ int32_t btemp_sensor_init(uint32_t slv_addr)
 		ercd = emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(slv_addr));
 		tmp_sensor_slvaddr = slv_addr;
 		
-		/******set tmp112 reg ******/
+		/* set tmp112 reg */
 		tmp112_reg_write(tmp_shutdown_enable, 3);
 	}
 
@@ -195,7 +198,7 @@ error_exit:
  * \retval	E_OK	read success
  * \retval	!E_OK	read failed
  */
-int32_t btemp_sensor_read(uint32_t *tmp)
+extern int32_t btemp_sensor_read(uint32_t *tmp)
 {
 	int32_t ercd = E_OK;
 	int i = 0;
