@@ -25,14 +25,14 @@
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
 
-     * Redistributions of source code must retain the above copyright notice,
-       this list of conditions and the following disclaimer.
-     * Redistributions in binary form must reproduce the above copyright notice,
-       this list of conditions and the following disclaimer in the documentation
-       and/or other materials provided with the distribution.
-     * Neither the name of Intel Corporation nor the names of its contributors
-       may be used to endorse or promote products derived from this software
-       without specific prior written permission.
+	 * Redistributions of source code must retain the above copyright notice,
+	   this list of conditions and the following disclaimer.
+	 * Redistributions in binary form must reproduce the above copyright notice,
+	   this list of conditions and the following disclaimer in the documentation
+	   and/or other materials provided with the distribution.
+	 * Neither the name of Intel Corporation nor the names of its contributors
+	   may be used to endorse or promote products derived from this software
+	   without specific prior written permission.
 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -91,172 +91,172 @@
  */
 typedef struct _prv_instance_
 {
-    /*
-     * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
-     * is the instance scope user data (uint8_t test in this case)
-     */
-    struct _prv_instance_ * next; /* matches lwm2m_list_t::next */
-    uint16_t shortID;             /* matches lwm2m_list_t::id */
-    float   btemp;
+	/*
+	 * The first two are mandatories and represent the pointer to the next instance and the ID of this one. The rest
+	 * is the instance scope user data (uint8_t test in this case)
+	 */
+	struct _prv_instance_ * next; /* matches lwm2m_list_t::next */
+	uint16_t shortID;             /* matches lwm2m_list_t::id */
+	float   btemp;
 } prv_instance_t;
 
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
-                             prv_instance_t * targetP)
+							 prv_instance_t * targetP)
 {
-    /* There are no multiple instance resources */
-    tlvP->type = LWM2M_TYPE_RESOURCE;
-    switch (tlvP->id)
-    {
-    case LWM2M_BODYTEMP_ID:
-        targetP->btemp = data_report_wn.btemp/10.0;
-        lwm2m_tlv_encode_float(targetP->btemp, tlvP);
-        if (0 != tlvP->length) return COAP_205_CONTENT;
-        else return COAP_500_INTERNAL_SERVER_ERROR;
-        break;
+	/* There are no multiple instance resources */
+	tlvP->type = LWM2M_TYPE_RESOURCE;
+	switch (tlvP->id)
+	{
+	case LWM2M_BODYTEMP_ID:
+		targetP->btemp = data_report_wn.btemp/10.0;
+		lwm2m_tlv_encode_float(targetP->btemp, tlvP);
+		if (0 != tlvP->length) return COAP_205_CONTENT;
+		else return COAP_500_INTERNAL_SERVER_ERROR;
+		break;
 
-    default:
-        return COAP_404_NOT_FOUND;
-    }
+	default:
+		return COAP_404_NOT_FOUND;
+	}
 }
 
 static uint8_t prv_read(uint16_t instanceId,
-                        int * numDataP,
-                        lwm2m_tlv_t ** dataArrayP,
-                        lwm2m_object_t * objectP)
+						int * numDataP,
+						lwm2m_tlv_t ** dataArrayP,
+						lwm2m_object_t * objectP)
 {
-    prv_instance_t * targetP;
-    uint8_t result;
-    int i;
+	prv_instance_t * targetP;
+	uint8_t result;
+	int i;
 
-    targetP = (prv_instance_t *)lwm2m_list_find(objectP->instanceList, instanceId);
-    if (NULL == targetP) return COAP_404_NOT_FOUND;
+	targetP = (prv_instance_t *)lwm2m_list_find(objectP->instanceList, instanceId);
+	if (NULL == targetP) return COAP_404_NOT_FOUND;
 
-        if (*numDataP == 0)
-        {
-            uint16_t resList[] = {
-                    LWM2M_BODYTEMP_ID
-            };
-            int nbRes = sizeof(resList)/sizeof(uint16_t);
+		if (*numDataP == 0)
+		{
+			uint16_t resList[] = {
+					LWM2M_BODYTEMP_ID
+			};
+			int nbRes = sizeof(resList)/sizeof(uint16_t);
 
-            *dataArrayP = lwm2m_tlv_new(nbRes);
-            if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
-            *numDataP = nbRes;
-            for (i = 0 ; i < nbRes ; i++)
-            {
-                (*dataArrayP)[i].id = resList[i];
-            }
-        }
+			*dataArrayP = lwm2m_tlv_new(nbRes);
+			if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+			*numDataP = nbRes;
+			for (i = 0 ; i < nbRes ; i++)
+			{
+				(*dataArrayP)[i].id = resList[i];
+			}
+		}
 
-        i = 0;
-        do
-        {
-            result = prv_get_value((*dataArrayP) + i, targetP);
-            i++;
-        } while (i < *numDataP && result == COAP_205_CONTENT);
+		i = 0;
+		do
+		{
+			result = prv_get_value((*dataArrayP) + i, targetP);
+			i++;
+		} while (i < *numDataP && result == COAP_205_CONTENT);
 
-        return result;
+		return result;
    
 }
 
 static uint8_t prv_write(uint16_t instanceId,
-                         int numData,
-                         lwm2m_tlv_t * dataArray,
-                         lwm2m_object_t * objectP)
+						 int numData,
+						 lwm2m_tlv_t * dataArray,
+						 lwm2m_object_t * objectP)
 {
-    return COAP_204_CHANGED;
+	return COAP_204_CHANGED;
 }
 
 static uint8_t prv_delete(uint16_t id,lwm2m_object_t * objectP)
 {
-    return COAP_405_METHOD_NOT_ALLOWED;
+	return COAP_405_METHOD_NOT_ALLOWED;
 }
 
 static uint8_t prv_create(uint16_t instanceId,
-                          int numData,
-                          lwm2m_tlv_t * dataArray,
-                          lwm2m_object_t * objectP)
+						  int numData,
+						  lwm2m_tlv_t * dataArray,
+						  lwm2m_object_t * objectP)
 {
-    return COAP_405_METHOD_NOT_ALLOWED;
+	return COAP_405_METHOD_NOT_ALLOWED;
 }
 
 static uint8_t prv_exec(uint16_t instanceId,
-                        uint16_t resourceId,
-                        uint8_t * buffer,
-                        int length,
-                        lwm2m_object_t * objectP)
+						uint16_t resourceId,
+						uint8_t * buffer,
+						int length,
+						lwm2m_object_t * objectP)
 {
-    return COAP_405_METHOD_NOT_ALLOWED; 
+	return COAP_405_METHOD_NOT_ALLOWED; 
 }
 
 static void prv_close(lwm2m_object_t * objectP)
 {
-    LWM2M_LIST_FREE(objectP->instanceList);
-    if (objectP->userData != NULL)
-    {
-        lwm2m_free(objectP->userData);
-        objectP->userData = NULL;
-    }
+	LWM2M_LIST_FREE(objectP->instanceList);
+	if (objectP->userData != NULL)
+	{
+		lwm2m_free(objectP->userData);
+		objectP->userData = NULL;
+	}
 }
 
 void display_temp_object(lwm2m_object_t * object)
 {
 #ifdef WITH_LOGS
-    EMBARC_PRINTF("  /%u: Temp object, instances:\r\n", object->objID);
-    prv_instance_t * instance = (prv_instance_t *)object->instanceList;
-    while (instance != NULL)
-    {
-        EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
-                object->objID, instance->shortID,
-                instance->shortID, instance->btn);
-        instance = (prv_instance_t *)instance->next;
-    }
+	EMBARC_PRINTF("  /%u: Temp object, instances:\r\n", object->objID);
+	prv_instance_t * instance = (prv_instance_t *)object->instanceList;
+	while (instance != NULL)
+	{
+		EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
+				object->objID, instance->shortID,
+				instance->shortID, instance->btn);
+		instance = (prv_instance_t *)instance->next;
+	}
 #endif
 }
 
 lwm2m_object_t * get_temp_object(void)
 {
-    lwm2m_object_t * tempObj;
-    uint32_t temp_val;
-     
-    tempObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
+	lwm2m_object_t * tempObj;
+	uint32_t temp_val;
+	 
+	tempObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
 
-    if (NULL != tempObj)
-    {
-        int i;    
-        
-        prv_instance_t * targetP;
+	if (NULL != tempObj)
+	{
+		int i;    
+		
+		prv_instance_t * targetP;
 
-        memset(tempObj, 0, sizeof(lwm2m_object_t));
+		memset(tempObj, 0, sizeof(lwm2m_object_t));
 
-        tempObj->objID = LWM2M_TEMP_OBJECT_ID;
-        for (i=0 ; i < 1 ; i++)
-        {
-            targetP = (prv_instance_t *)lwm2m_malloc(sizeof(prv_instance_t));
-            if (NULL == targetP) {
-                lwm2m_free(tempObj);
-                return NULL;
-            }
-            memset(targetP, 0, sizeof(prv_instance_t));
-            targetP->shortID = LWM2M_EMSK_INSTANCE_ID+i;
-            targetP->btemp = data_report_wn.btemp;
-            tempObj->instanceList = LWM2M_LIST_ADD(tempObj->instanceList, targetP);
-        }
-        /*
-         * From a single instance object, two more functions are available.
-         * - The first one (createFunc) create a new instance and filled it with the provided informations. If an ID is
-         *   provided a check is done for verifying his disponibility, or a new one is generated.
-         * - The other one (deleteFunc) delete an instance by removing it from the instance list (and freeing the memory
-         *   allocated to it)
-         */
-        tempObj->readFunc    = prv_read;
-        tempObj->writeFunc   = prv_write;
-        tempObj->createFunc  = prv_create;
-        tempObj->deleteFunc  = prv_delete;
-        tempObj->executeFunc = prv_exec;
-        tempObj->closeFunc   = prv_close;
-        
-    }
+		tempObj->objID = LWM2M_TEMP_OBJECT_ID;
+		for (i=0 ; i < 1 ; i++)
+		{
+			targetP = (prv_instance_t *)lwm2m_malloc(sizeof(prv_instance_t));
+			if (NULL == targetP) {
+				lwm2m_free(tempObj);
+				return NULL;
+			}
+			memset(targetP, 0, sizeof(prv_instance_t));
+			targetP->shortID = LWM2M_EMSK_INSTANCE_ID+i;
+			targetP->btemp = data_report_wn.btemp;
+			tempObj->instanceList = LWM2M_LIST_ADD(tempObj->instanceList, targetP);
+		}
+		/*
+		 * From a single instance object, two more functions are available.
+		 * - The first one (createFunc) create a new instance and filled it with the provided informations. If an ID is
+		 *   provided a check is done for verifying his disponibility, or a new one is generated.
+		 * - The other one (deleteFunc) delete an instance by removing it from the instance list (and freeing the memory
+		 *   allocated to it)
+		 */
+		tempObj->readFunc    = prv_read;
+		tempObj->writeFunc   = prv_write;
+		tempObj->createFunc  = prv_create;
+		tempObj->deleteFunc  = prv_delete;
+		tempObj->executeFunc = prv_exec;
+		tempObj->closeFunc   = prv_close;
+		
+	}
 
-    return tempObj;
+	return tempObj;
 }

@@ -34,20 +34,20 @@
 #ifdef LWM2M_EMBEDDED_MODE
 
 static void prv_value_change(void* context,
-                             const char* uriPath,
-                             const char * value,
-                             size_t valueLength)
+							 const char* uriPath,
+							 const char * value,
+							 size_t valueLength)
 {
-    lwm2m_uri_t uri;
-    if (lwm2m_stringToUri((char *)uriPath, strlen(uriPath), &uri))
-    {
-        handle_value_changed(context, &uri, value, valueLength);
-    }
+	lwm2m_uri_t uri;
+	if (lwm2m_stringToUri((char *)uriPath, strlen(uriPath), &uri))
+	{
+		handle_value_changed(context, &uri, value, valueLength);
+	}
 }
 
 void init_value_change(lwm2m_context_t * lwm2m)
 {
-    //system_setValueChangedHandler(lwm2m, prv_value_change);
+	//system_setValueChangedHandler(lwm2m, prv_value_change);
 }
 extern void _arc_reset(void);
 
@@ -55,15 +55,15 @@ extern void _arc_reset(void);
 void system_reboot()
 {
 /* impossible to reboot, because data section is different now and many static variable are changed */
-    // if ((_arc_aux_read(AUX_BCR_I_CACHE) & 0x7) >= 0x2) {
-    //     icache_invalidate();
-    // }
-    // if ((_arc_aux_read(AUX_BCR_D_CACHE) & 0x7) >= 0x2) {
-    //     dcache_invalidate();
-    //     dcache_flush();
-    // }
-    // cpu_lock();
-    // _arc_reset();
+	// if ((_arc_aux_read(AUX_BCR_I_CACHE) & 0x7) >= 0x2) {
+	//     icache_invalidate();
+	// }
+	// if ((_arc_aux_read(AUX_BCR_D_CACHE) & 0x7) >= 0x2) {
+	//     dcache_invalidate();
+	//     dcache_flush();
+	// }
+	// cpu_lock();
+	// _arc_reset();
 }
 
 #else
@@ -74,7 +74,7 @@ void init_value_change(lwm2m_context_t * lwm2m)
 
 void system_reboot()
 {
-    exit(1);
+	exit(1);
 }
 
 #endif
