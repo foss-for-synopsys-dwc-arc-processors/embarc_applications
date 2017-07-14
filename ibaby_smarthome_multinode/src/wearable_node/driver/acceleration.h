@@ -47,25 +47,9 @@
 #define ACC_SENSOR_IIC_ID	DW_IIC_1_ID
 
 /** MPU6050 registers */
-#define MPU6050_REG_SAMPLE_RATE          0x19 /* Gyro sample rate */ 
-// #define MPU6050_REG_EXT_SYNC_DISABLE     0x1A /* Ext sync disable */
-// #define MPU6050_REG_GYRO_FULL_SCALE      0x1B /* Gyro full scale  */
-// #define MPU6050_REG_ACCEL_FULL_SCALE     0x1C /* Accel full scale */
+#define MPU6050_REG_SAMPLE_RATE          0x19 /* Gyro sample rate */
 #define MPU6050_REG_POWER_MANAGEMENT     0x6B /* Power management */
 #define MPU6050_REG_ACCEL_XOUT_H         0x3B /* Accel_x out[15:8] */
-// #define MPU6050_REG_ACCEL_XOUT_L         0x3C /* Accel_x out[7:1] */
-// #define MPU6050_REG_ACCEL_YOUT_H         0x3D /* Accel_y out[15:8] */
-// #define MPU6050_REG_ACCEL_YOUT_L         0x3E /* Accel_y out[7:1] */
-// #define MPU6050_REG_ACCEL_ZOUT_H         0x3F /* Accel_z out[15:8] */
-// #define MPU6050_REG_ACCEL_ZOUT_L         0x40 /* Accel_z out[7:1] */
-// #define MPU6050_REG_TEMP_OUT_H           0x41 /* Temp out[15:8] */
-// #define MPU6050_REG_TEMP_OUT_L           0x42 /* Temp out[7:1] */
-// #define MPU6050_REG_GYRO_XOUT_H          0x43 /* Gyro_x out[15:8] */
-// #define MPU6050_REG_GYRO_XOUT_L          0x44 /* Gyro_x out[7:1] */
-// #define MPU6050_REG_GYRO_YOUT_H          0x45 /* Gyro_y out[15:8] */
-// #define MPU6050_REG_GYRO_YOUT_L          0x46 /* Gyro_y out[7:1] */
-// #define MPU6050_REG_GYRO_ZOUT_H          0x47 /* Gyro_z out[15:8] */
-// #define MPU6050_REG_GYRO_ZOUT_L          0x48 /* Gyro_z out[7:1] */
 
 /**
  * I2C address of PmodIMU4 can be selected via AD0: 0x68, 0x69
