@@ -43,25 +43,25 @@
 #ifndef _ACCELERATION_H_
 #define _ACCELERATION_H_
 
-/* using IIC 1 interface */
-#define ACC_SENSOR_IIC_ID	DW_IIC_1_ID
+/*!< using IIC 1 interface */
+#define ACC_SENSOR_IIC_ID             DW_IIC_1_ID
 
-/** MPU6050 registers */
-#define MPU6050_REG_SAMPLE_RATE          0x19 /* Gyro sample rate */
-#define MPU6050_REG_POWER_MANAGEMENT     0x6B /* Power management */
-#define MPU6050_REG_ACCEL_XOUT_H         0x3B /* Accel_x out[15:8] */
+/*!< MPU6050 registers */
+#define MPU6050_REG_SAMPLE_RATE       0x19 /*!< Gyro sample rate */
+#define MPU6050_REG_POWER_MANAGEMENT  0x6B /*!< Power management */
+#define MPU6050_REG_ACCEL_XOUT_H      0x3B /*!< Accel_x out[15:8] */
 
 /**
  * I2C address of PmodIMU4 can be selected via AD0: 0x68, 0x69
  * AD0 connect to GND is 0x68
  */
-/* MPU6050 address */
-#define MPU6050_A0_PIN   0 /*!< I2C Serial Bus Address Selection Pin */
-#define MPU6050_ADDRESS  (0x68 + MPU6050_A0_PIN)
-/* acceleration sensor address */
+/*!< MPU6050 address */
+#define MPU6050_A0_PIN    0 /*!< I2C Serial Bus Address Selection Pin */
+#define MPU6050_ADDRESS   (0x68 + MPU6050_A0_PIN)
+/*!< acceleration sensor address */
 #define ACC_SENSOR_ADDR	  MPU6050_ADDRESS
 
-#define EMSK_IMU_SENSOR_CHECK_EXP_NORTN(EXPR)		CHECK_EXP_NOERCD(EXPR, error_exit)
+#define EMSK_IMU_SENSOR_CHECK_EXP_NORTN(EXPR)    CHECK_EXP_NOERCD(EXPR, error_exit)
 
 
 typedef struct __accValues
@@ -77,7 +77,7 @@ union _acc_data
 	};
 } acc_data;
 
-/* configure related register, using the auto increase function */
+/*!< configure related register, using the auto increase function */
 static uint8_t imu_init_seq0[] = {
 	MPU6050_REG_SAMPLE_RATE,
 	0x00, /*!< 0x19: sr = gyro rate / 1 */

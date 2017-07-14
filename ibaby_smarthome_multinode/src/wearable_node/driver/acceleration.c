@@ -127,9 +127,9 @@ error_exit:
 
 /**
  * \brief	acceleration sensor initialize
- * \param[in]	slv_addr	imu sensor iic slave address
- * \retval	E_OK	init success
- * \retval	!E_OK	init failed
+ * \param[in]	slv_addr  imu sensor iic slave address
+ * \retval	E_OK	initialize success
+ * \retval	!E_OK	initialize failed
  */
 extern int32_t acc_sensor_init(uint32_t slv_addr)
 {

@@ -118,7 +118,7 @@ int main(void)
 		*********************************************************\r\n");
 
 	/* initialize body temperature sensor */
-	if (btemp_sensor_init(TMP112_ADDRESS) != E_OK) {
+	if (btemp_sensor_init(BTEMP_SENSOR_ADDRESS) != E_OK) {
 		EMBARC_PRINTF("Error: body temperature sensor init failed\r\n");
 		return E_SYS;
 	}

@@ -70,45 +70,6 @@
 #include "body_temperature.h"
 
 
-/* tmp112 registers */
-#define TMP112_REG_TMP			0x00 /* Temperature Register */
-#define TMP112_REG_CONG			0x01 /* Configuration Register */
-#define TMP112_REG_TLOW			0x02 /* T Low Register */
-#define TMP112_REG_THIGH		0x03 /* T High Register */
-
-/* ADT7420_REG_CONFIG definition */
-#define TMP112_CONFIG_OS        (1 << 7)
-#define TMP112_CONFIG_CC(x)     ((x & 0x3) << 5)
-#define TMP112_CONFIG_SD        (1 << 0)
-
-static DEV_IIC *emsk_tmp_sensor;
-static uint32_t tmp_sensor_slvaddr;
-
-#define EMSK_TMP_SENSOR_CHECK_EXP_NORTN(EXPR)		CHECK_EXP_NOERCD(EXPR, error_exit)
-
-/* store register data */
-union _fifo_data						
-{
-	uint8_t buf[2];
-	struct {
-		uint8_t tmp_h, tmp_l;
-	};
-} fifo_data;
-
-/* configure oneshot mode */
-uint8_t tmp_oneshot_enable[] = {
-	TMP112_REG_CONG,
-	TMP112_CONFIG_OS,
-	0x00
-};
-
-/* configure shutdown mode */
-uint8_t tmp_shutdown_enable[] = {
-	TMP112_REG_CONG,
-	TMP112_CONFIG_SD,
-	0x00
-};
-
 /**
  * \brief	write tmp112 register
  * \param 	*seq 	register address and value to be written
@@ -120,12 +81,12 @@ static int32_t tmp112_reg_write(uint8_t *seq, uint8_t len)
 {
 	int32_t ercd = E_PAR;
 
-	emsk_tmp_sensor = iic_get_dev(BOARD_TEMP_SENSOR_IIC_ID);
+	emsk_tmp_sensor = iic_get_dev(BTEMP_SENSOR_IIC_ID);
 
-	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor!=NULL);
+	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor != NULL);
 
 	/* make sure set the temp sensor's slave address */
-	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(tmp_sensor_slvaddr));
+	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(btemp_sensor_addr));
 
 	ercd = emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_NEXT_COND, CONV2VOID(IIC_MODE_STOP));
 	ercd = emsk_tmp_sensor->iic_write(seq, len);
@@ -146,12 +107,12 @@ static int32_t tmp112_reg_read(uint8_t seq,uint8_t *val,uint8_t len)
 {
 	int32_t ercd = E_PAR;
 
-	emsk_tmp_sensor = iic_get_dev(BOARD_TEMP_SENSOR_IIC_ID);
+	emsk_tmp_sensor = iic_get_dev(BTEMP_SENSOR_IIC_ID);
 
 	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor!=NULL);
 
 	/* make sure set the temp sensor's slave address */
-	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(tmp_sensor_slvaddr));
+	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(btemp_sensor_addr));
 	/* write register address then read register value */
 	ercd = emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_NEXT_COND, CONV2VOID(IIC_MODE_RESTART));
 
@@ -165,25 +126,26 @@ error_exit:
 
 
 /**
- * \brief	temperature sensor init
- * \param[in]	slv_addr	temperature sensor iic slave address
- * \retval	E_OK	init success
- * \retval	!E_OK	init failed
+ * \brief	body temperature sensor initialize
+ * \param[in]	slv_addr  body temperature sensor iic slave address
+ * \retval	E_OK	initialize success
+ * \retval	!E_OK	initialize failed
  */
 extern int32_t btemp_sensor_init(uint32_t slv_addr)
 {
 	int32_t ercd = E_OK;
 
-	emsk_tmp_sensor = iic_get_dev(BOARD_TEMP_SENSOR_IIC_ID);
+	emsk_tmp_sensor = iic_get_dev(BTEMP_SENSOR_IIC_ID);
 
-	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor!=NULL);
+	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor != NULL);
 
+	/* the device working as master */
 	ercd = emsk_tmp_sensor->iic_open(DEV_MASTER_MODE, IIC_SPEED_STANDARD);
 	if ((ercd == E_OK) || (ercd == E_OPNED)) {
 		ercd = emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(slv_addr));
-		tmp_sensor_slvaddr = slv_addr;
+		btemp_sensor_addr = slv_addr;
 		
-		/* set tmp112 reg */
+		/* write value to tmp112 to set registers */
 		tmp112_reg_write(tmp_shutdown_enable, 3);
 	}
 
@@ -198,25 +160,25 @@ error_exit:
  * \retval	E_OK	read success
  * \retval	!E_OK	read failed
  */
-extern int32_t btemp_sensor_read(uint32_t *tmp)
+extern int32_t btemp_sensor_read(uint32_t *btemp)
 {
 	int32_t ercd = E_OK;
-	int i = 0;
 
-	emsk_tmp_sensor = iic_get_dev(BOARD_TEMP_SENSOR_IIC_ID);
+	emsk_tmp_sensor = iic_get_dev(BTEMP_SENSOR_IIC_ID);
 
-	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor!=NULL);
-	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(tmp!=NULL);
+	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor != NULL);
+	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(btemp != NULL);
 	
-	ercd = tmp112_reg_write(tmp_oneshot_enable,3);
+	ercd = tmp112_reg_write(tmp_oneshot_enable, 3);
 
-	ercd += tmp112_reg_read(TMP112_REG_TMP, fifo_data.buf, 2);
+	/* read 5 data from tmp112 */
+	ercd += tmp112_reg_read(TMP112_REG_TMP, btemp_data.buf, 2);
 	
 	if(ercd != 5) {
 		ercd = E_OBJ;
 	} else {
 		ercd = E_OK;
-		*tmp = ((fifo_data.tmp_h << 4) | (fifo_data.tmp_l >> 4) ) * tmp112_unit * 10 + 2;
+		*btemp = ((btemp_data.btemp_h << 4) | (btemp_data.btemp_l >> 4) ) * btemp_unit * 10 + 2;
 	}
 
 error_exit:
