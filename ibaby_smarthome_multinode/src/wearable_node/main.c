@@ -130,7 +130,7 @@ int main(void)
 	}
 
 	/* initialize acceleration sensor */
-	if (acc_sensor_init(IMU_I2C_SLAVE_ADDRESS) != E_OK) {
+	if (acc_sensor_init(ACC_SENSOR_ADDR) != E_OK) {
 		EMBARC_PRINTF("Error: acceleration sensor init failed\r\n");
 		return E_SYS;
 	}
@@ -147,7 +147,7 @@ int main(void)
 	vTaskDelay(DELAY_TIME_SLICE * 10); 
 
 	/*  initialize accelerometer before read */
-	acc_sensor_init(IMU_I2C_SLAVE_ADDRESS);
+	acc_sensor_init(ACC_SENSOR_ADDR);
 	vTaskDelay(DELAY_TIME_SLICE * 2); 
 
 	/* initialize heartrate sensor before read */
