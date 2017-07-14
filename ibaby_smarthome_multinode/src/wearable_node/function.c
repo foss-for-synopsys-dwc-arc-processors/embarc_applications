@@ -356,7 +356,7 @@ extern void process_hrate(uint32_t* hrate)
 
 		if (!flag_hrate) {
 			for (int i = 0; i < FFT_LEN; i++) {
-				hrate_group[i] = (int)band_pass(hrate_group[i] - sum_hrate);
+				hrate_group[i] = (int)band_pass_filter(hrate_group[i] - sum_hrate);
 				
 				if (fabs(hrate_group[i]) < THOLD_HRATE_DIFF) {
 					seq_in[i].real = hrate_group[i] * 30;

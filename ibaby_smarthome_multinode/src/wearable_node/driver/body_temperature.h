@@ -57,7 +57,7 @@
 /*!< TMP112 address */
 #define TMP112_ADDRESS          0x48
 /*!< body temperature sensor address */
-#define BTEMP_SENSOR_ADDRESS    TMP112_ADDRESS
+#define BTEMP_SENSOR_ADDR       TMP112_ADDRESS
 
 #define EMSK_TMP_SENSOR_CHECK_EXP_NORTN(EXPR)    CHECK_EXP_NOERCD(EXPR, error_exit)
 

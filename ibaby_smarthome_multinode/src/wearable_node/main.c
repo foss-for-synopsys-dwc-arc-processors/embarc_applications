@@ -118,13 +118,13 @@ int main(void)
 		*********************************************************\r\n");
 
 	/* initialize body temperature sensor */
-	if (btemp_sensor_init(BTEMP_SENSOR_ADDRESS) != E_OK) {
+	if (btemp_sensor_init(BTEMP_SENSOR_ADDR) != E_OK) {
 		EMBARC_PRINTF("Error: body temperature sensor init failed\r\n");
 		return E_SYS;
 	}
 
 	/* initialize heartrate sensor */
-	if (hrate_sensor_init(MAX30102_ADDRESS) != E_OK) {
+	if (hrate_sensor_init(HRATE_SENSOR_ADDR) != E_OK) {
 		EMBARC_PRINTF("Error: heartrate sensor init failed\r\n");
 		return E_SYS;
 	}
@@ -151,7 +151,7 @@ int main(void)
 	vTaskDelay(DELAY_TIME_SLICE * 2); 
 
 	/* initialize heartrate sensor before read */
-	hrate_sensor_init(HEART_RATE_I2C_SLAVE_ADDRESS);
+	hrate_sensor_init(HRATE_SENSOR_ADDR);
 	vTaskDelay(DELAY_TIME_SLICE * 2);
 /*
 *  end of this part
