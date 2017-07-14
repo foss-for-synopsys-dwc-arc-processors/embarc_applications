@@ -135,9 +135,8 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 /*!< parameters of fast fourier transform function */
 #define FFT_DELTA (1 / (FFT_LEN * DTT))
 #define DTT       (0.02)                 /*!< error coefficient */
-#define FFT_M 	  (9)                    /*!< series of fast fourier transform */
-#define FFT_LEN   (1 << FFT_M)           /*!< amount of discrete points */
-#define NUM_TAPS  (FFT_LEN)
+#define FFT_M 	  (9)                    /*!< series of fft */
+#define FFT_LEN   (1 << FFT_M)           /*!< size of input sequence for fft */
 #define S16MAX	  (32767)                /*!< upper value of 16bits */
 #define S16MIN	  (-32767)               /*!< lower value of 16bits */
 #define PI        (3.1415926535897932385)/*!< value of pi */
@@ -189,23 +188,23 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define K4 (0.06)
 
 
-/*!< typedef for heartrate data processing */
-typedef struct
-{ 
-	float real;
-	float imag;
-}compx;
+// typedef struct
+// { 
+// 	float real;
+// 	float imag;
+// }compx;
 
-typedef struct _Cplx16
+/*!< struct of complex number for fft */
+typedef struct _complex_num
 {
-	int R;
-	int I;
-}Cplx16;
+	int real; /*!< real part */
+	int img;  /*!< imginary part */
+} complex_num;
 
 
 /*!< variable of heartrate data processing */
-Cplx16 fft_que[FFT_LEN];   /*!< value of discrete points after fft */
-Cplx16 par_w[FFT_LEN / 2]; /*!< parameters of fft */
+complex_num seq_in[FFT_LEN];   /*!< input sequence for fft */
+complex_num kernel_fft[FFT_LEN / 2]; /*!< transform kernel for fft */
 
 static int  cnt_hrate;           /*!< number of heartrate data counter */
 static bool flag_hrate;          /*!< flag of starting to report heartrate */
@@ -235,6 +234,15 @@ static int  state_aw[LEN_STA_QUEUE]; /*!< state for LEN_STA_QUEUE * 5s */
 static int   inten_sl[5]; /*!< motion intensity for 5 * 1min */
 static float score_sl;    /*!< score of motion */
 
+/** function for calculate parameters for fast fourier transform */
+static void  kernel_fft_init(complex_num *W);
+
+/** function for fast fourier transform */
+static void  fft(complex_num *D, complex_num *W);
+
+/** function for find the max value */
+static float find_max(complex_num *D);
+
 /* function for deal with acclerate by filter */
 static int filter_acc(int val_new, int val_old, bool *flag_old, char *cnt, unsigned char *par);
 
@@ -259,15 +267,6 @@ extern void  print_msg_sleep(uint state);
 
 /** function for starting lwm2mClient */
 extern int   lwm2m_client_start(void);
-
-/** function for calculate parameters for fast fourier transform */
-extern void  calc_par_w(Cplx16 *W);
-
-/** function for fast fourier transform */
-extern void  fft(Cplx16 *D, Cplx16 *W);
-
-/** function for find the max value */
-extern float find_max(Cplx16 *D);
 
 /** function for deal with heartrate by filter */
 extern void  process_hrate(uint32_t* hrate);
