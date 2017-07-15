@@ -69,7 +69,7 @@
 
 
 /* 	 
- * 2th IIR filter,sps:50,
+ * 2th IIR filter, sps:50,
  * lowpass  filter cutoff frequence: 2Hz,
  * highpass filter cutoff frequence: 0.2Hz, 	
  */
