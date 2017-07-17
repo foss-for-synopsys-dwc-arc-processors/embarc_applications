@@ -74,6 +74,7 @@
 #include "heartrate.h"
 #include "body_temperature.h"
 #include "value.h"
+#include "fft.h"
 
 
 /*
@@ -139,7 +140,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define FFT_LEN   (1 << FFT_M)           /*!< size of input sequence for fft */
 #define S16MAX	  (32767)                /*!< upper value of 16bits */
 #define S16MIN	  (-32767)               /*!< lower value of 16bits */
-#define PI        (3.1415926535897932385)/*!< value of pi */
+// #define PI        (3.1415926535897932385)/*!< value of pi */
 
 /*!< parameters of heartrate sensor processing function */
 #define MIN_HRATE_VAL     (10000)  /*!< upper limit of heartrate */
@@ -188,29 +189,23 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define K4 (0.06)
 
 
-// typedef struct
-// { 
-// 	float real;
-// 	float imag;
-// }compx;
-
 /*!< struct of complex number for fft */
-typedef struct _complex_num
-{
-	int real; /*!< real part */
-	int img;  /*!< imginary part */
-} complex_num;
+// typedef struct _complex_num
+// {
+	// int real; /*!< real part */
+	// int img;  /*!< imginary part */
+// } complex_num;
 
 
 /*!< variable of heartrate data processing */
-complex_num seq_in[FFT_LEN];   /*!< input sequence for fft */
-complex_num kernel_fft[FFT_LEN / 2]; /*!< transform kernel for fft */
+//complex_num seq_in[FFT_LEN];   /*!< input sequence for fft */
+//complex_num kernel_fft[FFT_LEN / 2]; /*!< transform kernel for fft */
 
-static int  cnt_hrate;           /*!< number of heartrate data counter */
-static bool flag_hrate;          /*!< flag of starting to report heartrate */
-static int  hrate_group[FFT_LEN];/*!< temporary value of heartrate */
-static int  hrate_temp;          /*!< temporary value of heartrate */
-static int  sum_hrate;           /*!< summation of heartrate value */
+//static int  cnt_hrate;           /*!< number of heartrate data counter */
+// static bool flag_hrate;          /*!< flag of starting to report heartrate */
+// static int  hrate_group[FFT_LEN];/*!< temporary value of heartrate */
+// static int  hrate_temp;          /*!< temporary value of heartrate */
+// static int  sum_hrate;           /*!< summation of heartrate value */
 
 /*!< variable of low pass filter for raw acceleration data */
 static char cnt_x, cnt_y, cnt_z;                /*!< low pass filter counter */

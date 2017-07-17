@@ -220,7 +220,7 @@ extern int32_t hrate_sensor_read(int* hrate)
 			*hrate = ((hrate_data.red_h && 0x3) << 16) |
 				(hrate_data.red_m << 8) | hrate_data.red_l;
 			data_num++;
-			data_rdy = 1;
+			flag_data_ready = true;
 		}
 		int_rdy = 0;
 	}

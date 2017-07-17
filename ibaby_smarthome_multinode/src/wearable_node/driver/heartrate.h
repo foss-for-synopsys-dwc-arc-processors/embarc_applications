@@ -127,7 +127,8 @@ static float zs1[3]={0.f}, zs2[3]={0.f};
 static DEV_IIC  *emsk_max_sensor;  /*!< MAX30102 sensor object */
 static uint32_t hrate_sensor_addr; /*!< variable of heartrate sensor address */
 
-int data_num, data_rdy;
+int data_num;
+bool flag_data_ready;
 
 static float   iir_tick(iir_par *, float *, float);
 

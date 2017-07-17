@@ -199,199 +199,209 @@ extern void print_msg_sleep(uint state)
 }
 #endif /* PRINT_DEBUG_SLEEP */
 
-/*
- * hanning window funtion for fft
- * interpolation method
- */
-static void hanning_win(complex_num *seq_temp)
-{
-	int i;
-	float factor[FFT_LEN];
+// /*
+//  * hanning window funtion for fft
+//  * interpolation method
+//  */
+// static void hanning_win(complex_num *seq_temp)
+// {
+// 	int i;
+// 	float factor[FFT_LEN];
 
-	for (i = 0; i < FFT_LEN; i++) {
-		factor[i] = 0.5 * (1.0 - cos(2.0 * PI * i / (FFT_LEN - 1)));
-		seq_temp[i].real = factor[i] * seq_temp[i].real;
-	}
-}
+// 	for (i = 0; i < FFT_LEN; i++) {
+// 		factor[i] = 0.5 * (1.0 - cos(2.0 * PI * i / (FFT_LEN - 1)));
+// 		seq_temp[i].real = factor[i] * seq_temp[i].real;
+// 	}
+// }
 
-/*
- * index reverse for fft function
- * change address
- */
-static int bit_reverse(int index_i)
-{
-	int i;
-	int index_j = 0;
+// /*
+//  * index reverse for fft function
+//  * change address
+//  */
+// static int bit_reverse(int index_i)
+// {
+// 	int i;
+// 	int index_j = 0;
 
-	for (i = 0; i < FFT_M; i++) {
-		index_j = (index_j << 1) | ((index_i >> i) & 1);
-	}
+// 	for (i = 0; i < FFT_M; i++) {
+// 		index_j = (index_j << 1) | ((index_i >> i) & 1);
+// 	}
 
-	return index_j;
-}
+// 	return index_j;
+// }
 
-/*
- * transform kernel for fft initialize function
- * it works like an rotation factor WAP
- */
-static void kernel_fft_init(complex_num *k_fft)
-{
-	int i;
-	double arg, arg_step;
+// /*
+//  * transform kernel for fft initialize function
+//  * it works like an rotation factor WAP
+//  */
+// static void kernel_fft_init(complex_num *k_fft)
+// {
+// 	int i;
+// 	double arg, arg_step;
 
-	arg_step = PI / (FFT_LEN >> 1);
-	for (arg = 0.0, i = 0; i < (FFT_LEN >> 1); arg -= arg_step, i++) {
-		k_fft[i].real = round(cos(arg) * S16MAX); /* get rotation factor rounded */
-		k_fft[i].img  = round(sin(arg) * S16MAX);
-	}
-}
+// 	arg_step = PI / (FFT_LEN >> 1);
+// 	for (arg = 0.0, i = 0; i < (FFT_LEN >> 1); arg -= arg_step, i++) {
+// 		k_fft[i].real = round(cos(arg) * S16MAX); /* get rotation factor rounded */
+// 		k_fft[i].img  = round(sin(arg) * S16MAX);
+// 	}
+// }
 
-/*
- * fast fourier transform(fft) funtion
- * 3 stages butterfly computation
- */
-static void fft(complex_num *seq_temp, complex_num *k_fft)
-{
-	int i, j, k;
-	int step, grpLen, grp;
-	complex_num add_num, sub_num;
+// /*
+//  * fast fourier transform(fft) funtion
+//  * 3 stages butterfly computation
+//  */
+// static void fft(complex_num *seq_temp, complex_num *k_fft)
+// {
+// 	int i, j, k;
+// 	int step, grpLen, grp;
+// 	complex_num add_num, sub_num;
 
-	/* value interpolation using hanning window */
-	hanning_win(seq_temp);
+// 	/* value interpolation using hanning window */
+// 	hanning_win(seq_temp);
 
-	/* 3 stages butterfly computation */
-	for (step = 0, grpLen = 1 << (FFT_M - 1); step < FFT_M; step++, grpLen >>= 1) {
-		for (grp = 0; grp < FFT_LEN; grp += grpLen << 1) {
-			for (i = grp, j = grp + grpLen, k = 0; i < grp + grpLen; i++, j++, k += (1 << step)) {
-				add_num.real = ((int)seq_temp[i].real + (int)seq_temp[j].real) >> 1;
-				add_num.img  = ((int)seq_temp[i].img  + (int)seq_temp[j].img)  >> 1;
+// 	/* 3 stages butterfly computation */
+// 	for (step = 0, grpLen = 1 << (FFT_M - 1); step < FFT_M; step++, grpLen >>= 1) {
+// 		for (grp = 0; grp < FFT_LEN; grp += grpLen << 1) {
+// 			for (i = grp, j = grp + grpLen, k = 0; i < grp + grpLen; i++, j++, k += (1 << step)) {
+// 				add_num.real = ((int)seq_temp[i].real + (int)seq_temp[j].real) >> 1;
+// 				add_num.img  = ((int)seq_temp[i].img  + (int)seq_temp[j].img)  >> 1;
 
-				sub_num.real = ((int)seq_temp[i].real - (int)seq_temp[j].real) >> 1;
-				sub_num.img  = ((int)seq_temp[i].img  - (int)seq_temp[j].img)  >> 1;
+// 				sub_num.real = ((int)seq_temp[i].real - (int)seq_temp[j].real) >> 1;
+// 				sub_num.img  = ((int)seq_temp[i].img  - (int)seq_temp[j].img)  >> 1;
 
-				seq_temp[j].real = (((int)sub_num.real * (int)k_fft[k].real) >> 15)
-					- (((int)sub_num.img  * (int)k_fft[k].img) >> 15);
-				seq_temp[j].img  = (((int)sub_num.img  * (int)k_fft[k].real) >> 15)
-					+ (((int)sub_num.real * (int)k_fft[k].img) >> 15);
+// 				seq_temp[j].real = (((int)sub_num.real * (int)k_fft[k].real) >> 15)
+// 					- (((int)sub_num.img  * (int)k_fft[k].img) >> 15);
+// 				seq_temp[j].img  = (((int)sub_num.img  * (int)k_fft[k].real) >> 15)
+// 					+ (((int)sub_num.real * (int)k_fft[k].img) >> 15);
 
-				seq_temp[i] = add_num;
-			}
-		}
-	}
+// 				seq_temp[i] = add_num;
+// 			}
+// 		}
+// 	}
 
-	for (i = 0; i < FFT_LEN; i++) {
-		j = bit_reverse(i);
+// 	for (i = 0; i < FFT_LEN; i++) {
+// 		j = bit_reverse(i);
 
-		/* exchange index number for seq_in(n) */
-		if (i < j) {
-			add_num = seq_temp[j];
-			seq_temp[j] = seq_temp[i];
-			seq_temp[i] = add_num;
-		}
-	}
-}
+// 		/* exchange index number for seq_in(n) */
+// 		if (i < j) {
+// 			add_num = seq_temp[j];
+// 			seq_temp[j] = seq_temp[i];
+// 			seq_temp[i] = add_num;
+// 		}
+// 	}
+// }
 
-static float find_max(complex_num *seq_temp)
-{
-	int i, j;
-	int index, sum_mag = 0, tmpfft = 0;
-	float rtn_freq = 0;
+// static float find_max(complex_num *seq_temp)
+// {
+// 	int i, j;
+// 	int index, sum_mag = 0, tmpfft = 0;
+// 	float rtn_freq = 0;
+// 	int t = FFT_LEN >> 2;
 
-	for (i = 0; i < FFT_LEN / 4; i++) {
-		seq_temp[i].real = sqrt( seq_temp[i].real * seq_temp[i].real
-			+ seq_temp[i].img * seq_temp[i].img ) / 2;
-	}
+// 	for (i = 0; i < t; i++) {
+// 		seq_temp[i].real = sqrt( seq_temp[i].real * seq_temp[i].real
+// 			+ seq_temp[i].img * seq_temp[i].img ) >> 1;
+// 	}
 
-	for (j = 0; j < 4; j++) {
-		for (i = 6; i < 16; i++) {
-			if (seq_temp[i].real > tmpfft) {
-				tmpfft = seq_temp[i].real;
-				index = i;
-				seq_temp[i].real = 0;
-			}
-		}
-		rtn_freq += tmpfft * index;
-		sum_mag += tmpfft;
-		tmpfft = 0;
-	}
+// 	for (j = 0; j < 4; j++) {
+// 		for (i = 6; i < 16; i++) {
+// 			if (seq_temp[i].real > tmpfft) {
+// 				tmpfft = seq_temp[i].real;
+// 				index = i;
+// 				seq_temp[i].real = 0;
+// 			}
+// 		}
+// 		rtn_freq += tmpfft * index;
+// 		sum_mag += tmpfft;
+// 		tmpfft = 0;
+// 	}
 
-	rtn_freq = (float)(rtn_freq / sum_mag);
+// 	rtn_freq = (float)(rtn_freq / sum_mag);
 
-	return rtn_freq;
-}
+// 	return rtn_freq;
+// }
 
 /* function for deal with heartrate by filter */
 extern void process_hrate(uint32_t* hrate)
 {
-	/* ignore the wrong data in the beginning */
-	if (data_num < FFT_M) {
-		hrate_sensor_read(NULL);
-	} else if (data_num < FFT_LEN + FFT_M) {
-		/* read raw heartrate data */
-		hrate_sensor_read(&hrate_group[data_num-FFT_M]);
+	/* I will try to rewrite all code on heartrate data processing, including fft, filter, etc */
+	hrate_sensor_read(hrate);
+	printf("%d\n", *hrate);
 
-		if (data_rdy && data_num > FFT_M) {
-			if (hrate_group[data_num-FFT_M-1] < MIN_HRATE_VAL 
-				|| hrate_group[data_num-FFT_M-1] > MAX_HRATE_VAL) {
-				data_num = 0;
-				sum_hrate = 0;
-				cnt_hrate = 0;
-			} else {
-				sum_hrate += hrate_group[data_num-FFT_M-1];
-			}
+	// int aver_hrate;
+
+	// /* ignore the wrong data in the beginning */
+	// if (data_num < FFT_M) {
+	// 	hrate_sensor_read(NULL);
+	// } else if (data_num < FFT_LEN + FFT_M) {
+	// 	/* read raw heartrate data */
+	// 	hrate_sensor_read(&hrate_group[data_num-FFT_M]);
+
+	// 	/* limiting filter */
+	// 	if (flag_data_ready && data_num > FFT_M) {
+	// 		if (hrate_group[data_num-FFT_M-1] < MIN_HRATE_VAL 
+	// 			|| hrate_group[data_num-FFT_M-1] > MAX_HRATE_VAL) {
+	// 			data_num  = 0;
+	// 			sum_hrate = 0;
+	// 			cnt_hrate = 0;
+	// 		} else {
+	// 			/* add new value to sum */
+	// 			sum_hrate += hrate_group[data_num-FFT_M-1];
+	// 		}
 			
-			data_rdy = 0;
-		}
-	} else if (data_num == FFT_LEN  + FFT_M) {
-		sum_hrate = sum_hrate / FFT_LEN;
+	// 		flag_data_ready = false;
+	// 	}
+	// } else if (data_num == FFT_LEN  + FFT_M) {
+	// 	aver_hrate = sum_hrate >> FFT_M; /* average of FFT_LEN heartrate data */
 
-		for (int i = 0; i < FFT_LEN - 1; i++) {
-			if (fabs(hrate_group[i] - hrate_group[i+1]) > THOLD_HRATE_DIFF) {
-				flag_hrate = true;
-				data_num = 0;
-				cnt_hrate = 0;
-				hrate_temp = 0;
-			}
-		}
+	// 	for (int i = 0; i < FFT_LEN - 1; i++) {
+	// 		if (fabs(hrate_group[i] - hrate_group[i+1]) > THOLD_HRATE_DIFF) {
+	// 			flag_hrate = true;
+	// 			data_num = 0;
+	// 			cnt_hrate = 0;
+	// 			hrate_temp = 0;
+	// 		}
+	// 	}
 
-		if (!flag_hrate) {
-			for (int i = 0; i < FFT_LEN; i++) {
-				hrate_group[i] = (int)band_pass_filter(hrate_group[i] - sum_hrate);
+	// 	if (!flag_hrate) {
+	// 		for (int i = 0; i < FFT_LEN; i++) {
+	// 			/* processing heartrate data by band-pass filter */
+	// 			hrate_group[i] = (int)band_pass_filter(hrate_group[i] - aver_hrate);
 				
-				if (fabs(hrate_group[i]) < THOLD_HRATE_DIFF) {
-					seq_in[i].real = hrate_group[i] * 30;
-				} else {
-					i = FFT_LEN - 1;
-					data_num = 0;
-					cnt_hrate = 0;
-					hrate_temp = 0;
-				}
-			}
-		}
+	// 			if (fabs(hrate_group[i]) < THOLD_HRATE_DIFF) {
+	// 				seq_in[i].real = hrate_group[i] * 30;
+	// 			} else {
+	// 				i = FFT_LEN - 1;
+	// 				data_num = 0;
+	// 				cnt_hrate = 0;
+	// 				hrate_temp = 0;
+	// 			}
+	// 		}
+	// 	}
 
-		if (data_num) {
-			/* calculate parameters for fast fourier transform */
-			kernel_fft_init(kernel_fft);
+	// 	if (data_num) {
+	// 		/* calculate parameters for fast fourier transform */
+	// 		kernel_fft_init(kernel_fft);
 
-			/* fast fourier transform function */
-			fft(seq_in, kernel_fft);
+	// 		/* fast fourier transform function */
+	// 		fft(seq_in, kernel_fft);
 
-			if (cnt_hrate > 0) {
-				/* get heartrate value after average filter */
-				hrate_temp += ((float)(find_max(seq_in) * 60 * FFT_DELTA) * 10 - hrate_temp) / 6;
-			} else if (cnt_hrate == 0) {
-				cnt_hrate++;
-				hrate_temp = DEFAULT_HRATE_VAL;
-			}
+	// 		if (cnt_hrate > 0) {
+	// 			/* get heartrate value after average filter */
+	// 			hrate_temp += ((float)(find_max(seq_in) * 60 * FFT_DELTA) * 10 - hrate_temp) / 6;
+	// 		} else if (cnt_hrate == 0) {
+	// 			cnt_hrate++;
+	// 			hrate_temp = DEFAULT_HRATE_VAL;
+	// 		}
 
-			data_num = 0;
-		}
+	// 		data_num = 0;
+	// 	}
 
-		sum_hrate = 0;
-		flag_hrate = false;
-	}
+	// 	sum_hrate = 0;
+	// 	flag_hrate = false;
+	// }
 
-	*hrate = (uint32_t)(hrate_temp / 10);
+	// *hrate = (uint32_t)(hrate_temp / 10);
 }
 
 /* function for deal with acclerate by filter */
