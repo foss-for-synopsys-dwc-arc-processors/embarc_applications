@@ -1,4 +1,15 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
 #include "fft.h"
+
+
+static complex_num complex_add(complex_num a, complex_num b);
+static complex_num complex_sub(complex_num a, complex_num b);
+static complex_num complex_mul(complex_num a, complex_num b);
+
 
 /* add function of complex number */
 static complex_num complex_add(complex_num a, complex_num b)

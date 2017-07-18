@@ -1,9 +1,6 @@
-#ifndef _HEARTRATE_H_
-#define _HEARTRATE_H_
+#ifndef _FFT_H_
+#define _FFT_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
 #define DATA_SIZE  (64) /* amount of input data */
 #define STAGE_SIZE (log(DATA_SIZE)/log(2)) /* stage size of fft */
@@ -21,16 +18,16 @@ typedef struct
 complex_num data[DATA_SIZE];
 
 /* rotation factor */
-static complex_num rota_fac[DATA_SIZE];
-
-static complex_num complex_add(complex_num a, complex_num b);
-static complex_num complex_sub(complex_num a, complex_num b);
-static complex_num complex_mul(complex_num a, complex_num b);
+complex_num rota_fac[DATA_SIZE];
 
 extern void rotation_factor_init(void);
 extern void reverse(void);
 extern void fft(void);
-extern void pr_data_fft(void);/* _WEARABLE_NODE_FFT_H_ */
+extern void pr_data_fft(void);
+
+/** @} end of name */
+
+#endif/* _WEARABLE_NODE_FFT_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_FFT */
 

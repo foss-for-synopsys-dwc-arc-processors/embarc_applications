@@ -325,7 +325,7 @@ extern void print_msg_sleep(uint state)
 extern void process_hrate(uint32_t* hrate)
 {
 	/* I will try to rewrite all code on heartrate data processing, including fft, filter, etc */
-	hrate_sensor_read(hrate);
+	hrate_sensor_read((int *)hrate);
 	printf("%d\n", *hrate);
 
 	// int aver_hrate;

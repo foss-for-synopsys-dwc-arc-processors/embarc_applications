@@ -44,58 +44,15 @@
 #define _BODY_TEMPERATURE_H_
 
 /*!< using IIC 1 interface */
-#define BTEMP_SENSOR_IIC_ID     DW_IIC_1_ID
-
-/*!< tmp112 registers */
-#define TMP112_REG_TMP          0x00 /*!< Temperature Register */
-#define TMP112_REG_CONG         0x01 /*!< Configuration Register */
-
-/*!< ADT7420_REG_CONFIG definition */
-#define TMP112_CONFIG_OS        (1 << 7)
-#define TMP112_CONFIG_SD        (1 << 0)
+#define BTEMP_SENSOR_IIC_ID  DW_IIC_1_ID
 
 /*!< TMP112 address */
-#define TMP112_ADDRESS          0x48
-/*!< body temperature sensor address */
-#define BTEMP_SENSOR_ADDR       TMP112_ADDRESS
+#define TMP112_ADDRESS       0x48
+#define BTEMP_SENSOR_ADDR    TMP112_ADDRESS
 
 #define EMSK_TMP_SENSOR_CHECK_EXP_NORTN(EXPR)    CHECK_EXP_NOERCD(EXPR, error_exit)
 
-
-/*!< store register data */
-union _btemp_data						
-{
-	uint8_t buf[2];
-	struct {
-		uint8_t btemp_h, btemp_l;
-	};
-} btemp_data;
-
-/*!< configure oneshot mode */
-static uint8_t tmp_oneshot_enable[] = {
-	TMP112_REG_CONG,
-	TMP112_CONFIG_OS,
-	0x00
-};
-
-/*!< configure shutdown mode */
-static uint8_t tmp_shutdown_enable[] = {
-	TMP112_REG_CONG,
-	TMP112_CONFIG_SD,
-	0x00
-};
-
-
-static const float btemp_unit = 0.0625; /*!< convert to ℃ */
-
-static DEV_IIC  *emsk_tmp_sensor;  /*!< TMP112 sensor object */
-static uint32_t btemp_sensor_addr; /*!< variable of body temperature sensor address */
-
-
-/* function for body temperature sensor initialize */
 extern int32_t btemp_sensor_init(uint32_t slv_addr);
-
-/* function for reading body temperature sensor data */
 extern int32_t btemp_sensor_read(uint32_t *btmp);
 
 #endif /* _WEARABLE_NODE_DRIVER_BODY_TEMPERATURE_H_ */

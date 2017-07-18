@@ -46,9 +46,9 @@
  * \name    macros about common setting
  * @{
  */
-#define LWM2M_CLIENT      (1) /*!< set 1 to be lwm2m client */
+#define LWM2M_CLIENT      (0) /*!< set 1 to be lwm2m client */
 
-#define PRINT_DEBUG_FUNC  (1) /*!< set 1 to print message for debug major function */
+#define PRINT_DEBUG_FUNC  (0) /*!< set 1 to print message for debug major function */
 #define PRINT_DEBUG_AWAKE (0) /*!< set 1 to print message for debug awake event detecting function */
 #define PRINT_DEBUG_SLEEP (0) /*!< set 1 to print message for debug sleep-wake state monitoring function */
 

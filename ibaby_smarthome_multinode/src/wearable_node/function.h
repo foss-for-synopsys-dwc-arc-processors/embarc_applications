@@ -231,13 +231,13 @@ static float score_sl;    /*!< score of motion */
 
 
 /** function for find the max value */
-static float find_max(complex_num *D);
+// static float find_max(complex_num *D);
 
 /** function for transform kernel initialize */
-static void  kernel_fft_init(complex_num *W);
+// static void  kernel_fft_init(complex_num *W);
 
 /** function for fast fourier transform */
-static void  fft(complex_num *D, complex_num *W);
+// static void  fft(complex_num *D, complex_num *W);
 
 /* function for deal with acclerate by filter */
 static int filter_acc(int val_new, int val_old, bool *flag_old, char *cnt, unsigned char *par);

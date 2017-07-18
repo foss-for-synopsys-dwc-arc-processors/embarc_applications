@@ -44,63 +44,28 @@
 #define _ACCELERATION_H_
 
 /*!< using IIC 1 interface */
-#define ACC_SENSOR_IIC_ID             DW_IIC_1_ID
-
-/*!< MPU6050 registers */
-#define MPU6050_REG_SAMPLE_RATE       0x19 /*!< Gyro sample rate */
-#define MPU6050_REG_POWER_MANAGEMENT  0x6B /*!< Power management */
-#define MPU6050_REG_ACCEL_XOUT_H      0x3B /*!< Accel_x out[15:8] */
+#define ACC_SENSOR_IIC_ID  DW_IIC_1_ID
 
 /**
  * I2C address of PmodIMU4 can be selected via AD0: 0x68, 0x69
  * AD0 connect to GND is 0x68
  */
-/*!< MPU6050 address */
+/* MPU6050 address */
 #define MPU6050_A0_PIN    0 /*!< I2C Serial Bus Address Selection Pin */
 #define MPU6050_ADDRESS   (0x68 + MPU6050_A0_PIN)
-/*!< acceleration sensor address */
+
+/* acceleration sensor address */
 #define ACC_SENSOR_ADDR	  MPU6050_ADDRESS
 
 #define EMSK_IMU_SENSOR_CHECK_EXP_NORTN(EXPR)    CHECK_EXP_NOERCD(EXPR, error_exit)
 
-
+/* struct for acceleration data storaged */
 typedef struct __accValues
 {
 	float accl_x, accl_y, accl_z;
 } acc_values;
 
-union _acc_data
-{
-	uint8_t buf[6];
-	struct {
-		uint8_t axh, axl, ayh, ayl, azh, azl;
-	};
-} acc_data;
-
-/*!< configure related register, using the auto increase function */
-static uint8_t imu_init_seq0[] = {
-	MPU6050_REG_SAMPLE_RATE,
-	0x00, /*!< 0x19: sr = gyro rate / 1 */
-	0x01, /*!< 0x1A: ext sync disable, dlpf = 1(accl 1k, gyro 1k) */
-	0x18, /*!< 0x1B: gyro fs = 2k deg/sec (34.6/s)*/
-	0x00  /*!< 0x1C: accl fs = 2g (19.6m/sq.s) */
-};
-
-static uint8_t imu_init_seq1[] = {
-	MPU6050_REG_POWER_MANAGEMENT,
-	0x00 /*!< 0x6B: no sleep */
-};
-
-static const float acc_unit = 5.9855042e-4f; /*!< m/sq.s/LSB @ fs=2g */
-
-static DEV_IIC  *emsk_imu_sensor; /*!< IMU6050 sensor object */
-static uint32_t acc_sensor_addr;  /*!< variable of acceleration sensor address */
-
-
-/* function for acceleration sensor initialize */
 extern int32_t acc_sensor_init(uint32_t slv_addr);
-
-/* function for reading acceleration sensor data */
 extern int32_t acc_sensor_read(acc_values* accel_val);
 
 #endif  /* _WEARABLE_NODE_DRIVER_ACCELERATION_H_ */
