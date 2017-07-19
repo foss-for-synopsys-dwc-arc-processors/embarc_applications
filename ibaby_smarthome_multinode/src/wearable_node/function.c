@@ -204,8 +204,7 @@ extern void process_hrate(uint32_t* hrate)
 {
 	int i;
 	int hrate_temp = 0, aver_temp = 0;
-	int mag_dc = 0, mag_max = 0;
-	int mag_hrate[HRATE_DATA_SIZE];
+	int mag_dc = 0, mag_max = 0, mag_hrate = 0;
 	int t = HRATE_DATA_SIZE / 2;
 
 	/* read raw heartrate data */
@@ -233,20 +232,20 @@ extern void process_hrate(uint32_t* hrate)
 
 			fft(hrate_data);
 
-			mag_dc = (int)((hrate_data[0].real * hrate_data[0].real + 
+			mag_dc = (int)(sqrt(hrate_data[0].real * hrate_data[0].real + 
 					hrate_data[0].img * hrate_data[0].img) / HRATE_DATA_SIZE);
 
 			for (i = 1; i < t; ++i)
 			{
-				mag_hrate[i] = (int)(hrate_data[i].real * hrate_data[i].real + 
+				mag_hrate = (int)sqrt(hrate_data[i].real * hrate_data[i].real + 
 					hrate_data[i].img * hrate_data[i].img);
 
-				if (mag_max < mag_hrate[i])
+				if (mag_max < mag_hrate)
 				{
-					mag_max = mag_hrate[i];
+					mag_max = mag_hrate;
 				}
 			}
-			*hrate = mag_dc + mag_max * 2 / HRATE_DATA_SIZE;
+			*hrate = (uint32_t)(mag_dc + mag_max * 2 / HRATE_DATA_SIZE);
 			printf("%d\n", *hrate);
 
 			data_num = 0;
