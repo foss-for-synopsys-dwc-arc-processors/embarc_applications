@@ -366,8 +366,6 @@ extern int32_t hrate_sensor_read(int* hrate)
 			ercd = E_OK;
 			*hrate = ((hrate_data.red_h && 0x3) << 16) |
 			         (hrate_data.red_m << 8) | hrate_data.red_l;
-			data_num++;
-			flag_data_ready = true;
 		}
 		int_rdy = 0;
 	}

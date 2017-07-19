@@ -5,6 +5,10 @@
 
 #include "fft.h"
 
+#define DATA_SIZE        (HRATE_DATA_SIZE)
+#define STAGE_SIZE       (log(DATA_SIZE)/log(2)) /* stage size of fft */
+#define BIT_SIZE         (STAGE_SIZE) /* bit size of index number */
+#define PI               (3.1415926)
 
 static complex_num complex_add(complex_num a, complex_num b);
 static complex_num complex_sub(complex_num a, complex_num b);
@@ -54,7 +58,7 @@ extern void rotation_factor_init(void)
 }
 
 /* reverse each bit of index number, arrange index number of input data */
-extern void reverse(void)
+extern void reverse(complex_num *data)
 {
 	unsigned int i, j, k;
 	unsigned int t;
@@ -90,7 +94,7 @@ extern void reverse(void)
  * for N points fft computation, there has log2(N) stages
  *    in stage m, there has N/2/L groups, L = 2^(m-1), and L butterfly forms in each group
  */
-extern void fft(void)
+extern void fft(complex_num *data)
 {
 	unsigned int i, j, k, l;
 	complex_num top, bottom, common;
@@ -121,39 +125,8 @@ extern void fft(void)
 	}
 }
 
-/* print out the data after fft */
-extern void pr_data_fft(void)
-{
-	unsigned int i;
-
-	printf("Print out the data.\n");
-	for (i = 0; i < DATA_SIZE; i++) {
-		printf("data[%d] = [%.4f\t%.4f]\n", i, data[i].real, data[i].img);
-		if(i != 0 && (i+1) % 8 == 0)
-			printf("\n");
-	}
-	printf("\n");
-}
-
-// void data_init(void)
-// {
-// 	unsigned int i, j;
-
-// 	for (i = 0; i < 8; ++i)
-// 	{
-// 		for (j = 0; j < 8; ++j)
-// 		{
-// 			data[i * 8 + j].real = (i + j + 1) % 10;
-// 		}
-// 	}
-// }
-// 
 // void main()
 // {
-// 	printf("Data initialize.\n");
-// 	data_init();
-// 	pr_data_fft();
-
 // 	/* initialize the rotation factor : rota_fac[DATA_SIZE] */
 // 	rotation_factor_init();
 
@@ -162,7 +135,4 @@ extern void pr_data_fft(void)
 
 // 	/* fast fourier transformation */
 // 	fft();
-
-// 	/* print out the data after fft */
-// 	pr_data_fft();
 // }

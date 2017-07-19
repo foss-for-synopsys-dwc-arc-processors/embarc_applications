@@ -53,9 +53,6 @@
 
 #define EMSK_HEART_RATE_SENSOR_CHECK_EXP_NORTN(EXPR)    CHECK_EXP_NOERCD(EXPR, error_exit)
 
-int data_num;
-bool flag_data_ready;
-
 /* function for band-pass filter */
 extern float   band_pass_filter(float in);
 

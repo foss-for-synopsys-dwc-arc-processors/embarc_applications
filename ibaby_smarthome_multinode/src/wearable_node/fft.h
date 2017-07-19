@@ -1,11 +1,8 @@
 #ifndef _FFT_H_
 #define _FFT_H_
 
-
-#define DATA_SIZE  (64) /* amount of input data */
-#define STAGE_SIZE (log(DATA_SIZE)/log(2)) /* stage size of fft */
-#define BIT_SIZE   (STAGE_SIZE) /* bit size of index number */
-#define PI         (3.1415926)
+#define HRATE_DATA_SIZE_POWER (7)
+#define HRATE_DATA_SIZE       (1 << HRATE_DATA_SIZE_POWER) /* amount of input data */
 
 /* complex number */
 typedef struct
@@ -14,16 +11,12 @@ typedef struct
 	double img;
 } complex_num;
 
-/* data group */
-complex_num data[DATA_SIZE];
-
 /* rotation factor */
-complex_num rota_fac[DATA_SIZE];
+complex_num rota_fac[HRATE_DATA_SIZE];
 
 extern void rotation_factor_init(void);
-extern void reverse(void);
-extern void fft(void);
-extern void pr_data_fft(void);
+extern void reverse(complex_num *data);
+extern void fft(complex_num *data);
 
 /** @} end of name */
 

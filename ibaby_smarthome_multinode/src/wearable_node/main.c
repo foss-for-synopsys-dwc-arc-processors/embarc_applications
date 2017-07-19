@@ -88,7 +88,7 @@
 #include "function.h"
 
 
-#define DELAY_TIME_SLICE (10)/**< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
+#define DELAY_TIME_SLICE (16)/**< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
 
 #define THOLD_CNT_AW (150)   /**< threshold of counter(5s) for executing awake event detecting algorithm */
 #define THOLD_CNT_SL (1760)  /**< threshold of counter(1min：1760) for executing sleep monitoring algorithm */

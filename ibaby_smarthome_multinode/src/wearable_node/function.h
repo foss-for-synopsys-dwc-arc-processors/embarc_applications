@@ -133,21 +133,6 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
  */
 #define WARN_ACCL_Z (-8) /*!< lower value of warning acceleration */
 
-/*!< parameters of fast fourier transform function */
-#define FFT_DELTA (1 / (FFT_LEN * DTT))
-#define DTT       (0.02)                 /*!< error coefficient */
-#define FFT_M 	  (9)                    /*!< series of fft */
-#define FFT_LEN   (1 << FFT_M)           /*!< size of input sequence for fft */
-#define S16MAX	  (32767)                /*!< upper value of 16bits */
-#define S16MIN	  (-32767)               /*!< lower value of 16bits */
-// #define PI        (3.1415926535897932385)/*!< value of pi */
-
-/*!< parameters of heartrate sensor processing function */
-#define MIN_HRATE_VAL     (10000)  /*!< upper limit of heartrate */
-#define MAX_HRATE_VAL     (120000) /*!< lower limit of heartrate */
-#define THOLD_HRATE_DIFF  (1000)   /*!< threshold of heartrate value variation range */
-#define DEFAULT_HRATE_VAL (750)    /*!< default value of heartrate */
-
 /*!< parameters of low pass filter for latest acceleration value */
 #define PAR_ACC_BASE   (30) /*!< base value of low pass filter coefficient */
 #define PAR_ACC_STEP   (5)  /*!< step of coefficient enlarge */
@@ -188,24 +173,11 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define K3 (0.24)
 #define K4 (0.06)
 
-
-/*!< struct of complex number for fft */
-// typedef struct _complex_num
-// {
-	// int real; /*!< real part */
-	// int img;  /*!< imginary part */
-// } complex_num;
-
-
-/*!< variable of heartrate data processing */
-//complex_num seq_in[FFT_LEN];   /*!< input sequence for fft */
-//complex_num kernel_fft[FFT_LEN / 2]; /*!< transform kernel for fft */
-
-//static int  cnt_hrate;           /*!< number of heartrate data counter */
-// static bool flag_hrate;          /*!< flag of starting to report heartrate */
-// static int  hrate_group[FFT_LEN];/*!< temporary value of heartrate */
-// static int  hrate_temp;          /*!< temporary value of heartrate */
-// static int  sum_hrate;           /*!< summation of heartrate value */
+/*!< variable of data processing for raw heartrate data */
+static int data_num;
+static int sum_hrate;
+static int hrate_group[HRATE_DATA_SIZE];
+static complex_num hrate_data[HRATE_DATA_SIZE];
 
 /*!< variable of low pass filter for raw acceleration data */
 static char cnt_x, cnt_y, cnt_z;                /*!< low pass filter counter */
@@ -229,15 +201,6 @@ static int  state_aw[LEN_STA_QUEUE]; /*!< state for LEN_STA_QUEUE * 5s */
 static int   inten_sl[5]; /*!< motion intensity for 5 * 1min */
 static float score_sl;    /*!< score of motion */
 
-
-/** function for find the max value */
-// static float find_max(complex_num *D);
-
-/** function for transform kernel initialize */
-// static void  kernel_fft_init(complex_num *W);
-
-/** function for fast fourier transform */
-// static void  fft(complex_num *D, complex_num *W);
 
 /* function for deal with acclerate by filter */
 static int filter_acc(int val_new, int val_old, bool *flag_old, char *cnt, unsigned char *par);
