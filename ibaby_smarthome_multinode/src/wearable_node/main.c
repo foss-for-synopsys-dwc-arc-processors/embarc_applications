@@ -134,6 +134,8 @@ int main(void)
 		EMBARC_PRINTF("Error: acceleration sensor init failed\r\n");
 		return E_SYS;
 	}
+
+	rotation_factor_init();
 	
 	#if LWM2M_CLIENT
 	/* try to start lwm2m client */

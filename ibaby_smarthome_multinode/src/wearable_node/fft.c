@@ -99,6 +99,11 @@ extern void fft(complex_num *data)
 	unsigned int i, j, k, l;
 	complex_num top, bottom, common;
 
+	// for (i = 0; i < HRATE_DATA_SIZE; ++i)
+	// {
+	// 	printf("%lf\t%lf\n", rota_fac[i].real, rota_fac[i].img);
+	// }
+
 	for (i = 0; i < STAGE_SIZE; i++) /* loop for stage */
 	{
 		/*
@@ -125,14 +130,36 @@ extern void fft(complex_num *data)
 	}
 }
 
-// void main()
-// {
-// 	/* initialize the rotation factor : rota_fac[DATA_SIZE] */
-// 	rotation_factor_init();
+/*
+ * find the maximum mold height value in the data group after fft
+ */
+extern uint32_t find_max(complex_num *data)
+{
+	int i;
+	int mag_dc, mag_hrate, mag_max = 0;
+	int size = HRATE_DATA_SIZE >> 1;
+	uint32_t res_temp;
 
-// 	/* arrange the index number */
-// 	reverse();
+	mag_dc = (int)(sqrt(data[0].real * data[0].real + 
+		data[0].img * data[0].img) / HRATE_DATA_SIZE);
 
-// 	/* fast fourier transformation */
-// 	fft();
-// }
+	// printf("%d\n", mag_dc);
+
+	for (i = 6; i < 16; ++i)
+	{
+		mag_hrate = (int)sqrt(data[i].real * data[i].real + 
+			data[i].img * data[i].img);
+
+		// printf("%d\n", mag_hrate);
+
+		if (mag_max < mag_hrate)
+		{
+			mag_max = mag_hrate;
+		}
+	}
+	// printf("0\n");
+
+	res_temp = (uint32_t)(mag_dc + mag_max * 2 / HRATE_DATA_SIZE);
+
+  return res_temp;
+}

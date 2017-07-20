@@ -133,6 +133,11 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
  */
 #define WARN_ACCL_Z (-8) /*!< lower value of warning acceleration */
 
+/*!< parameters of limiting filter */
+#define MAX_LIMIT_HRATE  (100000) /*!< upper limit of heartrate */
+#define MIN_LIMIT_HRATE  (10000)  /*!< lower limit of heartrate */
+#define THOLD_HRATE_DIFF (1000)   /*!< threshold of heartrate value variation range */
+
 /*!< parameters of low pass filter for latest acceleration value */
 #define PAR_ACC_BASE   (30) /*!< base value of low pass filter coefficient */
 #define PAR_ACC_STEP   (5)  /*!< step of coefficient enlarge */
@@ -173,11 +178,6 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define K3 (0.24)
 #define K4 (0.06)
 
-/*!< variable of data processing for raw heartrate data */
-static int data_num;
-static int sum_hrate;
-static int hrate_group[HRATE_DATA_SIZE];
-static complex_num hrate_data[HRATE_DATA_SIZE];
 
 /*!< variable of low pass filter for raw acceleration data */
 static char cnt_x, cnt_y, cnt_z;                /*!< low pass filter counter */

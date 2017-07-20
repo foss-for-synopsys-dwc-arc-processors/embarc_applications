@@ -3,6 +3,7 @@
 
 #define HRATE_DATA_SIZE_POWER (7)
 #define HRATE_DATA_SIZE       (1 << HRATE_DATA_SIZE_POWER) /* amount of input data */
+#define FFT_DELTA             (1 / (HRATE_DATA_SIZE * 0.02))
 
 /* complex number */
 typedef struct
@@ -17,6 +18,7 @@ complex_num rota_fac[HRATE_DATA_SIZE];
 extern void rotation_factor_init(void);
 extern void reverse(complex_num *data);
 extern void fft(complex_num *data);
+extern uint32_t find_max(complex_num *data);
 
 /** @} end of name */
 

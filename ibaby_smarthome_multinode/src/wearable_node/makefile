@@ -6,7 +6,7 @@ OS_SEL ?= freertos
 
 BOARD ?= emsk
 BD_VER ?= 22
-CUR_CORE ?= arcem11d
+CUR_CORE ?= arcem7d
 TOOLCHAIN ?= gnu
 
 ##

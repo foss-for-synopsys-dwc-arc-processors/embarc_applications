@@ -206,50 +206,78 @@ extern void process_hrate(uint32_t* hrate)
 	int hrate_temp = 0, aver_temp = 0;
 	int mag_dc = 0, mag_max = 0, mag_hrate = 0;
 	int t = HRATE_DATA_SIZE / 2;
+	int32_t data_rdy = E_SYS;
+	static int data_num, hrate_old, hrate_sum;
+	static int hrate_group[HRATE_DATA_SIZE];
+	static complex_num hrate_data[HRATE_DATA_SIZE];
+	static int hrate_val;
 
-	/* read raw heartrate data */
-	hrate_sensor_read(&hrate_temp);
-	if (hrate_temp != 0)
+	int hrate_aver = 0;
+
+	if (data_num < HRATE_DATA_SIZE)
 	{
-		if (data_num < HRATE_DATA_SIZE)
+		/* read raw heartrate data */
+		data_rdy = hrate_sensor_read(&hrate_temp);
+		/* heartrate data is ready */
+		if (data_rdy == E_OK && hrate_temp != 0)
 		{
-			hrate_group[data_num] = hrate_temp;
-			data_num++;
-
-			sum_hrate += hrate_temp;
-			printf("%d\n", hrate_temp);
-		} else {
-			printf("0\n");
-
-			aver_temp = sum_hrate / HRATE_DATA_SIZE;
-			for (i = 0; i < HRATE_DATA_SIZE; i++) {
-				hrate_group[i] = (int)band_pass_filter(hrate_group[i] - aver_temp);
-				hrate_data[i].real = (double)(hrate_group[i] * 30);
-				printf("%lf\n", hrate_data[i].real);
-			}
-
-			reverse(hrate_data);
-
-			fft(hrate_data);
-
-			mag_dc = (int)(sqrt(hrate_data[0].real * hrate_data[0].real + 
-					hrate_data[0].img * hrate_data[0].img) / HRATE_DATA_SIZE);
-
-			for (i = 1; i < t; ++i)
+			/* limiting filter */
+			if (hrate_temp > MIN_LIMIT_HRATE && hrate_temp < MAX_LIMIT_HRATE)
 			{
-				mag_hrate = (int)sqrt(hrate_data[i].real * hrate_data[i].real + 
-					hrate_data[i].img * hrate_data[i].img);
-
-				if (mag_max < mag_hrate)
-				{
-					mag_max = mag_hrate;
-				}
+				hrate_old = hrate_temp;
 			}
-			*hrate = (uint32_t)(mag_dc + mag_max * 2 / HRATE_DATA_SIZE);
-			printf("%d\n", *hrate);
+			/* storage new vlaue in heartrate group */
+			// hrate_group[data_num++] = hrate_old;
+			hrate_data[data_num++].real = (double)hrate_old;
+			/* add new vlaue to summation */
+			hrate_sum += hrate_old;
 
-			data_num = 0;
+			// printf("%d\n", hrate_old);
 		}
+	} else {
+		hrate_old  = 0;
+		hrate_temp = 0;
+		/* average value of heartrate */
+		hrate_aver = hrate_sum >> HRATE_DATA_SIZE_POWER;
+
+		// for(i = 0; i < HRATE_DATA_SIZE; i++)
+		// {
+		// 	/* band-pass filter */
+		// 	hrate_group[i] = (int)band_pass_filter(hrate_group[i] - hrate_aver);
+		// 	if(fabs(hrate_group[i]) < THOLD_HRATE_DIFF)
+		// 	{
+		// 		// hrate_old = hrate_group[i] * 30;
+		// 		hrate_old = hrate_group[i];
+		// 	}
+		// 	hrate_data[i].real = (double)hrate_old;
+		// 	hrate_old = 0;
+
+		// 	printf("%lf\n", hrate_data[i].real);
+		// }
+		
+		for (i = 0; i < HRATE_DATA_SIZE; ++i)
+		{
+			printf("%lf\n", hrate_data[i].real);
+		}
+
+		/* reverse each bit of index number */
+		reverse(hrate_data);
+
+		/* fast fourier transformation */
+		fft(hrate_data);
+
+		// for (i = 0; i < HRATE_DATA_SIZE; ++i)
+		// {
+		// 	printf("%lf\t%lf\n", hrate_data[i].real, hrate_data[i].img);
+		// }
+
+		hrate_val = hrate_val + ((find_max(hrate_data) * 60 * FFT_DELTA) * 10 - hrate_val) / 6;
+		*hrate = (uint32_t)(hrate_val / 10);
+
+		// printf("%d\n", *hrate);
+
+		data_num  = 0;
+		hrate_sum = 0;
 	}
 }
 
