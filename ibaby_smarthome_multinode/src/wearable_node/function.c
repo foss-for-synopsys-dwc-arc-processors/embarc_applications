@@ -12,8 +12,7 @@
  * other materials provided with the distribution.
 
  * 3) Neither the name of the Synopsys, Inc., nor the names of its contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
+ * be used
 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -203,16 +202,13 @@ extern void print_msg_sleep(uint state)
 extern void process_hrate(uint32_t* hrate)
 {
 	int i;
-	int hrate_temp = 0, aver_temp = 0;
-	int mag_dc = 0, mag_max = 0, mag_hrate = 0;
-	int t = HRATE_DATA_SIZE / 2;
+	int hrate_temp = 0, hrate_aver = 0;
 	int32_t data_rdy = E_SYS;
-	static int data_num, hrate_old, hrate_sum;
-	static int hrate_group[HRATE_DATA_SIZE];
-	static complex_num hrate_data[HRATE_DATA_SIZE];
-	static int hrate_val;
 
-	int hrate_aver = 0;
+	static int data_num, hrate_new, hrate_sum;
+	static complex_int hrate_data[HRATE_DATA_SIZE];
+	static int hrate_val;
+	static bool flag_start_hrate = false;
 
 	if (data_num < HRATE_DATA_SIZE)
 	{
@@ -224,41 +220,37 @@ extern void process_hrate(uint32_t* hrate)
 			/* limiting filter */
 			if (hrate_temp > MIN_LIMIT_HRATE && hrate_temp < MAX_LIMIT_HRATE)
 			{
-				hrate_old = hrate_temp;
+				hrate_new = hrate_temp; /* reflesh the new data */
 			}
-			/* storage new vlaue in heartrate group */
-			// hrate_group[data_num++] = hrate_old;
-			hrate_data[data_num++].real = (double)hrate_old;
-			/* add new vlaue to summation */
-			hrate_sum += hrate_old;
+			hrate_data[data_num++].real = hrate_new; /* storage the new data */
+			hrate_sum += hrate_new; /* add new vlaue to summation */
 
-			// printf("%d\n", hrate_old);
+			// printf("%d\n", hrate_new);
 		}
 	} else {
-		hrate_old  = 0;
 		hrate_temp = 0;
-		/* average value of heartrate */
-		hrate_aver = hrate_sum >> HRATE_DATA_SIZE_POWER;
-
-		// for(i = 0; i < HRATE_DATA_SIZE; i++)
-		// {
-		// 	/* band-pass filter */
-		// 	hrate_group[i] = (int)band_pass_filter(hrate_group[i] - hrate_aver);
-		// 	if(fabs(hrate_group[i]) < THOLD_HRATE_DIFF)
-		// 	{
-		// 		// hrate_old = hrate_group[i] * 30;
-		// 		hrate_old = hrate_group[i];
-		// 	}
-		// 	hrate_data[i].real = (double)hrate_old;
-		// 	hrate_old = 0;
-
-		// 	printf("%lf\n", hrate_data[i].real);
-		// }
 		
-		for (i = 0; i < HRATE_DATA_SIZE; ++i)
+		hrate_aver = hrate_sum >> HRATE_DATA_SIZE_POWER; /* average value of heartrate */
+
+		for(i = 0; i < HRATE_DATA_SIZE; i++)
 		{
-			printf("%lf\n", hrate_data[i].real);
+			hrate_temp = hrate_data[i].real; /* calculate using temp, reducing data access to DRAM */
+
+			/* band-pass filter */
+			hrate_temp = (int)band_pass_filter(hrate_temp - hrate_aver);
+			if(fabs(hrate_temp) < THOLD_HRATE_DIFF)
+			{
+				hrate_temp *= 30;
+			}
+			hrate_data[i].real = hrate_temp;
+
+			// printf("%d\n", hrate_temp);
 		}
+		
+		// for (i = 0; i < HRATE_DATA_SIZE; ++i)
+		// {
+		// 	printf("%d\n", hrate_data[i].real);
+		// }
 
 		/* reverse each bit of index number */
 		reverse(hrate_data);
@@ -268,13 +260,19 @@ extern void process_hrate(uint32_t* hrate)
 
 		// for (i = 0; i < HRATE_DATA_SIZE; ++i)
 		// {
-		// 	printf("%lf\t%lf\n", hrate_data[i].real, hrate_data[i].img);
+		// 	printf("%d\t%d\n", hrate_data[i].real, hrate_data[i].img);
 		// }
 
-		hrate_val = hrate_val + ((find_max(hrate_data) * 60 * FFT_DELTA) * 10 - hrate_val) / 6;
+		if (flag_start_hrate == false)
+		{
+			hrate_val = 700;
+			flag_start_hrate = true;
+		}
+
+		hrate_val = hrate_val + ((find_freq_max(hrate_data) * 60 * FFT_DELTA) * 10 - hrate_val) / 6;
 		*hrate = (uint32_t)(hrate_val / 10);
 
-		// printf("%d\n", *hrate);
+		printf("%d\n", *hrate);
 
 		data_num  = 0;
 		hrate_sum = 0;

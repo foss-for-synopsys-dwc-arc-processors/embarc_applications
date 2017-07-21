@@ -5,41 +5,71 @@
 
 #include "fft.h"
 
-#define DATA_SIZE        (HRATE_DATA_SIZE)
-#define STAGE_SIZE       (log(DATA_SIZE)/log(2)) /* stage size of fft */
-#define BIT_SIZE         (STAGE_SIZE) /* bit size of index number */
-#define PI               (3.1415926)
+#define DATA_SAMPLING_FREQ (HRATE_SAMPLING_FREQ) /* data sampling frequency */
+#define DATA_SIZE          (HRATE_DATA_SIZE)     /* data size of data group */
 
-static complex_num complex_add(complex_num a, complex_num b);
-static complex_num complex_sub(complex_num a, complex_num b);
-static complex_num complex_mul(complex_num a, complex_num b);
+#define STAGE_SIZE         (log(DATA_SIZE)/log(2)) /* stage size of fft */
+#define BIT_SIZE           (STAGE_SIZE) /* bit size of index number */
+#define PI                 (3.1415926)
+
+#define S16MAX_POWER       (15)         /* power of 16 bits */
+#define S16MAX             (32767)      /* maximum value of 16 bits */
+
+#define FREQ_INDEX_NUM     (4)          /* the number of frequency arresponding to the bigger amplitude value */
+#define MIN_FREQ_POS       (int)(HRATE_DATA_SIZE * 0.05) /* starting frequency for finding */
+#define MAX_FREQ_POS       (int)(HRATE_DATA_SIZE * 0.2)  /* ending frequency for finding */
+#define FREQ_SIZE          (MAX_FREQ_POS - MIN_FREQ_POS) /* frequency bindwidth for finding */
+
+static complex_int complex_add(complex_int a, complex_int b);
+static complex_int complex_sub(complex_int a, complex_int b);
+static complex_int complex_mul(complex_int a, complex_int b);
+static void hanning_window(complex_int *data);
 
 
 /* add function of complex number */
-static complex_num complex_add(complex_num a, complex_num b)
+static complex_int complex_add(complex_int a, complex_int b)
 {
-	complex_num c;
+	complex_int c;
 	c.real = a.real + b.real;
 	c.img  = a.img  + b.img;
 	return c;
 }
 
 /* subtraction function of complex number */
-static complex_num complex_sub(complex_num a, complex_num b)
+static complex_int complex_sub(complex_int a, complex_int b)
 {
-	complex_num c;
+	complex_int c;
 	c.real = a.real - b.real;
 	c.img  = a.img  - b.img;
 	return c;
 }
 
 /* multiplication function of complex number */
-static complex_num complex_mul(complex_num a, complex_num b)
+static complex_int complex_mul(complex_int a, complex_int b)
 {
-	complex_num c;
-	c.real = a.real * b.real - a.img * b.img;
-	c.img  = a.real * b.img  + a.img * b.real;
+	complex_int c;
+	/* 
+	 * shift to right S16MAX_POWER bits
+	 * because rotation factor has been shift to left S16MAX_POWER bits in initializing function
+	 */
+	c.real = (a.real * b.real - a.img * b.img)  >> S16MAX_POWER;
+	c.img  = (a.real * b.img  + a.img * b.real) >> S16MAX_POWER;
 	return c;
+}
+
+/*
+ * add hanning window function to data group
+ * processing the data within window domain only once time
+ */
+static void hanning_window(complex_int *data)
+{
+    int i;
+    float win_domain[DATA_SIZE];
+    for (i = 0; i < DATA_SIZE; i++)
+    {
+        win_domain[i] = 0.5 * (1.0 - cos(2.0 * PI * i / (DATA_SIZE - 1)));
+        data[i].real  = (int)(win_domain[i] * data[i].real);
+    }
 }
 
 /* the rotation factor initialize function */
@@ -52,17 +82,17 @@ extern void rotation_factor_init(void)
 	 *    rota_fact(k) = W(k, 2^m) = W(N*k/(2L), N)
 	 */
 	for (i = 0; i < DATA_SIZE; i++) {
-		rota_fac[i].real = cos(2 * PI * i / DATA_SIZE);
-		rota_fac[i].img = -1 * sin(2 * PI * i / DATA_SIZE);
+		rota_fac[i].real = round(cos(2 * PI * i / DATA_SIZE) * S16MAX);
+		rota_fac[i].img  = round(-1 * sin(2 * PI * i / DATA_SIZE) * S16MAX);
 	}
 }
 
 /* reverse each bit of index number, arrange index number of input data */
-extern void reverse(complex_num *data)
+extern void reverse(complex_int *data)
 {
 	unsigned int i, j, k;
 	unsigned int t;
-	complex_num data_temp;
+	complex_int data_temp;
 
 	for (i = 0; i < DATA_SIZE; i++)
 	{
@@ -94,15 +124,18 @@ extern void reverse(complex_num *data)
  * for N points fft computation, there has log2(N) stages
  *    in stage m, there has N/2/L groups, L = 2^(m-1), and L butterfly forms in each group
  */
-extern void fft(complex_num *data)
+extern void fft(complex_int *data)
 {
 	unsigned int i, j, k, l;
-	complex_num top, bottom, common;
+	complex_int top, bottom, common;
 
-	// for (i = 0; i < HRATE_DATA_SIZE; ++i)
+	// for (i = 0; i < DATA_SIZE; ++i)
 	// {
 	// 	printf("%lf\t%lf\n", rota_fac[i].real, rota_fac[i].img);
 	// }
+
+	/* add hanning window function to data group before fft */
+	hanning_window(data);
 
 	for (i = 0; i < STAGE_SIZE; i++) /* loop for stage */
 	{
@@ -131,35 +164,61 @@ extern void fft(complex_num *data)
 }
 
 /*
- * find the maximum mold height value in the data group after fft
+ * find the frequency corresponding to maximum amplitude in the data group after fft
+ * amplitude = sqrt(data[i].real * data[i].real + 
+ *			data[i].img * data[i].img)
  */
-extern uint32_t find_max(complex_num *data)
+extern float find_freq_max(complex_int *data)
 {
-	int i;
-	int mag_dc, mag_hrate, mag_max = 0;
-	int size = HRATE_DATA_SIZE >> 1;
-	uint32_t res_temp;
+	int i, j;
+	int ampl2_max, ampl2_clac_sum = 0;
+	int freq_calc = 0;
+	float freq_max;
 
-	mag_dc = (int)(sqrt(data[0].real * data[0].real + 
-		data[0].img * data[0].img) / HRATE_DATA_SIZE);
+	int ampl2_val[FREQ_SIZE];
+	int ampl2_index[FREQ_SIZE];
 
-	// printf("%d\n", mag_dc);
-
-	for (i = 6; i < 16; ++i)
+	for (i = MIN_FREQ_POS, j = 0; i < MAX_FREQ_POS; ++i, ++j)
 	{
-		mag_hrate = (int)sqrt(data[i].real * data[i].real + 
-			data[i].img * data[i].img);
+		ampl2_val[j] = data[i].real * data[i].real + 
+			data[i].img * data[i].img;
+		ampl2_index[j] = i;
+	}
 
-		// printf("%d\n", mag_hrate);
+	for (i = 0; i < FREQ_INDEX_NUM; ++i)
+	{
+		ampl2_max =0;
 
-		if (mag_max < mag_hrate)
+		for (j = 0; j < FREQ_SIZE; ++j)
 		{
-			mag_max = mag_hrate;
+			if (ampl2_max < ampl2_val[j])
+			{
+				ampl2_max  = ampl2_val[j];
+				ampl2_clac_sum += ampl2_max;
+				freq_calc  += ampl2_index[j] * ampl2_max;
+
+				ampl2_val[j] = 0;
+			}
 		}
 	}
-	// printf("0\n");
 
-	res_temp = (uint32_t)(mag_dc + mag_max * 2 / HRATE_DATA_SIZE);
+	freq_max = (((float)freq_calc / ampl2_clac_sum / FREQ_INDEX_NUM) * DATA_SAMPLING_FREQ) / DATA_SIZE;
 
-  return res_temp;
+	// for (i = MIN_FREQ_POS; i < MAX_FREQ_POS; ++i)
+	// {
+	// 	ampl2_val[0] = data[i].real * data[i].real + 
+	// 	data[i].img * data[i].img;
+
+	// 	if (ampl2_max < ampl2_val[0])
+	// 	{
+	// 		ampl2_max  = ampl2_val[0];
+	// 		freq_calc  = i;
+
+	// 		data[i].real = 0;
+	// 		data[i].img = 0;
+	// 	}
+	// }
+	// freq_max = ((float)freq_calc * DATA_SAMPLING_FREQ) / DATA_SIZE;
+
+  return freq_max;
 }
