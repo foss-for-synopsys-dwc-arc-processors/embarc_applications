@@ -171,20 +171,22 @@ extern void fft(complex_int *data)
 extern float find_freq_max(complex_int *data)
 {
 	int i, j;
-	int ampl2_max, ampl2_clac_sum = 0;
+	int ampl2_max, ampl2_sum = 0;
 	int freq_calc = 0;
 	float freq_max; /* the frequency corresponding to maximum amplitude */
 
-	int ampl2_val[FREQ_SIZE];
-	int ampl2_index[FREQ_SIZE];
+	int ampl2_val[FREQ_SIZE];  /* the bigger amplitude of complex number */
+	int ampl2_index[FREQ_SIZE];/* the index number(frequency number also) of the bigger amplitude */
 
+	/* ignoring low and high frequency */
 	for (i = MIN_FREQ_POS, j = 0; i < MAX_FREQ_POS; ++i, ++j)
 	{
-		ampl2_val[j] = data[i].real * data[i].real + 
-			data[i].img * data[i].img;
-		ampl2_index[j] = i;
+		ampl2_val[j] = sqrt(data[i].real * data[i].real + 
+			data[i].img * data[i].img); /* get amplitude */
+		ampl2_index[j] = i;                 /* get frequency number */
 	}
 
+	/* find FREQ_INDEX_NUM frequency of the bigger amplitude */
 	for (i = 0; i < FREQ_INDEX_NUM; ++i)
 	{
 		ampl2_max =0;
@@ -194,15 +196,20 @@ extern float find_freq_max(complex_int *data)
 			if (ampl2_max < ampl2_val[j])
 			{
 				ampl2_max  = ampl2_val[j];
-				ampl2_clac_sum += ampl2_max;
-				freq_calc  += ampl2_index[j] * ampl2_max;
+				ampl2_sum  += ampl2_max;
+				freq_calc  += ampl2_index[j] * ampl2_max; /* amplitude as the weight */
 
 				ampl2_val[j] = 0;
 			}
 		}
 	}
 
-	freq_max = (((float)freq_calc / ampl2_clac_sum / FREQ_INDEX_NUM) * DATA_SAMPLING_FREQ) / DATA_SIZE;
+	/*
+	 * calculating the average frequency of the bigger amplitude
+	 * transform it into real frequency actually
+	 * frequency = index number * DATA_SAMPLING_FREQ / DATA_SIZE
+	 */
+	freq_max = (((float)freq_calc / ampl2_sum) * DATA_SAMPLING_FREQ) / DATA_SIZE;
 
 	// for (i = MIN_FREQ_POS; i < MAX_FREQ_POS; ++i)
 	// {

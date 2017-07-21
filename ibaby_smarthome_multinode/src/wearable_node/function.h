@@ -134,6 +134,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
 #define WARN_ACCL_Z (-8) /*!< lower value of warning acceleration */
 
 /*!< parameters of limiting filter */
+#define HRATE_DEFAULT_VALUE (700) /*!< default value of heartrate */
 #define MAX_LIMIT_HRATE  (100000) /*!< upper limit of heartrate */
 #define MIN_LIMIT_HRATE  (10000)  /*!< lower limit of heartrate */
 #define THOLD_HRATE_DIFF (1000)   /*!< threshold of heartrate value variation range */

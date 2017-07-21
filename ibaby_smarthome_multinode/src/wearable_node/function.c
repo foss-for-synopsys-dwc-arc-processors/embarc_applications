@@ -217,6 +217,8 @@ extern void process_hrate(uint32_t* hrate)
 		/* heartrate data is ready */
 		if (data_rdy == E_OK && hrate_temp != 0)
 		{
+			// printf("%d\n", hrate_temp);
+
 			/* limiting filter */
 			if (hrate_temp > MIN_LIMIT_HRATE && hrate_temp < MAX_LIMIT_HRATE)
 			{
@@ -265,14 +267,14 @@ extern void process_hrate(uint32_t* hrate)
 
 		if (flag_start_hrate == false)
 		{
-			hrate_val = 700;
+			hrate_val = HRATE_DEFAULT_VALUE;
 			flag_start_hrate = true;
 		}
 
 		hrate_val = hrate_val + ((find_freq_max(hrate_data) * 60 * FFT_DELTA) * 10 - hrate_val) / 6;
 		*hrate = (uint32_t)(hrate_val / 10);
 
-		printf("%d\n", *hrate);
+		// printf("%d\n", *hrate);
 
 		data_num  = 0;
 		hrate_sum = 0;
