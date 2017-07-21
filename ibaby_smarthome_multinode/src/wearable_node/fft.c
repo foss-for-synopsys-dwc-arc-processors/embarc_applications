@@ -173,7 +173,7 @@ extern float find_freq_max(complex_int *data)
 	int i, j;
 	int ampl2_max, ampl2_clac_sum = 0;
 	int freq_calc = 0;
-	float freq_max;
+	float freq_max; /* the frequency corresponding to maximum amplitude */
 
 	int ampl2_val[FREQ_SIZE];
 	int ampl2_index[FREQ_SIZE];
