@@ -203,9 +203,9 @@ extern void print_msg_sleep(uint state)
 /* function for deal with heartrate by filter */
 extern void process_hrate(uint32_t *hrate)
 {
-	static int rates[HRATE_SIZE]; //Array of heart rates
+	static int rates[HRATE_SIZE]; /* array of heart rates */
 	static int rate_spot = 0;
-	static int last_beat = 0; //Time at which the last beat occurred
+	static int last_beat = 0;     /* Time at which the last beat occurred */
 
 	static float beats_per_min;
 	static int beat_aver;
@@ -218,7 +218,9 @@ extern void process_hrate(uint32_t *hrate)
 	if (data_rdy == E_OK && check_beat(ir_value) == 1)
 	{
 		// printf("%d\n", ir_value);
-		// int delta = time_cur - last_beat;
+
+		// time_cur = this is a function that get system current time
+		// delta = time_cur - last_beat;
 		last_beat = time_cur;
 
 		beats_per_min = 60 / (delta / 1000.0);
@@ -227,23 +229,16 @@ extern void process_hrate(uint32_t *hrate)
 
 		if (beats_per_min < 255 && beats_per_min > 20)
 		{
-			rates[rate_spot++] = (int)beats_per_min; //Store this reading in the array
-			rate_spot %= HRATE_SIZE; //Wrap variable
+			rates[rate_spot++] = (int)beats_per_min; /* store this reading in the array */
+			rate_spot %= HRATE_SIZE;                 /* wrap variable */
 
-			//Take average of readings
+			//take average of readings
 			beat_aver = 0;
 			for (int x = 0 ; x < HRATE_SIZE ; x++)
 				beat_aver += rates[x];
 			beat_aver /= HRATE_SIZE;
 		}
-
-		// if (ir_value < 50000)
-		// 	printf(" No finger?");
 	}
-	// if (rate_spot % HRATE_SIZE == 0)
-	// {
-	// 	printf("%d\n", beat_aver);
-	// }
 
 	*hrate = (uint32_t)beat_aver;
 }

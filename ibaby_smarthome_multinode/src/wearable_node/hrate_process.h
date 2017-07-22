@@ -3,18 +3,18 @@
 
 /*
  * Heart Rate Monitor functions takes a sample value and the sample number
- * Returns true if a beat is detected
- * A running average of four samples is recommended for display on the screen
+ * returns true if a beat is detected
+ * a running average of four samples is recommended for display on the screen
  */
 extern int check_beat(int sample);
 
-/* Average DC Estimator */
+/* average DC estimator */
 static int aver_dc_estimator(int *p, int x);
 
-/* Low Pass FIR Filter */
+/* low pass FIR filter */
 static int low_pass_fir_filter(int din);
 
-/* Integer multiplier */
+/* integer multiplier */
 static int mul16(int x, int y);
 
 #endif
