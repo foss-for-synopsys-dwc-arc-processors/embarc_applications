@@ -74,7 +74,7 @@
 #include "heartrate.h"
 #include "body_temperature.h"
 #include "value.h"
-#include "hrate.h"
+#include "hrate_process.h"
 #include "fft.h"
 
 
@@ -134,7 +134,7 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
  */
 #define WARN_ACCL_Z (-8) /*!< lower value of warning acceleration */
 
-#define RATE_SIZE (4) //Increase this for more averaging. 4 is good.
+#define HRATE_SIZE (4) //Increase this for more averaging. 4 is good.
 
 /*!< parameters of limiting filter */
 #define HRATE_DEFAULT_VALUE (700) /*!< default value of heartrate */

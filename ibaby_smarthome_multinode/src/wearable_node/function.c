@@ -201,49 +201,51 @@ extern void print_msg_sleep(uint state)
 #endif /* PRINT_DEBUG_SLEEP */
 
 /* function for deal with heartrate by filter */
-extern void process_hrate(uint32_t* hrate)
+extern void process_hrate(uint32_t *hrate)
 {
-	static int rates[RATE_SIZE]; //Array of heart rates
-	static int rateSpot = 0;
-	static int lastBeat = 0; //Time at which the last beat occurred
+	static int rates[HRATE_SIZE]; //Array of heart rates
+	static int rate_spot = 0;
+	static int last_beat = 0; //Time at which the last beat occurred
 
-	static float beatsPerMinute;
-	static int beatAvg;
+	static float beats_per_min;
+	static int beat_aver;
 
-	int time_cur = 10, irValue = 0, delta = 0;
+	int time_cur = 10, ir_value = 0, delta = 0;
 	uint32_t data_rdy;
 
-	data_rdy = hrate_sensor_read(&irValue);
+	data_rdy = hrate_sensor_read(&ir_value);
 
-	if (data_rdy == E_OK && checkForBeat(irValue) == 1)
+	if (data_rdy == E_OK && check_beat(ir_value) == 1)
 	{
-		// printf("%d\n", irValue);
-		// int delta = time_cur - lastBeat;
-		lastBeat = time_cur;
+		// printf("%d\n", ir_value);
+		// int delta = time_cur - last_beat;
+		last_beat = time_cur;
 
-		beatsPerMinute = 60 / (delta / 1000.0);
+		beats_per_min = 60 / (delta / 1000.0);
 
-		// printf("%f\n", beatsPerMinute);
+		// printf("%f\n", beats_per_min);
 
-		if (beatsPerMinute < 255 && beatsPerMinute > 20)
+		if (beats_per_min < 255 && beats_per_min > 20)
 		{
-			rates[rateSpot++] = (int)beatsPerMinute; //Store this reading in the array
-			rateSpot %= RATE_SIZE; //Wrap variable
+			rates[rate_spot++] = (int)beats_per_min; //Store this reading in the array
+			rate_spot %= HRATE_SIZE; //Wrap variable
 
 			//Take average of readings
-			beatAvg = 0;
-			for (int x = 0 ; x < RATE_SIZE ; x++)
-				beatAvg += rates[x];
-			beatAvg /= RATE_SIZE;
+			beat_aver = 0;
+			for (int x = 0 ; x < HRATE_SIZE ; x++)
+				beat_aver += rates[x];
+			beat_aver /= HRATE_SIZE;
 		}
 
-		// if (irValue < 50000)
+		// if (ir_value < 50000)
 		// 	printf(" No finger?");
 	}
-	// if (rateSpot % RATE_SIZE == 0)
+	// if (rate_spot % HRATE_SIZE == 0)
 	// {
-	// 	printf("%d\n", beatAvg);
+	// 	printf("%d\n", beat_aver);
 	// }
+
+	*hrate = (uint32_t)beat_aver;
 }
 
 /* function for deal with acclerate by filter */
