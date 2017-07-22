@@ -210,33 +210,44 @@ extern void process_hrate(uint32_t *hrate)
 	static float beats_per_min;
 	static int beat_aver;
 
-	int time_cur = 10, ir_value = 0, delta = 0;
+	static bool flag_timer_stop = true;
+
+	int time_cur = 10, ir_value = 0, delta = 1;
 	uint32_t data_rdy;
 
 	data_rdy = hrate_sensor_read(&ir_value);
 
 	if (data_rdy == E_OK && check_beat(ir_value) == 1)
 	{
+		flag_timer_stop != flag_timer_stop;
 		// printf("%d\n", ir_value);
 
 		// time_cur = this is a function that get system current time
 		// delta = time_cur - last_beat;
 		last_beat = time_cur;
 
-		beats_per_min = 60 / (delta / 1000.0);
-
-		// printf("%f\n", beats_per_min);
-
-		if (beats_per_min < 255 && beats_per_min > 20)
+		if (flag_timer_stop == true)
 		{
-			rates[rate_spot++] = (int)beats_per_min; /* store this reading in the array */
-			rate_spot %= HRATE_SIZE;                 /* wrap variable */
+			delta = 2 * t1_count;
+			t1_count = 1;
+			beats_per_min = 60 / (delta / 10000.0);
 
-			//take average of readings
-			beat_aver = 0;
-			for (int x = 0 ; x < HRATE_SIZE ; x++)
-				beat_aver += rates[x];
-			beat_aver /= HRATE_SIZE;
+			// printf("%f\n", beats_per_min);
+
+			if (beats_per_min < 255 && beats_per_min > 20)
+			{
+				rates[rate_spot++] = (int)beats_per_min; /* store this reading in the array */
+				rate_spot %= HRATE_SIZE;                 /* wrap variable */
+
+				//take average of readings
+				beat_aver = 0;
+				for (int x = 0 ; x < HRATE_SIZE ; x++)
+					beat_aver += rates[x];
+				beat_aver /= HRATE_SIZE;
+			}
+			printf("%d\n", beat_aver);
+		} else {
+			t1_count = 1;
 		}
 	}
 

@@ -135,12 +135,14 @@ int main(void)
 		return E_SYS;
 	}
 
-	rotation_factor_init();
+	// rotation_factor_init();
 	
 	#if LWM2M_CLIENT
 	/* try to start lwm2m client */
 	lwm2m_client_start();
 	#endif
+
+	timer1_start();
 
 /*
 **************************************************************
@@ -167,7 +169,7 @@ int main(void)
 */
 		/* start timer1 for calculating the time of task running */
 		#if USED_TIMER1
-		timer1_start();
+		// timer1_start();
 		#endif
 /*
 *  end of this part
@@ -256,7 +258,7 @@ int main(void)
 */
 		/* stop timer1 and print out the time of task running */		
 		#if USED_TIMER1
-		timer1_stop();
+		// timer1_stop();
 		#endif
 /*
 *  end of this part
