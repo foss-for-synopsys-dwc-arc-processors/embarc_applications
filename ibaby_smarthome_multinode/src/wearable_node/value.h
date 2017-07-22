@@ -56,7 +56,7 @@
 **************************************************************
 *  This part will be deleted in release version
 */
-#define USED_TIMER1         (0) /*!< set 1 to use timer1 for task timing */
+#define USED_TIMER1         (1) /*!< set 1 to use timer1 for task timing */
 #define SEND_DEBUG_SVM1_5S  (0) /*!< set 1 to send svm before svm filter to matlab by serial port every 5s */
 #define SEND_DEBUG_SVM2_5S  (0) /*!< set 1 to send svm after svm filter to matlab by serial port every 5s */
 #define SEND_DEBUG_INTEN_1M (0) /*!< set 1 to send motion intensity to matlab by serial port every 1min */

@@ -83,16 +83,18 @@ extern void timer1_start(void)
 }
 
 /** print message for debug major function */
-extern void timer1_stop(void)
+extern uint32_t timer1_stop(void)
 {
 	uint32_t dec;
 
 	timer_stop(TIMER_1);
 	dec = t1_count - (t1_count/10) * 10;
 
-	EMBARC_PRINTF("************     timing     ************\r\n");
-	EMBARC_PRINTF("* timer1 counter : %d.%d ms\r\n", t1_count/10, dec);
-	EMBARC_PRINTF("****************************************\r\n\r\n");
+	// EMBARC_PRINTF("************     timing     ************\r\n");
+	// EMBARC_PRINTF("* timer1 counter : %d.%d ms\r\n", t1_count/10, dec);
+	// EMBARC_PRINTF("****************************************\r\n\r\n");
+
+	return dec;
 }
 #endif/* USED_TIMER1 */
 /*
@@ -201,84 +203,47 @@ extern void print_msg_sleep(uint state)
 /* function for deal with heartrate by filter */
 extern void process_hrate(uint32_t* hrate)
 {
-	int i;
-	int hrate_temp = 0, hrate_aver = 0;
-	int32_t data_rdy = E_SYS;
+	static int rates[RATE_SIZE]; //Array of heart rates
+	static int rateSpot = 0;
+	static int lastBeat = 0; //Time at which the last beat occurred
 
-	static int data_num, hrate_new, hrate_sum;
-	static complex_int hrate_data[HRATE_DATA_SIZE];
-	static int hrate_val;
-	static bool flag_start_hrate = false;
+	static float beatsPerMinute;
+	static int beatAvg;
 
-	if (data_num < HRATE_DATA_SIZE)
+	int time_cur = 10, irValue = 0, delta = 0;
+	uint32_t data_rdy;
+
+	data_rdy = hrate_sensor_read(&irValue);
+
+	if (data_rdy == E_OK && checkForBeat(irValue) == 1)
 	{
-		/* read raw heartrate data */
-		data_rdy = hrate_sensor_read(&hrate_temp);
-		/* heartrate data is ready */
-		if (data_rdy == E_OK && hrate_temp != 0)
+		// printf("%d\n", irValue);
+		// int delta = time_cur - lastBeat;
+		lastBeat = time_cur;
+
+		beatsPerMinute = 60 / (delta / 1000.0);
+
+		// printf("%f\n", beatsPerMinute);
+
+		if (beatsPerMinute < 255 && beatsPerMinute > 20)
 		{
-			// printf("%d\n", hrate_temp);
+			rates[rateSpot++] = (int)beatsPerMinute; //Store this reading in the array
+			rateSpot %= RATE_SIZE; //Wrap variable
 
-			/* limiting filter */
-			if (hrate_temp > MIN_LIMIT_HRATE && hrate_temp < MAX_LIMIT_HRATE)
-			{
-				hrate_new = hrate_temp; /* reflesh the new data */
-			}
-			hrate_data[data_num++].real = hrate_new; /* storage the new data */
-			hrate_sum += hrate_new; /* add new vlaue to summation */
-
-			// printf("%d\n", hrate_new);
-		}
-	} else {
-		hrate_temp = 0;
-		
-		hrate_aver = hrate_sum >> HRATE_DATA_SIZE_POWER; /* average value of heartrate */
-
-		for(i = 0; i < HRATE_DATA_SIZE; i++)
-		{
-			hrate_temp = hrate_data[i].real; /* calculate using temp, reducing data access to DRAM */
-
-			/* band-pass filter */
-			hrate_temp = (int)band_pass_filter(hrate_temp - hrate_aver);
-			if(fabs(hrate_temp) < THOLD_HRATE_DIFF)
-			{
-				hrate_temp *= 30;
-			}
-			hrate_data[i].real = hrate_temp;
-
-			// printf("%d\n", hrate_temp);
-		}
-		
-		// for (i = 0; i < HRATE_DATA_SIZE; ++i)
-		// {
-		// 	printf("%d\n", hrate_data[i].real);
-		// }
-
-		/* reverse each bit of index number */
-		reverse(hrate_data);
-
-		/* fast fourier transformation */
-		fft(hrate_data);
-
-		// for (i = 0; i < HRATE_DATA_SIZE; ++i)
-		// {
-		// 	printf("%d\t%d\n", hrate_data[i].real, hrate_data[i].img);
-		// }
-
-		if (flag_start_hrate == false)
-		{
-			hrate_val = HRATE_DEFAULT_VALUE;
-			flag_start_hrate = true;
+			//Take average of readings
+			beatAvg = 0;
+			for (int x = 0 ; x < RATE_SIZE ; x++)
+				beatAvg += rates[x];
+			beatAvg /= RATE_SIZE;
 		}
 
-		hrate_val = hrate_val + ((find_freq_max(hrate_data) * 60 * FFT_DELTA) * 10 - hrate_val) / 6;
-		*hrate = (uint32_t)(hrate_val / 10);
-
-		// printf("%d\n", *hrate);
-
-		data_num  = 0;
-		hrate_sum = 0;
+		// if (irValue < 50000)
+		// 	printf(" No finger?");
 	}
+	// if (rateSpot % RATE_SIZE == 0)
+	// {
+	// 	printf("%d\n", beatAvg);
+	// }
 }
 
 /* function for deal with acclerate by filter */

@@ -74,6 +74,7 @@
 #include "heartrate.h"
 #include "body_temperature.h"
 #include "value.h"
+#include "hrate.h"
 #include "fft.h"
 
 
@@ -92,7 +93,7 @@
 static int t1_count; /*!< counter for timer1 */
 
 extern void timer1_start(void);
-extern void timer1_stop(void);
+extern uint32_t timer1_stop(void);
 #endif/* USED_TIMER1 */
 /** @} end of name */
 /*
@@ -132,6 +133,8 @@ static TaskHandle_t task_lwm2m_client_handle = NULL;
  * @{
  */
 #define WARN_ACCL_Z (-8) /*!< lower value of warning acceleration */
+
+#define RATE_SIZE (4) //Increase this for more averaging. 4 is good.
 
 /*!< parameters of limiting filter */
 #define HRATE_DEFAULT_VALUE (700) /*!< default value of heartrate */
