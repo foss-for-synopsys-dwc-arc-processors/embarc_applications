@@ -84,11 +84,20 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
-#include "value.h"
-#include "function.h"
+/* custom HAL */
+#include "common.h"
+#include "lwm2m.h"
+#include "print_msg.h"
+#include "process_acc.h"
+#include "process_hrate.h"
+
+#include "timer1.h"
+#include "acceleration.h"
+#include "heartrate.h"
+#include "body_temperature.h"
 
 
-#define DELAY_TIME_SLICE (10)/**< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
+#define TIME_DELAY_MS (18)   /**< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
 
 #define THOLD_CNT_AW (150)   /**< threshold of counter(5s) for executing awake event detecting algorithm */
 #define THOLD_CNT_SL (1760)  /**< threshold of counter(1min：1760) for executing sleep monitoring algorithm */
@@ -100,7 +109,7 @@
 
 
 /**
- * \brief  main entry, call Freertos API, create and start functional task
+ * \brief  main entry
  */
 int main(void)
 {
@@ -111,31 +120,19 @@ int main(void)
 	bool flag_start_sl;   /* flag of sleep monitoring start */
 	acc_values acc_vals;  /* accleration storage */
 
-	EMBARC_PRINTF("\r\n\
-		*********************************************************\r\n\
-		*                 iBaby Smarthome Nodes                 *\r\n\
-		*                     Wearable Node                     *\r\n\
-		*********************************************************\r\n");
+	vTaskDelay(200);
 
 	/* initialize body temperature sensor */
-	if (btemp_sensor_init(BTEMP_SENSOR_ADDR) != E_OK) {
-		EMBARC_PRINTF("Error: body temperature sensor init failed\r\n");
-		return E_SYS;
-	}
+	btemp_sensor_init(BTEMP_SENSOR_ADDR);
+	vTaskDelay(50);
 
 	/* initialize heartrate sensor */
-	if (hrate_sensor_init(HRATE_SENSOR_ADDR) != E_OK) {
-		EMBARC_PRINTF("Error: heartrate sensor init failed\r\n");
-		return E_SYS;
-	}
+	hrate_sensor_init(HRATE_SENSOR_ADDR);
+	vTaskDelay(50);
 
 	/* initialize acceleration sensor */
-	if (acc_sensor_init(ACC_SENSOR_ADDR) != E_OK) {
-		EMBARC_PRINTF("Error: acceleration sensor init failed\r\n");
-		return E_SYS;
-	}
-
-	// rotation_factor_init();
+	acc_sensor_init(ACC_SENSOR_ADDR);
+	vTaskDelay(50);
 	
 	#if LWM2M_CLIENT
 	/* try to start lwm2m client */
@@ -144,37 +141,7 @@ int main(void)
 
 	timer1_start();
 
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-	vTaskDelay(DELAY_TIME_SLICE * 10); 
-
-	/*  initialize accelerometer before read */
-	acc_sensor_init(ACC_SENSOR_ADDR);
-	vTaskDelay(DELAY_TIME_SLICE * 2); 
-
-	/* initialize heartrate sensor before read */
-	hrate_sensor_init(HRATE_SENSOR_ADDR);
-	vTaskDelay(DELAY_TIME_SLICE * 2);
-/*
-*  end of this part
-**************************************************************
-*/
-
 	for(;;) {
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-		/* start timer1 for calculating the time of task running */
-		#if USED_TIMER1
-		// timer1_start();
-		#endif
-/*
-*  end of this part
-**************************************************************
-*/
 
 		/* read acceleration data every 33ms */
 		acc_sensor_read(&acc_vals);
@@ -250,24 +217,11 @@ int main(void)
 			data_report_wn.warn_hrate = true;
 		}
 	
-		vTaskDelay(DELAY_TIME_SLICE); 
-
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-		/* stop timer1 and print out the time of task running */		
-		#if USED_TIMER1
-		// timer1_stop();
-		#endif
-/*
-*  end of this part
-**************************************************************
-*/
-
+		vTaskDelay(TIME_DELAY_MS);
 	}
 	
-	return E_OK;
+	/* never run to here */
+	return E_SYS;
 }
 
 /** @} */

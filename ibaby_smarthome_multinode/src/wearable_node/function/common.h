@@ -39,8 +39,8 @@
  * \addtogroup    EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
  * @{
  */
-#ifndef VALUE_H
-#define VALUE_H
+#ifndef COMMON_H
+#define COMMON_H
 
 /**
  * \name    macros about common setting
@@ -56,7 +56,6 @@
 **************************************************************
 *  This part will be deleted in release version
 */
-#define USED_TIMER1         (1) /*!< set 1 to use timer1 for task timing */
 #define SEND_DEBUG_SVM1_5S  (0) /*!< set 1 to send svm before svm filter to matlab by serial port every 5s */
 #define SEND_DEBUG_SVM2_5S  (0) /*!< set 1 to send svm after svm filter to matlab by serial port every 5s */
 #define SEND_DEBUG_INTEN_1M (0) /*!< set 1 to send motion intensity to matlab by serial port every 1min */
@@ -65,21 +64,15 @@
 **************************************************************
 */
 
-/** @} end of name */
+/*!< priority */
+#define TSKPRI_HIGH (configMAX_PRIORITIES-2) /*!< high priority */
+#define TSKPRI_MID  (configMAX_PRIORITIES-3) /*!< middle priority */
+#define TSKPRI_LOW  (configMAX_PRIORITIES-4) /*!< low priority */
 
-/**
- * \name    macros about iBaby wearable node
- * @{
- */ 
-/* lwm2mServer's port and IP */
-const static char *p_port   = (char *)"5683";
-const static char *p_server = (char *)"192.168.43.199";
-
-/* name of lwm2m client node */
-const static char *p_client_name = (char *)"wn";
+int t1_cnt; /*!< counter for timer1 */
 
 /* counter for number of files transported in OTA by LwM2M */
-static int count_file;
+int file_ota_cnt;
 
 
 /*!< struct of iBaby wearable node data reporting to iBaby Gateway */

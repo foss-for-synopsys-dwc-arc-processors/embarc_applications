@@ -6,7 +6,7 @@ OS_SEL ?= freertos
 
 BOARD ?= emsk
 BD_VER ?= 22
-CUR_CORE ?= arcem7d
+CUR_CORE ?= arcem11d
 TOOLCHAIN ?= gnu
 
 ##
@@ -24,11 +24,11 @@ EMBARC_ROOT = ../../../..
 MID_SEL = common lwip-contrib wakaama fatfs lwip
 
 # application source dirs
-APPL_CSRC_DIR = . ./lwm2m_client ./driver
+APPL_CSRC_DIR = . ./lwm2m_client ./driver ./function
 APPL_ASMSRC_DIR = .
 
 # application include dirs
-APPL_INC_DIR = . ./lwm2m_client ./driver
+APPL_INC_DIR = . ./lwm2m_client ./driver ./function
 
 # application defines
 APPL_DEFINES = -DLWM2M_CLIENT_MODE

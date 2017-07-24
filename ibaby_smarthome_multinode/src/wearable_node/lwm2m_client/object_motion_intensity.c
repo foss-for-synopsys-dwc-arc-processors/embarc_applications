@@ -78,10 +78,11 @@
 #include <ctype.h>
 #include "dev_iic.h"
 #include "board.h"
-#include "value.h"
 
 #include "embARC.h"
 #include "embARC_debug.h"
+
+#include "common.h"
 
 
 #define PRV_RESOURCE_3_SIZE 190

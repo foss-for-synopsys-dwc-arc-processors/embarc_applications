@@ -71,10 +71,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "value.h"
 
 #include "embARC.h"
 #include "embARC_debug.h"
+
+#include "common.h"
 
 
 #define PRV_RESOURCE_3_SIZE 190

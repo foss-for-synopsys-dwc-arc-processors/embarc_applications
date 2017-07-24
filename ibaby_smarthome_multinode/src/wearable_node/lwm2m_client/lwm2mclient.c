@@ -72,10 +72,11 @@
 #include <netdb.h>
 #include <sys/stat.h>
 #include <errno.h>
-#include "value.h"
 
 #include "embARC.h"
 #include "embARC_debug.h"
+
+#include "common.h"
 
 
 #define MAX_PACKET_SIZE 1024

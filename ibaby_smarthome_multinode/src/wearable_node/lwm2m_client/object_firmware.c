@@ -44,7 +44,7 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
-#include "value.h"
+#include "common.h"
 
 
 /** Resource Id's: */
@@ -230,14 +230,14 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 				data->state = 3;
 				printf("receive temp file: %s successfully\n", tempname);
 				f_close(&tempfile);
-				count_file++;
-				printf("count_file = %d\n\n", count_file);
+				file_ota_cnt++;
+				printf("file_ota_cnt = %d\n\n", file_ota_cnt);
 			}
 
 			/* merge all temp file into boot.bin and replace previous one */
-			if (count_file == filesum)
+			if (file_ota_cnt == filesum)
 			{
-				count_file = 0;
+				file_ota_cnt = 0;
 				if((err = f_open(&dstfile, "boot.bin", FA_CREATE_ALWAYS | FA_WRITE))){
 					printf("open file boot.bin err : %d\n", err);
 					break;
@@ -266,7 +266,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 						res = f_write(&dstfile, buff, br, &bw);
 						if (res || bw < br) break; /* error or disk full */
 					}
-					count_file++;
+					file_ota_cnt++;
 
 					f_close(&tempfile);
 
@@ -276,7 +276,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 				}
 
 				f_close(&dstfile);
-				if (count_file == filesum)
+				if (file_ota_cnt == filesum)
 				{ 
 					printf("\nfirmware update online completed\r\n\n");
 					result = COAP_204_CHANGED; 
@@ -284,12 +284,12 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 					printf("\nfirmware update online failed\r\n\n");
 					result = COAP_400_BAD_REQUEST;
 				}
-				count_file = 0;
+				file_ota_cnt = 0;
 			}
 
-			if (count_file >= filesum)
+			if (file_ota_cnt >= filesum)
 			{
-				count_file = 0;
+				file_ota_cnt = 0;
 			}
 			break;
 
