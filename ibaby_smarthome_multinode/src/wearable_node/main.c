@@ -112,9 +112,9 @@
  */
 int main(void)
 {
-	int  svm_val;         /* SVM : signal vector magnitude for difference */
-	int  cnt_aw;          /* executing algorithm counter */
-	int  cnt_sl;          /* counter for sleep monitoring */
+	uint32_t svm_val;     /* SVM : signal vector magnitude for difference */
+	uint32_t cnt_aw;      /* executing algorithm counter */
+	uint32_t cnt_sl;      /* counter for sleep monitoring */
 	acc_values acc_vals;  /* accleration storage */
 
 	vTaskDelay(200);

@@ -49,7 +49,7 @@
 
 
 extern void timer1_start(void);
-extern uint32_t timer1_stop(void);
+extern void timer1_stop(void);
 
 
 #endif /* _WEARABLE_NODE_DRIVER_HEARTRATE_H_ */

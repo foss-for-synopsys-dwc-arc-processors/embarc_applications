@@ -94,8 +94,8 @@ static unsigned char par_x, par_y, par_z;       /* low pass filter coefficient *
 static bool flag_old_x, flag_old_y, flag_old_z; /* flag of last change direction of value */
 
 /* variable of calculating intensity of motion in one sampling period */
-static int x_old, y_old, z_old; /* last value */
-static int svm_old;             /* SVM : signal vector magnitude for difference */
+static int16_t  x_old, y_old, z_old; /* last value */
+static uint32_t svm_old;             /* SVM : signal vector magnitude for difference */
 
 /* variable of low pass filter for svm data */
 static char cnt_v;          /* low pass filter counter */
@@ -210,14 +210,14 @@ static int filter_svm(int val_new,
 }
 
 /** function for processing accelerate raw data */
-extern int process_acc(acc_values acc_temp)
+extern uint32_t process_acc(acc_values acc_temp)
 {
-	int  x_new, y_new, z_new; /* latest value */
-	int  svm_new;             /* SVM : signal vector magnitude for difference */
+	int16_t  x_new, y_new, z_new; /* latest value */
+	uint32_t  svm_new;            /* SVM : signal vector magnitude for difference */
 
-	x_new = (int)(100 * acc_temp.accl_x);
-	y_new = (int)(100 * acc_temp.accl_y);
-	z_new = (int)(100 * acc_temp.accl_z);
+	x_new = (int16_t)(100 * acc_temp.accl_x);
+	y_new = (int16_t)(100 * acc_temp.accl_y);
+	z_new = (int16_t)(100 * acc_temp.accl_z);
 
 	/* deal with raw accelerate data by filter */
 	x_new = filter_acc(x_new, x_old, &flag_old_x, &cnt_x, &par_x);
@@ -270,12 +270,12 @@ extern int process_acc(acc_values acc_temp)
 }
 
 /** function for awake event detecting */
-extern uint func_detect_awake(int inten_temp)
+extern uint8_t func_detect_awake(uint32_t inten_temp)
 {
 	bool flag_break_aw = false;
-	uint cnt_sl_aw = 0;
-	uint cnt_wk_aw = 0;
-	uint event = NOEVENT; /* flag of event : NOEVENT or AWAKE */
+	uint8_t cnt_sl_aw = 0;
+	uint8_t cnt_wk_aw = 0;
+	uint8_t event = NOEVENT; /* flag of event : NOEVENT or AWAKE */
 
 	/* judge current status */
 	if (inten_temp > THOLD_INTEN_AW) {
@@ -285,7 +285,7 @@ extern uint func_detect_awake(int inten_temp)
 	}
 
 	/* the number of sleep state in front of the state queue */
-	for (uint i = LEN_STA_QUEUE - 1; i > LEN_STA_WAKE - 1; --i) {
+	for (uint8_t i = LEN_STA_QUEUE - 1; i > LEN_STA_WAKE - 1; --i) {
 		if (flag_break_aw) {
 			flag_break_aw = false;
 			break;
@@ -299,7 +299,7 @@ extern uint func_detect_awake(int inten_temp)
 			cnt_sl_aw = 0;
 
 			/* statistics the number of wake state in back of the state queue */
-			for (uint i = 0; i < LEN_STA_WAKE; ++i) {
+			for (uint8_t i = 0; i < LEN_STA_WAKE; ++i) {
 				if (!state_aw[i]) {
 					cnt_wk_aw++;
 				}
@@ -324,7 +324,7 @@ extern uint func_detect_awake(int inten_temp)
 #endif
 
 	/* update motion intensity for LEN_STA_QUEUE * 5s */
-	for (uint i = LEN_STA_QUEUE - 1; i > 0; --i) {
+	for (uint8_t i = LEN_STA_QUEUE - 1; i > 0; --i) {
 		state_aw[i] = state_aw[i - 1];
 	}
 
@@ -332,9 +332,9 @@ extern uint func_detect_awake(int inten_temp)
 }
 
 /** function for sleep-wake state detecting */
-extern uint func_detect_state(int inten_temp)
+extern uint8_t func_detect_state(uint32_t inten_temp)
 {
-	uint state; /* state : SLEEP or WAKE */
+	uint8_t state; /* state : SLEEP or WAKE */
 
 	/*
 	**************************************************************
@@ -369,7 +369,7 @@ extern uint func_detect_state(int inten_temp)
 #endif
 
 	/* update motion intensity for 5 * 1min */
-	for (uint i = 4; i > 0; --i) {
+	for (uint8_t i = 4; i > 0; --i) {
 		inten_sl[i] = inten_sl[i - 1];
 	}
 

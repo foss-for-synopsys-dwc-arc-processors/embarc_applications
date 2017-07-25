@@ -44,7 +44,7 @@
 
 
 /** function for processing heartrate data */
-extern void process_hrate(uint32_t *hrate);
+extern void process_hrate(uint16_t *hrate);
 
 
 #endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */

@@ -200,7 +200,7 @@ error_exit:
  * \retval	E_OK	read success
  * \retval	!E_OK	read failed
  */
-extern int32_t btemp_sensor_read(uint32_t *btemp)
+extern int32_t btemp_sensor_read(uint16_t *btemp)
 {
 	int32_t ercd = E_OK;
 

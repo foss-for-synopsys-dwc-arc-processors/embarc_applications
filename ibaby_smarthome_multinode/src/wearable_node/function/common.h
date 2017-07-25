@@ -76,8 +76,8 @@
 #define TSKPRI_MID  (configMAX_PRIORITIES-3) /*!< middle priority */
 #define TSKPRI_LOW  (configMAX_PRIORITIES-4) /*!< low priority */
 
-int t1_cnt;       /*!< counter for timer1 */
-int file_ota_cnt; /*!< counter for number of files transported in OTA by LwM2M */
+uint32_t t1_cnt;       /*!< counter for timer1 */
+uint16_t file_ota_cnt; /*!< counter for number of files transported in OTA by LwM2M */
 /** @} end of name */
 
 
@@ -87,12 +87,12 @@ int file_ota_cnt; /*!< counter for number of files transported in OTA by LwM2M *
  */
 /*!< struct of iBaby wearable node data reporting to iBaby Gateway */
 typedef struct{
-	uint32_t btemp;       /*!< body temperature */
-	uint32_t hrate;       /*!< heartrate */
+	uint16_t btemp;       /*!< body temperature */
+	uint16_t hrate;       /*!< heartrate */
 
-	int  motion_intensity;/*!< motion intensity in 1min */
-	uint state;           /*!< Sleep-Wake state : SLEEP or WAKE */
-	uint event_awake;     /*!< flag of Awake Event : NOEVENT or AWAKE */
+	uint32_t motion_intensity;/*!< motion intensity in 1min */
+	uint8_t  state;           /*!< Sleep-Wake state : SLEEP or WAKE */
+	uint8_t  event_awake;     /*!< flag of Awake Event : NOEVENT or AWAKE */
 
 	bool warn_hrate;      /*!< warning flag of heartrate abnormal */
 	bool warn_btemp;      /*!< warning flag of body temperature abnormal */

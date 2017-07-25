@@ -44,7 +44,7 @@
 
 
 /** function to be LwM2M Client */
-extern int   lwm2m_client_start(void);
+extern int32_t lwm2m_client_start(void);
 
 
 #endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */

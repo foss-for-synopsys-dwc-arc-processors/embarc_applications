@@ -50,8 +50,22 @@
 #include "heartrate.h"
 
 
-#define HRATE_SIZE (4) /* Increase this for more averaging. 4 is good. */
+#define HRATE_SIZE (4) /* increase this for more averaging, 4 is good */
+#define BEATS_PER_MIN_MAX (255) /* maximum value of heartrate */
+#define BEATS_PER_MIN_MIN (20)  /* minimum value of heartrate */
+#define AMPL_DIFF_MAX (1000)    /* maximum value of finger detecting amplitude */
+#define AMPL_DIFF_MIN (100)     /* minimum value of finger detecting amplitude */
 
+
+
+
+static uint16_t rates[HRATE_SIZE]; /* array of heart rates */
+static uint8_t  rate_spot = 0;     /* index number of rates[] */
+
+static float beats_per_min;        /* heartrate: beats per 1min */
+static uint16_t beat_aver;         /* heartrate: average of 4 values */
+
+static bool flag_timer_stop = true;
 
 static int16_t ir_ac_max = 20;
 static int16_t ir_ac_min = -20;
@@ -79,51 +93,47 @@ static int32_t mul16(int16_t x, int16_t y);
 
 
 /** function for deal with heartrate by filter */
-extern void process_hrate(uint32_t *hrate)
+extern void process_hrate(uint16_t *hrate)
 {
-	static int rates[HRATE_SIZE]; /* array of heart rates */
-	static int rate_spot = 0;
+	int32_t ir_value = 0; /* IR value of heartrate sensor(max30102) */
+	int32_t data_rdy;     /* flag of IR data ready */
+	uint32_t delta = 1;   /* time interval between 2 heartbeats */
 
-	static float beats_per_min;
-	static int beat_aver;
-
-	static bool flag_timer_stop = true;
-
-	int ir_value = 0, delta = 1;
-	uint32_t data_rdy;
-
+	/* read IR data from heartrate sensor */
 	data_rdy = hrate_sensor_read(&ir_value);
 
-	if (data_rdy == E_OK && ir_value != 0 && check_beat((int32_t)ir_value) == true)
+	/* IR data ready and detect a heartbeat */
+	if (data_rdy == E_OK && ir_value != 0 && check_beat(ir_value) == true)
 	{
 		flag_timer_stop != flag_timer_stop;
 
 		if (flag_timer_stop == true)
 		{
-			delta = t1_cnt;
+			delta = t1_cnt; /* get heartbeat's cycle time(uint: 0.1ms) */
 			t1_cnt = 1;
-			beats_per_min = 60 / (delta / 10000.0);
+			beats_per_min = 600000 / delta; /* 60/(delta/10000.0), get heartrate */
 
 			// printf("%f\n", beats_per_min);
 
-			if (beats_per_min < 255 && beats_per_min > 20)
+			if (beats_per_min < BEATS_PER_MIN_MAX && beats_per_min > BEATS_PER_MIN_MIN)
 			{
-				rates[rate_spot++] = (int)beats_per_min; /* store this reading in the array */
-				rate_spot %= HRATE_SIZE;                 /* wrap variable */
+				/* sliding average filtering */
+				rates[rate_spot++] = (uint16_t)beats_per_min; /* store this reading in the array */
+				rate_spot %= HRATE_SIZE;                      /* wrap variable */
 
-				//take average of readings
+				/* take average of readings */
 				beat_aver = 0;
-				for (int x = 0 ; x < HRATE_SIZE ; x++)
+				for (uint8_t x = 0 ; x < HRATE_SIZE ; x++)
 					beat_aver += rates[x];
 				beat_aver /= HRATE_SIZE;
 			}
 			printf("%d\n", beat_aver);
 		} else {
-			t1_cnt = 1;
+			t1_cnt = 1;/* reset the counter of timer1 */
 		}
 	}
 
-	*hrate = (uint32_t)beat_aver;
+	*hrate = beat_aver;
 }
 
 /**
@@ -156,9 +166,9 @@ static bool check_beat(int32_t sample)
 		val_max = 0;
 
 		// printf("%d\n", ir_ac_max - ir_ac_min);
-		if ((ir_ac_max - ir_ac_min) > 100 & (ir_ac_max - ir_ac_min) < 1000)
+		if ((ir_ac_max - ir_ac_min) > AMPL_DIFF_MIN & (ir_ac_max - ir_ac_min) < AMPL_DIFF_MAX)
 		{
-			/* heart beat!!! */
+			/* heart beat detected */
 			beat_detected = true;
 		}
 	}

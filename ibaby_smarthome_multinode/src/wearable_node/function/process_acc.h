@@ -60,25 +60,25 @@
 
 
 /*!< variable of detecting awake event */
-int  state_aw[LEN_STA_QUEUE]; /*!< state for LEN_STA_QUEUE * 5s */
+uint8_t state_aw[LEN_STA_QUEUE]; /*!< state for LEN_STA_QUEUE * 5s */
 
 /*!< variable of sleep monitoring */
-int   inten_sl[5];            /*!< motion intensity for 5 * 1min */
-float score_sl;               /*!< score of motion */
-int   sum_svm_5s;             /*!< motion intensity in 5s */
+uint32_t inten_sl[5]; /*!< motion intensity for 5 * 1min */
+uint32_t sum_svm_5s;  /*!< motion intensity in 5s */
+float    score_sl;    /*!< score of motion */
 
 
 /** function for processing acceleration data */
-extern int   process_acc(acc_values acc_temp);
+extern uint32_t process_acc(acc_values acc_temp);
 
 /** function for awake event detecting */
-extern uint  func_detect_awake(int inten_temp);
+extern uint8_t  func_detect_awake(uint32_t inten_temp);
 
 /** function for sleep-wake state detecting */
-extern uint  func_detect_state(int inten_temp);
+extern uint8_t  func_detect_state(uint32_t inten_temp);
 
 /** function for sleep downward state detecting */
-extern bool  func_detect_downward(float acc_temp);
+extern bool     func_detect_downward(float acc_temp);
 /** @} end of name */
 
 

@@ -100,7 +100,7 @@ extern void print_msg_awake(void)
 	sprintf(str, "* Motion intensity in 5s : %d\r\n", sum_svm_5s);
 	EMBARC_PRINTF(str);
 
-	for (uint i = 0; i < LEN_STA_QUEUE; ++i) {
+	for (uint8_t i = 0; i < LEN_STA_QUEUE; ++i) {
 		if (i != 0 && !(i % 3)) {
 			EMBARC_PRINTF("\r\n");
 		}
@@ -123,12 +123,12 @@ extern void print_msg_awake(void)
 
 #if PRINT_DEBUG_SLEEP
 /** print message for debug Sleep-Wake state monitoring function */
-extern void print_msg_sleep(uint state)
+extern void print_msg_sleep(uint8_t state)
 {
 	char str[50];
 
 	EMBARC_PRINTF("\r\n************ Sleep monitoring ************\r\n");
-	for (uint i = 0; i < 5; ++i) {
+	for (uint8_t i = 0; i < 5; ++i) {
 		if (i == 2 || i == 3) {
 			EMBARC_PRINTF("\r\n");
 		}

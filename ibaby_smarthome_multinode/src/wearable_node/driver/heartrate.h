@@ -57,7 +57,7 @@
 extern float   band_pass_filter(float in);
 
 extern int32_t hrate_sensor_init(uint32_t slv_addr);
-extern int32_t hrate_sensor_read(int* heart_rate);
+extern int32_t hrate_sensor_read(int32_t* heart_rate);
 
 #endif /* _WEARABLE_NODE_DRIVER_HEARTRATE_H_ */
 

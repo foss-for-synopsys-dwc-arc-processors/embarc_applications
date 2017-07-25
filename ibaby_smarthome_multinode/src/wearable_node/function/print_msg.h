@@ -50,7 +50,7 @@ extern void  print_msg_func(void);
 extern void  print_msg_awake(void);
 
 /** print message for debug sleep-wake state monitoring function */
-extern void  print_msg_sleep(uint state);
+extern void  print_msg_sleep(uint8_t state);
 
 
 #endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */

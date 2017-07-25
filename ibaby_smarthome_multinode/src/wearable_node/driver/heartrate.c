@@ -340,7 +340,7 @@ error_exit:
  * \retval E_OK  	read success
  * \retval !E_OK 	read failed
  */
-extern int32_t hrate_sensor_read(int* hrate)
+extern int32_t hrate_sensor_read(int32_t* hrate)
 {
 	int32_t ercd = E_OK;
 

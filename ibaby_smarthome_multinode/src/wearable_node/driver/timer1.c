@@ -83,7 +83,7 @@ extern void timer1_start(void)
 }
 
 /** print message for debug major function */
-extern uint32_t timer1_stop(void)
+extern void timer1_stop(void)
 {
 	uint32_t dec;
 
@@ -93,8 +93,6 @@ extern uint32_t timer1_stop(void)
 	EMBARC_PRINTF("************     timing     ************\r\n");
 	EMBARC_PRINTF("* timer1 counter : %d.%d ms\r\n", t1_cnt / 10, dec);
 	EMBARC_PRINTF("****************************************\r\n\r\n");
-
-	return dec;
 }
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

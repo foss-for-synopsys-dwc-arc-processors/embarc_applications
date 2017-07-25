@@ -107,7 +107,7 @@ static void task_lwm2m_client(void *par)
 }
 
 /** function for initialize and start lwm2m client */
-extern int lwm2m_client_start(void)
+extern int32_t lwm2m_client_start(void)
 {
 	int c_quit = 0;
 	task_lwm2m_client_handle = 0;

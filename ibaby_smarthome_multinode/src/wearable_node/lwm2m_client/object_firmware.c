@@ -157,7 +157,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 	char sumstr[10], numstr[10];
 	uint8_t res = 0;
 	uint32_t br, bw;
-	UINT cnt;
+	uint32_t cnt;
 	uint8_t buff[4096];
 	uint32_t blen = sizeof(buff);
 

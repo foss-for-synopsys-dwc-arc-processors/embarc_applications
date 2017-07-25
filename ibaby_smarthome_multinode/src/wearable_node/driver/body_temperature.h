@@ -53,7 +53,7 @@
 #define EMSK_TMP_SENSOR_CHECK_EXP_NORTN(EXPR)    CHECK_EXP_NOERCD(EXPR, error_exit)
 
 extern int32_t btemp_sensor_init(uint32_t slv_addr);
-extern int32_t btemp_sensor_read(uint32_t *btmp);
+extern int32_t btemp_sensor_read(uint16_t *btmp);
 
 #endif /* _WEARABLE_NODE_DRIVER_BODY_TEMPERATURE_H_ */
 
