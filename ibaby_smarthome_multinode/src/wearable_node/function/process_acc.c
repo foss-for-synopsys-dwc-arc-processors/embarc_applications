@@ -31,25 +31,10 @@
 --------------------------------------------- */
 
 /**
- * \defgroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE		embARC iBaby Smarthome Node Wearable Node
- * \ingroup	EMBARC_APPS_TOTAL
- * \ingroup	EMBARC_APPS_OS_FREERTOS
- * \ingroup	EMBARC_APPS_MID_LWIP
- * \ingroup	EMBARC_APPS_MID_WAKAAMA
- * \ingroup	EMBARC_APPS_MID_FATFS
- * \brief	embARC iBaby Smarthome Node Wearable Node
- * \details
- *		Implement all function of iBaby wearable node, including data acquisition, processing and 
- *    interaction with iBaby Smarthome Gateway(LwM2M Server) as LwM2M Client.
- *
- *      Manual function including body temperature detecting, heartrate detecting and posture, 
- *    motion intensity, awake event detecting in real time during sleep.
- */
-
-/**
  * \file
  * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
- * \brief	Functional Task for iBaby Wearable Node
+ * \brief	function for acceleration data processing
+ *              awake event detecting, sleep downward detecting, sleep monitoring
  */
 
 /**
@@ -69,59 +54,56 @@
 #include "print_msg.h"
 #include "acceleration.h"
 
-/**
- * \name	local macro for function of wearable node
- * @{
- */
-#define WARN_ACCL_Z    (-8) /*!< lower value of warning acceleration */
 
-/*!< parameters of low pass filter for latest acceleration value */
-#define PAR_ACC_BASE   (30) /*!< base value of low pass filter coefficient */
-#define PAR_ACC_STEP   (5)  /*!< step of coefficient enlarge */
-#define CNT_ACC_STEP   (5)  /*!< step of counter enlarge */
-#define THOLD_ACC_DIFF (300)/*!< threshold of acceleration value variation range, counter enlarge */
-#define THOLD_ACC_CNT  (30) /*!< threshold of counter, coefficient enlarge  */
+#define WARN_ACCL_Z    (-8)  /* lower value of warning acceleration */
 
-/*!< parameters of low pass filter for latest motion intersity */
-#define PAR_SVM_BASE   (80) /*!< base value of low pass filter coefficient */
-#define PAR_SVM_STEP   (20) /*!< step of coefficient enlarge */
-#define CNT_SVM_STEP   (5)  /*!< step of counter enlarge */
-#define THOLD_SVM_DIFF (30) /*!< threshold of acceleration value variation range, counter enlarge */
-#define THOLD_SVM_CNT  (50) /*!< threshold of counter, coefficient enlarge */
+/* parameters of low pass filter for latest acceleration value */
+#define PAR_ACC_BASE   (30)  /* base value of low pass filter coefficient */
+#define PAR_ACC_STEP   (5)   /* step of coefficient enlarge */
+#define CNT_ACC_STEP   (5)   /* step of counter enlarge */
+#define THOLD_ACC_DIFF (300) /* threshold of acceleration value variation range, counter enlarge */
+#define THOLD_ACC_CNT  (30)  /* threshold of counter, coefficient enlarge  */
 
-/*!< parameters of limiting filter */
-#define MAX_LIMIT_SVM (200) /*!< upper limit of svm */
-#define MIN_LIMIT_SVM (5)   /*!< lower limit of svm */
+/* parameters of low pass filter for latest motion intersity */
+#define PAR_SVM_BASE   (80)  /* base value of low pass filter coefficient */
+#define PAR_SVM_STEP   (20)  /* step of coefficient enlarge */
+#define CNT_SVM_STEP   (5)   /* step of counter enlarge */
+#define THOLD_SVM_DIFF (30)  /* threshold of acceleration value variation range, counter enlarge */
+#define THOLD_SVM_CNT  (50)  /* threshold of counter, coefficient enlarge */
 
-#define THOLD_INTEN_AW (1000)/*!< threshold of motion intensity */
-#define LEN_STA_WAKE   (5)   /*!< length of state queue indicated baby awake */
+/* parameters of limiting filter */
+#define MAX_LIMIT_SVM (200)  /* upper limit of svm */
+#define MIN_LIMIT_SVM (5)    /* lower limit of svm */
+
+#define THOLD_INTEN_AW (1000) /* threshold of motion intensity */
+#define LEN_STA_WAKE   (5)    /* length of state queue indicated baby awake */
 #define LEN_STA_SLEEP  (LEN_STA_QUEUE - LEN_STA_WAKE)
-#define PAR_STA_AW     (0.75)/*!< proportion of wake-state in total queue indicated baby awake */
+#define PAR_STA_AW     (0.75) /* proportion of wake-state in total queue indicated baby awake */
 
-/*!< sparameters of Webster sleep-wake determine method */
-#define P  (0.0046) /*!< 0.0046:coefficient of scale */
-#define K0 (0.04)   /*!< coefficient of relationship */
+/* sparameters of Webster sleep-wake determine method */
+#define P  (0.0046) /* coefficient of scale */
+#define K0 (0.04)   /* coefficient of relationship */
 #define K1 (0.22)
 #define K2 (1)
 #define K3 (0.24)
 #define K4 (0.06)
 
-/*!< variable of low pass filter for raw acceleration data */
-static char cnt_x, cnt_y, cnt_z;                /*!< low pass filter counter */
-static unsigned char par_x, par_y, par_z;       /*!< low pass filter coefficient */
-static bool flag_old_x, flag_old_y, flag_old_z; /*!< flag of last change direction of value */
+/* variable of low pass filter for raw acceleration data */
+static char cnt_x, cnt_y, cnt_z;                /* low pass filter counter */
+static unsigned char par_x, par_y, par_z;       /* low pass filter coefficient */
+static bool flag_old_x, flag_old_y, flag_old_z; /* flag of last change direction of value */
 
-/*!< variable of calculating intensity of motion in one sampling period */
-static int x_old, y_old, z_old; /*!< last value */
-static int svm_old;             /*!< SVM : signal vector magnitude for difference */
+/* variable of calculating intensity of motion in one sampling period */
+static int x_old, y_old, z_old; /* last value */
+static int svm_old;             /* SVM : signal vector magnitude for difference */
 
-/*!< variable of low pass filter for svm data */
-static char cnt_v;          /*!< low pass filter counter */
-static unsigned char par_v; /*!< low pass filter coefficient */
-static bool flag_old_v;     /*!< flag of change direction of value */
+/* variable of low pass filter for svm data */
+static char cnt_v;          /* low pass filter counter */
+static unsigned char par_v; /* low pass filter coefficient */
+static bool flag_old_v;     /* flag of change direction of value */
 
 
-/* function for deal with acclerate by filter */
+/** function for deal with acclerate by filter */
 static int filter_acc(int val_new,
                       int val_old,
                       bool *flag_old,
@@ -131,7 +113,7 @@ static int filter_acc(int val_new,
 	int  val_diff;
 	bool flag_new;
 
-	/* calculate low pass filter coefficient for x axis acceleration */ 
+	/* calculate low pass filter coefficient for x axis acceleration */
 	val_diff = val_new - val_old;
 
 	if (val_diff > 0) {
@@ -160,13 +142,13 @@ static int filter_acc(int val_new,
 	if (!val_diff) {
 		val_new = val_old;
 	} else {
-		val_new = val_old + val_diff*(*par)/256;
+		val_new = val_old + val_diff * (*par) / 256;
 	}
 
 	return val_new;
 }
 
-/* function for deal with SVM by filter */
+/** function for deal with SVM by filter */
 static int filter_svm(int val_new,
                       int val_old,
                       bool *flag_old,
@@ -216,9 +198,9 @@ static int filter_svm(int val_new,
 	if (!val_diff) {
 		val_new = val_old;
 	} else {
-		val_new = val_old + val_diff*(*par)/256;
+		val_new = val_old + val_diff * (*par) / 256;
 	}
-	
+
 	/* deal with SVM by limiting filter */
 	if (val_new < MIN_LIMIT_SVM) {
 		val_new = 0;
@@ -233,9 +215,9 @@ extern int process_acc(acc_values acc_temp)
 	int  x_new, y_new, z_new; /* latest value */
 	int  svm_new;             /* SVM : signal vector magnitude for difference */
 
-	x_new = (int)(100*acc_temp.accl_x);
-	y_new = (int)(100*acc_temp.accl_y);
-	z_new = (int)(100*acc_temp.accl_z);
+	x_new = (int)(100 * acc_temp.accl_x);
+	y_new = (int)(100 * acc_temp.accl_y);
+	z_new = (int)(100 * acc_temp.accl_z);
 
 	/* deal with raw accelerate data by filter */
 	x_new = filter_acc(x_new, x_old, &flag_old_x, &cnt_x, &par_x);
@@ -243,51 +225,46 @@ extern int process_acc(acc_values acc_temp)
 	z_new = filter_acc(z_new, z_old, &flag_old_z, &cnt_z, &par_z);
 
 	/* calculate SVM using data fusion */
-	svm_new = sqrt((x_new - x_old)*(x_new - x_old) + 
-		(y_new - y_old)*(y_new - y_old) + (z_new - z_old)*(z_new - z_old));
+	svm_new = sqrt((x_new - x_old) * (x_new - x_old) +
+	               (y_new - y_old) * (y_new - y_old) + 
+	               (z_new - z_old) * (z_new - z_old));
 
 	x_old = x_new;
 	y_old = y_new;
 	z_old = z_new;
 
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
- 	/* print out message for debug */
-	#if SEND_DEBUG_SVM1_5S
+	/*
+	**************************************************************
+	*  This part will be deleted in release version
+	*/
+#if SEND_DEBUG_SVM1_5S
 	char str[50];
-
-	/* send data to matlab */
-	sprintf(str, "%d.", svm_new);
+	sprintf(str, "%d.", svm_new); /* send data to matlab */
 	EMBARC_PRINTF(str);
-	#endif
-/*
-*  end of this part
-**************************************************************
-*/
+#endif
+	/*
+	*  end of this part
+	**************************************************************
+	*/
 
 	/* deal with SVM by filter */
 	svm_new = filter_svm(svm_new, svm_old, &flag_old_v, &cnt_v, &par_v);
 
 	svm_old = svm_new;
 
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-	/* print out message for debug */
-	#if SEND_DEBUG_SVM2_5S
+	/*
+	**************************************************************
+	*  This part will be deleted in release version
+	*/
+#if SEND_DEBUG_SVM2_5S
 	char str[50];
-
-	/* send data to matlab */
-	sprintf(str, "%d.", svm_new);
+	sprintf(str, "%d.", svm_new); /* send data to matlab */
 	EMBARC_PRINTF(str);
-	#endif
-/*
-*  end of this part
-**************************************************************
-*/
+#endif
+	/*
+	*  end of this part
+	**************************************************************
+	*/
 
 	return svm_new;
 }
@@ -298,19 +275,17 @@ extern uint func_detect_awake(int inten_temp)
 	bool flag_break_aw = false;
 	uint cnt_sl_aw = 0;
 	uint cnt_wk_aw = 0;
-	uint event = NOEVENT;/* flag of event : NOEVENT or AWAKE */
+	uint event = NOEVENT; /* flag of event : NOEVENT or AWAKE */
 
 	/* judge current status */
 	if (inten_temp > THOLD_INTEN_AW) {
-		/* in wake state now */
-		state_aw[0] = 0;
+		state_aw[0] = 0; /* in wake state now */
 	} else {
-		/* in sleep state now */
-		state_aw[0] = 1;
+		state_aw[0] = 1; /* in sleep state now */
 	}
 
 	/* the number of sleep state in front of the state queue */
-	for (uint i = LEN_STA_QUEUE-1; i > LEN_STA_WAKE-1; --i) {
+	for (uint i = LEN_STA_QUEUE - 1; i > LEN_STA_WAKE - 1; --i) {
 		if (flag_break_aw) {
 			flag_break_aw = false;
 			break;
@@ -329,12 +304,9 @@ extern uint func_detect_awake(int inten_temp)
 					cnt_wk_aw++;
 				}
 
-				if(cnt_wk_aw > LEN_STA_WAKE * PAR_STA_AW) {
-					/* wake up event detected */
-					event = AWAKE;
-
-					/* go exit from for loop */
-					flag_break_aw = true;
+				if (cnt_wk_aw > LEN_STA_WAKE * PAR_STA_AW) {
+					event = AWAKE;        /* wake up event detected */
+					flag_break_aw = true; /* go exit from for loop */
 				} else {
 					event = NOEVENT;
 				}
@@ -347,14 +319,13 @@ extern uint func_detect_awake(int inten_temp)
 	cnt_sl_aw = 0;
 	cnt_wk_aw = 0;
 
-	/* print out message for debug */
-	#if PRINT_DEBUG_AWAKE
-	print_msg_awake();
-	#endif
+#if PRINT_DEBUG_AWAKE
+	print_msg_awake(); /* print out message for debug */
+#endif
 
 	/* update motion intensity for LEN_STA_QUEUE * 5s */
-	for (uint i = LEN_STA_QUEUE-1; i > 0; --i) {
-		state_aw[i] = state_aw[i-1];
+	for (uint i = LEN_STA_QUEUE - 1; i > 0; --i) {
+		state_aw[i] = state_aw[i - 1];
 	}
 
 	return event;
@@ -365,27 +336,26 @@ extern uint func_detect_state(int inten_temp)
 {
 	uint state; /* state : SLEEP or WAKE */
 
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-	/* print out message for debug */
-	#if SEND_DEBUG_INTEN_1M
+	/*
+	**************************************************************
+	*  This part will be deleted in release version
+	*/
+#if SEND_DEBUG_INTEN_1M
 	char str[50];
-
-	/* send data to matlab */
-	sprintf(str, "%d.", inten_temp);
+	sprintf(str, "%d.", inten_temp); /* send data to matlab */
 	EMBARC_PRINTF(str);
-	#endif
-/*
-*  end of this part
-**************************************************************
-*/
+#endif
+	/*
+	*  end of this part
+	**************************************************************
+	*/
 
 	inten_sl[0] = inten_temp; /* motion intensity in 1min */
 
 	/* calculate the score of 2min ago(inten_sl[2]) by Webster sleep-wake determine method */
-	score_sl = P * (K4*inten_sl[4] + K3*inten_sl[3] + K2*inten_sl[2] + K1*inten_sl[1] + K0*inten_sl[0]) / 100;
+	score_sl = P * (K4 * inten_sl[4] + K3 * inten_sl[3] + 
+		        K2 * inten_sl[2] + K1 * inten_sl[1] + 
+		        K0 * inten_sl[0]) / 100;
 
 	/* determine the state of 2min ago by score */
 	if (score_sl > 1) {
@@ -394,14 +364,13 @@ extern uint func_detect_state(int inten_temp)
 		state = SLEEP;
 	}
 
-	/* print out message for debug */
-	#if PRINT_DEBUG_SLEEP
-	print_msg_sleep(state);
-	#endif
+#if PRINT_DEBUG_SLEEP
+	print_msg_sleep(state); /* print out message for debug */
+#endif
 
 	/* update motion intensity for 5 * 1min */
 	for (uint i = 4; i > 0; --i) {
-		inten_sl[i] = inten_sl[i-1];
+		inten_sl[i] = inten_sl[i - 1];
 	}
 
 	return state;
@@ -420,7 +389,5 @@ extern bool func_detect_downward(float acc_temp)
 
 	return warn;
 }
-
-
 
 /** @} */

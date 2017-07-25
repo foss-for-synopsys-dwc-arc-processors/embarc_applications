@@ -33,7 +33,8 @@
 /**
  * \file
  * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
- * \brief	Header File of Functio Task for iBaby Wearable Node
+ * \brief	Header File of acceleration data processing function
+ *              awake event detecting, sleep downward detecting, sleep monitoring
  */
 
 /**
@@ -43,19 +44,20 @@
 #ifndef PROCESS_ACC_H
 #define PROCESS_ACC_H
 
+
 #include "acceleration.h"
 
+
 /*!< parameters of awake event detecting */
-#define AWAKE   (1) /*!< wake up event */
-#define NOEVENT (0) /*!< no event */
+#define AWAKE   (1)        /*!< wake up event */
+#define NOEVENT (0)        /*!< no event */
+
+#define LEN_STA_QUEUE (20) /*!< length of state queue used to detect awake event */
 
 /*!< parameters of sleep monitoring algorithm */
-#define SLEEP   (1) /*!< sleep state */
-#define WAKE    (0) /*!< wake state */
+#define SLEEP   (1)        /*!< sleep state */
+#define WAKE    (0)        /*!< wake state */
 
-#define LEN_STA_QUEUE (20)    /*!< length of state queue used to detect awake event */
-
-int  sum_svm_5s;              /*!< motion intensity in 5s */
 
 /*!< variable of detecting awake event */
 int  state_aw[LEN_STA_QUEUE]; /*!< state for LEN_STA_QUEUE * 5s */
@@ -63,8 +65,10 @@ int  state_aw[LEN_STA_QUEUE]; /*!< state for LEN_STA_QUEUE * 5s */
 /*!< variable of sleep monitoring */
 int   inten_sl[5];            /*!< motion intensity for 5 * 1min */
 float score_sl;               /*!< score of motion */
+int   sum_svm_5s;             /*!< motion intensity in 5s */
 
-/** function for processing acceleration raw data */
+
+/** function for processing acceleration data */
 extern int   process_acc(acc_values acc_temp);
 
 /** function for awake event detecting */
@@ -75,7 +79,6 @@ extern uint  func_detect_state(int inten_temp);
 
 /** function for sleep downward state detecting */
 extern bool  func_detect_downward(float acc_temp);
-
 /** @} end of name */
 
 

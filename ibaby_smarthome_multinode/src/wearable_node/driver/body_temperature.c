@@ -82,7 +82,7 @@
 #define TMP112_CONFIG_SD     (1 << 0)
 
 /*!< body temperature data received buffer */
-union _btemp_data						
+union _btemp_data
 {
 	uint8_t buf[2];
 	struct {
@@ -143,13 +143,13 @@ error_exit:
  * \retval	>=0	read success, return bytes read
  * \retval	!E_OK	read failed
  */
-static int32_t tmp112_reg_read(uint8_t seq,uint8_t *val,uint8_t len)
+static int32_t tmp112_reg_read(uint8_t seq, uint8_t *val, uint8_t len)
 {
 	int32_t ercd = E_PAR;
 
 	emsk_tmp_sensor = iic_get_dev(BTEMP_SENSOR_IIC_ID);
 
-	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor!=NULL);
+	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor != NULL);
 
 	/* make sure set the temp sensor's slave address */
 	emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(btemp_sensor_addr));
@@ -184,7 +184,7 @@ extern int32_t btemp_sensor_init(uint32_t slv_addr)
 	if ((ercd == E_OK) || (ercd == E_OPNED)) {
 		ercd = emsk_tmp_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(slv_addr));
 		btemp_sensor_addr = slv_addr;
-		
+
 		/* write value to tmp112 to set registers */
 		tmp112_reg_write(tmp_shutdown_enable, 3);
 	}
@@ -208,13 +208,13 @@ extern int32_t btemp_sensor_read(uint32_t *btemp)
 
 	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(emsk_tmp_sensor != NULL);
 	EMSK_TMP_SENSOR_CHECK_EXP_NORTN(btemp != NULL);
-	
+
 	ercd = tmp112_reg_write(tmp_oneshot_enable, 3);
 
 	/* read 5 data from tmp112 */
 	ercd += tmp112_reg_read(TMP112_REG_TMP, btemp_data.buf, 2);
-	
-	if(ercd != 5) {
+
+	if (ercd != 5) {
 		ercd = E_OBJ;
 	} else {
 		ercd = E_OK;

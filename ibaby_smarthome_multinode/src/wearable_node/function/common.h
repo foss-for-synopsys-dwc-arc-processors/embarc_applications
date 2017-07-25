@@ -32,25 +32,26 @@
 --------------------------------------------- */
 /**
  * \file
- * \brief   Header File of Settings and Reported Data
+ * \brief   Header File of common variables, Settings and Reported Data
  */
 
 /**
- * \addtogroup    EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \addtogroup    EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_
  * @{
  */
 #ifndef COMMON_H
 #define COMMON_H
 
+
 /**
- * \name    macros about common setting
+ * \name    macros for settings
  * @{
  */
 #define LWM2M_CLIENT      (0) /*!< set 1 to be lwm2m client */
 
-#define PRINT_DEBUG_FUNC  (0) /*!< set 1 to print message for debug major function */
-#define PRINT_DEBUG_AWAKE (0) /*!< set 1 to print message for debug awake event detecting function */
-#define PRINT_DEBUG_SLEEP (0) /*!< set 1 to print message for debug sleep-wake state monitoring function */
+#define PRINT_DEBUG_FUNC  (0) /*!< set 1 to print out message for debug major function */
+#define PRINT_DEBUG_AWAKE (0) /*!< set 1 to print out message for debug awake event detecting function */
+#define PRINT_DEBUG_SLEEP (0) /*!< set 1 to print out message for debug sleep-wake state monitoring function */
 
 /*
 **************************************************************
@@ -63,18 +64,27 @@
 *  end of this part
 **************************************************************
 */
+/** @} end of name */
 
-/*!< priority */
+
+/**
+ * \name    macros for common variables
+ * @{
+ */
+/*!< freertos task priority */
 #define TSKPRI_HIGH (configMAX_PRIORITIES-2) /*!< high priority */
 #define TSKPRI_MID  (configMAX_PRIORITIES-3) /*!< middle priority */
 #define TSKPRI_LOW  (configMAX_PRIORITIES-4) /*!< low priority */
 
-int t1_cnt; /*!< counter for timer1 */
+int t1_cnt;       /*!< counter for timer1 */
+int file_ota_cnt; /*!< counter for number of files transported in OTA by LwM2M */
+/** @} end of name */
 
-/* counter for number of files transported in OTA by LwM2M */
-int file_ota_cnt;
 
-
+/**
+ * \name    macros for reported data
+ * @{
+ */
 /*!< struct of iBaby wearable node data reporting to iBaby Gateway */
 typedef struct{
 	uint32_t btemp;       /*!< body temperature */
@@ -89,11 +99,8 @@ typedef struct{
 	bool warn_downward;   /*!< warning flag of sleep downward */
 } data_wearable_node;
 
-/* current value of reporting data */
-data_wearable_node data_report_wn;
-
-/* the last value of reporting data */
-data_wearable_node data_report_wn_old;
+data_wearable_node data_report_wn;    /*!< current value of reporting data */
+data_wearable_node data_report_wn_old;/*!< the last value of reporting data */
 /** @} end of name */
 
 

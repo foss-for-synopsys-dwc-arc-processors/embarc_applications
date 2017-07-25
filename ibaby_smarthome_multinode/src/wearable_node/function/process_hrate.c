@@ -1,3 +1,45 @@
+/* ------------------------------------------
+ * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
+
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+
+ * 1) Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+
+ * 2) Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+
+ * 3) Neither the name of the Synopsys, Inc., nor the names of its contributors may
+ * be used
+
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * \version 2017.07
+ * \date 2017-07-11
+ * \author Xiangcai Huang(xiangcai@synopsys.com)
+--------------------------------------------- */
+
+/**
+ * \file
+ * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \brief	function for heartrate data processing
+ */
+
+/**
+ * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * @{
+ */
 /* embARC HAL */
 #include "embARC.h"
 #include "embARC_debug.h"
@@ -7,7 +49,9 @@
 #include "process_hrate.h"
 #include "heartrate.h"
 
-#define HRATE_SIZE (4)     /* Increase this for more averaging. 4 is good. */
+
+#define HRATE_SIZE (4) /* Increase this for more averaging. 4 is good. */
+
 
 static int16_t ir_ac_max = 20;
 static int16_t ir_ac_min = -20;
@@ -27,13 +71,14 @@ static uint8_t offset = 0;
 
 static const uint16_t fir_coeffs[12] = {172, 321, 579, 927, 1360, 1858, 2390, 2916, 3391, 3768, 4012, 4096};
 
+
 static bool check_beat(int32_t sample);
 static int16_t aver_dc_estimator(int32_t *p, uint16_t x);
 static int16_t low_pass_fir_filter(int16_t din);
 static int32_t mul16(int16_t x, int16_t y);
 
 
-/* function for deal with heartrate by filter */
+/** function for deal with heartrate by filter */
 extern void process_hrate(uint32_t *hrate)
 {
 	static int rates[HRATE_SIZE]; /* array of heart rates */
@@ -81,7 +126,7 @@ extern void process_hrate(uint32_t *hrate)
 	*hrate = (uint32_t)beat_aver;
 }
 
-/*
+/**
  * Heart Rate Monitor functions takes a sample value and the sample number
  * returns true if a beat is detected
  * a running average of four samples is recommended for display on the screen
@@ -98,7 +143,7 @@ static bool check_beat(int32_t sample)
 	aver_estimated = aver_dc_estimator(&ir_avg_reg, sample);
 	val_cur = low_pass_fir_filter(sample - aver_estimated);
 	// printf("%d\n", val_cur);
-	
+
 	/* detect positive zero crossing (rising edge) */
 	if ((val_pre < 0) & (val_cur >= 0))
 	{
@@ -141,14 +186,14 @@ static bool check_beat(int32_t sample)
 	return (beat_detected);
 }
 
-/* average DC estimator */
+/** average DC estimator */
 static int16_t aver_dc_estimator(int32_t *p, uint16_t x)
 {
 	*p += ((((long) x << 15) - *p) >> 4);
 	return (*p >> 15);
 }
 
-/* low pass FIR filter */
+/** low pass FIR filter */
 static int16_t low_pass_fir_filter(int16_t din)
 {
 	cbuf[offset] = din;
@@ -157,7 +202,8 @@ static int16_t low_pass_fir_filter(int16_t din)
 
 	for (uint8_t i = 0 ; i < 11 ; i++)
 	{
-		z += mul16(fir_coeffs[i], cbuf[(offset - i) & 0x1F] + cbuf[(offset - 22 + i) & 0x1F]);
+		z += mul16(fir_coeffs[i], cbuf[(offset - i) & 0x1F] + 
+			cbuf[(offset - 22 + i) & 0x1F]);
 	}
 
 	offset++;
@@ -166,8 +212,10 @@ static int16_t low_pass_fir_filter(int16_t din)
 	return (z >> 15);
 }
 
-/* integer multiplier */
+/** integer multiplier */
 static int32_t mul16(int16_t x, int16_t y)
 {
 	return ((long)x * (long)y);
 }
+
+/** @} */

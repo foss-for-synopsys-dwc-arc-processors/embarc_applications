@@ -69,7 +69,7 @@
 
 
 /*!< MPU6050 registers */
-#define MPU6050_REG_SAMPLE_RATE          0x19 /*!< Gyro sample rate */ 
+#define MPU6050_REG_SAMPLE_RATE          0x19 /*!< Gyro sample rate */
 #define MPU6050_REG_EXT_SYNC_DISABLE     0x1A /*!< Ext sync disable */
 #define MPU6050_REG_GYRO_FULL_SCALE      0x1B /*!< Gyro full scale  */
 #define MPU6050_REG_ACCEL_FULL_SCALE     0x1C /*!< Accel full scale */
@@ -170,7 +170,7 @@ static int32_t mpu6050_reg_read(uint8_t seq, uint8_t *val, uint8_t len)
 	emsk_imu_sensor->iic_control(IIC_CMD_MST_SET_NEXT_COND, CONV2VOID(IIC_MODE_STOP));
 	/* read len data from mpu6050 */
 	ercd = emsk_imu_sensor->iic_read(val, len);
-	
+
 error_exit:
 	return ercd;
 }
@@ -194,7 +194,7 @@ extern int32_t acc_sensor_init(uint32_t slv_addr)
 	if ((ercd == E_OK) || (ercd == E_OPNED)) {
 		ercd = emsk_imu_sensor->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(slv_addr));
 		acc_sensor_addr = slv_addr;
-		
+
 		/* write value to mpu6050 to set registers */
 		mpu6050_reg_write(imu_init_seq1, 2);
 		mpu6050_reg_write(imu_init_seq0, 5);
@@ -220,11 +220,11 @@ extern int32_t acc_sensor_read(acc_values* acc_temp)
 	/* read 6 data from mpu6050 */
 	ercd = mpu6050_reg_read(MPU6050_REG_ACCEL_XOUT_H, acc_data.buf, 6);
 
-	if(ercd != 6) {
+	if (ercd != 6) {
 		ercd = E_OBJ;
 	} else {
 		acc_temp->accl_x = acc_unit * (float)(short)((acc_data.axh << 8) | acc_data.axl);
-		acc_temp->accl_y = acc_unit * (float)(short)((acc_data.ayh << 8) | acc_data.ayl); 
+		acc_temp->accl_y = acc_unit * (float)(short)((acc_data.ayh << 8) | acc_data.ayl);
 		acc_temp->accl_z = acc_unit * (float)(short)((acc_data.azh << 8) | acc_data.azl);
 
 		ercd = E_OK;

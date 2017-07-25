@@ -51,7 +51,7 @@
  *
  * ### Design Concept
  *     All sensor modules should be connected to \ref EMBARC_BOARD_CONNECTION "EMSK".
- *     This application is designed to show how to connect EMSK and iBaby Smarthome Gateway using embARC. 
+ *     This application is designed to show how to connect EMSK and iBaby Smarthome Gateway using embARC.
  *
  * ### Usage Manual
  *     Before compiling this example, you need to change some macro in value.h to customize your own project.
@@ -97,15 +97,14 @@
 #include "body_temperature.h"
 
 
-#define TIME_DELAY_MS (18)   /**< consumption time 4.2ms + 29ms = sampling frequency : 33.3ms(30Hz) */
+#define TIME_DELAY_MS (18)   /* acceleration sampling frequency: 30Hz */
 
-#define THOLD_CNT_AW (150)   /**< threshold of counter(5s) for executing awake event detecting algorithm */
-#define THOLD_CNT_SL (1760)  /**< threshold of counter(1min：1760) for executing sleep monitoring algorithm */
-
-#define WARN_BTEMP_L (350)   /**< lower value of warning body temperature */
-#define WARN_BTEMP_H (380)   /**< upper value of warning body temperature */
-#define WARN_HR_MIN  (50)    /**< lower value of warning heartrate */
-#define WARN_HR_MAX  (150)   /**< upper value of warning heartrate */
+#define THOLD_CNT_AW  (150)  /* threshold of counter(5s) for executing awake event detecting algorithm */
+#define THOLD_CNT_SL  (1760) /* threshold of counter(1min：1760) for executing sleep monitoring algorithm */
+#define WARN_BTEMP_L  (350)  /* lower value of warning body temperature */
+#define WARN_BTEMP_H  (380)  /* upper value of warning body temperature */
+#define WARN_HR_MIN   (50)   /* lower value of warning heartrate */
+#define WARN_HR_MAX   (150)  /* upper value of warning heartrate */
 
 
 /**
@@ -115,9 +114,7 @@ int main(void)
 {
 	int  svm_val;         /* SVM : signal vector magnitude for difference */
 	int  cnt_aw;          /* executing algorithm counter */
-	bool flag_start_aw;   /* flag of awake event detecting start */
 	int  cnt_sl;          /* counter for sleep monitoring */
-	bool flag_start_sl;   /* flag of sleep monitoring start */
 	acc_values acc_vals;  /* accleration storage */
 
 	vTaskDelay(200);
@@ -133,41 +130,34 @@ int main(void)
 	/* initialize acceleration sensor */
 	acc_sensor_init(ACC_SENSOR_ADDR);
 	vTaskDelay(50);
-	
-	#if LWM2M_CLIENT
+
+#if LWM2M_CLIENT
 	/* try to start lwm2m client */
 	lwm2m_client_start();
-	#endif
+#endif
 
+	/* start timer1, timing for transform IR cycle into heartrate(beats per 1min) */
 	timer1_start();
 
-	for(;;) {
-
-		/* read acceleration data every 33ms */
+	for (;;) {
+		/* read acceleration data */
 		acc_sensor_read(&acc_vals);
 
-		/* process raw accelerationdata and calculate SVM(representation of motion intensity) in 33ms */
+		/* process acceleration data and get SVM(representation of motion intensity) in 1 sample time */
 		svm_val = process_acc(acc_vals);
 
 		/* awake event detecting algorithm */
 		if (cnt_aw < THOLD_CNT_AW) {
-			/* summation of SVM in 5s */
-			sum_svm_5s += svm_val;
+			sum_svm_5s += svm_val; /* summation of SVM in 5s */
 			cnt_aw++;
 		} else {
-			/* remove the error value in the beginning */
-			if (!flag_start_aw) {
-				sum_svm_5s = 0;
-				flag_start_aw = true;
-			}
-
 			/* detect awake event */
 			data_report_wn.event_awake = func_detect_awake(sum_svm_5s);
 
 			/* print out messages for primary function */
-			#if PRINT_DEBUG_FUNC
-				print_msg_func();
-			#endif/* PRINT_DEBUG_FUNC */
+#if PRINT_DEBUG_FUNC
+			print_msg_func();
+#endif/* PRINT_DEBUG_FUNC */
 
 			sum_svm_5s = 0;
 			cnt_aw = 0;
@@ -175,16 +165,9 @@ int main(void)
 
 		/* sleep monitoring algorithm based on indigital integration method */
 		if (cnt_sl < THOLD_CNT_SL) {
-			/* summation of SVM in 1 min */
-			data_report_wn.motion_intensity += svm_val;
+			data_report_wn.motion_intensity += svm_val; /* summation of SVM in 1 min */
 			cnt_sl++;
 		} else {
-			/* remove the error value in the beginning */
-			if (!flag_start_sl) {
-				data_report_wn.motion_intensity = 0;
-				flag_start_sl = true;
-			}
-
 			/* sleep-wake state monitoring */
 			data_report_wn.state = func_detect_state(data_report_wn.motion_intensity);
 
@@ -192,15 +175,12 @@ int main(void)
 			cnt_sl = 0;
 		}
 
-		/* initialize the flag_warn */
+		/* initialize the flag of warning */
 		data_report_wn.warn_hrate    = false;
 		data_report_wn.warn_btemp    = false;
 		data_report_wn.warn_downward = false;
 
-		/* 
-		* detect warn of sleep on his stomach
-		* detect sleep downward event
-		*/
+		/* detect sleep downward event */
 		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
 
 		/* read body temperature data */
@@ -210,16 +190,16 @@ int main(void)
 			data_report_wn.warn_btemp = true;
 		}
 
-		/* read heartrate data and process them by fft and filter */
+		/* read and process IR value and get heartrate */
 		process_hrate(&data_report_wn.hrate);
 
 		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX) {
 			data_report_wn.warn_hrate = true;
 		}
-	
+
 		vTaskDelay(TIME_DELAY_MS);
 	}
-	
+
 	/* never run to here */
 	return E_SYS;
 }
