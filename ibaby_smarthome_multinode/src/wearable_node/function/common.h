@@ -52,18 +52,6 @@
 #define PRINT_DEBUG_FUNC  (1) /*!< set 1 to print out message for debug major function */
 #define PRINT_DEBUG_AWAKE (0) /*!< set 1 to print out message for debug awake event detecting function */
 #define PRINT_DEBUG_SLEEP (0) /*!< set 1 to print out message for debug sleep-wake state monitoring function */
-
-/*
-**************************************************************
-*  This part will be deleted in release version
-*/
-#define SEND_DEBUG_SVM1_5S  (0) /*!< set 1 to send svm before svm filter to matlab by serial port every 5s */
-#define SEND_DEBUG_SVM2_5S  (0) /*!< set 1 to send svm after svm filter to matlab by serial port every 5s */
-#define SEND_DEBUG_INTEN_1M (0) /*!< set 1 to send motion intensity to matlab by serial port every 1min */
-/*
-*  end of this part
-**************************************************************
-*/
 /** @} end of name */
 
 

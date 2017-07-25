@@ -150,7 +150,6 @@ static void task_process_hrate(void *par)
 						beat_aver += rates[x];
 					beat_aver /= HRATE_SIZE;
 				}
-				// printf("%d\n", beat_aver);
 			} else {
 				t1_cnt = 1; /* reset the counter of timer1 */
 			}

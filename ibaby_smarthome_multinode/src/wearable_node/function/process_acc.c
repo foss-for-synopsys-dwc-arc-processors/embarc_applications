@@ -233,38 +233,9 @@ extern uint32_t process_acc(acc_values acc_temp)
 	y_old = y_new;
 	z_old = z_new;
 
-	/*
-	**************************************************************
-	*  This part will be deleted in release version
-	*/
-#if SEND_DEBUG_SVM1_5S
-	char str[50];
-	sprintf(str, "%d.", svm_new); /* send data to matlab */
-	EMBARC_PRINTF(str);
-#endif
-	/*
-	*  end of this part
-	**************************************************************
-	*/
-
 	/* deal with SVM by filter */
 	svm_new = filter_svm(svm_new, svm_old, &flag_old_v, &cnt_v, &par_v);
-
 	svm_old = svm_new;
-
-	/*
-	**************************************************************
-	*  This part will be deleted in release version
-	*/
-#if SEND_DEBUG_SVM2_5S
-	char str[50];
-	sprintf(str, "%d.", svm_new); /* send data to matlab */
-	EMBARC_PRINTF(str);
-#endif
-	/*
-	*  end of this part
-	**************************************************************
-	*/
 
 	return svm_new;
 }
@@ -335,20 +306,6 @@ extern uint8_t func_detect_awake(uint32_t inten_temp)
 extern uint8_t func_detect_state(uint32_t inten_temp)
 {
 	uint8_t state; /* state : SLEEP or WAKE */
-
-	/*
-	**************************************************************
-	*  This part will be deleted in release version
-	*/
-#if SEND_DEBUG_INTEN_1M
-	char str[50];
-	sprintf(str, "%d.", inten_temp); /* send data to matlab */
-	EMBARC_PRINTF(str);
-#endif
-	/*
-	*  end of this part
-	**************************************************************
-	*/
 
 	inten_sl[0] = inten_temp; /* motion intensity in 1min */
 
