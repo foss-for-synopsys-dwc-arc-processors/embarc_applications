@@ -12,10 +12,6 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 
 ![system_architecture](http://i.imgur.com/3hqxrJJ.png)
 
-### iBaby Freeboard UI
-
-![freeboard_ui](http://i.imgur.com/FCIUjcn.png)
-
 ## Hardware and Software Setup
 ### Required Hardware
 - 1 [DesignWare ARC EM Starter Kit(EMSK)](https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit)
