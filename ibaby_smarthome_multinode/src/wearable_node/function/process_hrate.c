@@ -136,7 +136,7 @@ static void task_process_hrate(void *par)
 			{
 				delta = t1_cnt; /* get heartbeat's cycle time(uint: 0.1ms) */
 				t1_cnt = 1;
-				beats_per_min = 600000 / delta; /* 60/(delta/10000.0), get heartrate */
+				beats_per_min = 600000.0 / delta; /* 60/(delta/10000.0), get heartrate */
 
 				if (beats_per_min < BEATS_PER_MIN_MAX && beats_per_min > BEATS_PER_MIN_MIN)
 				{
