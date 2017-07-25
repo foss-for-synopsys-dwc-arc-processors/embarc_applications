@@ -9,28 +9,28 @@
 
 #define HRATE_SIZE (4)     /* Increase this for more averaging. 4 is good. */
 
-static int ir_ac_max = 20;
-static int ir_ac_min = -20;
+static int16_t ir_ac_max = 20;
+static int16_t ir_ac_min = -20;
 
-static int val_cur = 0;    /* current ir value */
-static int val_pre;        /* previous ir value */
-static int val_min = 0;
-static int val_max = 0;
-static int aver_estimated; /* average ir value */
+static int16_t val_cur = 0;    /* current ir value */
+static int16_t val_pre;        /* previous ir value */
+static int16_t val_min = 0;
+static int16_t val_max = 0;
+static int16_t aver_estimated; /* average ir value */
 
-static int pos_edge = 0;   /* positive edge */
-static int neg_edge = 0;   /* negative edge */
-static int ir_avg_reg = 0;
+static int16_t pos_edge = 0;   /* positive edge */
+static int16_t neg_edge = 0;   /* negative edge */
+static int32_t ir_avg_reg = 0;
 
-static int cbuf[32];
-static int offset = 0;
+static int16_t cbuf[32];
+static uint8_t offset = 0;
 
-static const int fir_coeffs[12] = {172, 321, 579, 927, 1360, 1858, 2390, 2916, 3391, 3768, 4012, 4096};
+static const uint16_t fir_coeffs[12] = {172, 321, 579, 927, 1360, 1858, 2390, 2916, 3391, 3768, 4012, 4096};
 
-static int check_beat(int sample);
-static int aver_dc_estimator(int *p, int x);
-static int low_pass_fir_filter(int din);
-static int mul16(int x, int y);
+static bool check_beat(int32_t sample);
+static int16_t aver_dc_estimator(int32_t *p, uint16_t x);
+static int16_t low_pass_fir_filter(int16_t din);
+static int32_t mul16(int16_t x, int16_t y);
 
 
 /* function for deal with heartrate by filter */
@@ -49,13 +49,13 @@ extern void process_hrate(uint32_t *hrate)
 
 	data_rdy = hrate_sensor_read(&ir_value);
 
-	if (data_rdy == E_OK && ir_value != 0 && check_beat(ir_value) == 1)
+	if (data_rdy == E_OK && ir_value != 0 && check_beat((int32_t)ir_value) == true)
 	{
 		flag_timer_stop != flag_timer_stop;
 
 		if (flag_timer_stop == true)
 		{
-			delta = 2 * t1_cnt;
+			delta = t1_cnt;
 			t1_cnt = 1;
 			beats_per_min = 60 / (delta / 10000.0);
 
@@ -72,7 +72,7 @@ extern void process_hrate(uint32_t *hrate)
 					beat_aver += rates[x];
 				beat_aver /= HRATE_SIZE;
 			}
-			// printf("%d\n", beat_aver);
+			printf("%d\n", beat_aver);
 		} else {
 			t1_cnt = 1;
 		}
@@ -86,9 +86,9 @@ extern void process_hrate(uint32_t *hrate)
  * returns true if a beat is detected
  * a running average of four samples is recommended for display on the screen
  */
-static int check_beat(int sample)
+static bool check_beat(int32_t sample)
 {
-	int beat_detected = 0;
+	bool beat_detected = false;
 
 	/* save current state */
 	val_pre = val_cur;
@@ -97,7 +97,7 @@ static int check_beat(int sample)
 	/* process next data sample */
 	aver_estimated = aver_dc_estimator(&ir_avg_reg, sample);
 	val_cur = low_pass_fir_filter(sample - aver_estimated);
-	// printf("%d\n", aver_estimated);
+	// printf("%d\n", val_cur);
 	
 	/* detect positive zero crossing (rising edge) */
 	if ((val_pre < 0) & (val_cur >= 0))
@@ -110,10 +110,11 @@ static int check_beat(int sample)
 		neg_edge = 0;
 		val_max = 0;
 
-		if ((ir_ac_max - ir_ac_min) > 1000 & (ir_ac_max - ir_ac_min) < 3000)
+		// printf("%d\n", ir_ac_max - ir_ac_min);
+		if ((ir_ac_max - ir_ac_min) > 100 & (ir_ac_max - ir_ac_min) < 1000)
 		{
 			/* heart beat!!! */
-			beat_detected = 1;
+			beat_detected = true;
 		}
 	}
 
@@ -122,7 +123,7 @@ static int check_beat(int sample)
 	{
 		pos_edge = 0;
 		neg_edge = 1;
-		val_min = 0;
+		val_min  = 0;
 	}
 
 	/* find maximum value in positive cycle */
@@ -141,20 +142,20 @@ static int check_beat(int sample)
 }
 
 /* average DC estimator */
-static int aver_dc_estimator(int *p, int x)
+static int16_t aver_dc_estimator(int32_t *p, uint16_t x)
 {
 	*p += ((((long) x << 15) - *p) >> 4);
 	return (*p >> 15);
 }
 
 /* low pass FIR filter */
-static int low_pass_fir_filter(int din)
+static int16_t low_pass_fir_filter(int16_t din)
 {
 	cbuf[offset] = din;
 
-	int z = mul16(fir_coeffs[11], cbuf[(offset - 11) & 0x1F]);
+	int32_t z = mul16(fir_coeffs[11], cbuf[(offset - 11) & 0x1F]);
 
-	for (int i = 0 ; i < 11 ; i++)
+	for (uint8_t i = 0 ; i < 11 ; i++)
 	{
 		z += mul16(fir_coeffs[i], cbuf[(offset - i) & 0x1F] + cbuf[(offset - 22 + i) & 0x1F]);
 	}
@@ -166,7 +167,7 @@ static int low_pass_fir_filter(int din)
 }
 
 /* integer multiplier */
-static int mul16(int x, int y)
+static int32_t mul16(int16_t x, int16_t y)
 {
 	return ((long)x * (long)y);
 }
