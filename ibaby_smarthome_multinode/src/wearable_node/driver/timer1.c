@@ -79,6 +79,7 @@ extern void timer1_start(void)
 
 	int_handler_install(INTNO_TIMER1, timer1_isr);
 	int_enable(INTNO_TIMER1);
+	// timer_start(TIMER_1, TIMER_CTRL_IE, T1_COUNT_UNIT_MS);
 	timer_start(TIMER_1, TIMER_CTRL_IE, T1_COUNT_UNIT_LMS);
 }
 

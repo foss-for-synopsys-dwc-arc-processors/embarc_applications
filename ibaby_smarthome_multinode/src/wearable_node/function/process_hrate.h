@@ -43,8 +43,8 @@
 #define PROCESS_HRATE_H
 
 
-/** function for processing heartrate data */
-extern void process_hrate(uint16_t *hrate);
+/** function for starting heartrate detecting */
+extern void hrate_detector_start(void);
 
 
 #endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */

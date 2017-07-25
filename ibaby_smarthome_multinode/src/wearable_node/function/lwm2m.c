@@ -71,12 +71,12 @@ static lwm2m_client_info c_info;        /* lwM2M client info */
 static int lwm2m_client_conn_stat = 0;  /* flag of connect status lwM2M client */
 static int lwm2m_client_start_flag = 0; /* flag of start of lwM2M client */
 
-static void task_lwm2m_client(void *par);
-static TaskHandle_t task_lwm2m_client_handle = NULL;
-
 const static char *p_port   = (char *)"5683";    /* lwm2mServer's port and IP */
 const static char *p_server = (char *)"192.168.43.199";
 const static char *p_client_name = (char *)"wn"; /* name of lwm2m client node */
+
+static void task_lwm2m_client(void *par);
+static TaskHandle_t task_lwm2m_client_handle = NULL;
 
 
 #if LWM2M_CLIENT

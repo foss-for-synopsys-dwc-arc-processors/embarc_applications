@@ -97,14 +97,14 @@
 #include "body_temperature.h"
 
 
-#define TIME_DELAY_MS (18)   /* acceleration sampling frequency: 30Hz */
+#define TIME_DELAY_ACC_MS (31) /* acceleration sampling frequency: 30Hz */
 
-#define THOLD_CNT_AW  (150)  /* threshold of counter(5s) for executing awake event detecting algorithm */
-#define THOLD_CNT_SL  (1760) /* threshold of counter(1min：1760) for executing sleep monitoring algorithm */
-#define WARN_BTEMP_L  (350)  /* lower value of warning body temperature */
-#define WARN_BTEMP_H  (380)  /* upper value of warning body temperature */
-#define WARN_HR_MIN   (50)   /* lower value of warning heartrate */
-#define WARN_HR_MAX   (150)  /* upper value of warning heartrate */
+#define THOLD_CNT_AW    (150)  /* threshold of counter(5s) for executing awake event detecting algorithm */
+#define THOLD_CNT_SL    (1760) /* threshold of counter(1min：1760) for executing sleep monitoring algorithm */
+#define THOLD_CNT_BTEMP (1760) /* threshold of counter(1min：1760) for body temperature sampling time */
+
+#define WARN_BTEMP_L  (350) /* lower value of warning body temperature */
+#define WARN_BTEMP_H  (380) /* upper value of warning body temperature */
 
 
 /**
@@ -112,10 +112,11 @@
  */
 int main(void)
 {
-	uint32_t svm_val;     /* SVM : signal vector magnitude for difference */
-	uint32_t cnt_aw;      /* executing algorithm counter */
-	uint32_t cnt_sl;      /* counter for sleep monitoring */
-	acc_values acc_vals;  /* accleration storage */
+	uint32_t svm_val;       /* SVM : signal vector magnitude for difference */
+	uint32_t cnt_aw = 0;    /* executing algorithm counter */
+	uint32_t cnt_sl = 0;    /* counter for sleep monitoring */
+	uint32_t cnt_btemp = 0; /* counter for body temperature sampling */
+	acc_values acc_vals;    /* accleration storage */
 
 	vTaskDelay(200);
 
@@ -135,9 +136,8 @@ int main(void)
 	/* try to start lwm2m client */
 	lwm2m_client_start();
 #endif
-
-	/* start timer1, timing for transform IR cycle into heartrate(beats per 1min) */
-	timer1_start();
+	/* try to start heartrate detector */
+	hrate_detector_start();
 
 	for (;;) {
 		/* read acceleration data */
@@ -175,29 +175,27 @@ int main(void)
 			cnt_sl = 0;
 		}
 
-		/* initialize the flag of warning */
-		data_report_wn.warn_hrate    = false;
-		data_report_wn.warn_btemp    = false;
 		data_report_wn.warn_downward = false;
 
 		/* detect sleep downward event */
 		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
 
+
 		/* read body temperature data */
-		btemp_sensor_read(&data_report_wn.btemp);
+		if (cnt_btemp < THOLD_CNT_BTEMP) {
+			cnt_btemp++;
+		} else {
+			btemp_sensor_read(&data_report_wn.btemp);
 
-		if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L) {
-			data_report_wn.warn_btemp = true;
+			data_report_wn.warn_btemp = false;
+			if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L) {
+				data_report_wn.warn_btemp = true;
+			}
+
+			cnt_btemp = 0;
 		}
 
-		/* read and process IR value and get heartrate */
-		process_hrate(&data_report_wn.hrate);
-
-		if (data_report_wn.hrate < WARN_HR_MIN || data_report_wn.hrate > WARN_HR_MAX) {
-			data_report_wn.warn_hrate = true;
-		}
-
-		vTaskDelay(TIME_DELAY_MS);
+		vTaskDelay(TIME_DELAY_ACC_MS);
 	}
 
 	/* never run to here */

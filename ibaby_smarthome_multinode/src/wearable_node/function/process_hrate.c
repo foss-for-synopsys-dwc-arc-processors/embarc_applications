@@ -47,16 +47,23 @@
 /* custom HAL */
 #include "common.h"
 #include "process_hrate.h"
+#include "timer1.h"
 #include "heartrate.h"
 
 
-#define HRATE_SIZE (4) /* increase this for more averaging, 4 is good */
-#define BEATS_PER_MIN_MAX (255) /* maximum value of heartrate */
-#define BEATS_PER_MIN_MIN (20)  /* minimum value of heartrate */
-#define AMPL_DIFF_MAX (1000)    /* maximum value of finger detecting amplitude */
-#define AMPL_DIFF_MIN (100)     /* minimum value of finger detecting amplitude */
+#define STACK_DEPTH_HRATE (1024) /* stack depth for heartrate detector : word(4*bytes) */
+#define TIME_DELAY_HRATE_MS (19) /* IR sampling frequency: 50Hz */
 
+#define HRATE_SIZE (4)           /* increase this for more averaging, 4 is good */
 
+#define BEATS_PER_MIN_MAX (255)  /* maximum value of heartrate */
+#define BEATS_PER_MIN_MIN (20)   /* minimum value of heartrate */
+
+#define AMPL_DIFF_MAX (1000)     /* maximum value of finger detecting amplitude */
+#define AMPL_DIFF_MIN (100)      /* minimum value of finger detecting amplitude */
+
+#define WARN_HR_MIN   (50)       /* lower value of warning heartrate */
+#define WARN_HR_MAX   (150)      /* upper value of warning heartrate */
 
 
 static uint16_t rates[HRATE_SIZE]; /* array of heart rates */
@@ -91,49 +98,73 @@ static int16_t aver_dc_estimator(int32_t *p, uint16_t x);
 static int16_t low_pass_fir_filter(int16_t din);
 static int32_t mul16(int16_t x, int16_t y);
 
+static void task_process_hrate(void *par);
+static TaskHandle_t task_process_hrate_handle = NULL;
+
+extern void hrate_detector_start(void)
+{
+	/* start timer1, timing for transform IR cycle into heartrate(beats per 1min) */
+	timer1_start();
+
+	/* create task for heartrate detector */
+	if (xTaskCreate(task_process_hrate, "heartrate detector", STACK_DEPTH_HRATE, NULL, TSKPRI_HIGH,
+	                &task_process_hrate_handle) != pdPASS) {
+		EMBARC_PRINTF("Error: Create task_process_hrate failed\r\n");
+	}
+}
+
 
 /** function for deal with heartrate by filter */
-extern void process_hrate(uint16_t *hrate)
+static void task_process_hrate(void *par)
 {
-	int32_t ir_value = 0; /* IR value of heartrate sensor(max30102) */
-	int32_t data_rdy;     /* flag of IR data ready */
-	uint32_t delta = 1;   /* time interval between 2 heartbeats */
+	int32_t ir_value;   /* IR value of heartrate sensor(max30102) */
+	int32_t data_rdy;   /* flag of IR data ready */
+	uint32_t delta = 1; /* time interval between 2 heartbeats */
 
-	/* read IR data from heartrate sensor */
-	data_rdy = hrate_sensor_read(&ir_value);
+	for (;;) {
+		ir_value = 0;
 
-	/* IR data ready and detect a heartbeat */
-	if (data_rdy == E_OK && ir_value != 0 && check_beat(ir_value) == true)
-	{
-		flag_timer_stop != flag_timer_stop;
+		/* read IR data from heartrate sensor */
+		data_rdy = hrate_sensor_read(&ir_value);
 
-		if (flag_timer_stop == true)
+		/* IR data ready and detect a heartbeat */
+		if (data_rdy == E_OK && ir_value != 0 && check_beat(ir_value) == true)
 		{
-			delta = t1_cnt; /* get heartbeat's cycle time(uint: 0.1ms) */
-			t1_cnt = 1;
-			beats_per_min = 600000 / delta; /* 60/(delta/10000.0), get heartrate */
+			flag_timer_stop != flag_timer_stop;
 
-			// printf("%f\n", beats_per_min);
-
-			if (beats_per_min < BEATS_PER_MIN_MAX && beats_per_min > BEATS_PER_MIN_MIN)
+			if (flag_timer_stop == true)
 			{
-				/* sliding average filtering */
-				rates[rate_spot++] = (uint16_t)beats_per_min; /* store this reading in the array */
-				rate_spot %= HRATE_SIZE;                      /* wrap variable */
+				delta = t1_cnt; /* get heartbeat's cycle time(uint: 0.1ms) */
+				t1_cnt = 1;
+				beats_per_min = 600000 / delta; /* 60/(delta/10000.0), get heartrate */
 
-				/* take average of readings */
-				beat_aver = 0;
-				for (uint8_t x = 0 ; x < HRATE_SIZE ; x++)
-					beat_aver += rates[x];
-				beat_aver /= HRATE_SIZE;
+				if (beats_per_min < BEATS_PER_MIN_MAX && beats_per_min > BEATS_PER_MIN_MIN)
+				{
+					/* sliding average filtering */
+					rates[rate_spot++] = (uint16_t)beats_per_min; /* store this reading in the array */
+					rate_spot %= HRATE_SIZE;                      /* wrap variable */
+
+					/* take average of readings */
+					beat_aver = 0;
+					for (uint8_t x = 0 ; x < HRATE_SIZE ; x++)
+						beat_aver += rates[x];
+					beat_aver /= HRATE_SIZE;
+				}
+				// printf("%d\n", beat_aver);
+			} else {
+				t1_cnt = 1; /* reset the counter of timer1 */
 			}
-			printf("%d\n", beat_aver);
-		} else {
-			t1_cnt = 1;/* reset the counter of timer1 */
 		}
-	}
 
-	*hrate = beat_aver;
+		data_report_wn.hrate = beat_aver;
+
+		data_report_wn.warn_hrate = false;
+		if (beat_aver < WARN_HR_MIN || beat_aver > WARN_HR_MAX) {
+			data_report_wn.warn_hrate = true;
+		}
+
+		vTaskDelay(TIME_DELAY_HRATE_MS);
+	}
 }
 
 /**
@@ -147,17 +178,14 @@ static bool check_beat(int32_t sample)
 
 	/* save current state */
 	val_pre = val_cur;
-	// printf("%d\n", sample);
 
 	/* process next data sample */
 	aver_estimated = aver_dc_estimator(&ir_avg_reg, sample);
 	val_cur = low_pass_fir_filter(sample - aver_estimated);
-	// printf("%d\n", val_cur);
 
 	/* detect positive zero crossing (rising edge) */
 	if ((val_pre < 0) & (val_cur >= 0))
 	{
-
 		ir_ac_max = val_max; /* adjust our AC max and min */
 		ir_ac_min = val_min;
 
@@ -165,7 +193,6 @@ static bool check_beat(int32_t sample)
 		neg_edge = 0;
 		val_max = 0;
 
-		// printf("%d\n", ir_ac_max - ir_ac_min);
 		if ((ir_ac_max - ir_ac_min) > AMPL_DIFF_MIN & (ir_ac_max - ir_ac_min) < AMPL_DIFF_MAX)
 		{
 			/* heart beat detected */
@@ -212,8 +239,8 @@ static int16_t low_pass_fir_filter(int16_t din)
 
 	for (uint8_t i = 0 ; i < 11 ; i++)
 	{
-		z += mul16(fir_coeffs[i], cbuf[(offset - i) & 0x1F] + 
-			cbuf[(offset - 22 + i) & 0x1F]);
+		z += mul16(fir_coeffs[i], cbuf[(offset - i) & 0x1F] +
+		           cbuf[(offset - 22 + i) & 0x1F]);
 	}
 
 	offset++;

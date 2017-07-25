@@ -44,7 +44,7 @@
 #define TIMER1_H
 
 
-//#define T1_COUNT_UNIT_MS  (20000) /*!< counting accuracy of Timer1: 1ms */
+// #define T1_COUNT_UNIT_MS  (20000) /*!< counting accuracy of Timer1: 1ms */
 #define T1_COUNT_UNIT_LMS (2000)  /*!< counting accuracy of Timer1: 0.1ms */
 
 
