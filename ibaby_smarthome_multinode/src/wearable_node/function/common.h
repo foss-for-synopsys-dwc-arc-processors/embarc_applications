@@ -49,23 +49,20 @@
  */
 #define LWM2M_CLIENT      (0) /*!< set 1 to be lwm2m client */
 
-#define PRINT_DEBUG_FUNC  (1) /*!< set 1 to print out message for debug major function */
+#define PRINT_DEBUG_FUNC  (0) /*!< set 1 to print out message for debug major function */
 #define PRINT_DEBUG_AWAKE (0) /*!< set 1 to print out message for debug awake event detecting function */
 #define PRINT_DEBUG_SLEEP (0) /*!< set 1 to print out message for debug sleep-wake state monitoring function */
 /** @} end of name */
 
 
 /**
- * \name    macros for common variables
+ * \name    macros for freertos task
  * @{
  */
 /*!< freertos task priority */
 #define TSKPRI_HIGH (configMAX_PRIORITIES-2) /*!< high priority */
 #define TSKPRI_MID  (configMAX_PRIORITIES-3) /*!< middle priority */
 #define TSKPRI_LOW  (configMAX_PRIORITIES-4) /*!< low priority */
-
-uint32_t t1_cnt;       /*!< counter for timer1 */
-uint16_t file_ota_cnt; /*!< counter for number of files transported in OTA by LwM2M */
 /** @} end of name */
 
 

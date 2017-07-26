@@ -44,12 +44,23 @@
 #define TIMER1_H
 
 
-// #define T1_COUNT_UNIT_MS  (20000) /*!< counting accuracy of Timer1: 1ms */
-#define T1_COUNT_UNIT_LMS (2000)  /*!< counting accuracy of Timer1: 0.1ms */
+volatile uint32_t t1_cnt;   /*!< software timing counter for timer1 */
+volatile uint32_t t1_start; /*!< storage count of timer1 */
 
-
+/** software timing used timer1 interrupt start */
 extern void timer1_start(void);
+
+/** software timing used timer1 stop */
 extern void timer1_stop(void);
+
+/** performance timer initialization */
+extern void perf_init(void);
+
+/** performance timer start */
+extern void perf_start(void);
+
+/** performance timer end, and return the time passed */
+extern uint32_t perf_end(void);
 
 
 #endif /* _WEARABLE_NODE_DRIVER_HEARTRATE_H_ */

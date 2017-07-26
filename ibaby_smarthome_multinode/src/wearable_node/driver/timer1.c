@@ -65,6 +65,11 @@
 #include "timer1.h"
 
 
+// #define T1_COUNT_UNIT_MS  (20000) /*!< counting accuracy of Timer1: 1ms */
+#define T1_COUNT_UNIT_LMS (2000) /*!< counting accuracy of Timer1: 0.1ms */
+static void timer1_isr(void *ptr);
+
+
 /** arc timer 1 interrupt routine */
 static void timer1_isr(void *ptr)
 {
@@ -72,7 +77,7 @@ static void timer1_isr(void *ptr)
 	t1_cnt++;
 }
 
-/** print message for debug major function */
+/** software timing used timer1 interrupt start */
 extern void timer1_start(void)
 {
 	t1_cnt = 0;
@@ -83,7 +88,7 @@ extern void timer1_start(void)
 	timer_start(TIMER_1, TIMER_CTRL_IE, T1_COUNT_UNIT_LMS);
 }
 
-/** print message for debug major function */
+/** software timing used timer1 stop */
 extern void timer1_stop(void)
 {
 	uint32_t dec;
@@ -94,6 +99,39 @@ extern void timer1_stop(void)
 	EMBARC_PRINTF("************     timing     ************\r\n");
 	EMBARC_PRINTF("* timer1 counter : %d.%d ms\r\n", t1_cnt / 10, dec);
 	EMBARC_PRINTF("****************************************\r\n\r\n");
+}
+
+/** performance timer initialization */
+extern void perf_init(void)
+{
+	if (timer_start(TIMER_1, TIMER_CTRL_NH, 0xFFFFFFFF) < 0) {
+		EMBARC_PRINTF("perf timer init failed\r\n");
+		while(1);
+	}
+}
+
+/** performance timer start */
+extern void perf_start(void)
+{
+	if (timer_current(TIMER_1, (void *)(&t1_start)) < 0) {
+		t1_start = 0;
+	}
+}
+
+/** performance timer end, and return the time passed */
+extern uint32_t perf_end(void)
+{
+	uint32_t t1_end = 0;
+
+	if (timer_current(TIMER_1, (void *)(&t1_end)) < 0) {
+		return 0;
+	}
+
+	if (t1_start < t1_end) {
+		return (t1_end - t1_start);
+	} else {
+		return (0xFFFFFFFF - t1_start + t1_end);
+	}
 }
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

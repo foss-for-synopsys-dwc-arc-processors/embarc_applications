@@ -54,7 +54,13 @@
 #define STACK_DEPTH_HRATE (1024) /* stack depth for heartrate detector : word(4*bytes) */
 #define TIME_DELAY_HRATE_MS (19) /* IR sampling frequency: 50Hz */
 
-#define HRATE_SIZE (4)           /* increase this for more averaging, 4 is good */
+/**
+ * calibrate the time elapsed per clock cycle: U = 1000(ms)/20001331(cycles)
+ * beats_per_min = 60/(cost_cycles*U/1000) ==> = 1200079925/cost_cycles
+ */
+#define HRATE_BASE_VALUE (1200079925) /* base value of calculating heartrate */
+
+#define HRATE_SIZE (8)           /* increase this for more averaging, 8 is good */
 
 #define BEATS_PER_MIN_MAX (255)  /* maximum value of heartrate */
 #define BEATS_PER_MIN_MIN (20)   /* minimum value of heartrate */
@@ -69,7 +75,7 @@
 static uint16_t rates[HRATE_SIZE]; /* array of heart rates */
 static uint8_t  rate_spot = 0;     /* index number of rates[] */
 
-static float beats_per_min;        /* heartrate: beats per 1min */
+static uint32_t beats_per_min;     /* heartrate: beats per 1min */
 static uint16_t beat_aver;         /* heartrate: average of 4 values */
 
 static bool flag_timer_stop = true;
@@ -103,8 +109,8 @@ static TaskHandle_t task_process_hrate_handle = NULL;
 
 extern void hrate_detector_start(void)
 {
-	/* start timer1, timing for transform IR cycle into heartrate(beats per 1min) */
-	timer1_start();
+	/* initialize timer1, timing for transform IR cycle into heartrate(beats per 1min) */
+	perf_init();
 
 	/* create task for heartrate detector */
 	if (xTaskCreate(task_process_hrate, "heartrate detector", STACK_DEPTH_HRATE, NULL, TSKPRI_HIGH,
@@ -130,13 +136,13 @@ static void task_process_hrate(void *par)
 		/* IR data ready and detect a heartbeat */
 		if (data_rdy == E_OK && ir_value != 0 && check_beat(ir_value) == true)
 		{
-			flag_timer_stop != flag_timer_stop;
+			flag_timer_stop = !flag_timer_stop;
 
 			if (flag_timer_stop == true)
 			{
-				delta = t1_cnt; /* get heartbeat's cycle time(uint: 0.1ms) */
-				t1_cnt = 1;
-				beats_per_min = 600000.0 / delta; /* 60/(delta/10000.0), get heartrate */
+				delta = perf_end(); /* get cycles cost */
+
+				beats_per_min = HRATE_BASE_VALUE / delta; /* get heartrate */
 
 				if (beats_per_min < BEATS_PER_MIN_MAX && beats_per_min > BEATS_PER_MIN_MIN)
 				{
@@ -149,9 +155,11 @@ static void task_process_hrate(void *par)
 					for (uint8_t x = 0 ; x < HRATE_SIZE ; x++)
 						beat_aver += rates[x];
 					beat_aver /= HRATE_SIZE;
+
+					printf("%d\n", beat_aver);
 				}
 			} else {
-				t1_cnt = 1; /* reset the counter of timer1 */
+				perf_start();  /* get new counter number of t1 and flush t1_start */
 			}
 		}
 

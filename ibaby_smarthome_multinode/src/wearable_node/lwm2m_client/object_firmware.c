@@ -16,7 +16,7 @@
  *    David Navarro, Intel Corporation - Please refer to git log
  *    Bosch Software Innovations GmbH - Please refer to git log
  *    Pascal Rieux - Please refer to git log
- *    
+ *
  *******************************************************************************/
 
 /*
@@ -43,8 +43,6 @@
 
 #include "embARC.h"
 #include "embARC_debug.h"
-
-#include "common.h"
 
 
 /** Resource Id's: */
@@ -145,7 +143,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
                                   lwm2m_tlv_t * dataArray,
                                   lwm2m_object_t * objectP)
 {
-	int i,j;
+	int i, j;
 	bool bvalue;
 	uint8_t result;
 	firmware_data_t * data = (firmware_data_t*)(objectP->userData);
@@ -160,6 +158,8 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 	uint32_t cnt;
 	uint8_t buff[4096];
 	uint32_t blen = sizeof(buff);
+
+	static uint16_t file_ota_cnt;      /*!< counter for number of files transported in OTA by LwM2M */
 
 	/* this is a single instance object */
 	if (instanceId != 0)
@@ -216,17 +216,17 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 			sprintf(tempname, "boot%d.bin", filenum);
 
 			/* receive and save temp file as boot0.bin */
-			if(data->state == 1 || data->state == 3){
-				if((err = f_open(&tempfile, tempname, FA_WRITE | FA_CREATE_ALWAYS))){
+			if (data->state == 1 || data->state == 3) {
+				if ((err = f_open(&tempfile, tempname, FA_WRITE | FA_CREATE_ALWAYS))) {
 					printf("create temp file %s err : %d\n", tempname, err);
 					break;
 				}
 				f_write(&tempfile, dataArray->value, dataArray->length - cnt_fh, &cnt);
 				data->state = 2;
-			}else{
+			} else {
 				f_write(&tempfile, dataArray->value, dataArray->length - cnt_fh, &cnt);
 			}
-			if (cnt != 256){
+			if (cnt != 256) {
 				data->state = 3;
 				printf("receive temp file: %s successfully\n", tempname);
 				f_close(&tempfile);
@@ -238,7 +238,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 			if (file_ota_cnt == filesum)
 			{
 				file_ota_cnt = 0;
-				if((err = f_open(&dstfile, "boot.bin", FA_CREATE_ALWAYS | FA_WRITE))){
+				if ((err = f_open(&dstfile, "boot.bin", FA_CREATE_ALWAYS | FA_WRITE))) {
 					printf("open file boot.bin err : %d\n", err);
 					break;
 				}
@@ -251,7 +251,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 				{
 					sprintf(tempname, "boot%d.bin", i);
 
-					if((err = f_open(&tempfile, tempname, FA_OPEN_EXISTING | FA_READ))){
+					if ((err = f_open(&tempfile, tempname, FA_OPEN_EXISTING | FA_READ))) {
 						printf("\nopen file %s err : %d\n", tempname, err);
 						break;
 					}
@@ -271,16 +271,16 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 					f_close(&tempfile);
 
 					/* delete temp file like boot0.bin */
-					if(f_unlink(tempname) != FR_OK) 
+					if (f_unlink(tempname) != FR_OK)
 						printf("delete file %s failed\n", tempname);
 				}
 
 				f_close(&dstfile);
 				if (file_ota_cnt == filesum)
-				{ 
+				{
 					printf("\nfirmware update online completed\r\n\n");
-					result = COAP_204_CHANGED; 
-				}else{
+					result = COAP_204_CHANGED;
+				} else {
 					printf("\nfirmware update online failed\r\n\n");
 					result = COAP_400_BAD_REQUEST;
 				}
@@ -378,7 +378,7 @@ void display_firmware_object(lwm2m_object_t * object)
 	if (NULL != data)
 	{
 		EMBARC_PRINTF("    state: %u, supported: %u, result: %u\r\n",
-				data->state, data->supported, data->result);
+		              data->state, data->supported, data->result);
 	}
 #endif
 }
