@@ -26,18 +26,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * \version 2017.07
- * \date 2017-07-11
+ * \date 2017-07-26
  * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * \brief	function for heartrate data processing
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
 /* embARC HAL */
@@ -47,11 +47,12 @@
 /* custom HAL */
 #include "common.h"
 #include "process_hrate.h"
+
 #include "timer1.h"
 #include "heartrate.h"
 
 
-#define STACK_DEPTH_HRATE (1024) /* stack depth for heartrate detector : word(4*bytes) */
+#define STACK_DEPTH_HRATE (256)  /* stack depth for heartrate detector : word(4*bytes) */
 #define TIME_DELAY_HRATE_MS (19) /* IR sampling frequency: 50Hz */
 
 /**
@@ -107,6 +108,8 @@ static int32_t mul16(int16_t x, int16_t y);
 static void task_process_hrate(void *par);
 static TaskHandle_t task_process_hrate_handle = NULL;
 
+
+/** function for starting heartrate detecting */
 extern void hrate_detector_start(void)
 {
 	/* initialize timer1, timing for transform IR cycle into heartrate(beats per 1min) */
@@ -120,7 +123,7 @@ extern void hrate_detector_start(void)
 }
 
 
-/** function for deal with heartrate by filter */
+/** task for heartrate detecting */
 static void task_process_hrate(void *par)
 {
 	int32_t ir_value;   /* IR value of heartrate sensor(max30102) */

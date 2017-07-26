@@ -26,19 +26,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * \version 2017.07
- * \date 2017-07-11
+ * \date 2017-07-26
  * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * \brief	function for acceleration data processing
  *              awake event detecting, sleep downward detecting, sleep monitoring
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
 /* standard C HAL */
@@ -50,11 +50,22 @@
 
 /* custom HAL */
 #include "common.h"
-#include "process_acc.h"
 #include "print_msg.h"
+#include "process_acc.h"
+
 #include "acceleration.h"
+#include "body_temperature.h"
 
 
+#define STACK_DEPTH_ACC (1024) /* stack depth for heartrate detector : word(4*bytes) */
+#define TIME_DELAY_ACC_MS (31) /* acceleration sampling frequency: 30Hz */
+
+#define THOLD_CNT_AW    (150)  /* threshold of counter(5s) for executing awake event detecting algorithm */
+#define THOLD_CNT_SL    (1760) /* threshold of counter(1min：1760) for executing sleep monitoring algorithm */
+#define THOLD_CNT_BTEMP (1760) /* threshold of counter(1min：1760) for body temperature sampling time */
+
+#define WARN_BTEMP_L  (350)  /* lower value of warning body temperature */
+#define WARN_BTEMP_H  (380)  /* upper value of warning body temperature */
 #define WARN_ACCL_Z    (-8)  /* lower value of warning acceleration */
 
 /* parameters of low pass filter for latest acceleration value */
@@ -102,6 +113,93 @@ static char cnt_v;          /* low pass filter counter */
 static unsigned char par_v; /* low pass filter coefficient */
 static bool flag_old_v;     /* flag of change direction of value */
 
+static uint32_t process_acc(acc_values acc_temp);
+static uint8_t  func_detect_awake(uint32_t inten_temp);
+static uint8_t  func_detect_state(uint32_t inten_temp);
+static bool     func_detect_downward(float acc_temp);
+
+static void task_sleep_monitor(void *par);
+static TaskHandle_t task_sleep_monitor_handle = NULL;
+
+
+/** function for starting sleep monitor and body temperature detecting */
+extern void sleep_monitor_start(void)
+{
+	/* create task for sleep monitor */
+	if (xTaskCreate(task_sleep_monitor, "sleep monitor", STACK_DEPTH_ACC, NULL, TSKPRI_MID,
+	                &task_sleep_monitor_handle) != pdPASS) {
+		EMBARC_PRINTF("Error: Create task_sleep_monitor failed\r\n");
+	}
+}
+
+/** task for sleep monitoring */
+static void task_sleep_monitor(void *par)
+{
+	uint32_t svm_val;       /* SVM : signal vector magnitude for difference */
+	uint32_t cnt_aw = 0;    /* executing algorithm counter */
+	uint32_t cnt_sl = 0;    /* counter for sleep monitoring */
+	uint32_t cnt_btemp = 0; /* counter for body temperature sampling */
+	acc_values acc_vals;    /* accleration storage */
+
+	while (1) {
+		/* read acceleration data */
+		acc_sensor_read(&acc_vals);
+
+		/* process acceleration data and get SVM(representation of motion intensity) in 1 sample time */
+		svm_val = process_acc(acc_vals);
+
+		/* awake event detecting algorithm */
+		if (cnt_aw < THOLD_CNT_AW) {
+			sum_svm_5s += svm_val; /* summation of SVM in 5s */
+			cnt_aw++;
+		} else {
+			/* detect awake event */
+			data_report_wn.event_awake = func_detect_awake(sum_svm_5s);
+
+			/* print out messages for primary function */
+#if PRINT_DEBUG_FUNC
+			print_msg_func();
+#endif/* PRINT_DEBUG_FUNC */
+
+			sum_svm_5s = 0;
+			cnt_aw = 0;
+		}
+
+		/* sleep monitoring algorithm based on indigital integration method */
+		if (cnt_sl < THOLD_CNT_SL) {
+			data_report_wn.motion_intensity += svm_val; /* summation of SVM in 1 min */
+			cnt_sl++;
+		} else {
+			/* sleep-wake state monitoring */
+			data_report_wn.state = func_detect_state(data_report_wn.motion_intensity);
+
+			data_report_wn.motion_intensity = 0;
+			cnt_sl = 0;
+		}
+
+		data_report_wn.warn_downward = false;
+
+		/* detect sleep downward event */
+		data_report_wn.warn_downward = func_detect_downward(acc_vals.accl_z);
+
+
+		/* read body temperature data */
+		if (cnt_btemp < THOLD_CNT_BTEMP) {
+			cnt_btemp++;
+		} else {
+			btemp_sensor_read(&data_report_wn.btemp);
+
+			data_report_wn.warn_btemp = false;
+			if (data_report_wn.btemp > WARN_BTEMP_H || data_report_wn.btemp < WARN_BTEMP_L) {
+				data_report_wn.warn_btemp = true;
+			}
+
+			cnt_btemp = 0;
+		}
+
+		vTaskDelay(TIME_DELAY_ACC_MS);
+	}
+}
 
 /** function for deal with acclerate by filter */
 static int filter_acc(int val_new,
@@ -210,7 +308,7 @@ static int filter_svm(int val_new,
 }
 
 /** function for processing accelerate raw data */
-extern uint32_t process_acc(acc_values acc_temp)
+static uint32_t process_acc(acc_values acc_temp)
 {
 	int16_t  x_new, y_new, z_new; /* latest value */
 	uint32_t  svm_new;            /* SVM : signal vector magnitude for difference */
@@ -226,7 +324,7 @@ extern uint32_t process_acc(acc_values acc_temp)
 
 	/* calculate SVM using data fusion */
 	svm_new = sqrt((x_new - x_old) * (x_new - x_old) +
-	               (y_new - y_old) * (y_new - y_old) + 
+	               (y_new - y_old) * (y_new - y_old) +
 	               (z_new - z_old) * (z_new - z_old));
 
 	x_old = x_new;
@@ -241,7 +339,7 @@ extern uint32_t process_acc(acc_values acc_temp)
 }
 
 /** function for awake event detecting */
-extern uint8_t func_detect_awake(uint32_t inten_temp)
+static uint8_t func_detect_awake(uint32_t inten_temp)
 {
 	bool flag_break_aw = false;
 	uint8_t cnt_sl_aw = 0;
@@ -303,16 +401,16 @@ extern uint8_t func_detect_awake(uint32_t inten_temp)
 }
 
 /** function for sleep-wake state detecting */
-extern uint8_t func_detect_state(uint32_t inten_temp)
+static uint8_t func_detect_state(uint32_t inten_temp)
 {
 	uint8_t state; /* state : SLEEP or WAKE */
 
 	inten_sl[0] = inten_temp; /* motion intensity in 1min */
 
 	/* calculate the score of 2min ago(inten_sl[2]) by Webster sleep-wake determine method */
-	score_sl = P * (K4 * inten_sl[4] + K3 * inten_sl[3] + 
-		        K2 * inten_sl[2] + K1 * inten_sl[1] + 
-		        K0 * inten_sl[0]) / 100;
+	score_sl = P * (K4 * inten_sl[4] + K3 * inten_sl[3] +
+	                K2 * inten_sl[2] + K1 * inten_sl[1] +
+	                K0 * inten_sl[0]) / 100;
 
 	/* determine the state of 2min ago by score */
 	if (score_sl > 1) {
@@ -334,7 +432,7 @@ extern uint8_t func_detect_state(uint32_t inten_temp)
 }
 
 /** function for sleep downward state detecting */
-extern bool func_detect_downward(float acc_temp)
+static bool func_detect_downward(float acc_temp)
 {
 	bool warn;
 

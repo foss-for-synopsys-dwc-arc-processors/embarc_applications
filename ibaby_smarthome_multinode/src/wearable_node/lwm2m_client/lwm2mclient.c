@@ -54,7 +54,7 @@
 */
 /**
  * \file
- * \ingroup	EMBARC_APP_LWIP_FREERTOS_LWM2M_CLIENT
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * \brief	Implementation for LwM2M client
  */
 

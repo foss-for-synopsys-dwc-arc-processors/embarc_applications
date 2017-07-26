@@ -36,7 +36,7 @@
  */
 
 /**
- * \addtogroup    EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_
+ * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
 #ifndef COMMON_H
@@ -49,7 +49,7 @@
  */
 #define LWM2M_CLIENT      (0) /*!< set 1 to be lwm2m client */
 
-#define PRINT_DEBUG_FUNC  (0) /*!< set 1 to print out message for debug major function */
+#define PRINT_DEBUG_FUNC  (1) /*!< set 1 to print out message for debug major function */
 #define PRINT_DEBUG_AWAKE (0) /*!< set 1 to print out message for debug awake event detecting function */
 #define PRINT_DEBUG_SLEEP (0) /*!< set 1 to print out message for debug sleep-wake state monitoring function */
 /** @} end of name */
@@ -89,6 +89,6 @@ data_wearable_node data_report_wn_old;/*!< the last value of reporting data */
 /** @} end of name */
 
 
-#endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */
+#endif/* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
 
-/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */

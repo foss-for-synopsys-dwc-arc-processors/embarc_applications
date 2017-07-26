@@ -27,18 +27,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * \version 2017.07
- * \date 2017-07-11
+ * \date 2017-07-26
  * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * \brief	Header File of acceleration data processing function
  *              awake event detecting, sleep downward detecting, sleep monitoring
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
 #ifndef PROCESS_ACC_H
@@ -68,20 +68,11 @@ uint32_t sum_svm_5s;  /*!< motion intensity in 5s */
 float    score_sl;    /*!< score of motion */
 
 
-/** function for processing acceleration data */
-extern uint32_t process_acc(acc_values acc_temp);
-
-/** function for awake event detecting */
-extern uint8_t  func_detect_awake(uint32_t inten_temp);
-
-/** function for sleep-wake state detecting */
-extern uint8_t  func_detect_state(uint32_t inten_temp);
-
-/** function for sleep downward state detecting */
-extern bool     func_detect_downward(float acc_temp);
+/** function for starting sleep monitor and body temperature detecting */
+extern void sleep_monitor_start(void);
 /** @} end of name */
 
 
-#endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */
+#endif/* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
 
-/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
