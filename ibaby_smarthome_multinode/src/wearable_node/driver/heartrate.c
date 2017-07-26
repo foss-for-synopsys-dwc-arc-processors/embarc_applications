@@ -158,13 +158,6 @@
 #define MAX30102_CONFIG_SPO2_ADC_2_REG       2  /*!< ADC LSB SIZE:31.25 FULL SCALE:8192 */
 #define MAX30102_CONFIG_SPO2_ADC_3_REG       3  /*!< ADC LSB SIZE:62.5  FULL SCALE:16384 */
 
-typedef struct __iir_par
-{
-	short order;
-	float *num;
-	float *den;
-} iir_par;
-
 union _hrate_data
 {
 	uint8_t buf[3];
@@ -199,54 +192,8 @@ static uint8_t hrate_int_enable[] = {
 	0x00,
 };
 
-static float iir1num[3] = {0.013359f, 0.026718f, 0.013359f};
-static float iir1den[2] = { -1.647460f, 0.700897f};
-static float iir2num[3] = {0.982385f, -1.964770f, 0.982385f};
-static float iir2den[2] = { -1.964461f, 0.965081f};
-
-static iir_par iirs1 = {2, iir1num, iir1den};
-static iir_par iirs2 = {2, iir2num, iir2den};
-
-static float zs1[3] = {0.f}, zs2[3] = {0.f};
-
 static DEV_IIC  *emsk_max_sensor;  /*!< MAX30102 sensor object */
 static uint32_t hrate_sensor_addr; /*!< variable of heartrate sensor address */
-
-static float   iir_tick(iir_par *, float *, float);
-
-
-/*
- * 2th IIR filter, sps:50,
- * lowpass  filter cutoff frequence: 2Hz,
- * highpass filter cutoff frequence: 0.2Hz,
- */
-static float iir_tick(iir_par *par, float *zs, float in)
-{
-	int i;
-	float out;
-
-	out = zs[0] + in * par->num[0];
-
-	for (i = 0; i < par->order - 1; i++) {
-		zs[i] = zs[i + 1] + (in * par->num[i + 1])
-		        - (out * par->den[i]);
-	}
-
-	zs[i] = (in * par->num[i + 1]) - (out * par->den[i]);
-
-	return out;
-}
-
-/* filter function for band pass */
-extern float band_pass_filter(float in)
-{
-	float lout, hout;
-
-	lout = iir_tick(&iirs1, zs1, in);
-	hout = iir_tick(&iirs2, zs2, lout);
-
-	return hout;
-}
 
 
 /**
