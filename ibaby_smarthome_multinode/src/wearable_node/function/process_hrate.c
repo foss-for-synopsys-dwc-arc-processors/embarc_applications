@@ -155,8 +155,6 @@ static void task_process_hrate(void *par)
 					for (uint8_t x = 0 ; x < HRATE_SIZE ; x++)
 						beat_aver += rates[x];
 					beat_aver /= HRATE_SIZE;
-
-					printf("%d\n", beat_aver);
 				}
 			} else {
 				perf_start();  /* get new counter number of t1 and flush t1_start */
