@@ -6,6 +6,11 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 
 ### Function
 
+- Heartrate and body temperature detecting
+- Sleep monitoring (alarm of face down during sleeping, Sleep-Wake state detecting and notify of baby awake)
+- Communicate with Gateway（LwM2M）
+- OTA based on LwM2M protocol (supports file transfer over 2k size)
+
 ![ibaby_function](http://i.imgur.com/tspan1C.png)
 
 ### System architecture
@@ -59,7 +64,7 @@ The hardware resources are allocated as following table.
 
 ### Run this application
 
-Modify the setting for connecting to the LwM2M Server(Gateway), as shown below (path: src/wearable_node/function/lwm2m.c) :
+Modify the setting for connecting to the LwM2M Server(Gateway), as shown below (path: src/wearable_node/function/lwm2m/lwm2m.c) :
 
 		const static char *p_port   = (char *)"5683";    /* lwm2mServer's port and IP */
 		const static char *p_server = (char *)"192.168.43.199";
