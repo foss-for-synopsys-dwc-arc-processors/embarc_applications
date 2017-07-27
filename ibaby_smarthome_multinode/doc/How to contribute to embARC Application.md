@@ -4,7 +4,7 @@ embARC users are welcome to make contributions to embARC, including examples, so
 
 ## Prerequisites
 
-The hardware we used in the development is EM Start Kit. We need to download and install the following tools: 
+The hardware we used during development is **EM Starter Kit(aka EMSK)**. We need to download and install the following tools: 
 
 + Download and install [**Development Tools**](http://embarc.org/tools.html "IDE"). 
 	+ Here we use [GNU Toolchain](https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases "GNU Toolchain") in **windows** host.
@@ -16,16 +16,16 @@ The hardware we used in the development is EM Start Kit. We need to download and
 
 	![Digilent Adapt](http://i.imgur.com/aSPUBuW.png)
 
-+ Download and install [**zadig**](http://zadig.akeo.ie/ "zadig"), replacing a driver for **windows** host.
++ Download and install [**Zadig**](http://zadig.akeo.ie/ "zadig"), replacing a driver for **Windows** host.
 	+ Before you can start using OpenOCD, you have to download WinUSB driver and replace with it one of FTDI drivers for your hardware development system.
 	+ See [How to Use OpenOCD on Windows](https://github.com/foss-for-synopsys-dwc-arc-processors/arc_gnu_eclipse/wiki/How-to-Use-OpenOCD-on-Windows "How to Use OpenOCD on Windows") for reference.
-	+ For more information, see [toolchain Home](https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/wiki "Home").
+	+ For more information, see [ARC GNU Toolchain Wiki Home](https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/wiki "Home").
 	
 	![Zadig](http://i.imgur.com/q6Q6SFX.png)
 
-	Notices: To do that, you have to connect EMSK to PC using JTAG-USB cable. Then click on the "Options" - "List all devices", and you can find **Digilent USB Device(Interface 0/1)**. Just replacing one to WinUSB driver, it helps PC to load executable file into EMSK, and you can choose Interface 0/1.
+	Notices: To do that, you have to connect EMSK to PC using JTAG-USB cable. Then click on the *Options* - *List all devices*, and you can find **Digilent USB Device(Interface 0/1)**. Just replacing one to WinUSB driver, it helps PC to load executable file into EMSK, and you can choose *Interface 0*.
 
-	Make sure the driver has been install successfully, see **Diligent USB Device** in the Device Manager.
+	Make sure the driver has been install successfully, see **Digilent USB Device** in the Device Manager.
 
 	![Device Manager](http://i.imgur.com/Amm5Lej.png)
 
@@ -35,7 +35,7 @@ The hardware we used in the development is EM Start Kit. We need to download and
 
 + Download and install [**Doxygen**](http://www.stack.nl/~dimitri/doxygen/download.html "Doxygen") for building embARC document.
 
-	Goto the path: ./embarc\_osp/doc, run the **Command Line** and use the following command to make embARC document.
+	Goto the path: `./embarc_osp/doc`, run the **Command Line** and use the following command to make embARC document.
 
 	![Document Folder](http://i.imgur.com/Ix9Q6wF.png) 
 
@@ -45,7 +45,7 @@ The hardware we used in the development is EM Start Kit. We need to download and
 
 	![embARC Document](http://i.imgur.com/wRUWgNd.png)
 
-+ Download and install [**Tera Term**](https://zh.osdn.net/projects/ttssh2/ "Tera Term")..
++ Download and install [**Tera Term**](https://zh.osdn.net/projects/ttssh2/ "Tera Term").
 
 ## Getting Start with existing Application
 
@@ -54,7 +54,7 @@ We provided some examples and applications in embARC, user can take reference fr
 + Access to the examples: [source code of embARC examples](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/tree/master/example "examples")
 + Access to the applications: [source code of embARC applications](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications "applications")
 
-Here we use EMSK 2.2, EM11D for example. Goto the path: .\embarc_osp\example\baremetal\bootloader, run the Command Line and type commands for building and running.
+Here we use EMSK 2.2, EM11D for example. Goto the path: `.\embarc_osp\example\baremetal\bootloader`, run the Command Line and type commands for building and running.
 
 ![cmd-make](http://i.imgur.com/Kuv2dlz.png)
 
@@ -66,7 +66,7 @@ For more detail information, see [Getting Started with embARC Using GNU on Windo
 
 ## Creating a New Application in embARC
 
-See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/html/page\_example\_usage.html* in the *embarc\_osp* for more detail information. It will help you to create a **"Hello World"** application using ARC GNU quickly.
+See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/html/page\_example\_usage.html* in the *embarc\_osp* for more detail information. It will help you to create a **Hello World** application using ARC GNU quickly.
 
 ![example usage guide](http://i.imgur.com/CejxBqG.png)
 
@@ -174,4 +174,4 @@ Redistribution and use in source and binary forms, with or without modification,
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. NY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-**For complete embARC license information, please refer to the embARC FOSS Notice** [License](file:///C:/WorkSpace/Files/embarc_osp_liteos/doc/embARC_Document/html/page_license.html "License"). 
+**For complete embARC license information, please refer to the embARC FOSS Notice** [License](http://embarc.org/embarc_osp/doc/embARC_Document/html/page_license.html "License"). 
