@@ -68,6 +68,8 @@ For more detail information, see [Getting Started with embARC Using GNU on Windo
 
 See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/html/page\_example\_usage.html* in the *embarc\_osp* for more detail information. It will help you to create a **"Hello World"** application using ARC GNU quickly.
 
+![example usage guide](http://i.imgur.com/CejxBqG.png)
+
 ## Developing Your Application Using Git
 
 We recommand you to develop the application following these steps:
