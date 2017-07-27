@@ -1,8 +1,8 @@
-#How to Contribute to embARC Applications
+#How to Contribute to embARC Applications#
 
 embARC users are welcome to make contributions to embARC, including examples, source code (bug fixes and/or new packages), and documentation. This document is intended to help you contribute to embARC Applications quickly.
 
-##Prerequisites
+##Prerequisites##
 
 The hardware we used in the development is EM Start Kit. We need to download and install the following tools: 
 
@@ -47,7 +47,7 @@ The hardware we used in the development is EM Start Kit. We need to download and
 
 + Download and install [**Tera Term**](https://zh.osdn.net/projects/ttssh2/ "Tera Term")..
 
-##Getting Start with existing Application
+##Getting Start with existing Application##
 
 We provided some examples and applications in embARC, user can take reference from them.
 
@@ -64,11 +64,11 @@ Run the Tera Term:
 
 For more detail information, see [Getting Started with embARC Using GNU on Windows](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-Using-GNU-on-Windows#building-and-running-your-first-example "Getting Started with embARC Using GNU on Windows") for reference. And see [Getting Started with embARC OSP](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-OSP "Getting Started with embARC OSP") to learn how to get start with embARC using different toolsets or hosts.
 
-##Creating a New Application in embARC
+##Creating a New Application in embARC##
 
 See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/html/page\_example\_usage.html* in the *embarc\_osp* for more detail information. It will help you to create a **"Hello World"** application using ARC GNU quickly.
 
-##Developing Your Application Using Git
+##Developing Your Application Using Git##
 
 We recommand you to develop the application following these steps:
 
@@ -95,7 +95,7 @@ We recommand you to develop the application following these steps:
 
    See the document **Example Usage Guide** in the *embarc\_osp* for more information.
 
-##Committing Your Work
+##Committing Your Work##
 
 You can contribute your work by submitting **Pull Request** to *embarc\_applications* in github after finishing your project development. Creating a new **Pull Request**:
 
@@ -113,7 +113,7 @@ Create the new pull request:
 
 ![create pull request](http://i.imgur.com/4zpWJ7V.png)
 
-##Copyright Notice
+##Copyright Notice##
 
 Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
