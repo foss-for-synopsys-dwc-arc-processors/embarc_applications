@@ -75,7 +75,7 @@ We provided some examples and applications in embARC, user can take reference fr
 + Access to the examples: [source code of embARC examples][45]
 + Access to the applications: [source code of embARC applications][38]
 
-Here we use EMSK 2.2, EM11D for example. Goto the path: `.\embarc_osp\example\baremetal\bootloader`, run the Command Line and type commands for building and running.
+Here we take bootload example using GNU and EMSK 2.2, EM11D for example. Goto the path: `.\embarc_osp\example\baremetal\bootloader`, run the Command Line and type commands for building and running.
 
 ![cmd_make][8]
 
@@ -87,7 +87,7 @@ For more detail information, see [Getting Started with embARC Using GNU on Windo
 
 ## Creating a New Application in embARC
 
-See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/html/page\_example\_usage.html* in the *embarc\_osp* for more detail information. It will help you to create a **Hello World** application using ARC GNU quickly.
+See the document **Example Usage Guide** - `./embarc_osp/doc/embARC_Document/html/page_example_usage.html` in the *embarc\_osp* for more detail information. It will help you to create a **Hello World** application using ARC GNU quickly.
 
 ![example_usage_guide][10]
 
@@ -95,9 +95,9 @@ See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/h
 
 1) Make sure you have installed [Git][40]，and know how to use it.
 
-2) Goto the folder `./embarc_osp/application`, Create a new folder for your own application, like **helloworld**.
+2) Goto the folder `./embarc_osp/application`, create a new folder for your own application, like **smart_device**. Please notice that your application projects should be placed under the folder `./embarc_osp/application`, not `./embarc_osp/example`.
 
-3) Copy **example.makefile** and **main.c.tmpl** in `./embarc_osp/example` folder to the newly created helloworld folder.
+3) Copy **example.makefile** and **main.c.tmpl** in `./embarc_osp/example` folder to the newly created **smart_device** folder.
 
 + Rename example.makefile to **makefile**.
 + Rename main.c.tmpl to **main.c.**

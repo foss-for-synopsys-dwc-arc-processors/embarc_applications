@@ -6,10 +6,10 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 
 ### Function
 
-- Heartrate and body temperature detecting
-- Sleep monitoring (alarm of face down during sleeping, Sleep-Wake state detecting and notify of baby awake)
-- Communicate with Gateway（LwM2M）
-- OTA based on LwM2M protocol (supports file transfer over 2k size)
+- **Heartrate and body temperature detecting**
+- **Sleep monitoring** (alarm of face down during sleeping, Sleep-Wake state detecting and notify of baby awake)
+- Communicate with Gateway（**LwM2M**）
+- **OTA** based on LwM2M protocol (supports file transfer over 2k size)
 
 ![ibaby_function][0]
 
@@ -78,25 +78,15 @@ Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how 
 
 3. Interact using EMSK and Freeboard.
 
-[0]: ./doc/screenshots/ibaby_function.PNG
-	"ibaby_function"
-[1]: ./doc/screenshots/system_architecture.PNG
-	"system_architecture"
-[2]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
+[0]: ./doc/screenshots/ibaby_function.PNG         "ibaby_function"
+[1]: ./doc/screenshots/system_architecture.PNG    "system_architecture"
+[2]: ./doc/screenshots/wearable_node.jpg          "wearable_node"
 
-[30]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
-[31]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
-[32]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
-[33]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
-[34]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
-[35]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
-[36]: ./doc/screenshots/wearable_node.PNG
-	"wearable_node"
+[30]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
+[31]: http://store.digilentinc.com/pmodwifi-wifi-interface-802-11g/    "Digilent PMOD WiFi(MRF24WG0MA)"
+[32]: https://www.invensense.com/products/motion-tracking/6-axis/mpu-6050/    "Acceleration sensor(MPU6050)"
+[33]: http://www.electronics-lab.com/max30102/    "Heartrate sensor(MAX30102)"
+[34]: https://developer.mbed.org/components/MLX90614-I2C-Infrared-Thermometer/    "Temperature sensor(MLX90614)"
+[35]: https://github.com/XiangcaiHuang/ibaby.git    "iBaby Smarthome Gateway"
+[36]: https://github.com/XiangcaiHuang/ibaby.git    "iBaby Freeboard UI"
 
