@@ -12,8 +12,7 @@ embARC users are welcome to make contributions to embARC, including examples, so
 ## <a name="prerequisites"/> Prerequisites
 
 The hardware we used during development is **EM Starter Kit(aka EMSK)**. We need to download and install the following tools:
-
-+ Download and install [**Development Tools**][30]. 
+	+ Download and install [**Development Tools**][30]. 
 	+ Here we use [GNU Toolchain][31] in **windows** host.
 	+ For using GNU or other tools in different host, see [Getting Started with embARC OSP][32] for reference.
 	
@@ -94,9 +93,9 @@ See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/h
 
 1) Make sure you have installed [Git][40]，and know how to use it.
 
-3) Goto the folder `./embarc_osp/application`, Create a new folder for your own application, like **helloworld**.
+2) Goto the folder `./embarc_osp/application`, Create a new folder for your own application, like **helloworld**.
 
-4) Copy **example.makefile** and **main.c.tmpl** in `./embarc_osp/example` folder to the newly created helloworld folder.
+3) Copy **example.makefile** and **main.c.tmpl** in `./embarc_osp/example` folder to the newly created helloworld folder.
 
 + Rename example.makefile to **makefile**.
 + Rename main.c.tmpl to **main.c.**
@@ -184,39 +183,23 @@ Redistribution and use in source and binary forms, with or without modification,
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. NY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-**For complete embARC license information, please refer to the embARC FOSS Notice** [License][50].
+**For complete embARC license information, please refer to the embARC FOSS Notice** [License][50]. 
 
-
-[0]: ../img/gnu_make.png               
-	"gnu_make"
-[1]: ../img/digilent_adapt.png         
-	"digilent_adapt"
-[2]: ../img/zadig.png                  
-	"zadig"
-[3]: ../img/device_manager.png         
-	"device_manager"
-[4]: ../img/fork_app_repo.png          
-	"fork_app_repo"
-[5]: ../img/document_folder.png        
-	"document_folder"
-[6]: ../img/doxygen_make.png           
-	"doxygen_make"
-[7]: ../img/embarc_document.png        
-	"embarc_document"
-[8]: ../img/cmd_make.png               
-	"cmd_make"
-[9]: ../img/tera_term.png              
-	"tera_term"
-[10]: ../img/example_usage_guide.png   
-	"example_usage_guide"
-[11]: ../img/new_pull_request.png      
-	"new_pull_request"
-[12]: ../img/compare_across_forks.png  
-	"compare_across_forks"
-[13]: ../img/compare_changes.png       
-	"compare_changes"
-[14]: ../img/create_pull_request.png   
-	"create_pull_request"
+[0]: ../img/gnu_make.png               "gnu_make"
+[1]: ../img/digilent_adapt.png         "digilent_adapt"
+[2]: ../img/zadig.png                  "zadig"
+[3]: ../img/device_manager.png         "device_manager"
+[4]: ../img/fork_app_repo.png          "fork_app_repo"
+[5]: ../img/document_folder.png        "document_folder"
+[6]: ../img/doxygen_make.png           "doxygen_make"
+[7]: ../img/embarc_document.png        "embarc_document"
+[8]: ../img/cmd_make.png               "cmd_make"
+[9]: ../img/tera_term.png              "tera_term"
+[10]: ../img/example_usage_guide.png   "example_usage_guide"
+[11]: ../img/new_pull_request.png      "new_pull_request"
+[12]: ../img/compare_across_forks.png  "compare_across_forks"
+[13]: ../img/compare_changes.png       "compare_changes"
+[14]: ../img/create_pull_request.png   "create_pull_request"
 
 [30]: http://embarc.org/tools.html
 	"Development Tools"
