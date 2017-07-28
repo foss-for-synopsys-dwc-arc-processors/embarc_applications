@@ -187,7 +187,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 **For complete embARC license information, please refer to the embARC FOSS Notice** [License][50]. 
 
-[0]: ../img/cmd_make.PNG               "gnu_make"
+[0]: ./img/cmd_make.PNG               "gnu_make"
 [1]: ../img/digilent_adapt.PNG         "digilent_adapt"
 [2]: ../img/zadig.PNG                  "zadig"
 [3]: ../img/device_manager.PNG         "device_manager"
