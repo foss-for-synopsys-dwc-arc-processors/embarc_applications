@@ -1,19 +1,30 @@
 # iBaby Smarthome Application
 This application is designed to show how to connect 1 or more EMSKs and **iBaby Smarthome Gateway** using embARC. The connection between EMSK and Gateway is based on **LwM2M** protocol as shown in the following figure. All the iBaby nodes interact with AWS IoT through the Gateway indirectly.
 
+* [Introduction](#introduction)
+	* [Function](#function)
+	* [System Architecture](#system-architecture)
+* [Hardware and Software Setup](#hardware-and-software-setup)
+	* [Required Hardware](#required-hardware)
+	* [Required Software](#required-software)
+	* [Hardware Connection](#hardware-connection)
+* [User Manual](#user-manual)
+	* [Before Running This Application](#before-running-this-application)
+	* [Run This Application](#run-this-application)
+
 ## Introduction
 **iBaby Infant Sleep Monitoring System**
 
 ### Function
 
 - **Heartrate and body temperature detecting**
-- **Sleep monitoring** (alarm of face down during sleeping, Sleep-Wake state detecting and notify of baby awake)
+- **Sleep monitoring** (Alarm of face down during sleeping, Sleep-Wake state detecting and notify of baby awake)
 - Communicate with Gateway（**LwM2M**）
-- **OTA** based on LwM2M protocol (supports file transfer over 2k size)
+- **OTA** based on LwM2M protocol (Supports file transfer over 2k size)
 
 ![ibaby_function][0]
 
-### System architecture
+### System Architecture
 
 ![system_architecture][1]
 
@@ -40,12 +51,12 @@ We designed integrated module for 3 sensors above, I'll call it **Foot Ring Modu
 
 ### Hardware Connection
 1. EMSK 1 implement **wearable** node, as an intelligent foot ring for baby, it will publish baby's status to AWS IoT Cloud via the Gateway, including body temperature, heartrate, sleep-wake state, motion intensity and some warning information. We can view all data on the Freeboard UI.
-   - Connect PMOD WiFi to J5, connect Foot Ring Module to J4.
+   - Connect **PMOD WiFi** to **J5**, connect **Foot Ring Module** to **J4**(Using IIC1 interface).
 2. Configure your EMSKs with proper core configuration.
 
 ## User Manual
-### Before running this application
-Firstly, download source code of **iBaby Smarthome Gateway** and **iBaby Freeboard UI** from github. Then you need an AWS account, and create things for ibaby nodes, generate and save the certs for different nodes, and modify specific `config.js`(path: ./ibaby_smarthome_gateway/config.js) for your project.
+### Before Running This Application
+Firstly, download source code of **iBaby Smarthome Gateway** and **iBaby Freeboard UI** from github. Then you need an AWS account, and create things for ibaby nodes, generate and save the certs for different nodes, and modify specific `config.js`(path: `./ibaby_smarthome_gateway/config.js`) for your project.
 
 Secondly, run the iBaby Smarthome Gateway, open the browser and type IP address of the Gateway to access user interface. You can push iBaby Freeboard UI to github so that it can support remote access data.
 
@@ -62,9 +73,9 @@ The hardware resources are allocated as following table.
 |  MLX90614           | Body temperature sensor                                       |
 |  PMOD WiFi          | Provide WiFi Connection                                       |
 
-### Run this application
+### Run This Application
 
-Modify the setting for connecting to the LwM2M Server(Gateway), as shown below (path: src/wearable_node/function/lwm2m/lwm2m.c) :
+Modify the settings for connecting to the LwM2M Server(Gateway), as shown below (path: `src/wearable_node/function/lwm2m/lwm2m.c`) :
 
 		const static char *p_port   = (char *)"5683";    /* lwm2mServer's port and IP */
 		const static char *p_server = (char *)"192.168.43.199";
