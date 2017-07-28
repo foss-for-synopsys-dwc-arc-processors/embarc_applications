@@ -3,13 +3,13 @@
 embARC users are welcome to make contributions to embARC, including examples, source code (bug fixes and/or new packages), and documentation. This document is intended to help you contribute to embARC Applications quickly.
 
 * [Prerequisites](#prerequisites)
-* [Getting Start with Existing Application](#get_start)
-* [Creating a New Application in embARC](#new_app)
-* [Developing Your Application Using Git](#development)
-* [Committing Your Work](#commit)
-* [Copyright Notice](#copyright)
+* [Getting Start with Existing Application](#getting-start-with-existing-application)
+* [Creating a New Application in embARC](#creating-a-new-application-in-embarc)
+* [Developing Your Application Using Git](#developing-your-application-using-git)
+* [Committing Your Work](#committing-your-work)
+* [Copyright Notice](#copyright-notice)
 
-## <a name="prerequisites"/> Prerequisites
+## Prerequisites
 
 The hardware we used during development is **EM Starter Kit(aka EMSK)**. We need to download and install the following tools:
 
@@ -68,7 +68,7 @@ The hardware we used during development is **EM Starter Kit(aka EMSK)**. We need
 
 + Download and install [**Tera Term**][44].
 
-## <a name="get_start"/> Getting Start with Existing Application
+## Getting Start with Existing Application
 
 We provided some examples and applications in embARC, user can take reference from them.
 
@@ -85,13 +85,13 @@ Run the Tera Term:
 
 For more detail information, see [Getting Started with embARC Using GNU on Windows][46] for reference. And see [Getting Started with embARC OSP][47] to learn how to get start with embARC using different toolsets or hosts.
 
-## <a name="new_app"/> Creating a New Application in embARC
+## Creating a New Application in embARC
 
 See the document **Example Usage Guide** - *./embarc\_osp/doc/embARC\_Document/html/page\_example\_usage.html* in the *embarc\_osp* for more detail information. It will help you to create a **Hello World** application using ARC GNU quickly.
 
 ![example_usage_guide][10]
 
-## <a name="development"/> Developing Your Application Using Git
+## Developing Your Application Using Git
 
 1) Make sure you have installed [Git][40]，and know how to use it.
 
@@ -153,7 +153,7 @@ Notices:
 
 + See [Contributing to embARC OSP][49] for more information about Coding-Style, Document-Style and Git Commit Message Guide, etc.
 
-## <a name="commit"/> Committing Your Work
+## Committing Your Work
 
 You can contribute your work by submitting **Pull Request** to *embarc\_applications* in github after finishing your project development. Creating a new **Pull Request**:
 
@@ -171,7 +171,7 @@ Create the new pull request:
 
 ![create_pull_request][14]
 
-## <a name="copyright"/> Copyright Notice
+## Copyright Notice
 
 Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
