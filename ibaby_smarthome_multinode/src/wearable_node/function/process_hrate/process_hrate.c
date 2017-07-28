@@ -137,18 +137,15 @@ static void task_process_hrate(void *par)
 		data_rdy = hrate_sensor_read(&ir_value);
 
 		/* IR data ready and detect a heartbeat */
-		if (data_rdy == E_OK && ir_value != 0 && check_beat(ir_value) == true)
-		{
+		if (data_rdy == E_OK && ir_value != 0 && check_beat(ir_value) == true) {
 			flag_timer_stop = !flag_timer_stop;
 
-			if (flag_timer_stop == true)
-			{
+			if (flag_timer_stop == true) {
 				delta = perf_end(); /* get cycles cost */
 
 				beats_per_min = HRATE_BASE_VALUE / delta; /* get heartrate */
 
-				if (beats_per_min < BEATS_PER_MIN_MAX && beats_per_min > BEATS_PER_MIN_MIN)
-				{
+				if (beats_per_min < BEATS_PER_MIN_MAX && beats_per_min > BEATS_PER_MIN_MIN) {
 					/* sliding average filtering */
 					rates[rate_spot++] = (uint16_t)beats_per_min; /* store this reading in the array */
 					rate_spot %= HRATE_SIZE;                      /* wrap variable */
@@ -192,8 +189,7 @@ static bool check_beat(int32_t sample)
 	val_cur = low_pass_fir_filter(sample - aver_estimated);
 
 	/* detect positive zero crossing (rising edge) */
-	if ((val_pre < 0) & (val_cur >= 0))
-	{
+	if ((val_pre < 0) & (val_cur >= 0)) {
 		ir_ac_max = val_max; /* adjust our AC max and min */
 		ir_ac_min = val_min;
 
@@ -201,30 +197,26 @@ static bool check_beat(int32_t sample)
 		neg_edge = 0;
 		val_max = 0;
 
-		if ((ir_ac_max - ir_ac_min) > AMPL_DIFF_MIN & (ir_ac_max - ir_ac_min) < AMPL_DIFF_MAX)
-		{
+		if ((ir_ac_max - ir_ac_min) > AMPL_DIFF_MIN & (ir_ac_max - ir_ac_min) < AMPL_DIFF_MAX) {
 			/* heart beat detected */
 			beat_detected = true;
 		}
 	}
 
 	/* detect negative zero crossing (falling edge) */
-	if ((val_pre > 0) & (val_cur <= 0))
-	{
+	if ((val_pre > 0) & (val_cur <= 0)) {
 		pos_edge = 0;
 		neg_edge = 1;
 		val_min  = 0;
 	}
 
 	/* find maximum value in positive cycle */
-	if (pos_edge & (val_cur > val_pre))
-	{
+	if (pos_edge & (val_cur > val_pre)) {
 		val_max = val_cur;
 	}
 
 	/* find minimum value in negative cycle */
-	if (neg_edge & (val_cur < val_pre))
-	{
+	if (neg_edge & (val_cur < val_pre)) {
 		val_min = val_cur;
 	}
 
@@ -245,12 +237,10 @@ static int16_t low_pass_fir_filter(int16_t din)
 
 	int32_t z = mul16(fir_coeffs[11], cbuf[(offset - 11) & 0x1F]);
 
-	for (uint8_t i = 0 ; i < 11 ; i++)
-	{
+	for (uint8_t i = 0 ; i < 11 ; i++) {
 		z += mul16(fir_coeffs[i], cbuf[(offset - i) & 0x1F] +
 		           cbuf[(offset - 22 + i) & 0x1F]);
 	}
-
 	offset++;
 	offset %= 32; /* wrap condition */
 

@@ -50,16 +50,16 @@
  * I2C address of PmodIMU4 can be selected via AD0: 0x68, 0x69
  * AD0 connect to GND is 0x68
  */
-/* MPU6050 address */
+/*!< MPU6050 address */
 #define MPU6050_A0_PIN    0 /*!< I2C Serial Bus Address Selection Pin */
 #define MPU6050_ADDRESS   (0x68 + MPU6050_A0_PIN)
 
-/* acceleration sensor address */
+/*!< acceleration sensor address */
 #define ACC_SENSOR_ADDR	  MPU6050_ADDRESS
 
 #define EMSK_IMU_SENSOR_CHECK_EXP_NORTN(EXPR)    CHECK_EXP_NOERCD(EXPR, error_exit)
 
-/* struct for acceleration data storaged */
+/*!< struct for acceleration data storaged */
 typedef struct __accValues
 {
 	float accl_x, accl_y, accl_z;

@@ -102,14 +102,12 @@ static uint8_t prv_read(uint16_t instanceId, int * numDataP, lwm2m_tlv_t** dataA
 	int i;
 
 	/* this is a single instance object */
-	if (instanceId != 0)
-	{
+	if (instanceId != 0) {
 		return COAP_404_NOT_FOUND ;
 	}
 
 	/* is the server asking for the full object ? */
-	if (*numDataP == 0)
-	{
+	if (*numDataP == 0) {
 		uint16_t resList[] = {
 			RES_O_SMS_TX_COUNTER,
 			RES_O_SMS_RX_COUNTER,
@@ -124,15 +122,13 @@ static uint8_t prv_read(uint16_t instanceId, int * numDataP, lwm2m_tlv_t** dataA
 		if (*dataArrayP == NULL)
 			return COAP_500_INTERNAL_SERVER_ERROR ;
 		*numDataP = nbRes;
-		for (i = 0; i < nbRes; i++)
-		{
+		for (i = 0; i < nbRes; i++) {
 			(*dataArrayP)[i].id = resList[i];
 		}
 	}
 
 	i = 0;
-	do
-	{
+	do {
 		result = prv_set_tlv((*dataArrayP) + i, (conn_s_data_t*) (objectP->userData));
 		i++;
 	} while (i < *numDataP && result == COAP_205_CONTENT );
@@ -157,15 +153,13 @@ static uint8_t prv_exec(uint16_t instanceId, uint16_t resourceId,
                         uint8_t * buffer, int length, lwm2m_object_t * objectP)
 {
 	/* this is a single instance object */
-	if (instanceId != 0)
-	{
+	if (instanceId != 0) {
 		return COAP_404_NOT_FOUND;
 	}
 
 	if (length != 0) return COAP_400_BAD_REQUEST;
 
-	switch (resourceId)
-	{
+	switch (resourceId) {
 	case RES_M_START_OR_RESET:
 		prv_resetCounter(objectP, true);
 		return COAP_204_CHANGED;
@@ -187,7 +181,7 @@ void conn_s_updateTxStatistic(lwm2m_object_t * objectP, uint16_t txDataByte, boo
 		myData->txDataByte += txDataByte;
 		myData->messageCount++;
 		myData->avrMessageSize = (myData->txDataByte+myData->rxDataByte) /
-								  myData->messageCount;
+					  myData->messageCount;
 		if (txDataByte > myData->maxMessageSize)
 			myData->maxMessageSize = txDataByte;
 		if (smsBased) myData->smsTxCounter++;
@@ -201,7 +195,7 @@ void conn_s_updateRxStatistic(lwm2m_object_t * objectP, uint16_t rxDataByte, boo
 		myData->rxDataByte += rxDataByte;
 		myData->messageCount++;
 		myData->avrMessageSize = (myData->txDataByte+myData->rxDataByte) /
-								  myData->messageCount;
+					  myData->messageCount;
 		if (rxDataByte > myData->maxMessageSize)
 			myData->maxMessageSize = rxDataByte;
 		myData->txDataByte += rxDataByte;
@@ -220,8 +214,7 @@ lwm2m_object_t * get_object_conn_s(void)
 
 	connObj = (lwm2m_object_t *) lwm2m_malloc(sizeof(lwm2m_object_t));
 
-	if (NULL != connObj)
-	{
+	if (NULL != connObj) {
 		memset(connObj, 0, sizeof(lwm2m_object_t));
 
 		/*
@@ -230,11 +223,9 @@ lwm2m_object_t * get_object_conn_s(void)
 		 */
 		connObj->objID = LWM2M_CONN_STATS_OBJECT_ID;
 		connObj->instanceList = lwm2m_malloc(sizeof(lwm2m_list_t));
-		if (NULL != connObj->instanceList)
-		{
+		if (NULL != connObj->instanceList) {
 			memset(connObj->instanceList, 0, sizeof(lwm2m_list_t));
-		}
-		else {
+		} else {
 			lwm2m_free(connObj);
 			return NULL;
 		}
@@ -254,12 +245,9 @@ lwm2m_object_t * get_object_conn_s(void)
 		 * Also some user data can be stored in the object with a private
 		 * structure containing the needed variables.
 		 */
-		if (NULL != connObj->userData)
-		{
+		if (NULL != connObj->userData) {
 			prv_resetCounter(connObj, false);
-		}
-		else
-		{
+		} else {
 			lwm2m_free(connObj);
 			connObj = NULL;
 		}

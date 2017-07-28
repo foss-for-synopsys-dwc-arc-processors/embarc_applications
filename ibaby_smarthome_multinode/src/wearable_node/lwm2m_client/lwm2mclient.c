@@ -115,10 +115,8 @@ static lwm2m_object_t * prv_find_object(lwm2m_context_t * contextP, uint16_t Id)
 {
 	int i;
 
-	for (i = 0 ; i < contextP->numObject ; i++)
-	{
-		if (contextP->objectList[i]->objID == Id)
-		{
+	for (i = 0 ; i < contextP->numObject ; i++) {
+		if (contextP->objectList[i]->objID == Id) {
 			return contextP->objectList[i];
 		}
 	}
@@ -133,16 +131,13 @@ void handle_value_changed(lwm2m_context_t * lwm2mH,
 {
 	lwm2m_object_t * object = prv_find_object(lwm2mH, uri->objectId);
 
-	if (NULL != object)
-	{
-		if (object->writeFunc != NULL)
-		{
+	if (NULL != object) {
+		if (object->writeFunc != NULL) {
 			lwm2m_tlv_t * tlvP;
 			int result;
 
 			tlvP = lwm2m_tlv_new(1);
-			if (tlvP == NULL)
-			{
+			if (tlvP == NULL) {
 				EMBARC_PRINTF("Internal allocation failure !\n");
 				return;
 			}
@@ -158,10 +153,8 @@ void handle_value_changed(lwm2m_context_t * lwm2mH,
 			tlvP->value = (uint8_t*) value;
 
 			result = object->writeFunc(uri->instanceId, 1, tlvP, object);
-			if (COAP_405_METHOD_NOT_ALLOWED == result)
-			{
-				switch (uri->objectId)
-				{
+			if (COAP_405_METHOD_NOT_ALLOWED == result) {
+				switch (uri->objectId) {
 				case LWM2M_DEVICE_OBJECT_ID:
 					result = device_change(tlvP, object);
 					break;
@@ -170,25 +163,18 @@ void handle_value_changed(lwm2m_context_t * lwm2mH,
 				}
 			}
 
-			if (COAP_204_CHANGED != result)
-			{
+			if (COAP_204_CHANGED != result) {
 				EMBARC_PRINTF("Failed to change value!\n");
-			}
-			else
-			{
+			} else {
 				lwm2m_resource_value_changed(lwm2mH, uri);
 			}
 			lwm2m_tlv_free(1, tlvP);
 			return;
-		}
-		else
-		{
+		} else {
 			EMBARC_PRINTF("write not supported for specified resource!\n");
 		}
 		return;
-	}
-	else
-	{
+	} else {
 		EMBARC_PRINTF("Object not found !\n");
 	}
 }
@@ -206,16 +192,15 @@ static void * prv_connect_server(uint16_t secObjInstID, void * userData)
 	dataP = (client_data_t *)userData;
 
 	uri = get_server_uri(dataP->securityObjP, secObjInstID);
-	if (uri == NULL) return NULL;
+	if (uri == NULL) 
+		return NULL;
 
 	/* parse uri in the form "coaps://[host]:[port]"  compare previous n ch between s1 and s2 */
 	if (0==strncmp(uri, "coaps://", strlen("coaps://"))) {
 		host = uri+strlen("coaps://");
-	}
-	else if (0==strncmp(uri, "coap://", strlen("coap://"))) {
+	} else if (0==strncmp(uri, "coap://", strlen("coap://"))) {
 		host = uri+strlen("coap://");
-	}
-	else {
+	} else {
 		goto exit;
 	}
 
@@ -233,12 +218,9 @@ static void * prv_connect_server(uint16_t secObjInstID, void * userData)
 
 	/* will happen error here if the size of heap is not large enough */
 	newConnP = connection_create(dataP->connList, dataP->sock, host, port);
-	if (newConnP == NULL)
-	{
+	if (newConnP == NULL) {
 		EMBARC_PRINTF("Connection creation failed.\r\n");
-	}
-	else
-	{
+	} else {
 		dataP->connList = newConnP;
 	}
 
@@ -254,14 +236,12 @@ static uint8_t prv_buffer_send(void * sessionH,
 {
 	connection_t * connP = (connection_t*) sessionH;
 
-	if (connP == NULL)
-	{
+	if (connP == NULL) {
 		EMBARC_PRINTF("#> failed sending %lu bytes, missing connection\r\n", length);
 		return COAP_500_INTERNAL_SERVER_ERROR ;
 	}
 
-	if (-1 == connection_send(connP, buffer, length))
-	{
+	if (-1 == connection_send(connP, buffer, length)) {
 		EMBARC_PRINTF("#> failed sending %lu bytes\r\n", length);
 		return COAP_500_INTERNAL_SERVER_ERROR ;
 	}
@@ -277,18 +257,15 @@ static void prv_output_servers(char * buffer,void * user_data)
 
 	targetP = lwm2mH->serverList;
 
-	if (targetP == NULL)
-	{
+	if (targetP == NULL) {
 		EMBARC_PRINTF("No server.\r\n");
 		return;
 	}
 
-	for (targetP = lwm2mH->serverList ; targetP != NULL ; targetP = targetP->next)
-	{
+	for (targetP = lwm2mH->serverList ; targetP != NULL ; targetP = targetP->next) {
 		EMBARC_PRINTF("Server ID %d:\r\n", targetP->shortID);
 		EMBARC_PRINTF("\tstatus: ");
-		switch(targetP->status)
-		{
+		switch(targetP->status) {
 		case STATE_DEREGISTERED:
 			EMBARC_PRINTF("DEREGISTERED\r\n");
 			break;
@@ -321,22 +298,20 @@ static void prv_update(void * user_data)
 	lwm2m_server_t * targetP;
 
 	tv_sec = lwm2m_gettime();
-	if (tv_sec < 0) return;
+	if (tv_sec < 0) 
+		return;
 
 	targetP = lwm2mH->serverList;
 
-	if (targetP == NULL)
-	{
+	if (targetP == NULL) {
 		EMBARC_PRINTF("No server.\r\n");
 		return;
 	}
 
-	for (targetP = lwm2mH->serverList ; targetP != NULL ; targetP = targetP->next)
-	{
+	for (targetP = lwm2mH->serverList ; targetP != NULL ; targetP = targetP->next) {
 		if (next_update_time < tv_sec) {
 			next_update_time = tv_sec + 30;
-			switch(targetP->status)
-			{
+			switch(targetP->status) {
 			case STATE_DEREGISTERED:
 			case STATE_REG_PENDING:
 			case STATE_REG_UPDATE_PENDING:
@@ -361,17 +336,16 @@ static void prv_update(void * user_data)
 	static time_t next_change_time = 0;
 	time_t tv_sec;
 	tv_sec = lwm2m_gettime();
-	if (tv_sec < 0) return;
+	if (tv_sec < 0) 
+		return;
 
-	if (next_change_time < tv_sec)
-	{
+	if (next_change_time < tv_sec) {
 		char value[15];
 		int valueLength;
 		lwm2m_uri_t uri;
 
 		/* update body tempeperature value */
-		if (data_report_wn.btemp != data_report_wn_old.btemp)
-		{
+		if (data_report_wn.btemp != data_report_wn_old.btemp) {
 			lwm2m_stringToUri("/3303/0/5700", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.btemp);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -379,8 +353,7 @@ static void prv_update(void * user_data)
 		}
 
 		/* update heartrate value */
-		if (data_report_wn.hrate != data_report_wn_old.hrate)
-		{
+		if (data_report_wn.hrate != data_report_wn_old.hrate) {
 			lwm2m_stringToUri("/3346/0/5700", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.hrate);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -388,8 +361,7 @@ static void prv_update(void * user_data)
 		}
 
 		/* update sleep status value */
-		if (data_report_wn.state != data_report_wn_old.state)
-		{
+		if (data_report_wn.state != data_report_wn_old.state) {
 			lwm2m_stringToUri("/3300/0/5700", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.state);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -397,8 +369,7 @@ static void prv_update(void * user_data)
 		}
 
 		/* update motion intensity value */
-		if (data_report_wn.motion_intensity != data_report_wn_old.motion_intensity)
-		{
+		if (data_report_wn.motion_intensity != data_report_wn_old.motion_intensity) {
 			lwm2m_stringToUri("/3323/0/5700", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.motion_intensity);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -406,8 +377,7 @@ static void prv_update(void * user_data)
 		}
 
 		/* update warning of heartrate value */
-		if (data_report_wn.warn_hrate != data_report_wn_old.warn_hrate)
-		{
+		if (data_report_wn.warn_hrate != data_report_wn_old.warn_hrate) {
 			lwm2m_stringToUri("/3338/0/5800", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.warn_hrate);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -415,8 +385,7 @@ static void prv_update(void * user_data)
 		}
 
 		/* update warning of body temperature value */
-		if (data_report_wn.warn_btemp != data_report_wn_old.warn_btemp)
-		{
+		if (data_report_wn.warn_btemp != data_report_wn_old.warn_btemp) {
 			lwm2m_stringToUri("/3339/0/5800", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.warn_btemp);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -424,8 +393,7 @@ static void prv_update(void * user_data)
 		}
 
 		/* update warning of sleep downward value */
-		if (data_report_wn.warn_downward != data_report_wn_old.warn_downward)
-		{
+		if (data_report_wn.warn_downward != data_report_wn_old.warn_downward) {
 			lwm2m_stringToUri("/3341/0/5800", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.warn_downward);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -433,8 +401,7 @@ static void prv_update(void * user_data)
 		}
 
 		/* update notify of baby awake event value */
-		if (data_report_wn.event_awake != data_report_wn_old.event_awake)
-		{
+		if (data_report_wn.event_awake != data_report_wn_old.event_awake) {
 			lwm2m_stringToUri("/3342/0/5800", 12, &uri);
 			valueLength = sprintf(value, "%d", data_report_wn.event_awake);
 			handle_value_changed(context, &uri, value, valueLength);
@@ -510,7 +477,6 @@ static void prv_display_objects(char * buffer,
 				case LWM2M_AWAKE_STA_OBJECT_ID:
 					display_hratestatus_object(object);
 					break;
-
 				} 
 			}
 		}
@@ -590,8 +556,7 @@ static void prv_backup_objects(lwm2m_context_t * context)
 	for (i = 0; i < context->numObject; i++) {
 		lwm2m_object_t * object = context->objectList[i];
 		if (NULL != object) {
-			switch (object->objID)
-			{
+			switch (object->objID) {
 			case LWM2M_SECURITY_OBJECT_ID:
 				copy_security_object(backupObjectArray[0], object);
 				break;
@@ -613,8 +578,7 @@ static void prv_restore_objects(lwm2m_context_t * context)
 	for (i = 0; i < context->numObject; i++) {
 		lwm2m_object_t * object = context->objectList[i];
 		if (NULL != object) {
-			switch (object->objID)
-			{
+			switch (object->objID) {
 			case LWM2M_SECURITY_OBJECT_ID:
 				/* first delete internal content */ 
 				object->closeFunc(object);
@@ -643,8 +607,7 @@ static void prv_connections_free(lwm2m_context_t * context)
 	client_data_t * app_data;
 
 	app_data = context->userData;
-	if (NULL != app_data)
-	{
+	if (NULL != app_data) {
 		connection_free(app_data->connList);
 		app_data->connList = NULL;
 	}
@@ -653,11 +616,9 @@ static void prv_connections_free(lwm2m_context_t * context)
 static void update_bootstrap_info(lwm2m_bootstrap_state_t * previousBootstrapState,
                                   lwm2m_context_t * context)
 {
-	if (*previousBootstrapState != context->bsState)
-	{
+	if (*previousBootstrapState != context->bsState) {
 		*previousBootstrapState = context->bsState;
-		switch(context->bsState)
-		{
+		switch(context->bsState) {
 			case BOOTSTRAP_CLIENT_HOLD_OFF:
 #ifdef WITH_LOGS
 				EMBARC_PRINTF("[BOOTSTRAP] backup security and server objects\r\n");
@@ -737,8 +698,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	/* This call an internal function that create an IPV6 socket on the port 5683 */
 	EMBARC_PRINTF("Trying to open a socket for LwM2M Connection\r\n");
 	data.sock = create_socket(0, 56830);
-	if (data.sock < 0)
-	{
+	if (data.sock < 0) {
 		EMBARC_PRINTF("Failed to open socket: %d\r\n", errno);
 		return -1;
 	}
@@ -748,30 +708,26 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	 * Those functions are located in their respective object file.
 	 */
 	objArray[0] = get_object_device();
-	if (NULL == objArray[0])
-	{
+	if (NULL == objArray[0]) {
 		EMBARC_PRINTF("Failed to create Device object\r\n");
 		return -1;
 	}
 
 	objArray[1] = get_object_firmware();
-	if (NULL == objArray[1])
-	{
+	if (NULL == objArray[1]) {
 		EMBARC_PRINTF("Failed to create Firmware object\r\n");
 		return -1;
 	}
 
 	objArray[2] = get_temp_object();
-	if (NULL == objArray[2])
-	{
+	if (NULL == objArray[2]) {
 		EMBARC_PRINTF("Failed to create sensor object\r\n");
 		return -1;
 	}
 
 	int serverId = 123;
 	objArray[3] = get_server_object(serverId, "U", lifetime, false);
-	if (NULL == objArray[3])
-	{
+	if (NULL == objArray[3]) {
 		EMBARC_PRINTF("Failed to create server object\r\n");
 		return -1;
 	}
@@ -779,61 +735,52 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	char serverUri[50];
 	sprintf(serverUri, "coap://%s:%s", server, serverPort);
 	objArray[4] = get_security_object(serverId, serverUri, false);
-	if (NULL == objArray[4])
-	{
+	if (NULL == objArray[4]) {
 		EMBARC_PRINTF("Failed to create security object\r\n");
 		return -1;
 	}
 	data.securityObjP = objArray[4];
 
 	objArray[5] = get_act_object();
-	if (NULL == objArray[5])
-	{
+	if (NULL == objArray[5]) {
 		EMBARC_PRINTF("Failed to create location object\r\n");
 		return -1;
 	}
 
 	objArray[6] = get_btempstatus_object();
-	if (NULL == objArray[6])
-	{
+	if (NULL == objArray[6]) {
 		EMBARC_PRINTF("Failed to create connectivity monitoring object\r\n");
 		return -1;
 	}
 
 	objArray[7] = get_object_conn_s();
-	if (NULL == objArray[7])
-	{
+	if (NULL == objArray[7]) {
 		EMBARC_PRINTF("Failed to create connectivity statistics object\r\n");
 		return -1;
 	}
 
 	objArray[8] = get_hrate_object();
-	if (NULL == objArray[8])
-	{
+	if (NULL == objArray[8]) {
 		EMBARC_PRINTF("Failed to create hrate object\r\n");
 		return -1;
 	} 
 	objArray[9] = get_sleepsta_object();
-	if (NULL == objArray[9])
-	{
+	if (NULL == objArray[9]) {
 		EMBARC_PRINTF("Failed to create hrate object\r\n");
 		return -1;
 	} 
 	objArray[10] = get_hratestatus_object();
-	if (NULL == objArray[10])
-	{
+	if (NULL == objArray[10]) {
 		EMBARC_PRINTF("Failed to create status object\r\n");
 		return -1;
 	} 
 	objArray[11] = get_downstatus_object();
-	if (NULL == objArray[11])
-	{
+	if (NULL == objArray[11]) {
 		EMBARC_PRINTF("Failed to create downstatus object\r\n");
 		return -1;
 	}  
 	objArray[12] = get_awakestatus_object();
-	if (NULL == objArray[12])
-	{
+	if (NULL == objArray[12]) {
 		EMBARC_PRINTF("Failed to create awakestatus object\r\n");
 		return -1;
 	} 
@@ -843,8 +790,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	 * charge of communication
 	 */
 	lwm2mH = lwm2m_init(prv_connect_server, prv_buffer_send, &data);
-	if (NULL == lwm2mH)
-	{
+	if (NULL == lwm2mH) {
 		EMBARC_PRINTF("lwm2m_init() failed\r\n");
 		return -1;
 	}
@@ -855,8 +801,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	 * the number of objects we will be passing through and the objects array
 	 */
 	result = lwm2m_configure(lwm2mH, (char *)(name), NULL, NULL, OBJ_COUNT, objArray);
-	if (result != 0)
-	{
+	if (result != 0) {
 		lwm2m_free(lwm2mH);
 		EMBARC_PRINTF("lwm2m_set_objects() failed: 0x%X\r\n", result);
 		return -1;
@@ -867,8 +812,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	 * Create objects for known LWM2M Servers.
 	 */
 	result = lwm2m_start(lwm2mH);
-	if (result != 0)
-	{
+	if (result != 0) {
 		lwm2m_free(lwm2mH);
 		EMBARC_PRINTF("lwm2m_register() failed: 0x%X\r\n", result);
 		return -1;
@@ -887,45 +831,34 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	 */
 	g_quit = 0;
 	g_reboot = 0;
-	while (0 == g_quit)
-	{
+	while (0 == g_quit) {
 		struct timeval tv;
 		fd_set readfds;
 
-		if (g_reboot)
-		{
+		if (g_reboot) {
 			time_t tv_sec;
 
 			tv_sec = lwm2m_gettime();
 
-			if (0 == reboot_time)
-			{
+			if (0 == reboot_time) {
 				reboot_time = tv_sec + 5;
 			}
-			if (reboot_time < tv_sec)
-			{
+			if (reboot_time < tv_sec) {
 				/*
 				 * Message should normally be lost with reboot ...
 				 */
 				EMBARC_PRINTF("reboot time expired, rebooting ...\n");
 				system_reboot();
 				g_quit = 1;
-			}
-			else
-			{
+			} else {
 				tv.tv_sec = reboot_time - tv_sec;
 			}
-		}
-		else if (update_flag)
-		{
+		} else if (update_flag) {
 			
 			update_value(lwm2mH);
 			tv.tv_sec = 5;
 			prv_update(lwm2mH);
-		}
-		
-		else
-		{
+		} else {
 			tv.tv_sec = 60;
 		}
 		tv.tv_usec = 0;
@@ -940,8 +873,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
 		 *    (eg. retransmission) and the time between the next operation
 		 */
 		result = lwm2m_step(lwm2mH, (time_t *)(&(tv.tv_sec)));
-		if (result != 0)
-		{
+		if (result != 0) {
 			EMBARC_PRINTF("lwm2m_step() failed: 0x%X\r\n", result);
 			return -1;
 		}
@@ -952,23 +884,18 @@ int lwm2mclient(lwm2m_client_info *client_info)
 		 */
 		result = select(FD_SETSIZE, &readfds, NULL, NULL, &tv);
 
-		if (result < 0)
-		{
-			if (errno != EINTR)
-			{
+		if (result < 0) {
+			if (errno != EINTR) {
 				EMBARC_PRINTF("Error in select(): %d\r\n", errno);
 			}
-		}
-		else if (result > 0)
-		{
+		} else if (result > 0) {
 			uint8_t buffer[MAX_PACKET_SIZE];
 			int numBytes;
 
 			/*
 			 * If an event happen on the socket
 			 */
-			if (FD_ISSET(data.sock, &readfds))
-			{
+			if (FD_ISSET(data.sock, &readfds)) {
 				struct sockaddr_storage addr;
 				socklen_t addrLen;
 
@@ -979,23 +906,18 @@ int lwm2mclient(lwm2m_client_info *client_info)
 				 */
 				numBytes = recvfrom(data.sock, buffer, MAX_PACKET_SIZE, 0, (struct sockaddr *)&addr, &addrLen);
 
-				if (0 > numBytes)
-				{
+				if (0 > numBytes) {
 					EMBARC_PRINTF("Error in recvfrom(): %d\r\n", errno);
-				}
-				else if (0 < numBytes)
-				{
+				} else if (0 < numBytes) {
 					char s[INET_ADDRSTRLEN];
 					in_port_t port = 0;
 					connection_t * connP;
 
-					if (AF_INET == addr.ss_family)
-					{
+					if (AF_INET == addr.ss_family) {
 						struct sockaddr_in *saddr = (struct sockaddr_in *)&addr;
 						inet_ntop(saddr->sin_family, &(saddr->sin_addr), s, INET_ADDRSTRLEN);
 						port = ntohs(saddr->sin_port);
-					} 
-					else {
+					} else {
 						EMBARC_PRINTF("IPV6 network package received!\n");
 						continue;
 					}
@@ -1007,12 +929,11 @@ int lwm2mclient(lwm2m_client_info *client_info)
 					 */
 					connP = connection_find(data.connList, &addr, addrLen);
 				   
-				   if (connP != NULL)
-					{
+				   	if (connP != NULL) {
 						/* Let liblwm2m respond to the query depending on the context */
 						lwm2m_handle_packet(lwm2mH, buffer, numBytes, connP);
 						conn_s_updateRxStatistic(objArray[7], numBytes, false);
-					}else{
+					} else {
 						EMBARC_PRINTF("received bytes ignored!\r\n");
 					}
 					
@@ -1024,8 +945,7 @@ int lwm2mclient(lwm2m_client_info *client_info)
 	/*
 	 * Finally when the loop is left smoothly - asked by user in the command line interface - we unregister our client from it
 	 */
-	if (g_quit != 0)
-	{
+	if (g_quit != 0) {
 		lwm2m_close(lwm2mH);
 	}
 	close(data.sock);

@@ -62,18 +62,18 @@
 #include "body_temperature.h"
 
 
-/*!< tmp112 registers */
-#define TMP112_REG_TMP          0x00 /*!< Temperature Register */
-#define TMP112_REG_CONG         0x01 /*!< Configuration Register */
-#define TMP112_REG_TLOW         0x02 /*!< T Low Register */
-#define TMP112_REG_THIGH        0x03 /*!< T High Register */
+/* tmp112 registers */
+#define TMP112_REG_TMP          0x00 /* Temperature Register */
+#define TMP112_REG_CONG         0x01 /* Configuration Register */
+#define TMP112_REG_TLOW         0x02 /* T Low Register */
+#define TMP112_REG_THIGH        0x03 /* T High Register */
 
-/*!< ADT7420_REG_CONFIG definition */
+/* ADT7420_REG_CONFIG definition */
 #define TMP112_CONFIG_OS     (1 << 7)
 #define TMP112_CONFIG_CC(x)  ((x & 0x3) << 5)
 #define TMP112_CONFIG_SD     (1 << 0)
 
-/*!< body temperature data received buffer */
+/* body temperature data received buffer */
 union _btemp_data
 {
 	uint8_t buf[2];
@@ -82,24 +82,24 @@ union _btemp_data
 	};
 } btemp_data;
 
-/*!< configure oneshot mode */
+/* configure oneshot mode */
 static uint8_t tmp_oneshot_enable[] = {
 	TMP112_REG_CONG,
 	TMP112_CONFIG_OS,
 	0x00
 };
 
-/*!< configure shutdown mode */
+/* configure shutdown mode */
 static uint8_t tmp_shutdown_enable[] = {
 	TMP112_REG_CONG,
 	TMP112_CONFIG_SD,
 	0x00
 };
 
-static const float btemp_unit = 0.0625; /*!< convert to ℃ */
+static const float btemp_unit = 0.0625; /* convert to ℃ */
 
-static DEV_IIC  *emsk_tmp_sensor;  /*!< TMP112 sensor object */
-static uint32_t btemp_sensor_addr; /*!< variable of body temperature sensor address */
+static DEV_IIC  *emsk_tmp_sensor;  /* TMP112 sensor object */
+static uint32_t btemp_sensor_addr; /* variable of body temperature sensor address */
 
 
 /**

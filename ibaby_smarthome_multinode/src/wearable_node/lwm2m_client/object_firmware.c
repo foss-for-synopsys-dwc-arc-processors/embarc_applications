@@ -73,14 +73,12 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
 	firmware_data_t * data = (firmware_data_t*)(objectP->userData);
 
 	/* this is a single instance object */
-	if (instanceId != 0)
-	{
+	if (instanceId != 0) {
 		return COAP_404_NOT_FOUND;
 	}
 
 	/* is the server asking for the full object? */
-	if (*numDataP == 0)
-	{
+	if (*numDataP == 0) {
 		*dataArrayP = lwm2m_tlv_new(3);
 		if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 		*numDataP = 3;
@@ -90,10 +88,8 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
 	}
 
 	i = 0;
-	do
-	{
-		switch ((*dataArrayP)[i].id)
-		{
+	do {
+		switch ((*dataArrayP)[i].id) {
 		case RES_M_PACKAGE:
 		case RES_M_PACKAGE_URI:
 		case RES_M_UPDATE:
@@ -162,26 +158,21 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 	static uint16_t file_ota_cnt;      /*!< counter for number of files transported in OTA by LwM2M */
 
 	/* this is a single instance object */
-	if (instanceId != 0)
-	{
+	if (instanceId != 0) {
 		return COAP_404_NOT_FOUND;
 	}
 
 	i = 0;
 
-	do
-	{
-		switch (dataArray[i].id)
-		{
+	do {
+		switch (dataArray[i].id) {
 		case RES_M_PACKAGE:
 			/* inline firmware binary */
 
 			/* get the sum number of the temp files */
 			j = 0;
-			for (;;)
-			{
-				if (*dataArray->value == '\n')
-				{
+			for (;;) {
+				if (*dataArray->value == '\n') {
 					dataArray->value++;
 					cnt_fh++;
 					break;
@@ -194,10 +185,8 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
 			/* get the number of this temp file */
 			j = 0;
-			for (;;)
-			{
-				if (*dataArray->value == '\n')
-				{
+			for (;;) {
+				if (*dataArray->value == '\n') {
 					dataArray->value++;
 					cnt_fh++;
 					break;
@@ -235,8 +224,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 			}
 
 			/* merge all temp file into boot.bin and replace previous one */
-			if (file_ota_cnt == filesum)
-			{
+			if (file_ota_cnt == filesum) {
 				file_ota_cnt = 0;
 				if ((err = f_open(&dstfile, "boot.bin", FA_CREATE_ALWAYS | FA_WRITE))) {
 					printf("open file boot.bin err : %d\n", err);
@@ -247,8 +235,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 				printf("\n    merging file, wait a moment");
 				printf("\n***********************************\n");
 
-				for (int i = 0; i < filesum; i++)
-				{
+				for (int i = 0; i < filesum; i++) {
 					sprintf(tempname, "boot%d.bin", i);
 
 					if ((err = f_open(&tempfile, tempname, FA_OPEN_EXISTING | FA_READ))) {
@@ -256,8 +243,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 						break;
 					}
 
-					for (;;)
-					{
+					for (;;) {
 						/* Read a chunk of source file */
 						res = f_read(&tempfile, buff, blen, &br);
 						if (res || br == 0) break; /* error or eof */
@@ -276,8 +262,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 				}
 
 				f_close(&dstfile);
-				if (file_ota_cnt == filesum)
-				{
+				if (file_ota_cnt == filesum) {
 					printf("\nfirmware update online completed\r\n\n");
 					result = COAP_204_CHANGED;
 				} else {
@@ -287,8 +272,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 				file_ota_cnt = 0;
 			}
 
-			if (file_ota_cnt >= filesum)
-			{
+			if (file_ota_cnt >= filesum) {
 				file_ota_cnt = 0;
 			}
 			break;
@@ -299,13 +283,10 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 			break;
 
 		case RES_O_UPDATE_SUPPORTED_OPJECTS:
-			if (lwm2m_tlv_decode_bool(&dataArray[i], &bvalue) == 1)
-			{
+			if (lwm2m_tlv_decode_bool(&dataArray[i], &bvalue) == 1) {
 				data->supported = bvalue ? 1 : 0;
 				result = COAP_204_CHANGED;
-			}
-			else
-			{
+			} else {
 				result = COAP_400_BAD_REQUEST;
 			}
 			break;
@@ -329,8 +310,7 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
 	firmware_data_t * data = (firmware_data_t*)(objectP->userData);
 
 	/* this is a single instance object */
-	if (instanceId != 0)
-	{
+	if (instanceId != 0) {
 		return COAP_404_NOT_FOUND;
 	}
 
@@ -340,15 +320,12 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
 	switch (resourceId)
 	{
 	case RES_M_UPDATE:
-		if (data->state == 1)
-		{
+		if (data->state == 1) {
 			EMBARC_PRINTF("\n\t FIRMWARE UPDATE\r\n\n");
 			/* trigger your firmware download and update logic */
 			data->state = 2;
 			return COAP_204_CHANGED;
-		}
-		else
-		{
+		} else {
 			/* firmware update already running */
 			return COAP_400_BAD_REQUEST;
 		}
@@ -358,13 +335,11 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
 }
 
 static void prv_firmware_close(lwm2m_object_t * objectP) {
-	if (NULL != objectP->userData)
-	{
+	if (NULL != objectP->userData) {
 		lwm2m_free(objectP->userData);
 		objectP->userData = NULL;
 	}
-	if (NULL != objectP->instanceList)
-	{
+	if (NULL != objectP->instanceList) {
 		lwm2m_free(objectP->instanceList);
 		objectP->instanceList = NULL;
 	}
@@ -375,8 +350,7 @@ void display_firmware_object(lwm2m_object_t * object)
 #ifdef WITH_LOGS
 	firmware_data_t * data = (firmware_data_t *)object->userData;
 	EMBARC_PRINTF("  /%u: Firmware object:\r\n", object->objID);
-	if (NULL != data)
-	{
+	if (NULL != data) {
 		EMBARC_PRINTF("    state: %u, supported: %u, result: %u\r\n",
 		              data->state, data->supported, data->result);
 	}
@@ -393,8 +367,7 @@ lwm2m_object_t * get_object_firmware(void)
 
 	firmwareObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
 
-	if (NULL != firmwareObj)
-	{
+	if (NULL != firmwareObj) {
 		memset(firmwareObj, 0, sizeof(lwm2m_object_t));
 
 		/*
@@ -408,12 +381,9 @@ lwm2m_object_t * get_object_firmware(void)
 		 *
 		 */
 		firmwareObj->instanceList = (lwm2m_list_t *)lwm2m_malloc(sizeof(lwm2m_list_t));
-		if (NULL != firmwareObj->instanceList)
-		{
+		if (NULL != firmwareObj->instanceList) {
 			memset(firmwareObj->instanceList, 0, sizeof(lwm2m_list_t));
-		}
-		else
-		{
+		} else {
 			lwm2m_free(firmwareObj);
 			return NULL;
 		}
@@ -432,14 +402,11 @@ lwm2m_object_t * get_object_firmware(void)
 		/*
 		 * Also some user data can be stored in the object with a private structure containing the needed variables
 		 */
-		if (NULL != firmwareObj->userData)
-		{
+		if (NULL != firmwareObj->userData) {
 			((firmware_data_t*)firmwareObj->userData)->state = 1;
 			((firmware_data_t*)firmwareObj->userData)->supported = 0;
 			((firmware_data_t*)firmwareObj->userData)->result = 0;
-		}
-		else
-		{
+		} else {
 			lwm2m_free(firmwareObj);
 			firmwareObj = NULL;
 		}

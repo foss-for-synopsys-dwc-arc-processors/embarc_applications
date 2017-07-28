@@ -72,8 +72,7 @@ lwm2m_context_t * lwm2m_init(lwm2m_connect_server_callback_t connectCallback,
 #endif
 
 	contextP = (lwm2m_context_t *)lwm2m_malloc(sizeof(lwm2m_context_t));
-	if (NULL != contextP)
-	{
+	if (NULL != contextP) {
 		memset(contextP, 0, sizeof(lwm2m_context_t));
 		contextP->connectCallback = connectCallback;
 		contextP->bufferSendCallback = bufferSendCallback;
@@ -89,15 +88,11 @@ lwm2m_context_t * lwm2m_init(lwm2m_connect_server_callback_t connectCallback,
 void lwm2m_delete_object_list_content(lwm2m_context_t * context)
 {
 	lwm2m_object_t ** objectList = context->objectList;
-	if (NULL != objectList)
-	{
+	if (NULL != objectList) {
 		int i;
-		for (i = 0 ; i < context->numObject ; i++)
-		{
-			if (NULL != objectList[i])
-			{
-				if (objectList[i]->closeFunc != NULL)
-				{
+		for (i = 0 ; i < context->numObject ; i++) {
+			if (NULL != objectList[i]) {
+				if (objectList[i]->closeFunc != NULL) {
 					objectList[i]->closeFunc(objectList[i]);
 				}
 			}
@@ -108,8 +103,7 @@ void lwm2m_delete_object_list_content(lwm2m_context_t * context)
 void lwm2m_deregister(lwm2m_context_t * context)
 {
 	lwm2m_server_t * server = context->serverList;
-	while (NULL != server)
-	{
+	while (NULL != server) {
 		registration_deregister(context, server);
 		server = server->next;
 	}
@@ -117,13 +111,11 @@ void lwm2m_deregister(lwm2m_context_t * context)
 
 void delete_server_list(lwm2m_context_t * context)
 {
-	while (NULL != context->serverList)
-	{
+	while (NULL != context->serverList) {
 		lwm2m_server_t * server;
 		server = context->serverList;
 		context->serverList = server->next;
-		if (NULL != server->location)
-		{
+		if (NULL != server->location) {
 			lwm2m_free(server->location);
 		}
 		lwm2m_free(server);
@@ -138,8 +130,7 @@ void delete_bootstrap_server_list(lwm2m_context_t * contextP)
 
 void delete_observed_list(lwm2m_context_t * contextP)
 {
-	while (NULL != contextP->observedList)
-	{
+	while (NULL != contextP->observedList) {
 		lwm2m_observed_t * targetP;
 
 		targetP = contextP->observedList;
@@ -154,8 +145,7 @@ void delete_observed_list(lwm2m_context_t * contextP)
 
 void delete_transaction_list(lwm2m_context_t * context)
 {
-	while (NULL != context->transactionList)
-	{
+	while (NULL != context->transactionList) {
 		lwm2m_transaction_t * transaction;
 
 		transaction = context->transactionList;
@@ -174,26 +164,22 @@ void lwm2m_close(lwm2m_context_t * contextP)
 	delete_bootstrap_server_list(contextP);
 	delete_observed_list(contextP);
 	lwm2m_delete_object_list_content(contextP);
-	for (i = 0 ; i < contextP->numObject ; i++)
-	{
+	for (i = 0 ; i < contextP->numObject ; i++) {
 		lwm2m_free(contextP->objectList[i]);
 	}
 	lwm2m_free(contextP->objectList);
 	lwm2m_free(contextP->endpointName);
-	if (contextP->msisdn != NULL)
-	{
+	if (contextP->msisdn != NULL) {
 		lwm2m_free(contextP->msisdn);
 	}
-	if (contextP->altPath != NULL)
-	{
+	if (contextP->altPath != NULL) {
 		lwm2m_free(contextP->altPath);
 	}
 
 #endif
 
 #ifdef LWM2M_SERVER_MODE
-	while (NULL != contextP->clientList)
-	{
+	while (NULL != contextP->clientList) {
 		lwm2m_client_t * clientP;
 
 		clientP = contextP->clientList;
@@ -225,56 +211,44 @@ int lwm2m_configure(lwm2m_context_t * contextP,
 	if (numObject < 3) return COAP_400_BAD_REQUEST;
 	/* Check that mandatory objects are present */
 	found = 0;
-	for (i = 0 ; i < numObject ; i++)
-	{
+	for (i = 0 ; i < numObject ; i++) {
 		if (objectList[i]->objID == LWM2M_SECURITY_OBJECT_ID)    found |= 0x01;
 		if (objectList[i]->objID == LWM2M_SERVER_OBJECT_ID)      found |= 0x02;
 		if (objectList[i]->objID == LWM2M_DEVICE_OBJECT_ID)      found |= 0x04;
 	}
 	if (found != 0x07) return COAP_400_BAD_REQUEST;
-	if (altPath != NULL)
-	{
-		if (0 == prv_isAltPathValid(altPath))
-		{
+	if (altPath != NULL) {
+		if (0 == prv_isAltPathValid(altPath)) {
 			return COAP_400_BAD_REQUEST;
 		}
-		if (altPath[1] == 0)
-		{
+		if (altPath[1] == 0) {
 			altPath = NULL;
 		}
 	}
 	contextP->endpointName = lwm2m_strdup(endpointName);
-	if (contextP->endpointName == NULL)
-	{
+	if (contextP->endpointName == NULL) {
 		return COAP_500_INTERNAL_SERVER_ERROR;
 	}
 
-	if (msisdn != NULL)
-	{
+	if (msisdn != NULL) {
 		contextP->msisdn = lwm2m_strdup(msisdn);
-		if (contextP->msisdn == NULL)
-		{
+		if (contextP->msisdn == NULL) {
 			return COAP_500_INTERNAL_SERVER_ERROR;
 		}
 	}
 
-	if (altPath != NULL)
-	{
+	if (altPath != NULL) {
 		contextP->altPath = lwm2m_strdup(altPath);
-		if (contextP->altPath == NULL)
-		{
+		if (contextP->altPath == NULL) {
 			return COAP_500_INTERNAL_SERVER_ERROR;
 		}
 	}
 
 	contextP->objectList = (lwm2m_object_t **)lwm2m_malloc(numObject * sizeof(lwm2m_object_t *));
-	if (NULL != contextP->objectList)
-	{
+	if (NULL != contextP->objectList) {
 		memcpy(contextP->objectList, objectList, numObject * sizeof(lwm2m_object_t *));
 		contextP->numObject = numObject;
-	}
-	else
-	{
+	} else {
 		lwm2m_free(contextP->endpointName);
 		contextP->endpointName = NULL;
 		return COAP_500_INTERNAL_SERVER_ERROR;
@@ -298,32 +272,25 @@ int lwm2m_step(lwm2m_context_t * contextP,
 	if (tv_sec < 0) return COAP_500_INTERNAL_SERVER_ERROR;
 
 	transacP = contextP->transactionList;
-	while (transacP != NULL)
-	{
+	while (transacP != NULL) {
 		/* transaction_send() may remove transaction from the linked list */
 		lwm2m_transaction_t * nextP = transacP->next;
 		int removed = 0;
 
-		if (transacP->retrans_time <= tv_sec)
-		{
+		if (transacP->retrans_time <= tv_sec) {
 			removed = transaction_send(contextP, transacP);
 		}
 
-		if (0 == removed)
-		{
+		if (0 == removed) {
 			time_t interval;
 
-			if (transacP->retrans_time > tv_sec)
-			{
+			if (transacP->retrans_time > tv_sec) {
 				interval = transacP->retrans_time - tv_sec;
-			}
-			else
-			{
+			} else {
 				interval = 1;
 			}
 
-			if (*timeoutP > interval)
-			{
+			if (*timeoutP > interval) {
 				*timeoutP = interval;
 			}
 		}
@@ -336,8 +303,7 @@ int lwm2m_step(lwm2m_context_t * contextP,
 	if ((contextP->bsState != BOOTSTRAP_CLIENT_HOLD_OFF) &&
 		(contextP->bsState != BOOTSTRAP_PENDING) &&
 		(contextP->bsState != BOOTSTRAP_FINISHED) &&
-		(contextP->bsState != BOOTSTRAP_FAILED))
-	{
+		(contextP->bsState != BOOTSTRAP_FAILED)) {
 #endif
 		registration_update(contextP, tv_sec, timeoutP);
 #ifdef LWM2M_BOOTSTRAP
@@ -349,27 +315,21 @@ int lwm2m_step(lwm2m_context_t * contextP,
 #ifdef LWM2M_SERVER_MODE
 	/* monitor clients lifetime */
 	clientP = contextP->clientList;
-	while (clientP != NULL)
-	{
+	while (clientP != NULL) {
 		lwm2m_client_t * nextP = clientP->next;
 
-		if (clientP->endOfLife <= tv_sec)
-		{
+		if (clientP->endOfLife <= tv_sec) {
 			contextP->clientList = (lwm2m_client_t *)LWM2M_LIST_RM(contextP->clientList, clientP->internalID, NULL);
-			if (contextP->monitorCallback != NULL)
-			{
+			if (contextP->monitorCallback != NULL) {
 				contextP->monitorCallback(clientP->internalID, NULL, DELETED_2_02, NULL, 0, contextP->monitorUserData);
 			}
 			prv_freeClient(clientP);
-		}
-		else
-		{
+		} else {
 			time_t interval;
 
 			interval = clientP->endOfLife - tv_sec;
 
-			if (*timeoutP > interval)
-			{
+			if (*timeoutP > interval) {
 				*timeoutP = interval;
 			}
 		}
@@ -387,18 +347,15 @@ int lwm2m_start(lwm2m_context_t * contextP)
 	bool cleanup = (NULL != contextP->bootstrapServerList) || (NULL != contextP->serverList);
 	delete_transaction_list(contextP);
 	delete_observed_list(contextP);
-	if (cleanup)
-	{
+	if (cleanup) {
 		LOG("lwm2m_start: cleanup\n");
 		delete_server_list(contextP);
 		delete_bootstrap_server_list(contextP);
 	}
 	result = object_getServers(contextP);
-	if (0 > result)
-	{
+	if (0 > result) {
 		LOG("lwm2m_start: security- or server-objects configuration error.\n");
-		if (0 > result && cleanup)
-		{
+		if (0 > result && cleanup) {
 			LOG("lwm2m_start: cleanup on error\n");
 			delete_server_list(contextP);
 			delete_bootstrap_server_list(contextP);

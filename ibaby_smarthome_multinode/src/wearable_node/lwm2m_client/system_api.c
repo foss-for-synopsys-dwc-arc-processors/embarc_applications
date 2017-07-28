@@ -39,8 +39,7 @@ static void prv_value_change(void* context,
                              size_t valueLength)
 {
 	lwm2m_uri_t uri;
-	if (lwm2m_stringToUri((char *)uriPath, strlen(uriPath), &uri))
-	{
+	if (lwm2m_stringToUri((char *)uriPath, strlen(uriPath), &uri)) {
 		handle_value_changed(context, &uri, value, valueLength);
 	}
 }

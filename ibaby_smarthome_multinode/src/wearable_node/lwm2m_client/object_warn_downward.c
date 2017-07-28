@@ -114,8 +114,7 @@ static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 	/* There are no multiple instance resources */
 	tlvP->type = LWM2M_TYPE_RESOURCE;
  
-	switch (tlvP->id)
-	{
+	switch (tlvP->id) {
 	case WARN_DSLEEP_ID:
 		targetP->warn_downward = data_report_wn.warn_downward;
 		lwm2m_tlv_encode_bool(targetP->warn_downward, tlvP);
@@ -142,8 +141,7 @@ static uint8_t prv_read(uint16_t instanceId,
 	targetP = (prv_instance_t *)lwm2m_list_find(objectP->instanceList, instanceId);
 	if (NULL == targetP) return COAP_404_NOT_FOUND;
 
-	if (*numDataP == 0)
-	{
+	if (*numDataP == 0) {
 		uint16_t resList[] = {
 			WARN_DSLEEP_ID
 		};
@@ -152,16 +150,14 @@ static uint8_t prv_read(uint16_t instanceId,
 		*dataArrayP = lwm2m_tlv_new(nbRes);
 		if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 		*numDataP = nbRes;
-		for (i = 0 ; i < nbRes ; i++)
-		{
+		for (i = 0 ; i < nbRes ; i++) {
 			(*dataArrayP)[i].id = resList[i];
 		}
 
 	}
 
 	i = 0;
-	do
-	{
+	do {
 		result = prv_get_value((*dataArrayP) + i, targetP);
 		i++;
 	} while (i < *numDataP && result == COAP_205_CONTENT);
@@ -202,8 +198,7 @@ static uint8_t prv_exec(uint16_t instanceId,
 static void prv_close(lwm2m_object_t * objectP)
 {
 	LWM2M_LIST_FREE(objectP->instanceList);
-	if (objectP->userData != NULL)
-	{
+	if (objectP->userData != NULL) {
 		lwm2m_free(objectP->userData);
 		objectP->userData = NULL;
 	}
@@ -216,8 +211,7 @@ void display_downstatus_object(lwm2m_object_t * object)
 #ifdef WITH_LOGS
 	EMBARC_PRINTF("  /%u: Downstatus object, instances:\r\n", object->objID);
 	prv_instance_t * instance = (prv_instance_t *)object->instanceList;
-	while (instance != NULL)
-	{
+	while (instance != NULL) {
 		EMBARC_PRINTF("    /%u/%u: shortId: %u, btn: %u\r\n",
 			object->objID, instance->shortID,
 			instance->shortID, instance->btn);
@@ -232,8 +226,7 @@ lwm2m_object_t * get_downstatus_object(void)
 	
 	downstatusObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
 
-	if (NULL != downstatusObj)
-	{
+	if (NULL != downstatusObj) {
 		int i;    
 		
 		prv_instance_t * targetP;
@@ -241,8 +234,7 @@ lwm2m_object_t * get_downstatus_object(void)
 		memset(downstatusObj, 0, sizeof(lwm2m_object_t));
 
 		downstatusObj->objID = LWM2M_DOWN_STA_OBJECT_ID;
-		for (i=0 ; i < 1 ; i++)
-		{
+		for (i=0 ; i < 1 ; i++) {
 			targetP = (prv_instance_t *)lwm2m_malloc(sizeof(prv_instance_t));
 			if (NULL == targetP) {
 				lwm2m_free(downstatusObj);
