@@ -187,76 +187,40 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 **For complete embARC license information, please refer to the embARC FOSS Notice** [License][50]. 
 
-[0]: ./img/cmd_make.PNG               
-	"gnu_make"
-[1]: ./img/digilent_adapt.PNG         
-	"digilent_adapt"
-[2]: ./img/zadig.PNG                  
-	"zadig"
-[3]: ./img/device_manager.PNG         
-	"device_manager"
-[4]: ./img/fork_app_repo.PNG          
-	"fork_app_repo"
-[5]: ./img/document_folder.PNG        
-	"document_folder"
-[6]: ./img/doxygen_make.PNG           
-	"doxygen_make"
-[7]: ./img/embarc_document.PNG        
-	"embarc_document"
-[8]: ./img/cmd_make.PNG               
-	"cmd_make"
-[9]: ./img/tera_term.PNG              
-	"tera_term"
-[10]: ./img/example_usage_guide.PNG   
-	"example_usage_guide"
-[11]: ./img/new_pull_request.PNG      
-	"new_pull_request"
-[12]: ./img/compare_across_forks.PNG  
-	"compare_across_forks"
-[13]: ./img/compare_changes.PNG       
-	"compare_changes"
-[14]: ./img/create_pull_request.PNG   
-	"create_pull_request"
+[0]: ./img/cmd_make.PNG                "gnu_make"
+[1]: ./img/digilent_adapt.PNG          "digilent_adapt"
+[2]: ./img/zadig.PNG                   "zadig"
+[3]: ./img/device_manager.PNG          "device_manager"
+[4]: ./img/fork_app_repo.PNG           "fork_app_repo"
+[5]: ./img/document_folder.PNG         "document_folder"
+[6]: ./img/doxygen_make.PNG            "doxygen_make"
+[7]: ./img/embarc_document.PNG         "embarc_document"
+[8]: ./img/cmd_make.PNG                "cmd_make"
+[9]: ./img/tera_term.PNG               "tera_term"
+[10]: ./img/example_usage_guide.PNG    "example_usage_guide"
+[11]: ./img/new_pull_request.PNG       "new_pull_request"
+[12]: ./img/compare_across_forks.PNG   "compare_across_forks"
+[13]: ./img/compare_changes.PNG        "compare_changes"
+[14]: ./img/create_pull_request.PNG    "create_pull_request"
 
-[30]: http://embarc.org/tools.html
-	"Development Tools"
-[31]: https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases 
-	"GNU Toolchain"
-[32]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-OSP 
-	"Getting Started with embARC OSP"
-[33]: http://store.digilentinc.com/digilent-adept-2-download-only/ 
-	"Digilent Adapt Software"     
-[34]: http://zadig.akeo.ie/ 
-	"zadig"
-[35]: https://github.com/foss-for-synopsys-dwc-arc-processors/arc_gnu_eclipse/wiki/How-to-Use-OpenOCD-on-Windows 
-	"How to Use OpenOCD on Windows"
-[36]: https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/wiki
-	"ARC GNU Toolchain Wiki Home"
-[37]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp
-	"embARC OSP"
-[38]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications
-	"embARC Applications"
-[39]: https://github.com/
-	"Github Account"
-[40]: https://git-for-windows.github.io/
-	"Git"
-[41]: https://git-scm.com/book/en/v2
-	"Git Book"
-[42]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/blob/master/README.md
-	"embARC Applications README"
-[43]: http://www.stack.nl/~dimitri/doxygen/download.html
-	"Doxygen"
-[44]: https://zh.osdn.net/projects/ttssh2/
-	"Tera Term"
-[45]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/tree/master/example
-	"source code of embARC examples"
-[46]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-Using-GNU-on-Windows#building-and-running-your-first-example
-	"Getting Started with embARC Using GNU on Windows"
-[47]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-OSP
-	"Getting Started with embARC OSP"
-[48]: https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst     
-	"Linux Kernel Coding Style"
-[49]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/blob/master/.github/CONTRIBUTING.md 
-	"Contributing to embARC OSP"
-[50]: http://embarc.org/embarc_osp/doc/embARC_Document/html/page_license.html
-	"License"
+[30]: http://embarc.org/tools.html    "Development Tools"
+[31]: https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases    "GNU Toolchain"
+[32]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-OSP    "Getting Started with embARC OSP"
+[33]: http://store.digilentinc.com/digilent-adept-2-download-only/    "Digilent Adapt Software"     
+[34]: http://zadig.akeo.ie/    "zadig"
+[35]: https://github.com/foss-for-synopsys-dwc-arc-processors/arc_gnu_eclipse/wiki/How-to-Use-OpenOCD-on-Windows    "How to Use OpenOCD on Windows"
+[36]: https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/wiki    "ARC GNU Toolchain Wiki Home"
+[37]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp    "embARC OSP"
+[38]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications    "embARC Applications"
+[39]: https://github.com/    "Github Account"
+[40]: https://git-for-windows.github.io/    "Git"
+[41]: https://git-scm.com/book/en/v2    "Git Book"
+[42]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/blob/master/README.md    "embARC Applications README"
+[43]: http://www.stack.nl/~dimitri/doxygen/download.html    "Doxygen"
+[44]: https://zh.osdn.net/projects/ttssh2/    "Tera Term"
+[45]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/tree/master/example    "source code of embARC examples"
+[46]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-Using-GNU-on-Windows#building-and-running-your-first-example    "Getting Started with embARC Using GNU on Windows"
+[47]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/wiki/Getting-Started-with-embARC-OSP    "Getting Started with embARC OSP"
+[48]: https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst    "Linux Kernel Coding Style"
+[49]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/blob/master/.github/CONTRIBUTING.md    "Contributing to embARC OSP"
+[50]: http://embarc.org/embarc_osp/doc/embARC_Document/html/page_license.html    "License"

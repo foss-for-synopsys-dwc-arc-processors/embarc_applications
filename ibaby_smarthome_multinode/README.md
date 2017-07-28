@@ -11,32 +11,32 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 - Communicate with Gateway（LwM2M）
 - OTA based on LwM2M protocol (supports file transfer over 2k size)
 
-![ibaby_function](http://i.imgur.com/tspan1C.png)
+![ibaby_function][0]
 
 ### System architecture
 
-![system_architecture](http://i.imgur.com/3hqxrJJ.png)
+![system_architecture][1]
 
 ## Hardware and Software Setup
 ### Required Hardware
-- 1 [DesignWare ARC EM Starter Kit(EMSK)](https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit)
-- 1 [Digilent PMOD WiFi(MRF24WG0MA)](http://store.digilentinc.com/pmodwifi-wifi-interface-802-11g/)
-- 1 [Acceleration sensor MPU6050](https://www.invensense.com/products/motion-tracking/6-axis/mpu-6050/)
-- 1 [Heartrate sensor MAX30102](http://www.electronics-lab.com/max30102/)
-- 1 [Temperature sensor MLX90614](https://developer.mbed.org/components/MLX90614-I2C-Infrared-Thermometer/)
+- 1 [DesignWare ARC EM Starter Kit(EMSK)][30]
+- 1 [Digilent PMOD WiFi(MRF24WG0MA)][31]
+- 1 [Acceleration sensor(MPU6050)][32]
+- 1 [Heartrate sensor(MAX30102)][33]
+- 1 [Temperature sensor(MLX90614)][34]
 - 1 SD Card
 - WiFi Hotspot(SSID:**embARC**, Password:**qazwsxedc**, WPA/WPA2 encypted)
 - PC or Raspberry Pi for running iBaby Smarthome Gateway program
 
 We designed integrated module for 3 sensors above, I'll call it **Foot Ring Module**. The physical picture of wearable node is as follows:
 
-![wearable_node](http://i.imgur.com/QofeNaG.jpg)
+![wearable_node][2]
 
 ### Required Software
 - Metaware or ARC GNU Toolset
 - Serial port terminal, such as putty, tera-term or minicom
-- [iBaby Smarthome Gateway](https://github.com/XiangcaiHuang/ibaby.git)
-- [iBaby Freeboard UI](https://github.com/XiangcaiHuang/ibaby.git)
+- [iBaby Smarthome Gateway][35]
+- [iBaby Freeboard UI][36]
 
 ### Hardware Connection
 1. EMSK 1 implement **wearable** node, as an intelligent foot ring for baby, it will publish baby's status to AWS IoT Cloud via the Gateway, including body temperature, heartrate, sleep-wake state, motion intensity and some warning information. We can view all data on the Freeboard UI.
@@ -77,3 +77,26 @@ Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how 
 2. Open your serial terminal such as Tera-Term on PC, and configure it to right COM port and *115200bps*.
 
 3. Interact using EMSK and Freeboard.
+
+[0]: ./doc/screenshots/ibaby_function.PNG
+	"ibaby_function"
+[1]: ./doc/screenshots/system_architecture.PNG
+	"system_architecture"
+[2]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+
+[30]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+[31]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+[32]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+[33]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+[34]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+[35]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+[36]: ./doc/screenshots/wearable_node.PNG
+	"wearable_node"
+
