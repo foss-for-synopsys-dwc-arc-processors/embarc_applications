@@ -153,6 +153,8 @@ Notices:
 
 + See [Contributing to embARC OSP][49] for more information about Coding-Style, Document-Style and Git Commit Message Guide, etc.
 
+4) Developing your application using [Git][40]. See [Git Book][41] for learning how to use it.
+
 ## Committing Your Work
 
 You can contribute your work by submitting **Pull Request** to *embarc\_applications* in github after finishing your project development. Creating a new **Pull Request**:
