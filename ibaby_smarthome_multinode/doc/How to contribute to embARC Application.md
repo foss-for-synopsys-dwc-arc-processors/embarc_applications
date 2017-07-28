@@ -12,7 +12,9 @@ embARC users are welcome to make contributions to embARC, including examples, so
 ## <a name="prerequisites"/> Prerequisites
 
 The hardware we used during development is **EM Starter Kit(aka EMSK)**. We need to download and install the following tools:
-	+ Download and install [**Development Tools**][30]. 
+
++ Download and install [**Development Tools**][30].
+
 	+ Here we use [GNU Toolchain][31] in **windows** host.
 	+ For using GNU or other tools in different host, see [Getting Started with embARC OSP][32] for reference.
 	
@@ -185,21 +187,21 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 **For complete embARC license information, please refer to the embARC FOSS Notice** [License][50]. 
 
-[0]: ../img/gnu_make.png               "gnu_make"
-[1]: ../img/digilent_adapt.png         "digilent_adapt"
-[2]: ../img/zadig.png                  "zadig"
-[3]: ../img/device_manager.png         "device_manager"
-[4]: ../img/fork_app_repo.png          "fork_app_repo"
-[5]: ../img/document_folder.png        "document_folder"
-[6]: ../img/doxygen_make.png           "doxygen_make"
-[7]: ../img/embarc_document.png        "embarc_document"
-[8]: ../img/cmd_make.png               "cmd_make"
-[9]: ../img/tera_term.png              "tera_term"
-[10]: ../img/example_usage_guide.png   "example_usage_guide"
-[11]: ../img/new_pull_request.png      "new_pull_request"
-[12]: ../img/compare_across_forks.png  "compare_across_forks"
-[13]: ../img/compare_changes.png       "compare_changes"
-[14]: ../img/create_pull_request.png   "create_pull_request"
+[0]: ../img/cmd_make.PNG               "gnu_make"
+[1]: ../img/digilent_adapt.PNG         "digilent_adapt"
+[2]: ../img/zadig.PNG                  "zadig"
+[3]: ../img/device_manager.PNG         "device_manager"
+[4]: ../img/fork_app_repo.PNG          "fork_app_repo"
+[5]: ../img/document_folder.PNG        "document_folder"
+[6]: ../img/doxygen_make.PNG           "doxygen_make"
+[7]: ../img/embarc_document.PNG        "embarc_document"
+[8]: ../img/cmd_make.PNG               "cmd_make"
+[9]: ../img/tera_term.PNG              "tera_term"
+[10]: ../img/example_usage_guide.PNG   "example_usage_guide"
+[11]: ../img/new_pull_request.PNG      "new_pull_request"
+[12]: ../img/compare_across_forks.PNG  "compare_across_forks"
+[13]: ../img/compare_changes.PNG       "compare_changes"
+[14]: ../img/create_pull_request.PNG   "create_pull_request"
 
 [30]: http://embarc.org/tools.html
 	"Development Tools"
