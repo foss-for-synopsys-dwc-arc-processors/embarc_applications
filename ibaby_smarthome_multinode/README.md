@@ -4,6 +4,7 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 * [Introduction](#introduction)
 	* [Function](#function)
 	* [System Architecture](#system-architecture)
+	* [Freeboard UI](#freeboard-ui)
 * [Hardware and Software Setup](#hardware-and-software-setup)
 	* [Required Hardware](#required-hardware)
 	* [Required Software](#required-software)
@@ -32,6 +33,10 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 
 ![system_architecture][1]
 
+### Freeboard UI
+
+![freeboard_ui][2]
+
 ## Hardware and Software Setup
 ### Required Hardware
 - 2 [DesignWare ARC EM Starter Kit(EMSK)][30]
@@ -45,7 +50,7 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 
 We designed integrated module for 3 sensors above, I'll call it **Foot Ring Module**. The physical picture of wearable node is as follows:
 
-![wearable_node][2]
+![wearable_node][3]
 
 ### Required Software
 - Metaware or ARC GNU Toolset
@@ -106,7 +111,8 @@ Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how 
 
 [0]: ./doc/screenshots/ibaby_function.PNG         "ibaby_function"
 [1]: ./doc/screenshots/system_architecture.PNG    "system_architecture"
-[2]: ./doc/screenshots/wearable_node.jpg          "wearable_node"
+[2]: ./doc/screenshots/freeboard_ui.png           "freeboard_ui"
+[3]: ./doc/screenshots/wearable_node.jpg          "wearable_node"
 
 [30]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
 [31]: http://store.digilentinc.com/pmodwifi-wifi-interface-802-11g/    "Digilent PMOD WiFi(MRF24WG0MA)"
