@@ -55,7 +55,7 @@
  *     This application is designed to show how to connect EMSK and iBaby Smarthome Gateway using embARC.
  *
  * ### Usage Manual
- *     Before compiling this example, you need to change some macro in value.h to customize your own project.
+ *     Before compiling this example, you need to change some macro in common.h to customize your own project.
  *
  *     It can report the following information to the iBaby Smarthome Gateway.
  *     - the Body Temperature (uint16_t) - Wearable module connected to J4 (Based on Temperature sensor)

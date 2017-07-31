@@ -39,8 +39,8 @@
  * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
-#ifndef PRINT_MSG_H
-#define PRINT_MSG_H
+#ifndef _PRINT_MSG_H_
+#define _PRINT_MSG_H_
 
 
 /** print message for debug major function */
@@ -53,6 +53,6 @@ extern void  print_msg_awake(void);
 extern void  print_msg_sleep(uint8_t state);
 
 
-#endif/* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif/* _PRINT_MSG_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */

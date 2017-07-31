@@ -39,14 +39,14 @@
  * \addtogroup    EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_
  * @{
  */
-#ifndef PROCESS_HRATE_H
-#define PROCESS_HRATE_H
+#ifndef _PROCESS_HRATE_H_
+#define _PROCESS_HRATE_H_
 
 
 /** function for starting heartrate detecting */
 extern void hrate_detector_start(void);
 
 
-#endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */
+#endif/* _PROCESS_HRATE_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE */

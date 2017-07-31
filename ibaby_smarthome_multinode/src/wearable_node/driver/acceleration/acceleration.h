@@ -68,6 +68,6 @@ typedef struct __accValues
 extern int32_t acc_sensor_init(uint32_t slv_addr);
 extern int32_t acc_sensor_read(acc_values* accel_val);
 
-#endif  /* _WEARABLE_NODE_DRIVER_ACCELERATION_H_ */
+#endif  /* _ACCELERATION_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */

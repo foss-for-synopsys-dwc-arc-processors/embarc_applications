@@ -39,8 +39,8 @@
  * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef _COMMON_H_
+#define _COMMON_H_
 
 
 /**
@@ -89,6 +89,6 @@ data_wearable_node data_report_wn_old;/*!< the last value of reporting data */
 /** @} end of name */
 
 
-#endif/* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif/* _COMMON_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */

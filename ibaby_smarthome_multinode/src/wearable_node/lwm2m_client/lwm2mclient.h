@@ -24,8 +24,8 @@
  *  Copyright (c) 2015 Bosch Software Innovations GmbH, Germany. All rights reserved.
  */
 
-#ifndef LWM2MCLIENT_H_
-#define LWM2MCLIENT_H_
+#ifndef _LWM2MCLIENT_H_
+#define _LWM2MCLIENT_H_
 
 #include "liblwm2m.h"
 
@@ -111,4 +111,4 @@ extern void handle_sigint(int signum);
 extern lwm2m_object_t * get_security_object();
 extern char * get_server_uri(lwm2m_object_t * objectP, uint16_t serverID);
 
-#endif /* LWM2MCLIENT_H_ */
+#endif /* _LWM2MCLIENT_H_ */

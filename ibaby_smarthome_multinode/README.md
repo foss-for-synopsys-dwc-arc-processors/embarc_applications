@@ -56,7 +56,7 @@ We designed integrated module for 3 sensors above, I'll call it **Foot Ring Modu
 ### Hardware Connection
 1. EMSK 1 implement **wearable** node, as an intelligent foot ring for baby, it will publish baby's status to AWS IoT Cloud via the Gateway, including body temperature, heartrate, sleep-wake state, motion intensity and some warning information. We can view all data on the Freeboard UI.
    - Connect **PMOD WiFi** to **J5**, connect **Foot Ring Module** to **J4**(Using IIC1 interface).
-2. EMSK 2 implement **lamp** node, as an desk lamp in parents' room, it will publish the working state of lamp to AWS IoT Cloud via the Gateway. We use the LED0 to simulate real desk lamp to make the application more simple and easy to learn. The lamp can be controlled by button A manually, or **wearable** node automaticlly. We can also view it's state on the Freeboard UI.
+2. EMSK 2 implement **lamp** node, as an desk lamp in parents' room, it will publish the working state of lamp to AWS IoT Cloud via the Gateway. We use the LED0 to simulate real desk lamp to make the application more simple and easy to learn. The lamp can be controlled by button A manually, or **wearable** node automatically. We can also view it's state on the Freeboard UI.
 	- Connect **PMOD WiFi** to **J5**.
 3. Configure your EMSKs with proper core configuration.
 

@@ -41,8 +41,8 @@
  * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
-#ifndef PROCESS_ACC_H
-#define PROCESS_ACC_H
+#ifndef _PROCESS_ACC_H_
+#define _PROCESS_ACC_H_
 
 
 #include "acceleration.h"
@@ -73,6 +73,6 @@ extern void sleep_monitor_start(void);
 /** @} end of name */
 
 
-#endif/* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif/* _PROCESS_ACC_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */

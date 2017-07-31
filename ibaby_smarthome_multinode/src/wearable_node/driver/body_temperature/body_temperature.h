@@ -55,6 +55,6 @@
 extern int32_t btemp_sensor_init(uint32_t slv_addr);
 extern int32_t btemp_sensor_read(uint16_t *btmp);
 
-#endif /* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif /* _BODY_TEMPERATURE_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */

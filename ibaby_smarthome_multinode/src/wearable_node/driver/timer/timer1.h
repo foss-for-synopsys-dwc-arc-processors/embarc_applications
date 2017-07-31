@@ -40,8 +40,8 @@
  * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
-#ifndef TIMER1_H
-#define TIMER1_H
+#ifndef _TIMER1_H_
+#define _TIMER1_H_
 
 
 volatile uint32_t t1_cnt;   /*!< software timing counter for timer1 */
@@ -63,6 +63,6 @@ extern void perf_start(void);
 extern uint32_t perf_end(void);
 
 
-#endif /* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif /* _TIMER1_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */

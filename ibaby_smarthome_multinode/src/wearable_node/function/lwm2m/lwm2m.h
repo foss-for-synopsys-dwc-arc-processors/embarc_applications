@@ -39,14 +39,14 @@
  * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
  * @{
  */
-#ifndef LWM2M_H
-#define LWM2M_H
+#ifndef _LWM2M_H_
+#define _LWM2M_H_
 
 
 /** function to be LwM2M Client */
 extern int32_t lwm2m_client_start(void);
 
 
-#endif/* _EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_ */
+#endif/* _LWM2M_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
