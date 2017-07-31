@@ -36,7 +36,7 @@
  */
 
 /**
- * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
 #ifndef _COMMON_H_
@@ -70,7 +70,7 @@
  */
 /*!< struct of iBaby lamp node data reporting to iBaby Gateway */
 typedef struct{
-	bool flag_lamp_work;/*!< working status of lamp module */
+	bool flag_lamp_work;/*!< working status of lamp */
 }data_lamp_node;
 
 data_lamp_node data_report_ln;
@@ -78,6 +78,6 @@ data_lamp_node data_report_ln_old;
 /** @} end of name */
 
 
-#endif/* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif/* _COMMON_H_ */
 
-/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE */

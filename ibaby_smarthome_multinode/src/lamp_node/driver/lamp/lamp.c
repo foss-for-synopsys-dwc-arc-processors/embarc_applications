@@ -33,12 +33,12 @@
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
- * \brief	emsk acceleration sensor driver for ibaby wearable node
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
+ * \brief	lamp driver for ibaby lamp node
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
 /* embARC HAL */
@@ -64,7 +64,7 @@
 
 /**
  * \brief	initialize GPIO for lamp
- *              using led on emsk instead of real lamp interface for convenience
+ *              using led on emsk to simulate desk lamp
  */
 extern void lamp_init(void)
 {
@@ -87,5 +87,5 @@ extern void lamp_off(void)
 	led_write(LED_OFF, LED0);
 }
 
-/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE */
 

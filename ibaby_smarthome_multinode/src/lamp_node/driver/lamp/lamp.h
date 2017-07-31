@@ -32,12 +32,12 @@
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
- * \brief	acceleration sensor driver related header file
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
+ * \brief	lamp driver related header file
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
 #ifndef _LAMP_H_
@@ -49,6 +49,6 @@ extern void lamp_on(void);
 extern void lamp_off(void);
 
 
-#endif  /* _WEARABLE_NODE_DRIVER_ACCELERATION_H_ */
+#endif  /* _LAMP_H_ */
 
-/** @} end of group EMBARC_APP_FREERTOS_IBABY_SMARTHOME_NODES_WEARABLE_NODE_DRIVER */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE */

@@ -33,18 +33,14 @@
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
- * \brief	emsk temperature sensor driver for ibaby wearable node
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
+ * \brief	emsk button driver for ibaby lamp node
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
-
-/* standard C HAL */
-#include <stdio.h>
-
 /* embARC HAL */
 #include "embARC.h"
 #include "embARC_debug.h"
@@ -119,4 +115,4 @@ extern void btn_init(void)
 
 }
 
-/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE */

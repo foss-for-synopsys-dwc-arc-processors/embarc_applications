@@ -77,9 +77,9 @@
 
 #include "common.h"
 
+
 #define PRV_RESOURCE_3_SIZE 190
 #define PRV_TLV_BUFFER_SIZE 64
-
 
 #define LWM2M_LAMP_OBJECT_ID   3311
 #define LWM2M_EMSK_INSTANCE_ID 0
@@ -102,6 +102,7 @@ typedef struct _prv_instance_
 	uint16_t shortID;
 	uint16_t flag_lamp_work;
 } prv_instance_t;
+
 
 static uint8_t prv_get_value(lwm2m_tlv_t * tlvP,
 			     prv_instance_t * targetP)

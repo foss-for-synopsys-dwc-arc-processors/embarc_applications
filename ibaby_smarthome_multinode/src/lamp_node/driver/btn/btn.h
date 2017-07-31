@@ -32,12 +32,12 @@
 --------------------------------------------- */
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
- * \brief	temperature sensor driver related header file
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
+ * \brief	button driver related header file
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
 #ifndef _BTN_H_
@@ -46,6 +46,6 @@
 /*!< initialize GPIO for button */
 extern void btn_init(void);
 
-#endif /* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif /* _BTN_H_ */
 
-/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE */

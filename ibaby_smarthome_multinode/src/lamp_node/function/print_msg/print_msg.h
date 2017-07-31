@@ -36,17 +36,17 @@
  */
 
 /**
- * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \addtogroup    EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
-#ifndef PRINT_MSG_H
-#define PRINT_MSG_H
+#ifndef _PRINT_MSG_H_
+#define _PRINT_MSG_H_
 
 
 /** print message for debug major function */
 extern void print_msg_func(void);
 
 
-#endif/* EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+#endif/* _PRINT_MSG_H_ */
 
-/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE */

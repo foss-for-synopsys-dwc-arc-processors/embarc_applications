@@ -32,40 +32,34 @@
 --------------------------------------------- */
 
 /**
- * \defgroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE		embARC IOT iBaby Smarthome Node Wearable Node
+ * \defgroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE		embARC IOT iBaby Smarthome Node Lamp Node
  * \ingroup	EMBARC_APPS_TOTAL
  * \ingroup	EMBARC_APPS_OS_FREERTOS
  * \ingroup	EMBARC_APPS_MID_LWIP
  * \ingroup	EMBARC_APPS_MID_WAKAAMA
  * \ingroup	EMBARC_APPS_MID_FATFS
  * \ingroup	EMBARC_APPS_MID_AWS
- * \brief	embARC IOT iBaby Smarthome Node Wearable Node
+ * \brief	embARC IOT iBaby Smarthome Node Lamp Node
  *
  * \details
  * ### Extra Required Tools
  *
  * ### Extra Required Peripherals
  *     [Digilent PMOD WIFI(MRF24WG0MA)](http://www.digilentinc.com/Products/Detail.cfm?NavPath=2,401,884&Prod=PMOD-WIFI)
- *     [MPU6050](https://www.invensense.com/products/motion-tracking/6-axis/mpu-6050/)
- *     [MAX30102](http://www.electronics-lab.com/max30102/)
- *     [MLX90614](https://developer.mbed.org/components/MLX90614-I2C-Infrared-Thermometer/)
  *
  * ### Design Concept
- *     All sensor modules should be connected to \ref EMBARC_BOARD_CONNECTION "EMSK".
+ *     All modules should be connected to \ref EMBARC_BOARD_CONNECTION "EMSK".
  *     This application is designed to show how to connect EMSK and iBaby Smarthome Gateway using embARC.
+ *     This a simple application example than iBaby Wearable Node, it can help user add extensional nodes to iBaby Smarthome.
+ *     Here we use the LED0 on emsk to simulate the desk lamp, it makes the application more simple and easy to learn.
  *
  * ### Usage Manual
- *     Before compiling this example, you need to change some macro in value.h to customize your own project.
+ *     Before compiling this example, you need to change some macro in common.h to customize your own project.
  *
  *     It can report the following information to the iBaby Smarthome Gateway.
- *     - the Body Temperature (uint16_t) - Wearable module connected to J4 (Based on Temperature sensor)
- *     - the Heartrate (uint16_t) - Wearable module connected to J4 (Based on Heartrate sensor)
- *     - the Motion Intensity in 1min (uint32_t) - Wearable module connected to J4 (Based on Acceleration sensor)
- *     - the Sleep-Wake state (uint8_t) - Wearable module connected to J4 (Based on Acceleration sensor)
- *     - the Awake Event (uint8_t) - Wearable module connected to J4 (Based on Acceleration sensor)
- *     - 3 flags of Warning (bool) - Warning of Body Temperature abnormal, Heartrate abnormal, sleep on his stomach
+ *     - the flag of Lamp working state (bool) - The Lamp is ON or OFF.
  *
- *     EMSK can send the above data to iBaby Gateway Smarthome with LwM2M.
+ *     EMSK can send the above data to iBaby Smarthome Gateway with LwM2M.
  *
  * ### Extra Comments
  *
@@ -73,12 +67,12 @@
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
- * \brief	main source of iBaby Smarthome Node Wearable Node
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
+ * \brief	main source of iBaby Smarthome Node Lamp Node
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
 /* embARC HAL */
@@ -99,8 +93,7 @@
  */
 int main(void)
 {
-	// vTaskDelay(200); /* delay time to ensure sensors initialize normally */
-	btn_init(); /* initialize button on emsk */
+	btn_init();  /* initialize button on emsk */
 
 	lamp_init(); /* initialize led on emsk */
 

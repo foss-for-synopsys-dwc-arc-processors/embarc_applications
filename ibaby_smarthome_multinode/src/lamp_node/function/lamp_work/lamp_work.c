@@ -32,13 +32,13 @@
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
- * \brief	function for acceleration data processing
- *              awake event detecting, sleep downward detecting, sleep monitoring
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
+ * \brief	function for control lamp to work
+ *              lamp turn on or turn off
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_LAMP_NODE
  * @{
  */
 /* embARC HAL */
@@ -74,8 +74,6 @@ extern void lamp_start(void)
 static void task_lamp(void *par)
 {
 	while(1) {
-		data_report_ln.flag_lamp_work = !data_report_ln.flag_lamp_work;
-
 		if (data_report_ln.flag_lamp_work)
 		{
 			lamp_on();
