@@ -1,5 +1,5 @@
 # iBaby Smarthome Application
-This application is designed to show how to connect 1 or more EMSKs and **iBaby Smarthome Gateway** using embARC. The connection between EMSK and Gateway is based on **LwM2M** protocol as shown in the following figure. All the iBaby nodes interact with AWS IoT through the Gateway indirectly.
+This application is designed to show how to connect 1 or more EMSKs and **iBaby Smarthome Gateway** using embARC. The connection between EMSK and Gateway is based on **LwM2M** protocol as shown in the following figure. All the iBaby nodes interact with AWS IoT through the Gateway indirectly. There are only 2 nodes available now, but you can add more nodes easily to iBaby Smarthome by taking these 2 examples as a reference. And the lamp node is more simple and easy to learn for beginner.
 
 * [Introduction](#introduction)
 	* [Function](#function)
