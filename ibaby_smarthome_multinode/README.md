@@ -12,6 +12,12 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 * [User Manual](#user-manual)
 	* [Before Running This Application](#before-running-this-application)
 	* [Run This Application](#run-this-application)
+	* [Add a New Node](#add-a-new-node)
+		* [Makefile](#makefile)
+		* [Main Entry](#main-entry)
+		* [Driver](#driver)
+		* [Function Module](#function-module)
+		* [LwM2M Client](#lwm2m-client)
 
 ## Introduction
 **iBaby Infant Sleep Monitoring System**
@@ -109,6 +115,155 @@ Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how 
 
 3. Interact using EMSK and Freeboard.
 
+### Add a New Node
+
+Seeing **Lamp Node** for reference. It's complete although seems very simple and very helpful to add a new node to iBaby System.
+
+|  folder/file        |            Function                                           |
+| ------------------- | ------------------------------------------------------------- |
+|  driver             |        source code of drivers                                 |
+|  function           |        source code of function modules                        |
+|  lwm2m_client       |        source code of LwM2M Client                            |
+|  FreeRTOSConfig.h   |        header file of FreeRTOS configurations                 |
+|  main.c             |        main entry of embARC Application                       |
+|  makefile           |        Makefile of embARC Application                         |
+
+#### Makefile
+
+- Selected FreeRTOS here, then you can use [FreeRTOS API][39] in your application:
+
+		# Selected OS
+		OS_SEL ?= freertos
+
+- Target options:
+
+		BOARD ?= emsk
+		BD_VER ?= 22
+		CUR_CORE ?= arcem11d
+		TOOLCHAIN ?= gnu
+
+- Reset the heap and stack size for LwM2M and make sure they are big enough for your application:
+
+		##
+		# HEAP & STACK SETTINGS
+		# For LwM2M Stack Usage
+		##
+		HEAPSZ ?= 81920
+		STACKSZ ?= 81920
+
+- The relative series of the root directory, here the path of the Makefile is `./embarc_osp/application/ibaby_smarthome_multinode/src/lamp_node/makefile`:
+
+		#
+		# root dir of embARC
+		#
+		EMBARC_ROOT = ../../../..
+
+- The middleware used in your application:
+
+		MID_SEL = common lwip-contrib wakaama fatfs lwip
+
+- Directoties of source files and header files, notice that it can not recursive:
+
+		# application source dirs
+		APPL_CSRC_DIR
+		APPL_ASMSRC_DIR
+
+		# application include dirs
+		APPL_INC_DIR
+
+See `./embarc_osp/doc/embARC_Document/html/page_example.html`, **"Options to Hard-Code in the Application Makefile"** for more detailed information.
+
+#### Main Entry
+
+- Firstly, initializing the hardware, such as buttons on the emsk and GPIO interface for lamp.
+
+- Secondly, try to start LwM2M Client. Before that, modify the ssid and password of WIFI AP in `./embarc_osp/board/emsk/emsk.h`:
+
+		143 #define WF_HOTSPOT_NAME             "embARC"
+		    #define WF_HOTSPOT_PASSWD           "qazwsxedc"
+
+	You ought to modify the flag of WIFI module selection if you are using **RW009** not MRF24G, in `./embarc_osp/board/board.mk`:
+
+		16 WIFI_SEL ?= 1
+
+- Finally, starting to run the function moudles. Reading value from sensors, processing it and controlling someting to work according to the results, just like the **wearable node** and **lamp node** do.
+
+#### Driver
+
+Placing the drivers' source code in `driver` folder, you can see there are subfolders for button and lamp drivers.
+Placing the C source file and header file in the corresponding subfolder.
+
+|  folder/file        |            Function           |
+| ------------------- | ------------------------------|
+|  btn                |        button driver          |
+|  lamp               |        lamp driver            |
+
+#### Function Module
+
+- The `function` folder contains the API implementations of functions.
+
+|  folder/file        |            Function                                         |
+| ------------------- | ------------------------------------------------------------|
+|  lamp_work          |        lamp controller                                      |
+|  lwm2m              |        LwM2M Client start to work                           |
+|  print_msg          |        print out message for debug                          |
+|  common.h           |        common variables, settings and reported data         |
+
+- In the `common.h`, set 1 to enable corresponding function, set 0 to disable.
+
+		/**
+		 * \name    macros for settings
+		 * @{
+		 */
+		#define LWM2M_CLIENT      (1) /*!< set 1 to be lwm2m client */
+	
+		#define PRINT_DEBUG_FUNC  (1) /*!< set 1 to print out message for debug major function */
+		/** @} end of name */
+
+#### LwM2M Client
+
+- In the `lwm2m_client` folder, you can see several files about LwM2M. See [**LwM2M Protocol**][37] and [**LwM2M Object and Resource**][38] to learn more about it.
+
+- The following objects are nessary, you ought to keep them:
+
+|  file                         |
+| ----------------------------- |
+|  object_connectivity_stat.c   |
+|  object_device.c              |
+|  object_firmware.c            |
+|  object_security.c            |
+|  object_server.c              |
+
+- Only the `object_flag_lamp_work.c` is custom here, you ought to remove it and add the new object definition files for your node. Then, modify `lwm2mclient.c`:
+
+	The number of objects in your node:
+
+		87 #define OBJ_COUNT 7
+
+	Logic of reporting data to LwM2M Server:
+
+		346 /* update the flag of lamp working value */
+	            if (data_report_ln.flag_lamp_work != data_report_ln_old.flag_lamp_work)
+		    {
+			    lwm2m_stringToUri("/3311/0/5850", 12, &uri);
+			    valueLength = sprintf(value, "%d", data_report_ln.flag_lamp_work);
+			    handle_value_changed(context, &uri, value, valueLength);
+			    data_report_ln_old.flag_lamp_work = data_report_ln.flag_lamp_work;
+		    }
+	
+	Register custom objects:
+	
+		667 objArray[5] = get_lamp_object();
+		    if (NULL == objArray[5]) {
+			    EMBARC_PRINTF("Failed to create lamp object\r\n");
+			    return -1;
+		    }
+	
+	Finally, modify `lwm2mclient.h`:
+	
+		62   extern lwm2m_object_t * get_lamp_object();
+
+
 [0]: ./doc/screenshots/ibaby_function.PNG         "ibaby_function"
 [1]: ./doc/screenshots/system_architecture.PNG    "system_architecture"
 [2]: ./doc/screenshots/freeboard_ui.png           "freeboard_ui"
@@ -121,3 +276,9 @@ Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how 
 [34]: https://developer.mbed.org/components/MLX90614-I2C-Infrared-Thermometer/    "Temperature sensor(MLX90614)"
 [35]: https://github.com/XiangcaiHuang/ibaby.git    "iBaby Smarthome Gateway"
 [36]: https://github.com/XiangcaiHuang/ibaby.git    "iBaby Freeboard UI"
+[37]: http://www.openmobilealliance.org/release/LightweightM2M/V1_0_1-20170704-A/OMA-TS-LightweightM2M-V1_0_1-20170704-A.pdf    "LwM2M Protocol"
+[38]: http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html#omalabel   "LwM2M Object and Resource"
+[39]: http://www.freertos.org/a00106.html   "FreeRTOS API"
+
+
+
