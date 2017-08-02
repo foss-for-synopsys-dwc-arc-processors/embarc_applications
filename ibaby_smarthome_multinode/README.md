@@ -202,12 +202,12 @@ Placing the C source file and header file in the corresponding subfolder.
 
 - The `function` folder contains the API implementations of functions.
 
-|  folder/file        |            Function                                         |
-| ------------------- | ------------------------------------------------------------|
-|  lamp_work          |        lamp controller                                      |
-|  lwm2m              |        LwM2M Client start to work                           |
-|  print_msg          |        print out message for debug                          |
-|  common.h           |        common variables, settings and reported data         |
+	|  folder/file        |            Function                                         |
+	| ------------------- | ------------------------------------------------------------|
+	|  lamp_work          |        lamp controller                                      |
+	|  lwm2m              |        LwM2M Client start to work                           |
+	|  print_msg          |        print out message for debug                          |
+	|  common.h           |        common variables, settings and reported data         |
 
 - In the `common.h`, set 1 to enable corresponding function, set 0 to disable.
 
@@ -226,13 +226,13 @@ Placing the C source file and header file in the corresponding subfolder.
 
 - The following objects are nessary, you ought to keep them:
 
-|  file                         |
-| ----------------------------- |
-|  object_connectivity_stat.c   |
-|  object_device.c              |
-|  object_firmware.c            |
-|  object_security.c            |
-|  object_server.c              |
+	|  file                         |
+	| ----------------------------- |
+	|  object_connectivity_stat.c   |
+	|  object_device.c              |
+	|  object_firmware.c            |
+	|  object_security.c            |
+	|  object_server.c              |
 
 - Only the `object_flag_lamp_work.c` is custom here, you ought to remove it and add the new object definition files for your node. Then, modify `lwm2mclient.c`:
 
