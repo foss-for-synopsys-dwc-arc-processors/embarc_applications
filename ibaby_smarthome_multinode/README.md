@@ -109,7 +109,7 @@ Modify the settings for connecting to the LwM2M Server(Gateway), as shown below:
 
 Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how to run this application.
 
-1. We need to use embARC 2nd bootloader to automatically load application binary for different EMSK and run.
+1. We need to use embARC 2nd bootloader to automatically load application binary for different EMSK and run. See *embARC Secondary Bootloader Example* for reference.
 
 2. Open your serial terminal such as Tera-Term on PC, and configure it to right COM port and *115200bps*.
 
@@ -117,7 +117,7 @@ Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how 
 
 ### Add a New Node
 
-Seeing **Lamp Node** for reference. It's complete although seems very simple and very helpful to add a new node to iBaby System.
+Seeing **Lamp Node** for reference. It's complete and very helpful to learn how to add a new node to iBaby System although it seems very simple.
 
 |  folder/file        |            Function                                           |
 | ------------------- | ------------------------------------------------------------- |
@@ -135,14 +135,14 @@ Seeing **Lamp Node** for reference. It's complete although seems very simple and
 		# Selected OS
 		OS_SEL ?= freertos
 
-- Target options:
+- Target options about EMSK and toolchain:
 
 		BOARD ?= emsk
 		BD_VER ?= 22
 		CUR_CORE ?= arcem11d
 		TOOLCHAIN ?= gnu
 
-- Reset the heap and stack size for LwM2M and make sure they are big enough for your application:
+- Reset the heap and stack size for LwM2M, make sure they are big enough for your application:
 
 		##
 		# HEAP & STACK SETTINGS
@@ -162,16 +162,30 @@ Seeing **Lamp Node** for reference. It's complete although seems very simple and
 
 		MID_SEL = common lwip-contrib wakaama fatfs lwip
 
-- Directoties of source files and header files, notice that it can not recursive:
+	common for baremetal function, lwip-contrib and wakaama for LwM2M, fatfs for file system, lwip for wifi.
+
+	You might be wondering about **how wifi works?** There is nothing about it in the lamp node or wearable node application. Goto `./embarc_osp/board/board.c`, and you'll solve the problem:
+
+		#if defined(OS_FREERTOS) && defined(MID_LWIP)
+		static void task_wifi(void *par)
+		{
+		...
+		}
+
+	Wifi works as a independent task on the FreeRTOS, so you ought to select *freertos* for OS_SEL and include *lwip* in the MID_SEL. Then, the task for wifi will start to work automatically.
+
+	![wifi_connected_info][4]
+
+- Directoties of source files and header files, notice that it **can not recursive**:
 
 		# application source dirs
-		APPL_CSRC_DIR
-		APPL_ASMSRC_DIR
+		APPL_CSRC_DIR = . ./lwm2m_client ./driver/acceleration ./driver/body_temperature ./driver/heartrate ./driver/timer ./function/ ./function/lwm2m ./function/print_msg ./function/process_acc ./function/process_hrate
+		APPL_ASMSRC_DIR = .
 
 		# application include dirs
-		APPL_INC_DIR
+		APPL_INC_DIR = . ./lwm2m_client ./driver/acceleration ./driver/body_temperature ./driver/heartrate ./driver/timer ./function/ ./function/lwm2m ./function/print_msg ./function/process_acc ./function/process_hrate
 
-See `./embarc_osp/doc/embARC_Document/html/page_example.html`, **"Options to Hard-Code in the Application Makefile"** for more detailed information.
+See `./embarc_osp/doc/embARC_Document/html/page_example.html`, **"Options to Hard-Code in the Application Makefile"** for more detailed information about **Makefile Options**.
 
 #### Main Entry
 
@@ -186,7 +200,11 @@ See `./embarc_osp/doc/embARC_Document/html/page_example.html`, **"Options to Har
 
 		16 WIFI_SEL ?= 1
 
+	![lwm2m_started_info][5]
+
 - Finally, starting to run the function moudles. Reading value from sensors, processing it and controlling someting to work according to the results, just like the **wearable node** and **lamp node** do.
+
+	![lamp_work_info][6]
 
 #### Driver
 
@@ -268,6 +286,10 @@ Placing the C source file and header file in the corresponding subfolder.
 [1]: ./doc/screenshots/system_architecture.PNG    "system_architecture"
 [2]: ./doc/screenshots/freeboard_ui.png           "freeboard_ui"
 [3]: ./doc/screenshots/wearable_node.jpg          "wearable_node"
+[4]: ./doc/screenshots/wifi_connected_info.PNG    "wifi_connected_info"
+[5]: ./doc/screenshots/lwm2m_started_info.PNG     "lwm2m_started_info"
+[6]: ./doc/screenshots/lamp_work_info.PNG         "lamp_work_info"
+
 
 [30]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
 [31]: http://store.digilentinc.com/pmodwifi-wifi-interface-802-11g/    "Digilent PMOD WiFi(MRF24WG0MA)"
