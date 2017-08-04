@@ -117,7 +117,7 @@ Here take **EMSK2.2 - ARC EM11D** with Metaware Toolset for example to show how 
 
 ### Add a New Node
 
-Seeing **Lamp Node** for reference. It's complete and very helpful to learn how to add a new node to iBaby System although it seems very simple.
+See **Lamp Node** for reference. It's complete and very helpful to learn how to add a new node to iBaby System although it seems very simple.
 
 |  folder/file        |            Function                                           |
 | ------------------- | ------------------------------------------------------------- |
@@ -162,7 +162,7 @@ Seeing **Lamp Node** for reference. It's complete and very helpful to learn how 
 
 		MID_SEL = common lwip-contrib wakaama fatfs lwip
 
-	common for baremetal function, lwip-contrib and wakaama for LwM2M, fatfs for file system, lwip for wifi.
+	*common* for baremetal function, *lwip*, *lwip-contrib* and *wakaama* for LwM2M, *fatfs* for file system .
 
 	You might be wondering about **how wifi works?** There is nothing about it in the lamp node or wearable node application. Goto `./embarc_osp/board/board.c`, and you'll solve the problem:
 
@@ -176,7 +176,7 @@ Seeing **Lamp Node** for reference. It's complete and very helpful to learn how 
 
 	![wifi_connected_info][4]
 
-- Directoties of source files and header files, notice that it **can not recursive**:
+- Directories of source files and header files, notice that it **is not recursive**:
 
 		# application source dirs
 		APPL_CSRC_DIR = . ./lwm2m_client ./driver/acceleration ./driver/body_temperature ./driver/heartrate ./driver/timer ./function/ ./function/lwm2m ./function/print_msg ./function/process_acc ./function/process_hrate
@@ -185,7 +185,7 @@ Seeing **Lamp Node** for reference. It's complete and very helpful to learn how 
 		# application include dirs
 		APPL_INC_DIR = . ./lwm2m_client ./driver/acceleration ./driver/body_temperature ./driver/heartrate ./driver/timer ./function/ ./function/lwm2m ./function/print_msg ./function/process_acc ./function/process_hrate
 
-See `./embarc_osp/doc/embARC_Document/html/page_example.html`, **"Options to Hard-Code in the Application Makefile"** for more detailed information about **Makefile Options**.
+See [ embARC Example User Guide][40], **"Options to Hard-Code in the Application Makefile"** for more detailed information about **Makefile Options**.
 
 #### Main Entry
 
@@ -301,6 +301,4 @@ Placing the C source file and header file in the corresponding subfolder.
 [37]: http://www.openmobilealliance.org/release/LightweightM2M/V1_0_1-20170704-A/OMA-TS-LightweightM2M-V1_0_1-20170704-A.pdf    "LwM2M Protocol"
 [38]: http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html#omalabel   "LwM2M Object and Resource"
 [39]: http://www.freertos.org/a00106.html   "FreeRTOS API"
-
-
-
+[40]: http://embarc.org/embarc_osp/doc/embARC_Document/html/page_example.html   " embARC Example User Guide"
