@@ -1,0 +1,2 @@
+# OpenThread Smarthome Application
+
