@@ -133,7 +133,8 @@
 
 #define GATEWAY_ADDR ("::1")
 
-static uint8_t lock_sta, flag_send;
+static uint8_t lock_sta;
+volatile static uint8_t flag_send;
 
 static void lock_sta_request_handler(void                * p_context,
                                      otCoapHeader        * p_header,

@@ -137,7 +137,7 @@
 
 static uint8_t light_sta;
 static uint32_t temp;
-static uint8_t flag_send_light_sta, flag_send_temp;
+volatile static uint8_t flag_send_light_sta, flag_send_temp;
 
 static void light_sta_request_handler(void                * p_context,
                                       otCoapHeader        * p_header,
@@ -220,13 +220,13 @@ static void btn_init(void)
  */
 static void livingroom_light_on(void)
 {
-	light_sta = light;
+	light_sta = LIGHT_ON;
 	led_write(LED_ON, LED_LIGHT_STA);
 }
 
 static void livingroom_light_off(void)
 {
-	light_sta = UNlight;
+	light_sta = LIGHT_OFF;
 	led_write(LED_OFF, LED_LIGHT_STA);
 }
 
