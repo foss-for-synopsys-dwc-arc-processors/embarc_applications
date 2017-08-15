@@ -17,23 +17,23 @@ This application is designed to show how to set up **OpenThread-CoAP-Based Smart
 
 There are 2 Thread Nodes in this application:
 
-- FrontDoor Node. It provides one resource:
+- **FrontDoor** Node. It provides one resource:
 
 	lock status (Use LED0 to simulate the FrontDoor's Lock status). 
 
-- LivingRoom Node. It provides two resources:
+- **LivingRoom** Node. It provides two resources:
 
 	light status (Use LED0 to simulate the Light in the LivingRoom).
 	temperature sensor value.
 
 ### Function
 
-- FrontDoor Node:
+- **FrontDoor** Node:
 
 	- Receive CoAP PUT request (lock_sta).
 	- Send CoAP PUT request (lock_sta) when the button L on EMSK is pressed.
 
-- LivingRoom Node:
+- **LivingRoom** Node:
 
 	- Receive CoAP PUT request (light_sta).
 	- Send CoAP PUT request (lock_sta) when the button L on EMSK is pressed.
