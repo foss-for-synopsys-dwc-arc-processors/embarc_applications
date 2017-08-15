@@ -1,5 +1,5 @@
 # OpenThread Smarthome Application
-This application is designed to show how to connect 1 or more EMSKs and **iBaby Smarthome Gateway** using embARC. The connection between EMSK and Gateway is based on **LwM2M** protocol as shown in the following figure. All the iBaby nodes interact with AWS IoT through the Gateway indirectly. There are only 2 nodes available now, but you can add more nodes easily to iBaby Smarthome by taking these 2 examples as a reference. And the lamp node is more simple and easy to learn for beginner.
+This application is designed to show how to set up **OpenThread-CoAP-Based Smarthome Application** using embARC, the application layer of the example is built on top of the CoAP protocol. All the Thread nodes interact with Gateway through the OpenThread Network Co-Processor(NCP). The Gateway has similar functionality as the Border Router available in the official OpenThread repository, but it is a more flexible solution. There are only 2 nodes available now, but you can add more nodes easily to OpenThread Smarthome by taking these 2 examples as a reference.
 
 * [Introduction](#introduction)
 	* [Function](#function)
@@ -15,29 +15,27 @@ This application is designed to show how to connect 1 or more EMSKs and **iBaby 
 
 ## Introduction
 
-**OpenThread-CoAP-Based Smarthome Application**, the application layer of the example is built on top of the CoAP protocol.
-
 There are 2 Thread Nodes in this application:
 
-	- FrontDoor Node. It provides one resource:
-	    lock status (Use LED0 to simulate the FrontDoor's Lock status). 
+- FrontDoor Node. It provides one resource:
+	lock status (Use LED0 to simulate the FrontDoor's Lock status). 
 
-	- LivingRoom Node. It provides two resources:
-	    light status (Use LED0 to simulate the Light in the LivingRoom).
-	    temperature sensor value.
+- LivingRoom Node. It provides two resources:
+	light status (Use LED0 to simulate the Light in the LivingRoom).
+	temperature sensor value.
 
 ### Function
 
 - FrontDoor Node:
 
-	- Receive CoAP PUT request(lock_sta).
-	- Send CoAP PUT request(lock_sta) when button L on EMSK is pressed.
+	- Receive CoAP PUT request (lock_sta).
+	- Send CoAP PUT request (lock_sta) when the button L on EMSK is pressed.
 
 - LivingRoom Node:
 
-	- Receive CoAP PUT request(light_sta).
-	- Send CoAP PUT request(lock_sta) when button L on EMSK is pressed.
-	- Send CoAP PUT request(temp) when button R on EMSK is pressed.
+	- Receive CoAP PUT request (light_sta).
+	- Send CoAP PUT request (lock_sta) when the button L on EMSK is pressed.
+	- Send CoAP PUT request (temp) when the button R on EMSK is pressed.
 
 ### System Architecture
 
@@ -70,14 +68,14 @@ There are 2 Thread Nodes in this application:
 ### Hardware Connection
 
 1. EMSK 1 implement **FrontDoor** node.
-	- Connect **PMOD RF2 (MRF24J40)** to **J2**.
+	- Connect **PMOD RF2 (MRF24J40)** to **J6**.
 
 2. EMSK 2 implement **LivingRoom** node.
-	- Connect **PMOD RF2 (MRF24J40)** to **J2**.
+	- Connect **PMOD RF2 (MRF24J40)** to **J6**.
 	- Connect **PMOD TMP2** to **J2**.
 
 3. EMSK 3 implement **NCP**.
-	- Connect **PMOD RF2 (MRF24J40)** to **J2**.
+	- Connect **PMOD RF2 (MRF24J40)** to **J6**.
 	- Connect **microUSB** to the Raspberry Pi 3 through **USB**.
 
 4. Insert SD Card to EMSKs, make sure Bit 4 of the onboard DIP switch is ON to enable the secondary bootloader.
@@ -101,17 +99,19 @@ Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for example to show how to ru
 
 1. Start **FrontDoor** Node, wait 20 seconds for completing Thread configuration and create a Thread network.
    Open your serial terminal such as Tera-Term on PC, and configure it to right COM port and *115200bps*.
-   Enter "ipaddr" to show the IP address of the Thread node. Such as "fdde:ad00:beef:0:da5:79f6:2a33:5c9c".
+   Enter "**ipaddr**" to show the IP address of the Thread node. Such as *fdde:ad00:beef:0:da5:79f6:2a33:5c9c*.
 
-2. Start **LivingRoom** Node, wait 20 seconds for completing Thread configuration and join the primary Thread network
+2. Start **LivingRoom** Node, wait 20 seconds for completing Thread configuration and **join** the primary Thread network
    created by **FrontDoor** Node automatically.
    Open your serial terminal such as Tera-Term on PC, and configure it to right COM port and *115200bps*.
-   Enter "ipaddr" to show the IP address of the Thread node. Such as "fdde:ad00:beef:0:69be:72ea:57d4:e9c2".
+   Enter "**ipaddr**" to show the IP address of the Thread node. Such as *fdde:ad00:beef:0:69be:72ea:57d4:e9c2*.
 
 3. Start **NCP**. Connect it to the Gateway through USB.
 
 Modify the Thread Nodes' and Gateway's IPv6 address in the [`ot_smarthome_gw/gateway/config.js`][36]. Then, Run the Gateway.
-Join the Thread network via NCP. Now you can visit Freeboard UI. See [OpenThread Smarthome Gateway and UI][35] for more infomation about how to interact using EMSK and Freeboard.
+**Join** the Thread network via **NCP wpanctl**. After that, you can visit **Freeboard UI**.
+
+See [OpenThread Smarthome Gateway and UI][35] for more infomation about how to interact using EMSK and Freeboard.
 
 [1]: ./doc/screenshots/openthread_smarthome_application.png "openthread_smarthome_application"
 [2]: ./doc/screenshots/freeboard_ui.png "freeboard_ui"
