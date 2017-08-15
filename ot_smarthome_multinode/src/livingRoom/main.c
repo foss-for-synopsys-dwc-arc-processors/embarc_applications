@@ -26,81 +26,70 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.03
- * \date 2016-11-14
- * \author Qiang Gu(Qiang.Gu@synopsys.com)
+ * \version 2017.08
+ * \date 2017-08-15
+ * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
-
+ 
 /**
- * \defgroup	EMBARC_APP_BAREMETAL_OPENTHREAD	embARC OpenThread example on MRF24J40
+ * \defgroup	EMBARC_APP_BAREMETAL_OT_SMARTHOME_MULTINODE_LIVINGROOM	embARC OpenThread application on MRF24J40
  * \ingroup	EMBARC_APPS_TOTAL
  * \ingroup	EMBARC_APPS_BAREMETAL
  * \ingroup	EMBARC_APPS_MID_OPENTHREAD
- * \brief	OpenThread command line interface example on MRF24J40
+ * \brief	OpenThread CoAP example on MRF24J40
  *
  * \details
  * ### Extra Required Tools
  *
  * ### Extra Required Peripherals
- *     * 2 x EMSK
- *     * 2 x Digilent PMOD RF2 (MRF24J40)
+ *     * 1 x EMSK
+ *     * 1 x Digilent PMOD RF2 (MRF24J40)
+ *     * 1 x Digilent PMOD TEMP2
  *     * 1 x SD card
  *
  * ### Design Concept
- *     This example is an OpenThread Command Line Interface (CLI) application on PMOD RF2 (MRF24J40).
+ *     This example is an OpenThread CoAP application on PMOD RF2 (MRF24J40).
+ *     The application layer of the example is built on top of the CoAP protocol. The server nodes provide two resources:
+ *       - light status (Use LED0 to simulate the Light in the LivingRoom).
+ *       - temperature sensor value.
  *     The mesh network is established, and IPv6 is configured with using bi-/multi-boards as Thread nodes.
- *     The node status can be shown on the terminal via UART. There are dozens of commands supported in the CLI example.
- *     The OpenThread CLI reference is in README.md.
+ *     The node status can be shown on the terminal via UART. There are dozens of commands supported in the example.
  *
  * ### Usage Manual
  *     - See \ref EMBARC_BOARD_CONNECTION "EMSK" to connect PMOD RF2 (MRF24J40).
  *
  *     - How to use this example
  *
- *       * Program the secondary bootloader application into onboard SPI flash of EMSKs.
- *       * Generate boot.bin of the Openthread CLI example using "make bin".
- *       * Run Openthread CLI example with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
+ *       * Program the secondary bootloader application into onboard SPI flash of EMSK.
+ *       * Generate boot.bin of the Openthread CoAP example using "make bin".
+ *       * Run Openthread CoAP example with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
  *         the secondary bootloader.
  *         - Insert SD Card back to one EMSK. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
- *         - Get SD card from one EMSK and insert it to the other EMSK. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
- *         - Enter “1” and press Enter button in one Tera Term. Enter “2” and press Enter button in the other one.
- *           The number will not be shown directly in the Tera Term until pressing Enter button from the keyboard.
- *         - Enter the following commands in the two terminal windows, "panid 0x1234", "ifconfig up", "thread start", to start
- *           start Thread process.
- *         - Wait 20 seconds for completing Thread configuration. Enter “state” to see the state of the node, one leader and one router.
- *         - Enter other commands in the OpenThread CLI reference (README.md) to get more information. For example,
- *           “ipaddr” is used to show the IP address of the Thread node. Enter “ipaddr” in one ternimal to get the Thread node IP address,
- *           such as **fdde:ad00:beef:0:0:ff:fe00:ec00**. Enter “ping fdde:ad00:beef:0:0:ff:fe00:ec00” in the other ternimal to ping the Thread node.
- *           The Internet Control Messages Protocol (ICMP) is implemented in the OpenThread for **ping** command.
+ *         - Start Thread process automatically.
+ *         - Wait 20 seconds for completing Thread configuration. Enter "state" to see the state of the node, one leader and one router.
+ *         - Enter other commands of the OpenThread CLI to get more information. For example,
+ *           "ipaddr" is used to show the IP address of the Thread node.
  *
- * ![ScreenShot of Thread nodes and OpenThread startup](pic/images/example/emsk/emsk_openthread_connection.jpg)
- * ![ScreenShot of 'start' and 'ping' in OpenThread](pic/images/example/emsk/emsk_openthread_configuration.jpg)
+ * ![ScreenShot of Thread nodes and OpenThread startup](./doc/screenchots/emsk_openthread_connection.jpg)
+ * ![ScreenShot of 'start' and 'ping' in OpenThread](./doc/screenchots/emsk_openthread_configuration.jpg)
  *
  *
  * ### Extra Comments
  *     * A few seconds are required to make connections of Thread nodes.
  *     * Use AC adapter to ensure a steady power supply.
- *     * Open two Tera Term emulators to connect EMSKs with different COM ports.
- *     * The self-boot mode preparation is included in the above steps.
- *     * “make run” is not supported because EMSK boards are both v2.x and it can lead to conflict.
- *       See \ref sect_example_usage_HowToDebugMultiBoards "how to debug multiple boards in embARC" for more information.
- *     * Enter number to generate the pseudo-random number for OpenThread. Recommend enter number in order, such as “1”, “2” and “3”.
+ *     * Enter number to generate the pseudo-random number "2" for OpenThread.
  *       Using same number in different nodes may lead error.
- *     * Make sure the compiler configuration (TOOLCHAIN, BD_VER, CUR_CORE) of the secondary bootloader and bin file.
- *       For example, the bootloader for EMSK 2.3/ARCEM7D cannot boot the program for EMSK 2.3/ARCEM11D.
  *
  */
 
 /**
  * \file
- * \ingroup	EMBARC_APP_BAREMETAL_OPENTHREAD
- * \brief  example of how to use OpenThread command-line interface
- *   This example demonstrates a minimal OpenThread application to
- *   show the OpenThread configuration and management interfaces via a basic command-line interface.
+ * \ingroup	EMBARC_APP_BAREMETAL_OT_SMARTHOME_MULTINODE_LIVINGROOM
+ * \brief  application of how to use OpenThread CoAP API and CLI.
  */
 
 /**
- * \addtogroup	EMBARC_APP_BAREMETAL_OPENTHREAD
+ * \addtogroup	EMBARC_APP_BAREMETAL_OT_SMARTHOME_MULTINODE_LIVINGROOM
  * @{
  */
 #include "embARC.h"
