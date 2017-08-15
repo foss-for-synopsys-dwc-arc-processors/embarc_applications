@@ -137,32 +137,34 @@
 #define BTN_ACTIVE_HIGH  (1)
 
 
-#define LOCK   (1)
-#define UNLOCK (0)
-#define LED_LOCK_STA (LED0)
+#define LIGHT_ON  (1)
+#define LIGHT_OFF (0)
+#define LED_LIGHT_STA (LED0)
 
 #define REQUEST_SEND (1)
 #define REQUEST_NONE (0)
 
 #define GATEWAY_ADDR ("::1")
 
-static uint8_t lock_sta, flag_send;
+static uint8_t light_sta;
+static uint32_t temp;
+static uint8_t flag_send_light_sta, flag_send_temp;
 
-static void lock_sta_request_handler(void                * p_context,
-                                     otCoapHeader        * p_header,
-                                     otMessage           * p_message,
-                                     const otMessageInfo * p_message_info);
+static void light_sta_request_handler(void                * p_context,
+                                      otCoapHeader        * p_header,
+                                      otMessage           * p_message,
+                                      const otMessageInfo * p_message_info);
 
 typedef struct
 {
 	otInstance     * p_ot_instance;         /**< A pointer to the OpenThread instance. */
-	otCoapResource   lock_sta_resource;     /**< CoAP lock_sta resource. */
+	otCoapResource   light_sta_resource;     /**< CoAP light_sta resource. */
 } application_t;
 
 application_t m_app =
 {
 	.p_ot_instance     = NULL,
-	.lock_sta_resource = {"lock_sta", lock_sta_request_handler, NULL, NULL},
+	.light_sta_resource = {"light_sta", light_sta_request_handler, NULL, NULL},
 };
 
 
@@ -171,18 +173,19 @@ application_t m_app =
  */
 static void btn_l_isr(void *ptr)
 {
-	if (lock_sta == LOCK) {
-		frontdoor_unlock();
+	if (light_sta == LIGHT_ON) {
+		livingroom_light_off();
 	} else {
-		frontdoor_lock();
+		livingroom_light_on();
 	}
 
-	flag_send = REQUEST_SEND;
+	flag_send_light_sta = REQUEST_SEND;
 	EMBARC_PRINTF("\nbutton L pressed\r\n");
 }
 
 static void btn_r_isr(void *ptr)
 {
+	flag_send_temp = REQUEST_SEND;
 	EMBARC_PRINTF("\nbutton R pressed\r\n");
 }
 
@@ -224,26 +227,26 @@ static void btn_init(void)
 }
 
 /**
- * \brief  Use LED ON/OFF status simulates frontDoor's lock/unlock status
+ * \brief  Use LED ON/OFF status simulates livingRoom's light ON/OFF status
  */
-static void frontdoor_lock(void)
+static void livingroom_light_on(void)
 {
-	lock_sta = LOCK;
-	led_write(LED_ON, LED_LOCK_STA);
+	light_sta = light;
+	led_write(LED_ON, LED_LIGHT_STA);
 }
 
-static void frontdoor_unlock(void)
+static void livingroom_light_off(void)
 {
-	lock_sta = UNLOCK;
-	led_write(LED_OFF, LED_LOCK_STA);
+	light_sta = UNlight;
+	led_write(LED_OFF, LED_LIGHT_STA);
 }
 
 /**
  * \brief  CoAP Server functions
  */
-static void lock_sta_response_send(void                * p_context,
-                                   otCoapHeader        * p_request_header,
-                                   const otMessageInfo * p_message_info)
+static void light_sta_response_send(void                * p_context,
+                                    otCoapHeader        * p_request_header,
+                                    const otMessageInfo * p_message_info)
 {
 	otError      error = OT_ERROR_NONE;
 	otCoapHeader header;
@@ -270,10 +273,10 @@ static void lock_sta_response_send(void                * p_context,
 	}
 }
 
-static void lock_sta_request_handler(void                * p_context,
-                                     otCoapHeader        * p_header,
-                                     otMessage           * p_message,
-                                     const otMessageInfo * p_message_info)
+static void light_sta_request_handler(void                * p_context,
+                                      otCoapHeader        * p_header,
+                                      otMessage           * p_message,
+                                      const otMessageInfo * p_message_info)
 {
 	(void)p_message;
 	uint8_t sta;
@@ -281,35 +284,35 @@ static void lock_sta_request_handler(void                * p_context,
 	do {
 		if (otCoapHeaderGetType(p_header) != OT_COAP_TYPE_CONFIRMABLE &&
 		                otCoapHeaderGetType(p_header) != OT_COAP_TYPE_NON_CONFIRMABLE) {
-			EMBARC_PRINTF("err: lock_sta handler - bad header\r\n");
+			EMBARC_PRINTF("err: light_sta handler - bad header\r\n");
 			break;
 		}
 
 		if (otCoapHeaderGetCode(p_header) != OT_COAP_CODE_PUT) {
-			EMBARC_PRINTF("err: lock_sta handler - not PUT request\r\n");
+			EMBARC_PRINTF("err: light_sta handler - not PUT request\r\n");
 			break;
 		}
 
 		if (otMessageRead(p_message, otMessageGetOffset(p_message), &sta, 1) != 1) {
-			EMBARC_PRINTF("err: lock_sta handler - missing status\r\n");
+			EMBARC_PRINTF("err: light_sta handler - missing status\r\n");
 		}
 
 		switch (sta) {
-		case LOCK:
-			frontdoor_lock();
+		case LIGHT_ON:
+			livingroom_light_on();
 			break;
 
-		case UNLOCK:
-			frontdoor_unlock();
+		case LIGHT_OFF:
+			livingroom_light_off();
 			break;
 
 		default:
-			EMBARC_PRINTF("err: lock_sta handler - bad status\r\n");
+			EMBARC_PRINTF("err: light_sta handler - bad status\r\n");
 			break;
 		}
 
 		if (otCoapHeaderGetType(p_header) == OT_COAP_TYPE_CONFIRMABLE) {
-			lock_sta_response_send(p_context, p_header, p_message_info);
+			light_sta_response_send(p_context, p_header, p_message_info);
 		}
 	} while (false);
 }
@@ -317,24 +320,24 @@ static void lock_sta_request_handler(void                * p_context,
 /**
  * \brief  CoAP Client functions
  */
-static void lock_sta_response_handler(void                * p_context,
-                                      otCoapHeader        * p_header,
-                                      otMessage           * p_message,
-                                      const otMessageInfo * p_message_info,
-                                      otError               result)
+static void light_sta_response_handler(void                * p_context,
+                                       otCoapHeader        * p_header,
+                                       otMessage           * p_message,
+                                       const otMessageInfo * p_message_info,
+                                       otError               result)
 {
 	(void)p_context;
 	(void)p_header;
 	(void)p_message;
 
 	if (result == OT_ERROR_NONE) {
-		EMBARC_PRINTF("Received lock_sta control response.\r\n");
+		EMBARC_PRINTF("Received light_sta control response.\r\n");
 	} else {
 		EMBARC_PRINTF("err: Failed to receive response: %d\r\n", result);
 	}
 }
 
-static void lock_sta_request_send(otInstance * p_instance, uint8_t sta)
+static void light_sta_request_send(otInstance * p_instance, uint8_t sta)
 {
 	otError       error = OT_ERROR_NONE;
 	otMessage   * p_message;
@@ -343,7 +346,7 @@ static void lock_sta_request_send(otInstance * p_instance, uint8_t sta)
 
 	do {
 		otCoapHeaderInit(&header, OT_COAP_TYPE_CONFIRMABLE, OT_COAP_CODE_PUT);
-		otCoapHeaderAppendUriPathOptions(&header, "lock_sta");
+		otCoapHeaderAppendUriPathOptions(&header, "light_sta");
 		otCoapHeaderSetPayloadMarker(&header);
 
 		p_message = otCoapNewMessage(p_instance, &header);
@@ -378,11 +381,78 @@ static void lock_sta_request_send(otInstance * p_instance, uint8_t sta)
 	}
 }
 
+static void temp_response_handler(void                * p_context,
+                                  otCoapHeader        * p_header,
+                                  otMessage           * p_message,
+                                  const otMessageInfo * p_message_info,
+                                  otError               result)
+{
+	(void)p_context;
+	(void)p_header;
+	(void)p_message;
+
+	if (result == OT_ERROR_NONE) {
+		EMBARC_PRINTF("Received temp control response.\r\n");
+	} else {
+		EMBARC_PRINTF("err: Failed to receive response: %d\r\n", result);
+	}
+}
+
+static void temp_request_send(otInstance * p_instance, uint32_t val)
+{
+	otError       error = OT_ERROR_NONE;
+	otMessage   * p_message;
+	otMessageInfo messageInfo;
+	otCoapHeader  header;
+
+	do {
+		otCoapHeaderInit(&header, OT_COAP_TYPE_CONFIRMABLE, OT_COAP_CODE_PUT);
+		otCoapHeaderAppendUriPathOptions(&header, "temp");
+		otCoapHeaderSetPayloadMarker(&header);
+
+		p_message = otCoapNewMessage(p_instance, &header);
+		if (p_message == NULL) {
+			EMBARC_PRINTF("err: Failed to allocate message for CoAP Request\r\n");
+			break;
+		}
+
+		error = otMessageAppend(p_message, &val, sizeof(val));
+		if (error != OT_ERROR_NONE) {
+			break;
+		}
+
+		memset(&messageInfo, 0, sizeof(messageInfo));
+		messageInfo.mInterfaceId = OT_NETIF_INTERFACE_ID_THREAD;
+		messageInfo.mPeerPort = OT_DEFAULT_COAP_PORT;
+
+		/* Convert a human-readable IPv6 address string into a binary representation */
+		otIp6AddressFromString(GATEWAY_ADDR, &messageInfo.mPeerAddr);
+		// memcpy(&messageInfo.mPeerAddr, &m_app.peer_address, sizeof(messageInfo.mPeerAddr));
+
+		error = otCoapSendRequest(p_instance,
+					  p_message,
+					  &messageInfo,
+					  &temp_response_handler,
+					  p_instance);
+	} while (false);
+
+	if (error != OT_ERROR_NONE && p_message != NULL) {
+		EMBARC_PRINTF("err: Failed to send CoAP Request: %d\r\n", error);
+		otMessageFree(p_message);
+	}
+}
+
 static void request_send_scan(void)
 {
-	if (flag_send == REQUEST_SEND) {
-		flag_send == REQUEST_NONE;
-		lock_sta_request_send(m_app.p_ot_instance, lock_sta);
+	if (flag_send_light_sta == REQUEST_SEND) {
+		flag_send_light_sta == REQUEST_NONE;
+		light_sta_request_send(m_app.p_ot_instance, light_sta);
+	}
+
+	if (flag_send_temp == REQUEST_SEND) {
+		flag_send_temp == REQUEST_NONE;
+		temp_sensor_read(&temp);
+		temp_request_send(m_app.p_ot_instance, temp);
 	}
 }
 
@@ -420,10 +490,10 @@ static void thread_init(void)
 
 static void coap_init(void)
 {
-	m_app.lock_sta_resource.mContext = m_app.p_ot_instance;
+	m_app.light_sta_resource.mContext = m_app.p_ot_instance;
 
 	assert(otCoapStart(m_app.p_ot_instance, OT_DEFAULT_COAP_PORT) == OT_ERROR_NONE);
-	assert(otCoapAddResource(m_app.p_ot_instance, &m_app.lock_sta_resource) == OT_ERROR_NONE);
+	assert(otCoapAddResource(m_app.p_ot_instance, &m_app.light_sta_resource) == OT_ERROR_NONE);
 }
 
 /**
@@ -433,8 +503,9 @@ int main(void)
 {
 	thread_init();
 	coap_init();
+	temp_sensor_init(TEMP_I2C_SLAVE_ADDRESS);
 
-	EMBARC_PRINTF("OpenThread frontDoor Node Start\r\n");
+	EMBARC_PRINTF("OpenThread livingRoom Node Start\r\n");
 
 	while (true)
 	{

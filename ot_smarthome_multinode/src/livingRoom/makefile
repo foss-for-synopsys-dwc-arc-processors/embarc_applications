@@ -1,5 +1,5 @@
 # Application name
-APPL ?= openthread_ncp
+APPL ?= openthread_livingroom
 
 # Optimization Level
 OLEVEL = O2
