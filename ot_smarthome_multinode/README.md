@@ -21,13 +21,12 @@ There are 2 Thread Nodes in this application:
 
 - **FrontDoor** Node. It provides one resource:
 
-	lock status (Use LED0 to simulate the FrontDoor's Lock status). 
+	- lock status (Use LED0 to simulate the FrontDoor's Lock status). 
 
 - **LivingRoom** Node. It provides two resources:
 
-	light status (Use LED0 to simulate the Light in the LivingRoom).
-	
-	temperature sensor value.
+	- light status (Use LED0 to simulate the Light in the LivingRoom).
+	- temperature sensor value.
 
 ### Function
 
