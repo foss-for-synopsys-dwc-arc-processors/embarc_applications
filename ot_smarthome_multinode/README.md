@@ -1,5 +1,7 @@
 # OpenThread Smarthome Application
-This application is designed to show how to set up **OpenThread-CoAP-Based Smarthome Application** using embARC, the application layer of the example is built on top of the **CoAP protocol**. All the Thread nodes interact with **Gateway** through the OpenThread **Network Co-Processor(NCP)**. The Gateway has similar functionality as the **Border Router** available in the official OpenThread repository, but it is a more flexible solution. There are only 2 nodes available now, but you can add more nodes easily to OpenThread Smarthome by taking these 2 examples as a reference.
+This application is designed to show how to set up **OpenThread-CoAP-Based Smarthome Application** using embARC, the application layer of the example is built on top of the **CoAP protocol**.
+
+All the Thread nodes interact with **Gateway** through the OpenThread **Network Co-Processor(NCP)**. The Gateway has similar functionality as the **Border Router** available in the official OpenThread repository, but it is a more flexible solution. There are only 2 nodes available now, but you can add more nodes easily to OpenThread Smarthome by taking these 2 examples as a reference.
 
 * [Introduction](#introduction)
 	* [Function](#function)
@@ -24,6 +26,7 @@ There are 2 Thread Nodes in this application:
 - **LivingRoom** Node. It provides two resources:
 
 	light status (Use LED0 to simulate the Light in the LivingRoom).
+	
 	temperature sensor value.
 
 ### Function
