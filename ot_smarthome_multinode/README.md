@@ -1,5 +1,5 @@
 # OpenThread Smarthome Application
-This application is designed to show how to set up **OpenThread-CoAP-Based Smarthome Application** using embARC, the application layer of the example is built on top of the **CoAP protocol**.
+This application is designed to show how to set up **OpenThread-CoAP-Based Smarthome Application** using embARC, the application layer of the application is built on top of the **CoAP protocol**.
 
 All the Thread nodes interact with **Gateway** through the OpenThread **Network Co-Processor(NCP)**. The Gateway has similar functionality as the **Border Router** available in the official OpenThread repository, but it is a more flexible solution. There are only 2 nodes available now, but you can add more nodes easily to OpenThread Smarthome by taking these 2 examples as a reference.
 
@@ -94,10 +94,10 @@ Install [OpenThread Smarthome Gateway and UI][34] and [OpenThread wpantund][35] 
 
 ### Run This Application
 
-Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for example to show how to run this application.
+Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for application to show how to run this application.
 
 - Program the secondary bootloader application into onboard SPI flash of EMSK.
-- Generate boot.bin of the Openthread CoAP example using "make bin".
+- Generate boot.bin of the Openthread CoAP application using "make bin".
 - Insert SD Card back to the EMSKs. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
 - See **Bootloader** example in the [embARC OSP][37] for detailed information.
 

@@ -36,7 +36,7 @@
  * \ingroup	EMBARC_APPS_TOTAL
  * \ingroup	EMBARC_APPS_BAREMETAL
  * \ingroup	EMBARC_APPS_MID_OPENTHREAD
- * \brief	OpenThread CoAP example on MRF24J40
+ * \brief	OpenThread CoAP application on MRF24J40
  *
  * \details
  * ### Extra Required Tools
@@ -48,26 +48,26 @@
  *     * 1 x SD card
  *
  * ### Design Concept
- *     This example is an OpenThread CoAP application on PMOD RF2 (MRF24J40).
- *     The application layer of the example is built on top of the CoAP protocol. The server nodes provide two resources:
+ *     This application is an OpenThread CoAP application on PMOD RF2 (MRF24J40).
+ *     The application layer of the application is built on top of the CoAP protocol. The server nodes provide two resources:
  *       - light status (Use LED0 to simulate the Light in the LivingRoom).
  *       - temperature sensor value.
  *     The mesh network is established, and IPv6 is configured with using bi-/multi-boards as Thread nodes.
- *     The node status can be shown on the terminal via UART. There are dozens of commands supported in the example.
+ *     The node status can be shown on the terminal via UART. There are dozens of commands supported in the application.
  *
  * ### Usage Manual
  *     - See \ref EMBARC_BOARD_CONNECTION "EMSK" to connect PMOD RF2 (MRF24J40).
  *
- *     - How to use this example
+ *     - How to use this application
  *
  *       * Program the secondary bootloader application into onboard SPI flash of EMSK.
- *       * Generate boot.bin of the Openthread CoAP example using "make bin".
- *       * Run Openthread CoAP example with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
+ *       * Generate boot.bin of the Openthread CoAP application using "make bin".
+ *       * Run Openthread CoAP application with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
  *         the secondary bootloader.
  *         - Insert SD Card back to one EMSK. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
  *         - Start Thread process automatically.
  *         - Wait 20 seconds for completing Thread configuration. Enter "state" to see the state of the node, one leader and one router.
- *         - Enter other commands of the OpenThread CLI to get more information. For example,
+ *         - Enter other commands of the OpenThread CLI to get more information. For application,
  *           "ipaddr" is used to show the IP address of the Thread node.
  *
  * ![ScreenShot of Thread nodes and OpenThread startup](./doc/screenchots/emsk_openthread_connection.jpg)
@@ -124,6 +124,9 @@
 
 #define BTN_ACTIVE_LOW   (0)
 #define BTN_ACTIVE_HIGH  (1)
+
+#define THREAD_PANID   (0x1234)
+#define THREAD_CHANNEL (11)
 
 
 #define LIGHT_ON  (1)
@@ -465,12 +468,15 @@ static void thread_init(void)
 	// ToDo state change showing
 	// assert(otSetStateChangedCallback(p_instance, &state_changed_callback, p_instance) == OT_ERROR_NONE);
 
-	if (!otDatasetIsCommissioned(p_instance))
-	{
-		assert(otLinkSetChannel(p_instance, THREAD_CHANNEL) == OT_ERROR_NONE);
-		assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
-	}
+	/* indicates whether a valid network is present in the Active Operational Dataset or not */
+	// if (!otDatasetIsCommissioned(p_instance))
+	// {
+	// 	assert(otLinkSetChannel(p_instance, THREAD_CHANNEL) == OT_ERROR_NONE);
+	// 	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
+	// }
 
+	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
+	/* brings up the IPv6 interface */
 	assert(otIp6SetEnabled(p_instance, true) == OT_ERROR_NONE);
 	assert(otThreadSetEnabled(p_instance, true) == OT_ERROR_NONE);
 
@@ -491,6 +497,7 @@ static void coap_init(void)
 int main(void)
 {
 	thread_init();
+	/* before coap start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 	temp_sensor_init(TEMP_I2C_SLAVE_ADDRESS);
 
