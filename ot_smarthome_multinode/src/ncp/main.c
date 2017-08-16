@@ -36,7 +36,7 @@
  * \ingroup	EMBARC_APPS_TOTAL
  * \ingroup	EMBARC_APPS_BAREMETAL
  * \ingroup	EMBARC_APPS_MID_OPENTHREAD
- * \brief	OpenThread Network Co-Processor(NCP) example on MRF24J40
+ * \brief	OpenThread Network Co-Processor(NCP) application on MRF24J40
  *
  * \details
  * ### Extra Required Tools
@@ -48,10 +48,10 @@
  *     * 1 x microUSB-USB cable
  *
  * ### Design Concept
- *     This example is an OpenThread NCP application on PMOD RF2 (MRF24J40).
- *     The Thread NCP example demonstrates an OpenThread application that can serve as a low-power wireless NCP
+ *     This application is an OpenThread NCP application on PMOD RF2 (MRF24J40).
+ *     The Thread NCP application demonstrates an OpenThread application that can serve as a low-power wireless NCP
  *       to communicate with Userspace WPAN Network Daemon (wpantund) on Unix-like operating systems.
- *     This example has similar functionality as the NCP example available in the official OpenThread repository,
+ *     This application has similar functionality as the NCP application available in the official OpenThread repository,
  *       but has been adapted to use with the embARC OSP.
  *
  * ### Usage Manual
@@ -59,11 +59,11 @@
  *     - Connect the board to the Gateway(Raspberry Pi) through USB.
  *     - Run the Gateway(wpantund and wpanctl).
  *
- *     - How to use this example
+ *     - How to use this application
  *
  *       * Program the secondary bootloader application into onboard SPI flash of EMSK.
- *       * Generate boot.bin of the Openthread NCP example using "make bin".
- *       * Run Openthread NCP example with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
+ *       * Generate boot.bin of the Openthread NCP application using "make bin".
+ *       * Run Openthread NCP application with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
  *         the secondary bootloader.
  *         - Insert SD Card back to one EMSK. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
  *         - Initialize Thread NCP process automatically.
@@ -79,7 +79,7 @@
  *
  * ### Extra Comments
  *     * Use AC adapter to ensure a steady power supply.
- *     * This example can be used along with OpenThread Smarthome Application’s Gateway solution 
+ *     * This application can be used along with OpenThread Smarthome Application’s Gateway solution 
  *       to provide Internet connectivity to the Thread network.
  *     * The NCP application starts in disconnected state, and remains so until it is appropriately configured by the Gateway.
  *       After NCP is connected to the Gateway, NCP will try to connect to the existing network or form a new one.
@@ -123,6 +123,7 @@ static void thread_init(void)
 
 	PlatformInit(0, NULL);
 
+	/* deletes all settings from the settings store, resetting it to its initial factory state */
 	otPlatSettingsWipe(NULL);
 
 	p_instance = otInstanceInit();
@@ -130,6 +131,8 @@ static void thread_init(void)
 
 	otNcpInit(p_instance);
 
+	/* set the ROUTER_SELECTION_JITTER parameter used in the REED/Router role */
+	/* ? */
 	otThreadSetRouterSelectionJitter(p_instance, ROUTER_SELECTION_JITTER);
 
 	m_app.p_ot_instance = p_instance;

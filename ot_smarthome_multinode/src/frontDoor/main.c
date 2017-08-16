@@ -36,7 +36,7 @@
  * \ingroup	EMBARC_APPS_TOTAL
  * \ingroup	EMBARC_APPS_BAREMETAL
  * \ingroup	EMBARC_APPS_MID_OPENTHREAD
- * \brief	OpenThread CoAP example on MRF24J40
+ * \brief	OpenThread CoAP appllication on MRF24J40
  *
  * \details
  * ### Extra Required Tools
@@ -47,25 +47,25 @@
  *     * 1 x SD card
  *
  * ### Design Concept
- *     This example is an OpenThread CoAP application on PMOD RF2 (MRF24J40).
- *     The application layer of the example is built on top of the CoAP protocol. The server nodes provide one resource:
+ *     This appllication is an OpenThread CoAP application on PMOD RF2 (MRF24J40).
+ *     The application layer of the appllication is built on top of the CoAP protocol. The server nodes provide one resource:
  *       - lock status (Use LED0 to simulate the FrontDoor's Lock status).
  *     The mesh network is established, and IPv6 is configured with using bi-/multi-boards as Thread nodes.
- *     The node status can be shown on the terminal via UART. There are dozens of commands supported in the example.
+ *     The node status can be shown on the terminal via UART. There are dozens of commands supported in the appllication.
  *
  * ### Usage Manual
  *     - See \ref EMBARC_BOARD_CONNECTION "EMSK" to connect PMOD RF2 (MRF24J40).
  *
- *     - How to use this example
+ *     - How to use this appllication
  *
  *       * Program the secondary bootloader application into onboard SPI flash of EMSK.
- *       * Generate boot.bin of the Openthread CoAP example using "make bin".
- *       * Run Openthread CoAP example with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
+ *       * Generate boot.bin of the Openthread CoAP appllication using "make bin".
+ *       * Run Openthread CoAP appllication with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
  *         the secondary bootloader.
  *         - Insert SD Card back to one EMSK. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
  *         - Start Thread process automatically.
  *         - Wait 20 seconds for completing Thread configuration. Enter "state" to see the state of the node, one leader and one router.
- *         - Enter other commands of the OpenThread CLI to get more information. For example,
+ *         - Enter other commands of the OpenThread CLI to get more information. For appllication,
  *           "ipaddr" is used to show the IP address of the Thread node.
  *
  * ![ScreenShot of Thread nodes and OpenThread startup](./doc/screenchots/emsk_openthread_connection.jpg)
@@ -122,6 +122,9 @@
 
 #define BTN_ACTIVE_LOW   (0)
 #define BTN_ACTIVE_HIGH  (1)
+
+#define THREAD_PANID   (0x1234)
+#define THREAD_CHANNEL (11)
 
 
 #define LOCK   (1)
@@ -356,7 +359,7 @@ static void lock_sta_request_send(otInstance * p_instance, uint8_t sta)
 		error = otCoapSendRequest(p_instance,
 					  p_message,
 					  &messageInfo,
-					  &light_response_handler,
+					  &lock_sta_response_handler,
 					  p_instance);
 	} while (false);
 
@@ -394,12 +397,15 @@ static void thread_init(void)
 	// ToDo state change showing
 	// assert(otSetStateChangedCallback(p_instance, &state_changed_callback, p_instance) == OT_ERROR_NONE);
 
-	if (!otDatasetIsCommissioned(p_instance))
-	{
-		assert(otLinkSetChannel(p_instance, THREAD_CHANNEL) == OT_ERROR_NONE);
-		assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
-	}
+	/* indicates whether a valid network is present in the Active Operational Dataset or not */
+	// if (!otDatasetIsCommissioned(p_instance))
+	// {
+	// 	assert(otLinkSetChannel(p_instance, THREAD_CHANNEL) == OT_ERROR_NONE);
+	// 	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
+	// }
 
+	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
+	/*  brings up the IPv6 interface */
 	assert(otIp6SetEnabled(p_instance, true) == OT_ERROR_NONE);
 	assert(otThreadSetEnabled(p_instance, true) == OT_ERROR_NONE);
 
@@ -420,6 +426,7 @@ static void coap_init(void)
 int main(void)
 {
 	thread_init();
+	/* before coap start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 
 	EMBARC_PRINTF("OpenThread frontDoor Node Start\r\n");
