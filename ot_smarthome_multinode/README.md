@@ -115,7 +115,7 @@ Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for application to show how t
 Modify the Thread Nodes' and Gateway's IPv6 address in the [`ot_smarthome_gw/gateway/config.js`][36]. Then, Run the Gateway.
 **Join** the Thread network via **NCP wpanctl**. After that, you can visit **Freeboard UI**.
 
-See [OpenThread Smarthome Gateway and UI][35] for more infomation about how to interact using EMSK and Freeboard.
+See [OpenThread Smarthome Gateway and UI][34] for more infomation about how to interact using EMSK and Freeboard.
 
 [1]: ./doc/screenshots/openthread_smarthome_application.png "openthread_smarthome_application"
 [2]: ./doc/screenshots/freeboard_ui.png "freeboard_ui"
