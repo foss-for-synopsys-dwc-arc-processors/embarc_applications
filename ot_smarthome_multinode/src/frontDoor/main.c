@@ -399,7 +399,7 @@ static void thread_init(void)
 	EMBARC_PRINTF("Network name:   %s\r\n", (uint32_t)otThreadGetNetworkName(p_instance));
 
 	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
-	/*  brings up the IPv6 interface */
+	/* brings up the IPv6 interface */
 	assert(otIp6SetEnabled(p_instance, true) == OT_ERROR_NONE);
 	assert(otThreadSetEnabled(p_instance, true) == OT_ERROR_NONE);
 
