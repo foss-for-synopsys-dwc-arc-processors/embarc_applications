@@ -93,12 +93,15 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
+#include <openthread/config.h>
+
+#include <assert.h>
+
 #include <openthread/openthread.h>
 #include <openthread/diag.h>
 #include <openthread/coap.h>
 #include <openthread/cli.h>
 #include <openthread/thread_ftd.h>
-#include <openthread/platform/alarm.h>
 #include <openthread/platform/platform.h>
 
 
@@ -127,16 +130,16 @@
 #define THREAD_CHANNEL (11)
 
 
-#define LOCK   (1)
-#define UNLOCK (0)
+#define LOCK   ('1')
+#define UNLOCK ('0')
 #define LED_LOCK_STA (LED0)
 
 #define REQUEST_SEND (1)
 #define REQUEST_NONE (0)
 
-#define GATEWAY_ADDR ("::1")
+#define GATEWAY_ADDR ("fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0")
 
-static uint8_t lock_sta;
+static char lock_sta;
 volatile static uint8_t flag_send;
 
 static void lock_sta_request_handler(void                * p_context,
@@ -156,6 +159,21 @@ application_t m_app =
 	.lock_sta_resource = {"lock_sta", lock_sta_request_handler, NULL, NULL},
 };
 
+
+/**
+ * \brief  Use LED ON/OFF status simulates frontDoor's lock/unlock status
+ */
+static void frontdoor_lock(void)
+{
+	lock_sta = LOCK;
+	led_write(LED_ON, LED_LOCK_STA);
+}
+
+static void frontdoor_unlock(void)
+{
+	lock_sta = UNLOCK;
+	led_write(LED_OFF, LED_LOCK_STA);
+}
 
 /**
  * \brief  Interrupt service routine for buttons
@@ -215,21 +233,6 @@ static void btn_init(void)
 }
 
 /**
- * \brief  Use LED ON/OFF status simulates frontDoor's lock/unlock status
- */
-static void frontdoor_lock(void)
-{
-	lock_sta = LOCK;
-	led_write(LED_ON, LED_LOCK_STA);
-}
-
-static void frontdoor_unlock(void)
-{
-	lock_sta = UNLOCK;
-	led_write(LED_OFF, LED_LOCK_STA);
-}
-
-/**
  * \brief  CoAP Server functions
  */
 static void lock_sta_response_send(void                * p_context,
@@ -267,7 +270,7 @@ static void lock_sta_request_handler(void                * p_context,
                                      const otMessageInfo * p_message_info)
 {
 	(void)p_message;
-	uint8_t sta;
+	char sta;
 
 	do {
 		if (otCoapHeaderGetType(p_header) != OT_COAP_TYPE_CONFIRMABLE &&
@@ -325,7 +328,7 @@ static void lock_sta_response_handler(void                * p_context,
 	}
 }
 
-static void lock_sta_request_send(otInstance * p_instance, uint8_t sta)
+static void lock_sta_request_send(otInstance * p_instance, char sta)
 {
 	otError       error = OT_ERROR_NONE;
 	otMessage   * p_message;
@@ -372,8 +375,9 @@ static void lock_sta_request_send(otInstance * p_instance, uint8_t sta)
 static void request_send_scan(void)
 {
 	if (flag_send == REQUEST_SEND) {
-		flag_send == REQUEST_NONE;
+		flag_send = REQUEST_NONE;
 		lock_sta_request_send(m_app.p_ot_instance, lock_sta);
+		EMBARC_PRINTF("info: Send CoAP PUT message to Gateway OK\r\n");
 	}
 }
 
@@ -386,11 +390,12 @@ static void thread_init(void)
 
 	PlatformInit(0, NULL);
 
-	p_instance = otInstanceInit();
+	p_instance = otInstanceInitSingle();
 	assert(p_instance);
 
 	otCliUartInit(p_instance);
 
+	EMBARC_PRINTF("OpenThread Start\r\n");
 	EMBARC_PRINTF("Thread version: %s\r\n", (uint32_t)otGetVersionString());
 	EMBARC_PRINTF("Network name:   %s\r\n", (uint32_t)otThreadGetNetworkName(p_instance));
 
@@ -429,10 +434,11 @@ int main(void)
 	/* before coap start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 
+	btn_init();
+
 	EMBARC_PRINTF("OpenThread frontDoor Node Start\r\n");
 
-	while (true)
-	{
+	while (true) {
 		/* run all queued OpenThread tasklets at the time this is called */
 		otTaskletsProcess(m_app.p_ot_instance);
 		/* performs all platform-specific processing */
@@ -440,6 +446,8 @@ int main(void)
 
 		request_send_scan();
 	}
+
+	return 0;
 }
 
 /** @} */
