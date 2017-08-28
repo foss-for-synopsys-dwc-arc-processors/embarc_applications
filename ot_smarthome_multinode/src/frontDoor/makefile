@@ -1,18 +1,26 @@
 # Application name
-APPL ?= openthread_frontdoor
+APPL ?= ot_smarthome_frontdoor
 
 # Optimization Level
 OLEVEL = O2
 
-BOARD ?= emsk
-BD_VER ?= 22
-CUR_CORE ?= arcem11d
-TOOLCHAIN ?= gnu
+# Board Options
+BOARD=emsk
+BD_VER=23
+CUR_CORE=arcem7d
+TOOLCHAIN=gnu
 
 #
 # root dir of embARC
 #
 EMBARC_ROOT = ../../../..
+
+##
+# HEAP & STACK SETTINGS
+# For OpenThread Stack Usage
+##
+HEAPSZ ?= 81920
+STACKSZ ?= 81920
 
 # Select Middleware Packages
 MID_SEL = common mbedtls openthread
@@ -25,7 +33,14 @@ APPL_ASMSRC_DIR = .
 APPL_INC_DIR = .
 
 # application defines
-APPL_DEFINES = -DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\" -DOPENTHREAD_ENABLE_MAC_WHITELIST=1
+APPL_DEFINES = -DMBEDTLS_CONFIG_FILE=\"mbedtls-config.h\" \
+		-DOPENTHREAD_CONFIG_FILE=\"openthread-windows-config.h\" \
+		-DOPENTHREAD_FTD=1 \
+		-DOPENTHREAD_ENABLE_CLI=1 \
+		-DOPENTHREAD_ENABLE_CLI_MTD=0 \
+		-DOPENTHREAD_ENABLE_CLI_FTD=1 \
+		-DOPENTHREAD_ENABLE_APPLICATION_COAP=1 \
+		-DOPENTHREAD_CLI_DEBUG_INFO=0
 
 # include current project makefile
 COMMON_COMPILE_PREREQUISITES += makefile
