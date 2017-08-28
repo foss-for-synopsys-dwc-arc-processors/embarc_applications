@@ -95,12 +95,15 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
+#include <openthread/config.h>
+
+#include <assert.h>
+
 #include <openthread/openthread.h>
 #include <openthread/diag.h>
 #include <openthread/coap.h>
 #include <openthread/cli.h>
 #include <openthread/thread_ftd.h>
-#include <openthread/platform/alarm.h>
 #include <openthread/platform/platform.h>
 
 
@@ -129,16 +132,16 @@
 #define THREAD_CHANNEL (11)
 
 
-#define LIGHT_ON  (1)
-#define LIGHT_OFF (0)
+#define LIGHT_ON  ('1')
+#define LIGHT_OFF ('0')
 #define LED_LIGHT_STA (LED0)
 
 #define REQUEST_SEND (1)
 #define REQUEST_NONE (0)
 
-#define GATEWAY_ADDR ("::1")
+#define GATEWAY_ADDR ("fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0")
 
-static uint8_t light_sta;
+static char light_sta;
 static uint32_t temp;
 volatile static uint8_t flag_send_light_sta, flag_send_temp;
 
@@ -159,6 +162,21 @@ application_t m_app =
 	.light_sta_resource = {"light_sta", light_sta_request_handler, NULL, NULL},
 };
 
+
+/**
+ * \brief  Use LED ON/OFF status simulates livingRoom's light ON/OFF status
+ */
+static void livingroom_light_on(void)
+{
+	light_sta = LIGHT_ON;
+	led_write(LED_ON, LED_LIGHT_STA);
+}
+
+static void livingroom_light_off(void)
+{
+	light_sta = LIGHT_OFF;
+	led_write(LED_OFF, LED_LIGHT_STA);
+}
 
 /**
  * \brief  Interrupt service routine for buttons
@@ -219,21 +237,6 @@ static void btn_init(void)
 }
 
 /**
- * \brief  Use LED ON/OFF status simulates livingRoom's light ON/OFF status
- */
-static void livingroom_light_on(void)
-{
-	light_sta = LIGHT_ON;
-	led_write(LED_ON, LED_LIGHT_STA);
-}
-
-static void livingroom_light_off(void)
-{
-	light_sta = LIGHT_OFF;
-	led_write(LED_OFF, LED_LIGHT_STA);
-}
-
-/**
  * \brief  CoAP Server functions
  */
 static void light_sta_response_send(void                * p_context,
@@ -271,7 +274,7 @@ static void light_sta_request_handler(void                * p_context,
                                       const otMessageInfo * p_message_info)
 {
 	(void)p_message;
-	uint8_t sta;
+	char sta;
 
 	do {
 		if (otCoapHeaderGetType(p_header) != OT_COAP_TYPE_CONFIRMABLE &&
@@ -329,7 +332,7 @@ static void light_sta_response_handler(void                * p_context,
 	}
 }
 
-static void light_sta_request_send(otInstance * p_instance, uint8_t sta)
+static void light_sta_request_send(otInstance * p_instance, char sta)
 {
 	otError       error = OT_ERROR_NONE;
 	otMessage   * p_message;
@@ -358,12 +361,11 @@ static void light_sta_request_send(otInstance * p_instance, uint8_t sta)
 
 		/* Convert a human-readable IPv6 address string into a binary representation */
 		otIp6AddressFromString(GATEWAY_ADDR, &messageInfo.mPeerAddr);
-		// memcpy(&messageInfo.mPeerAddr, &m_app.peer_address, sizeof(messageInfo.mPeerAddr));
 
 		error = otCoapSendRequest(p_instance,
 					  p_message,
 					  &messageInfo,
-					  &light_response_handler,
+					  &light_sta_response_handler,
 					  p_instance);
 	} while (false);
 
@@ -419,7 +421,6 @@ static void temp_request_send(otInstance * p_instance, uint32_t val)
 
 		/* Convert a human-readable IPv6 address string into a binary representation */
 		otIp6AddressFromString(GATEWAY_ADDR, &messageInfo.mPeerAddr);
-		// memcpy(&messageInfo.mPeerAddr, &m_app.peer_address, sizeof(messageInfo.mPeerAddr));
 
 		error = otCoapSendRequest(p_instance,
 					  p_message,
@@ -437,12 +438,12 @@ static void temp_request_send(otInstance * p_instance, uint32_t val)
 static void request_send_scan(void)
 {
 	if (flag_send_light_sta == REQUEST_SEND) {
-		flag_send_light_sta == REQUEST_NONE;
+		flag_send_light_sta = REQUEST_NONE;
 		light_sta_request_send(m_app.p_ot_instance, light_sta);
 	}
 
 	if (flag_send_temp == REQUEST_SEND) {
-		flag_send_temp == REQUEST_NONE;
+		flag_send_temp = REQUEST_NONE;
 		temp_sensor_read(&temp);
 		temp_request_send(m_app.p_ot_instance, temp);
 	}
@@ -457,23 +458,14 @@ static void thread_init(void)
 
 	PlatformInit(0, NULL);
 
-	p_instance = otInstanceInit();
+	p_instance = otInstanceInitSingle();
 	assert(p_instance);
 
 	otCliUartInit(p_instance);
 
+	EMBARC_PRINTF("OpenThread Start\r\n");
 	EMBARC_PRINTF("Thread version: %s\r\n", (uint32_t)otGetVersionString());
 	EMBARC_PRINTF("Network name:   %s\r\n", (uint32_t)otThreadGetNetworkName(p_instance));
-
-	// ToDo state change showing
-	// assert(otSetStateChangedCallback(p_instance, &state_changed_callback, p_instance) == OT_ERROR_NONE);
-
-	/* indicates whether a valid network is present in the Active Operational Dataset or not */
-	// if (!otDatasetIsCommissioned(p_instance))
-	// {
-	// 	assert(otLinkSetChannel(p_instance, THREAD_CHANNEL) == OT_ERROR_NONE);
-	// 	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
-	// }
 
 	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
 	/* brings up the IPv6 interface */
@@ -499,7 +491,10 @@ int main(void)
 	thread_init();
 	/* before coap start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
+
 	temp_sensor_init(TEMP_I2C_SLAVE_ADDRESS);
+
+	btn_init();
 
 	EMBARC_PRINTF("OpenThread livingRoom Node Start\r\n");
 
