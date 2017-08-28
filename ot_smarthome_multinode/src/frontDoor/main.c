@@ -357,7 +357,6 @@ static void lock_sta_request_send(otInstance * p_instance, char sta)
 
 		/* Convert a human-readable IPv6 address string into a binary representation */
 		otIp6AddressFromString(GATEWAY_ADDR, &messageInfo.mPeerAddr);
-		// memcpy(&messageInfo.mPeerAddr, &m_app.peer_address, sizeof(messageInfo.mPeerAddr));
 
 		error = otCoapSendRequest(p_instance,
 					  p_message,
@@ -398,16 +397,6 @@ static void thread_init(void)
 	EMBARC_PRINTF("OpenThread Start\r\n");
 	EMBARC_PRINTF("Thread version: %s\r\n", (uint32_t)otGetVersionString());
 	EMBARC_PRINTF("Network name:   %s\r\n", (uint32_t)otThreadGetNetworkName(p_instance));
-
-	// ToDo state change showing
-	// assert(otSetStateChangedCallback(p_instance, &state_changed_callback, p_instance) == OT_ERROR_NONE);
-
-	/* indicates whether a valid network is present in the Active Operational Dataset or not */
-	// if (!otDatasetIsCommissioned(p_instance))
-	// {
-	// 	assert(otLinkSetChannel(p_instance, THREAD_CHANNEL) == OT_ERROR_NONE);
-	// 	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
-	// }
 
 	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
 	/*  brings up the IPv6 interface */
