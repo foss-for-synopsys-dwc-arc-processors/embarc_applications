@@ -30,7 +30,7 @@
  * \date 2017-08-15
  * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
- 
+
 /**
  * \defgroup	EMBARC_APP_BAREMETAL_OT_SMARTHOME_MULTINODE_LIVINGROOM	embARC OpenThread application on MRF24J40
  * \ingroup	EMBARC_APPS_TOTAL
@@ -108,16 +108,13 @@
 
 
 #define LED0 (0x01)
-#define LED1 (0x02)
-#define LED2 (0x04)
-#define LED3 (0x08)
-#define LED4 (0x10)
-#define LED5 (0x20)
-#define LED6 (0x40)
-#define LED7 (0x80)
 
 #define LED_ON  (0xff)
 #define LED_OFF (0x0)
+
+#define LIGHT_ON  ('1')
+#define LIGHT_OFF ('0')
+#define LED_LIGHT_STA (LED0)
 
 #define BTN_L_BIT_OFFSET (0)
 #define BTN_R_BIT_OFFSET (1)
@@ -128,22 +125,15 @@
 #define BTN_ACTIVE_LOW   (0)
 #define BTN_ACTIVE_HIGH  (1)
 
-#define THREAD_PANID   (0x1234)
-#define THREAD_CHANNEL (11)
-
-
-#define LIGHT_ON  ('1')
-#define LIGHT_OFF ('0')
-#define LED_LIGHT_STA (LED0)
-
 #define REQUEST_SEND (1)
 #define REQUEST_NONE (0)
 
-#define GATEWAY_ADDR ("fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0")
+#define THREAD_PANID_USER (0x1234)
+#define GATEWAY_ADDR_USER ("fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0")
 
 static char light_sta;
-static uint32_t temp;
 volatile static uint8_t flag_send_light_sta, flag_send_temp;
+
 
 static void light_sta_request_handler(void                * p_context,
                                       otCoapHeader        * p_header,
@@ -152,13 +142,13 @@ static void light_sta_request_handler(void                * p_context,
 
 typedef struct
 {
-	otInstance     * p_ot_instance;         /**< A pointer to the OpenThread instance. */
-	otCoapResource   light_sta_resource;     /**< CoAP light_sta resource. */
+	otInstance     * p_ot_instance;         /* A pointer to the OpenThread instance */
+	otCoapResource   light_sta_resource;    /* CoAP light_sta resource */
 } application_t;
 
 application_t m_app =
 {
-	.p_ot_instance     = NULL,
+	.p_ot_instance      = NULL,
 	.light_sta_resource = {"light_sta", light_sta_request_handler, NULL, NULL},
 };
 
@@ -190,13 +180,11 @@ static void btn_l_isr(void *ptr)
 	}
 
 	flag_send_light_sta = REQUEST_SEND;
-	EMBARC_PRINTF("\nbutton L pressed\r\n");
 }
 
 static void btn_r_isr(void *ptr)
 {
 	flag_send_temp = REQUEST_SEND;
-	EMBARC_PRINTF("\nbutton R pressed\r\n");
 }
 
 static void btn_a_isr(void *ptr)
@@ -209,13 +197,13 @@ static void btn_a_isr(void *ptr)
  */
 static void btn_init(void)
 {
-	DEV_GPIO_BIT_ISR bit_isr; 
+	DEV_GPIO_BIT_ISR bit_isr;
 	DEV_GPIO_INT_CFG int_cfg;
 
 	DEV_GPIO_PTR port = gpio_get_dev(EMSK_BUTTON_PORT);
 	int_cfg.int_bit_mask = BTN_BIT_MASK;
-	int_cfg.int_bit_type = BTN_BIT_MASK; 
-	int_cfg.int_bit_polarity = BTN_ACTIVE_LOW; 
+	int_cfg.int_bit_type = BTN_BIT_MASK;
+	int_cfg.int_bit_polarity = BTN_ACTIVE_LOW;
 	int_cfg.int_bit_debounce = BTN_BIT_MASK;
 
 	port->gpio_control(GPIO_CMD_SET_BIT_INT_CFG, &int_cfg);
@@ -326,7 +314,7 @@ static void light_sta_response_handler(void                * p_context,
 	(void)p_message;
 
 	if (result == OT_ERROR_NONE) {
-		EMBARC_PRINTF("Received light_sta control response.\r\n");
+		EMBARC_PRINTF("Received light_sta control response\r\n");
 	} else {
 		EMBARC_PRINTF("err: Failed to receive response: %d\r\n", result);
 	}
@@ -360,13 +348,13 @@ static void light_sta_request_send(otInstance * p_instance, char sta)
 		messageInfo.mPeerPort = OT_DEFAULT_COAP_PORT;
 
 		/* Convert a human-readable IPv6 address string into a binary representation */
-		otIp6AddressFromString(GATEWAY_ADDR, &messageInfo.mPeerAddr);
+		otIp6AddressFromString(GATEWAY_ADDR_USER, &messageInfo.mPeerAddr);
 
 		error = otCoapSendRequest(p_instance,
-					  p_message,
-					  &messageInfo,
-					  &light_sta_response_handler,
-					  p_instance);
+		                          p_message,
+		                          &messageInfo,
+		                          &light_sta_response_handler,
+		                          p_instance);
 	} while (false);
 
 	if (error != OT_ERROR_NONE && p_message != NULL) {
@@ -386,13 +374,13 @@ static void temp_response_handler(void                * p_context,
 	(void)p_message;
 
 	if (result == OT_ERROR_NONE) {
-		EMBARC_PRINTF("Received temp control response.\r\n");
+		EMBARC_PRINTF("Received temp control response\r\n");
 	} else {
 		EMBARC_PRINTF("err: Failed to receive response: %d\r\n", result);
 	}
 }
 
-static void temp_request_send(otInstance * p_instance, uint32_t val)
+static void temp_request_send(otInstance * p_instance, char* temp)
 {
 	otError       error = OT_ERROR_NONE;
 	otMessage   * p_message;
@@ -410,7 +398,8 @@ static void temp_request_send(otInstance * p_instance, uint32_t val)
 			break;
 		}
 
-		error = otMessageAppend(p_message, &val, sizeof(val));
+		/* only need to send 3 bytes */
+		error = otMessageAppend(p_message, temp, 3 * sizeof(char));
 		if (error != OT_ERROR_NONE) {
 			break;
 		}
@@ -420,13 +409,13 @@ static void temp_request_send(otInstance * p_instance, uint32_t val)
 		messageInfo.mPeerPort = OT_DEFAULT_COAP_PORT;
 
 		/* Convert a human-readable IPv6 address string into a binary representation */
-		otIp6AddressFromString(GATEWAY_ADDR, &messageInfo.mPeerAddr);
+		otIp6AddressFromString(GATEWAY_ADDR_USER, &messageInfo.mPeerAddr);
 
 		error = otCoapSendRequest(p_instance,
-					  p_message,
-					  &messageInfo,
-					  &temp_response_handler,
-					  p_instance);
+		                          p_message,
+		                          &messageInfo,
+		                          &temp_response_handler,
+		                          p_instance);
 	} while (false);
 
 	if (error != OT_ERROR_NONE && p_message != NULL) {
@@ -437,6 +426,9 @@ static void temp_request_send(otInstance * p_instance, uint32_t val)
 
 static void request_send_scan(void)
 {
+	int32_t val = 0;
+	char *temp = "0";
+
 	if (flag_send_light_sta == REQUEST_SEND) {
 		flag_send_light_sta = REQUEST_NONE;
 		light_sta_request_send(m_app.p_ot_instance, light_sta);
@@ -444,7 +436,13 @@ static void request_send_scan(void)
 
 	if (flag_send_temp == REQUEST_SEND) {
 		flag_send_temp = REQUEST_NONE;
-		temp_sensor_read(&temp);
+
+		if (E_OK != temp_sensor_read(&val)) {
+			EMBARC_PRINTF("err: Failed to read temperature\r\n");
+			return;
+		}
+		itoa(val, temp, 10);
+		EMBARC_PRINTF("Temperature in the LivingRoom now: %d.%d`C\r\n", val / 10, val % 10);
 		temp_request_send(m_app.p_ot_instance, temp);
 	}
 }
@@ -467,7 +465,7 @@ static void thread_init(void)
 	EMBARC_PRINTF("Thread version: %s\r\n", (uint32_t)otGetVersionString());
 	EMBARC_PRINTF("Network name:   %s\r\n", (uint32_t)otThreadGetNetworkName(p_instance));
 
-	assert(otLinkSetPanId(p_instance, THREAD_PANID) == OT_ERROR_NONE);
+	assert(otLinkSetPanId(p_instance, THREAD_PANID_USER) == OT_ERROR_NONE);
 	/* brings up the IPv6 interface */
 	assert(otIp6SetEnabled(p_instance, true) == OT_ERROR_NONE);
 	assert(otThreadSetEnabled(p_instance, true) == OT_ERROR_NONE);
@@ -483,20 +481,27 @@ static void coap_init(void)
 	assert(otCoapAddResource(m_app.p_ot_instance, &m_app.light_sta_resource) == OT_ERROR_NONE);
 }
 
+static void emsk_board_init(void)
+{
+	btn_init();
+
+	if (E_OK != temp_sensor_init(BOARD_TEMP_IIC_SLVADDR)) {
+		EMBARC_PRINTF("err: Failed to init temperature sensor\r\n");
+	}
+}
+
 /**
  * \brief  main entry
  */
 int main(void)
 {
+	emsk_board_init();
+
 	thread_init();
-	/* before coap start, it may needs 2min about to join the existing Thread network here */
+	/* before CoAP start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 
-	temp_sensor_init(TEMP_I2C_SLAVE_ADDRESS);
-
-	btn_init();
-
-	EMBARC_PRINTF("OpenThread livingRoom Node Start\r\n");
+	EMBARC_PRINTF("OpenThread LivingRoom Node Started\r\n");
 
 	while (true)
 	{
