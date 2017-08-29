@@ -127,7 +127,7 @@
 #define REQUEST_NONE (0)
 
 #define THREAD_PANID_USER (0x1234)
-#define GATEWAY_ADDR_USER ("fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0")
+#define GATEWAY_ADDR_USER ("INPUT_YOUR_GATEWAY_IPV6_ADDRESS")
 
 static char lock_sta;
 volatile static uint8_t flag_send;
@@ -157,12 +157,14 @@ static void frontdoor_lock(void)
 {
 	lock_sta = LOCK;
 	led_write(LED_ON, LED_LOCK_STA);
+	EMBARC_PRINTF("Lock the frontDoor\r\n");
 }
 
 static void frontdoor_unlock(void)
 {
 	lock_sta = UNLOCK;
 	led_write(LED_OFF, LED_LOCK_STA);
+	EMBARC_PRINTF("UnLock the frontDoor\r\n");
 }
 
 /**
@@ -181,12 +183,12 @@ static void btn_l_isr(void *ptr)
 
 static void btn_r_isr(void *ptr)
 {
-	EMBARC_PRINTF("\nbutton R pressed\r\n");
+	EMBARC_PRINTF("Button R pressed\r\n");
 }
 
 static void btn_a_isr(void *ptr)
 {
-	EMBARC_PRINTF("\nbutton A pressed\r\n");
+	EMBARC_PRINTF("Button A pressed\r\n");
 }
 
 /**
@@ -279,10 +281,12 @@ static void lock_sta_request_handler(void                * p_context,
 
 		switch (sta) {
 		case LOCK:
+			EMBARC_PRINTF("\r\nReceived [lock status: LOCK] from UI!\r\n");
 			frontdoor_lock();
 			break;
 
 		case UNLOCK:
+			EMBARC_PRINTF("\r\nReceived [lock status: UNLOCK] from UI!\r\n");
 			frontdoor_unlock();
 			break;
 
@@ -311,9 +315,9 @@ static void lock_sta_response_handler(void                * p_context,
 	(void)p_message;
 
 	if (result == OT_ERROR_NONE) {
-		EMBARC_PRINTF("Received lock_sta control response\r\n");
+		EMBARC_PRINTF("Send [lock status] OK!\r\n\r\n");
 	} else {
-		EMBARC_PRINTF("err: Failed to receive response: %d\r\n", result);
+		EMBARC_PRINTF("err: Send [lock status] failed: %d\r\n\r\n", result);
 	}
 }
 
@@ -352,6 +356,8 @@ static void lock_sta_request_send(otInstance * p_instance, char sta)
 		                          &messageInfo,
 		                          &lock_sta_response_handler,
 		                          p_instance);
+		EMBARC_PRINTF("Send [lock status: %c] to gateway[%s :%d]\r\n",
+		              sta, GATEWAY_ADDR_USER, OT_DEFAULT_COAP_PORT);
 	} while (false);
 
 	if (error != OT_ERROR_NONE && p_message != NULL) {
@@ -382,7 +388,6 @@ static void thread_init(void)
 
 	otCliUartInit(p_instance);
 
-	EMBARC_PRINTF("OpenThread Start\r\n");
 	EMBARC_PRINTF("Thread version: %s\r\n", (uint32_t)otGetVersionString());
 	EMBARC_PRINTF("Network name:   %s\r\n", (uint32_t)otThreadGetNetworkName(p_instance));
 
@@ -413,12 +418,12 @@ static void emsk_board_init(void)
 int main(void)
 {
 	emsk_board_init();
-	
+
 	thread_init();
 	/* before coap start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 
-	EMBARC_PRINTF("OpenThread frontDoor Node Started\r\n");
+	EMBARC_PRINTF("OpenThread frontDoor Node Started!\r\n\r\n");
 
 	while (true) {
 		/* run all queued OpenThread tasklets at the time this is called */

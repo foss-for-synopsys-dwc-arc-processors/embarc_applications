@@ -129,7 +129,7 @@
 #define REQUEST_NONE (0)
 
 #define THREAD_PANID_USER (0x1234)
-#define GATEWAY_ADDR_USER ("fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0")
+#define GATEWAY_ADDR_USER ("INPUT_YOUR_GATEWAY_IPV6_ADDRESS")
 
 static char light_sta;
 volatile static uint8_t flag_send_light_sta, flag_send_temp;
@@ -160,12 +160,14 @@ static void livingroom_light_on(void)
 {
 	light_sta = LIGHT_ON;
 	led_write(LED_ON, LED_LIGHT_STA);
+	EMBARC_PRINTF("Turn on the Light\r\n");
 }
 
 static void livingroom_light_off(void)
 {
 	light_sta = LIGHT_OFF;
 	led_write(LED_OFF, LED_LIGHT_STA);
+	EMBARC_PRINTF("Turn off the Light\r\n");
 }
 
 /**
@@ -189,7 +191,7 @@ static void btn_r_isr(void *ptr)
 
 static void btn_a_isr(void *ptr)
 {
-	EMBARC_PRINTF("\nbutton A pressed\r\n");
+	EMBARC_PRINTF("Button A pressed\r\n");
 }
 
 /**
@@ -282,10 +284,12 @@ static void light_sta_request_handler(void                * p_context,
 
 		switch (sta) {
 		case LIGHT_ON:
+			EMBARC_PRINTF("\r\nReceived [light status: ON] from UI!\r\n");
 			livingroom_light_on();
 			break;
 
 		case LIGHT_OFF:
+			EMBARC_PRINTF("\r\nReceived [light status: OFF] from UI!\r\n");
 			livingroom_light_off();
 			break;
 
@@ -314,9 +318,9 @@ static void light_sta_response_handler(void                * p_context,
 	(void)p_message;
 
 	if (result == OT_ERROR_NONE) {
-		EMBARC_PRINTF("Received light_sta control response\r\n");
+		EMBARC_PRINTF("Send [light status] OK!\r\n\r\n");
 	} else {
-		EMBARC_PRINTF("err: Failed to receive response: %d\r\n", result);
+		EMBARC_PRINTF("err: Send [light status] failed: %d\r\n\r\n", result);
 	}
 }
 
@@ -355,6 +359,8 @@ static void light_sta_request_send(otInstance * p_instance, char sta)
 		                          &messageInfo,
 		                          &light_sta_response_handler,
 		                          p_instance);
+		EMBARC_PRINTF("Send [light status: %c] to gateway[%s :%d]\r\n",
+		              sta, GATEWAY_ADDR_USER, OT_DEFAULT_COAP_PORT);
 	} while (false);
 
 	if (error != OT_ERROR_NONE && p_message != NULL) {
@@ -374,9 +380,9 @@ static void temp_response_handler(void                * p_context,
 	(void)p_message;
 
 	if (result == OT_ERROR_NONE) {
-		EMBARC_PRINTF("Received temp control response\r\n");
+		EMBARC_PRINTF("Send [temperature] OK!\r\n\r\n");
 	} else {
-		EMBARC_PRINTF("err: Failed to receive response: %d\r\n", result);
+		EMBARC_PRINTF("err: Send [temperature] failed: %d\r\n\r\n", result);
 	}
 }
 
@@ -416,6 +422,8 @@ static void temp_request_send(otInstance * p_instance, char* temp)
 		                          &messageInfo,
 		                          &temp_response_handler,
 		                          p_instance);
+		EMBARC_PRINTF("Send [temperature] to gateway[%s :%d]\r\n",
+		              GATEWAY_ADDR_USER, OT_DEFAULT_COAP_PORT);
 	} while (false);
 
 	if (error != OT_ERROR_NONE && p_message != NULL) {
@@ -461,7 +469,6 @@ static void thread_init(void)
 
 	otCliUartInit(p_instance);
 
-	EMBARC_PRINTF("OpenThread Start\r\n");
 	EMBARC_PRINTF("Thread version: %s\r\n", (uint32_t)otGetVersionString());
 	EMBARC_PRINTF("Network name:   %s\r\n", (uint32_t)otThreadGetNetworkName(p_instance));
 
@@ -501,7 +508,7 @@ int main(void)
 	/* before CoAP start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 
-	EMBARC_PRINTF("OpenThread LivingRoom Node Started\r\n");
+	EMBARC_PRINTF("OpenThread LivingRoom Node Started!\r\n\r\n");
 
 	while (true)
 	{

@@ -4,12 +4,6 @@ APPL ?= ot_smarthome_frontdoor
 # Optimization Level
 OLEVEL = O2
 
-# Board Options
-BOARD=emsk
-BD_VER=23
-CUR_CORE=arcem7d
-TOOLCHAIN=gnu
-
 #
 # root dir of embARC
 #
