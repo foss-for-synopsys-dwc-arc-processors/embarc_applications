@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * \version 2017.08
- * \date 2017-08-15
+ * \date 2017-08-30
  * \author Xiangcai Huang(xiangcai@synopsys.com)
 --------------------------------------------- */
 
@@ -51,7 +51,7 @@
  *     This application is an OpenThread CoAP application on PMOD RF2 (MRF24J40).
  *     The application layer of the application is built on top of the CoAP protocol. The server nodes provide two resources:
  *       - light status (Use LED0 to simulate the Light in the LivingRoom).
- *       - temperature sensor value.
+ *       - temperature value. (Send it every 5s if this function enabled)
  *     The mesh network is established, and IPv6 is configured with using bi-/multi-boards as Thread nodes.
  *     The node status can be shown on the terminal via UART. There are dozens of commands supported in the application.
  *
@@ -61,24 +61,23 @@
  *     - How to use this application
  *
  *       * Program the secondary bootloader application into onboard SPI flash of EMSK.
- *       * Generate boot.bin of the Openthread CoAP application using "make bin".
- *       * Run Openthread CoAP application with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
+ *       * Generate boot.bin of the Openthread CoAP appllication using "make bin".
+ *       * Run Openthread CoAP appllication with boot.bin from SD card. Make sure Bit 4 of the onboard DIP switch is ON to enable
  *         the secondary bootloader.
  *         - Insert SD Card back to one EMSK. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
- *         - Start Thread process automatically.
- *         - Wait 20 seconds for completing Thread configuration. Enter "state" to see the state of the node, one leader and one router.
- *         - Enter other commands of the OpenThread CLI to get more information. For application,
+ *         - Start Thread process automatically, don't need to enter number in the Tera Term.
+ *         - Wait 20 seconds for completing Thread configuration. Enter "state" to see the state of the node, leader or router.
+ *         - Enter other commands of the OpenThread CLI to get more information. For appllication,
  *           "ipaddr" is used to show the IP address of the Thread node.
  *
- * ![ScreenShot of Thread nodes and OpenThread startup](./doc/screenchots/emsk_openthread_connection.jpg)
- * ![ScreenShot of 'start' and 'ping' in OpenThread](./doc/screenchots/emsk_openthread_configuration.jpg)
  *
  *
  * ### Extra Comments
  *     * A few seconds are required to make connections of Thread nodes.
  *     * Use AC adapter to ensure a steady power supply.
- *     * Enter number to generate the pseudo-random number "2" for OpenThread.
- *       Using same number in different nodes may lead error.
+ *     * Generate the pseudo-random number for OpenThread automatically.
+ *       Make sure the number in all nodes are diffrent, using same number in different nodes may lead error.
+ *     * Make sure the mbedtls has been updated to "mbedtls-2.4.1", for the current OpenThread in embARC.
  *
  */
 
@@ -153,8 +152,8 @@ static void light_sta_request_handler(void                * p_context,
 
 typedef struct
 {
-	otInstance     * p_ot_instance;         /* A pointer to the OpenThread instance */
-	otCoapResource   light_sta_resource;    /* CoAP light_sta resource */
+	otInstance     * p_ot_instance;      /* A pointer to the OpenThread instance */
+	otCoapResource   light_sta_resource; /* CoAP light_sta resource */
 } application_t;
 
 application_t m_app =
@@ -179,7 +178,7 @@ static void timer1_isr(void *ptr)
 }
 
 /**
- * \brief  software timing used timer1 interrupt start
+ * \brief  Software timing used timer1 interrupt start
  */
 static void timer1_start(void)
 {
@@ -192,7 +191,7 @@ static void timer1_start(void)
 }
 
 /**
- * \brief  software timing used timer1 stop
+ * \brief  Software timing used timer1 stop
  */
 static void timer1_stop(void)
 {
