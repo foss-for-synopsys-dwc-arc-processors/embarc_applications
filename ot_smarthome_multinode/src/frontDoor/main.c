@@ -129,6 +129,8 @@
 #define THREAD_PANID_USER (0x1234)
 #define GATEWAY_ADDR_USER ("INPUT_YOUR_GATEWAY_IPV6_ADDRESS")
 
+#define NUM_FRONTDOOR_NODE (1)
+
 static char lock_sta;
 volatile static uint8_t flag_send;
 
@@ -381,7 +383,7 @@ static void thread_init(void)
 {
 	otInstance * p_instance;
 
-	PlatformInit(0, NULL);
+	PlatformInit(0, NULL, NUM_FRONTDOOR_NODE);
 
 	p_instance = otInstanceInitSingle();
 	assert(p_instance);
@@ -423,7 +425,8 @@ int main(void)
 	/* before coap start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 
-	EMBARC_PRINTF("OpenThread frontDoor Node Started!\r\n\r\n");
+	EMBARC_PRINTF("OpenThread FrontDoor Node Started!\r\n \
+	Press Button L to control the Lock and send it's status to UI.\r\n\r\n");
 
 	while (true) {
 		/* run all queued OpenThread tasklets at the time this is called */

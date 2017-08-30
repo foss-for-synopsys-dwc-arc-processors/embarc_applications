@@ -125,15 +125,26 @@
 #define BTN_ACTIVE_LOW   (0)
 #define BTN_ACTIVE_HIGH  (1)
 
-#define REQUEST_SEND (1)
 #define REQUEST_NONE (0)
+#define REQUEST_SEND (1)
 
 #define THREAD_PANID_USER (0x1234)
 #define GATEWAY_ADDR_USER ("INPUT_YOUR_GATEWAY_IPV6_ADDRESS")
 
-static char light_sta;
-volatile static uint8_t flag_send_light_sta, flag_send_temp;
+#define NUM_LIVINGROOM_NODE (2)
 
+#define T1_STA_STOP    (0)
+#define T1_STA_STARTED (1)
+
+#define T1_COUNT_5s    (5)
+
+static char light_sta;
+volatile static uint8_t flag_send_light_sta,
+                        flag_send_temp,
+                        flag_time1_start;
+
+static uint32_t t1_cnt;
+static void timer1_isr(void *ptr);
 
 static void light_sta_request_handler(void                * p_context,
                                       otCoapHeader        * p_header,
@@ -152,6 +163,42 @@ application_t m_app =
 	.light_sta_resource = {"light_sta", light_sta_request_handler, NULL, NULL},
 };
 
+
+/**
+ * \brief  arc timer 1 interrupt routine
+ */
+static void timer1_isr(void *ptr)
+{
+	timer_int_clear(TIMER_1);
+
+	if (t1_cnt >= T1_COUNT_5s) {
+		flag_send_temp = REQUEST_SEND;
+		t1_cnt = 0;
+	}
+	t1_cnt++;
+}
+
+/**
+ * \brief  software timing used timer1 interrupt start
+ */
+static void timer1_start(void)
+{
+	t1_cnt = 0;
+
+	int_handler_install(INTNO_TIMER1, timer1_isr);
+	int_enable(INTNO_TIMER1);
+	timer_start(TIMER_1, TIMER_CTRL_IE, BOARD_CPU_CLOCK);
+	flag_time1_start = T1_STA_STARTED;
+}
+
+/**
+ * \brief  software timing used timer1 stop
+ */
+static void timer1_stop(void)
+{
+	timer_stop(TIMER_1);
+	flag_time1_start = T1_STA_STOP;
+}
 
 /**
  * \brief  Use LED ON/OFF status simulates livingRoom's light ON/OFF status
@@ -186,7 +233,13 @@ static void btn_l_isr(void *ptr)
 
 static void btn_r_isr(void *ptr)
 {
-	flag_send_temp = REQUEST_SEND;
+	if (flag_time1_start == T1_STA_STARTED) {
+		timer1_stop();
+		EMBARC_PRINTF("Stop sending temperature value to gateway!\r\n");
+	} else {
+		timer1_start();
+		EMBARC_PRINTF("Start to send temperature value to gateway every 5s!\r\n");
+	}
 }
 
 static void btn_a_isr(void *ptr)
@@ -422,7 +475,7 @@ static void temp_request_send(otInstance * p_instance, char* temp)
 		                          &messageInfo,
 		                          &temp_response_handler,
 		                          p_instance);
-		EMBARC_PRINTF("Send [temperature] to gateway[%s :%d]\r\n",
+		EMBARC_PRINTF("Send [temperature value] to gateway[%s :%d]\r\n",
 		              GATEWAY_ADDR_USER, OT_DEFAULT_COAP_PORT);
 	} while (false);
 
@@ -462,7 +515,7 @@ static void thread_init(void)
 {
 	otInstance * p_instance;
 
-	PlatformInit(0, NULL);
+	PlatformInit(0, NULL, NUM_LIVINGROOM_NODE);
 
 	p_instance = otInstanceInitSingle();
 	assert(p_instance);
@@ -508,7 +561,9 @@ int main(void)
 	/* before CoAP start, it may needs 2min about to join the existing Thread network here */
 	coap_init();
 
-	EMBARC_PRINTF("OpenThread LivingRoom Node Started!\r\n\r\n");
+	EMBARC_PRINTF("OpenThread LivingRoom Node Started!\r\n \
+	Press Button L to control the Light and send it's status to UI.\r\n \
+	Press Button R to start/stop sending the Temperature value to UI every 5s.\r\n\r\n");
 
 	while (true)
 	{
