@@ -107,6 +107,7 @@
 
 
 #define LED0 (0x01)
+#define LED1 (0x02)
 
 #define LED_ON  (0xff)
 #define LED_OFF (0x0)
@@ -114,6 +115,7 @@
 #define LIGHT_ON  ('1')
 #define LIGHT_OFF ('0')
 #define LED_LIGHT_STA (LED0)
+#define LED_TEMP_TICK (LED1)
 
 #define BTN_L_BIT_OFFSET (0)
 #define BTN_R_BIT_OFFSET (1)
@@ -197,6 +199,16 @@ static void timer1_stop(void)
 {
 	timer_stop(TIMER_1);
 	flag_time1_start = T1_STA_STOP;
+}
+
+/**
+ * \brief  LED1 blinking when it sends temperature to gateway
+ */
+static void led_temp_blink(void)
+{
+	led_write(LED_ON, LED_TEMP_TICK);
+	board_delay_ms(50, OSP_DELAY_OS_COMPAT_ENABLE);
+	led_write(LED_OFF, LED_TEMP_TICK);
 }
 
 /**
@@ -504,6 +516,7 @@ static void request_send_scan(void)
 		itoa(val, temp, 10);
 		EMBARC_PRINTF("Temperature in the LivingRoom now: %d.%d`C\r\n", val / 10, val % 10);
 		temp_request_send(m_app.p_ot_instance, temp);
+		led_temp_blink();
 	}
 }
 
