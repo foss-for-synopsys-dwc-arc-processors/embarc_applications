@@ -12,7 +12,9 @@
  * other materials provided with the distribution.
 
  * 3) Neither the name of the Synopsys, Inc., nor the names of its contributors may
- * be used
+ * be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -26,60 +28,33 @@
  *
  * \version 2017.08
  * \date 2017-08-20
- * \author Ruige Lee(295054118@whut.edu.cn)
+ * \author Yibing Peng(Virus@hust.edu.cn)
 --------------------------------------------- */
-
-
 /**
  * \file
- * \ingroup EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
- * \brief mic used in ilight
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
+ * \brief	Header File of bluetooth
  */
 
 /**
- * \addtogroup  EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
  * @{
  */
 
-/* coustom HAL */
-#include "mic.h"
+#ifndef _BLE_INT_H_
+#define _BLE_INT_H_
 
-/***********    mic operation     ********/
-static DEV_IIC *adc_iic_port;
-
-/**
- * \brief	Adc value get of mic
- * \details	Get the adc value of mic using iic0.  
- * \param[out]	the value of adc convert  
+/** 
+ * Function for initialization of bluetooth 
+ * Only used without scope
  */
-uint8_t adc_get(void)
-{
-	uint8_t REG_data;
-	adc_iic_port -> iic_read((void*)(&REG_data),1);
-	EMBARC_PRINTF("ADC_DATA:%d\r\n",REG_data);
-	return REG_data;
-}
 
-/**
- * \brief	Initial the mic 
- * \details	Initial the mic using iic0.
- */
-void mic_init(void)
-{
-	uint8_t point;
-	point = (0x90 >> 1);
-	adc_iic_port = iic_get_dev( DW_IIC_0_ID );
-}
+#define BLE_UART_EN	(1)
 
-/**
- * \brief	IIC address point to mic
- * \details	IIC address point to mic.
- */
-void iic_point_mic(void)
-{
-	uint8_t point = (0x90 >> 1);
-	if (adc_iic_port->iic_control( IIC_CMD_MST_SET_TAR_ADDR, (void *)point) == E_OK) {
-		EMBARC_PRINTF("Target reset mic OK!\n");
-	}
-}
-/** @} */
+extern uint32_t ble_uart_init(uint32_t baudrate);
+
+/** Function for sending data to bluetooth */
+extern uint32_t ble_send(uint8_t *psend, uint8_t cnt);
+
+#endif /*_BLE_INT_H_ */
+/** @} end of group EMBARC_APP_FREERTOS_ILIGHT_SMARTDEVICE */
