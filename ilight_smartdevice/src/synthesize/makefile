@@ -54,11 +54,11 @@ EMBARC_ROOT = ../..
 MID_SEL = common
 
 # application source dirs
-APPL_CSRC_DIR = . ./light ./mpu6050 ./imu ./scope ./interrupt ./word ./mic ./rtc
+APPL_CSRC_DIR = . ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
 APPL_ASMSRC_DIR = .
 
 # application include dirs
-APPL_INC_DIR = . ./light ./mpu6050 ./imu ./scope ./interrupt ./word ./mic ./rtc
+APPL_INC_DIR = . ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
 
 APPL_DEFINES =
 
