@@ -106,7 +106,9 @@ Here take **EMSK2.3 - ARC EM7D** with GNU Toolset for application to show how to
 - Insert SD Card back to the EMSKs. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
 - See [embARC OSP **Bootloader** example][8] for detailed information.
 
-> Notice: **Before making boot.bin for NCP**, it is necessary to modify the source file in [embARC OpenThread NCP example' main.c][9] as the following shows:
+> Notice: 
+> 
+> **Before making boot.bin for NCP**, it is necessary to modify the source file in [embARC OpenThread NCP example' main.c][9] as the following shows:
 > 
 > 		149    PlatformInit(argc, argv, NUM_NCP);
 >
@@ -126,7 +128,9 @@ Here take **EMSK2.3 - ARC EM7D** with GNU Toolset for application to show how to
 
 3. Start **Gateway**, Connect the **NCP** to the Raspi via USB cable. Check the two Nodes' and Gateway's IPv6 address in the [`ot_smarthome_gw/gateway/config.js`][10]. Then, power the Raspi, the Gateway and NCP will be working automatically. See [OpenThread Smarthome Gateway's README][7] for more information and learn how to use the Gateway.
 
-	> Notice: Before checking the IPv6 address, find out and note the IPv6 address of virtual IPv6 network interface (named utun6 here) on the Raspi. It is **Gateway's IPv6 address** also. In general, this value is constant and you don't have to change it, like here *fdde:ad00:beef:0:3b33:8a2f:8e4:67d3*. But if not, modify the value of the following macro definitions in `./src/frontDoor\main.c` and `./src/livingRoom/main.c`:
+	> Notice: 
+	> 
+	> Before checking the IPv6 address, find out and note the IPv6 address of virtual IPv6 network interface (named utun6 here) on the Raspi. It is **Gateway's IPv6 address** also. In general, this value is constant and you don't have to change it, like here *fdde:ad00:beef:0:3b33:8a2f:8e4:67d3*. But if not, modify the value of the following macro definitions in `./src/frontDoor\main.c` and `./src/livingRoom/main.c`:
 	>
 	>		#define GATEWAY_ADDR_USER ("INPUT_YOUR_GATEWAY_IPV6_ADDRESS")
 	> Then, make boot.bin of the frontDoor and livingRoom Nodes again.
