@@ -106,7 +106,7 @@ Here take **EMSK2.3 - ARC EM7D** with GNU Toolset for application to show how to
 - Insert SD Card back to the EMSKs. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
 - See [embARC OSP **Bootloader** example][8] for more information.
 
-> Notice
+> Notice:
 > 
 > **Before making boot.bin for NCP**, it is necessary to modify the source file in [embARC OpenThread NCP example' main.c][9] as the following shows:
 > 
@@ -129,7 +129,7 @@ Here take **EMSK2.3 - ARC EM7D** with GNU Toolset for application to show how to
 
 3. Start **Gateway**, Connect the **NCP** to the Raspi via USB cable. Check the two Nodes' and Gateway's IPv6 address in the [`ot_smarthome_gw/gateway/config.js`][10]. Then, power the Raspi, the Gateway and NCP will be working automatically. See [OpenThread Smarthome Gateway's README][7] for more information and learn how to use the Gateway.
 
-	> Notice
+	> Notice:
 	> 
 	> For checking the IPv6 address, find out and note the IPv6 address of virtual IPv6 network interface (named utun6 here) on the Raspi. It is **Gateway's IPv6 address** also. In general, this value is constant and don't need to change it, the same as here: *fdde:ad00:beef:0:3b33:8a2f:8e4:67d3*. But if not, modify the following macro definition in `./src/frontDoor/main.c` and `./src/livingRoom/main.c`:
 	>
@@ -146,8 +146,8 @@ Here take **EMSK2.3 - ARC EM7D** with GNU Toolset for application to show how to
 	- On the Freeboard UI
 	  - Control **Lock status** and **Light status** by clicking on the according components.
 
-> Notice
-
+> Notice:
+>
 > Before restart Gateway, it is better to restart all Thread Nodes.
 
 [1]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/tree/master/example/baremetal/openthread/ncp "embARC OpenThread NCP example"
