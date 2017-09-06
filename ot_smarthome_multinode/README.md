@@ -3,7 +3,7 @@ This application is designed to show how to set up **OpenThread-CoAP-Based Smart
 
 All the Thread nodes interact with **Gateway** through the OpenThread **Network Co-Processor(NCP)**. The NCP can serve as a low-power wireless Network Co-Processor (NCP) to communicate with Userspace WPAN Network Daemon (wpantund) on Unix-like operating systems. It can be used along with OpenThread wpantund to provide Internet connectivity to the Thread network. See [embARC OpenThread NCP example][1] for more information.
 
-The Gateway contains wpantund and Web UI, running on the Host with Unix-like operating systems, like the [Raspberry Pi 3][2] with [Raspbian Stretch Lite 2017-07-05][3] installed. So the Gateway together with NCP have similar functionality as the **Border Router** available in the official OpenThread repository.
+The Gateway contains wpantund and Web UI, running on the Host with Unix-like operating systems, like the [Raspberry Pi 3][2] running recent [Raspbian Stretch Lite][3]. So the Gateway together with NCP have similar functionality as the **Border Router** available in the official OpenThread repository.
 
 There are only two nodes available now, but you can add more nodes to OpenThread Smarthome easily by taking these two examples as a reference.
 
@@ -25,25 +25,25 @@ There are two Thread Nodes in this application's Thread network:
 
 - **FrontDoor** Node. It provides one resource:
 
-	- lock status (Use **LED0** to simulate the FrontDoor's Lock status). 
+	- Lock status (Use **LED0** to simulate the FrontDoor's Lock status). 
 
 - **LivingRoom** Node. It provides two resources:
 
-	- light status (Use **LED0** to simulate the Light in the LivingRoom).
-	- temperature value.
+	- Light status (Use **LED0** to simulate the Light in the LivingRoom).
+	- Temperature value.
 
 ### Function
 
 - **FrontDoor** Node:
 
 	- Control **lock status** via Gateway and UI.
-	- Control **lock status**  by pressing the **button L** on the emsk, then itwill send it's value to Gateway.
+	- Control **lock status**  by pressing the **button L** on the emsk, then it will send the value to Gateway.
 
 - **LivingRoom** Node:
 
 	- Control **light status** via Gateway and UI.
-	- Control **light status** by pressing the **button L** on the emsk, then it will send it 's value to Gateway.
-	- Enable/Disable the functionality that sending **temperature value** to Gateway every 5s by pressing the **button R**.
+	- Control **light status** by pressing the **button L** on the emsk, then it will send the value to Gateway.
+	- Turn ON/OFF the function of sending **temperature value** to Gateway every 5s by pressing the **button R**.
 
 ### System Architecture
 
@@ -51,8 +51,8 @@ There are two Thread Nodes in this application's Thread network:
 
 ### Freeboard UI
 
-- Current data is accessed on the Freeboard UI.
-- Control lock status and light status by clicking on the light components on Freeboard UI.
+- Current data can be accessed on the Freeboard UI.
+- Control lock status and light status by clicking on the according components on the Freeboard UI.
 
 ![freeboard_ui][31]
 
@@ -65,7 +65,7 @@ There are two Thread Nodes in this application's Thread network:
 - 1 x [Digilent PMOD TMP2][6]
 - 3 x SD card
 - 1 x microUSB-USB cable
-- 1 x [Raspberry Pi 3][2] with [Raspbian Stretch Lite 2017-07-05][3] installed for running [OpenThread Smarthome Gateway][7]
+- 1 x [Raspberry Pi 3][2] (running recent [Raspbian Stretch Lite][3])
 
 ### Required Software
 
@@ -86,7 +86,7 @@ There are two Thread Nodes in this application's Thread network:
 
 3. EMSK 3 implement **NCP**.
 	- Connect **PMOD RF2 (MRF24J40)** to **J6**.
-	- Connect **microUSB** interface to the **USB** interface on the Raspberry Pi 3 (Gateway).
+	- Connect with the Raspberry Pi 3 (Gateway) via microUSB-USB cable.
 
 4. Insert SD Card to EMSKs, make sure Bit 4 of the onboard DIP switch is ON to enable the secondary bootloader.
 
@@ -104,50 +104,55 @@ Here take **EMSK2.3 - ARC EM7D** with GNU Toolset for application to show how to
 - Program the secondary bootloader application into onboard SPI flash of EMSK.
 - Generate boot.bin of the **frontDoor** Node, **livingRoom** Node and **NCP** using "make bin".
 - Insert SD Card back to the EMSKs. Press the reset button to reboot it. Wait for loading boot.bin from SD card.
-- See [embARC OSP **Bootloader** example][8] for detailed information.
+- See [embARC OSP **Bootloader** example][8] for more information.
 
-> Notice: 
+> Notice
 > 
 > **Before making boot.bin for NCP**, it is necessary to modify the source file in [embARC OpenThread NCP example' main.c][9] as the following shows:
 > 
 > 		149    PlatformInit(argc, argv, NUM_NCP);
 >
-> It is for generating pseudo random number for OpenThred automatically. Then, you don't have to input it manually.
+> It is for generating pseudo random number (by given a constant number: NUM_NCP here) for OpenThred automatically. Then, you don't need to input it manually.
 
 1. Start **FrontDoor** Node, wait a few seconds for completing Thread configuration and create a Thread network.
    Open your serial terminal such as Tera-Term on PC, and configure it to right COM port and *115200bps*.
-   Enter **ipaddr** to show the IP address of the Thread node. Here is *fdde:ad00:beef:0:63a8:7376:c6ad:828c*.
+   Enter **ipaddr** to show the IP address of the Thread node. Here it is *fdde:ad00:beef:0:63a8:7376:c6ad:828c*.
 
 2. Start **LivingRoom** Node, wait 2 minutes for completing Thread configuration and **join** the Thread network
    created by **FrontDoor** Node earlier. After that it will be a **router**.
    Open your serial terminal such as Tera-Term on PC, and configure it to right COM port and *115200bps*.
-   Enter **ipaddr** to show the IP address of the Thread node. Here is *fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0*.
-   It really doesn't matter the FrontDoor Node or the LivingRoom Node to be the leader. It just depends on which node starts first.
+   Enter **ipaddr** to show the IP address of the Thread node. Here it is *fdde:ad00:beef:0:4f6e:7e53:67c8:f5b0*.
+   
+	It really doesn't matter which Thread Node to be the leader. It just depends on which node starts first.
 
 	![start_thread_nodes][33]
 
 3. Start **Gateway**, Connect the **NCP** to the Raspi via USB cable. Check the two Nodes' and Gateway's IPv6 address in the [`ot_smarthome_gw/gateway/config.js`][10]. Then, power the Raspi, the Gateway and NCP will be working automatically. See [OpenThread Smarthome Gateway's README][7] for more information and learn how to use the Gateway.
 
-	> Notice: 
+	> Notice
 	> 
-	> Before checking the IPv6 address, find out and note the IPv6 address of virtual IPv6 network interface (named utun6 here) on the Raspi. It is **Gateway's IPv6 address** also. In general, this value is constant and you don't have to change it, like here *fdde:ad00:beef:0:3b33:8a2f:8e4:67d3*. But if not, modify the value of the following macro definitions in `./src/frontDoor\main.c` and `./src/livingRoom/main.c`:
+	> For checking the IPv6 address, find out and note the IPv6 address of virtual IPv6 network interface (named utun6 here) on the Raspi. It is **Gateway's IPv6 address** also. In general, this value is constant and don't need to change it, the same as here: *fdde:ad00:beef:0:3b33:8a2f:8e4:67d3*. But if not, modify the following macro definition in `./src/frontDoor/main.c` and `./src/livingRoom/main.c`:
 	>
 	>		#define GATEWAY_ADDR_USER ("INPUT_YOUR_GATEWAY_IPV6_ADDRESS")
 	> Then, make boot.bin of the frontDoor and livingRoom Nodes again.
 
-4. Start Freeboard UI, open the browser and enter the Raspi's IPv4 address and port to visit UI, like *192.168.137.116:8080*. Enjoy the interaction using EMSK and Freeboard UI!
+4. Start Freeboard UI, open the browser and enter the Raspi's IPv4 address and port to visit UI, like *192.168.137.116:8080*. Enjoy the interaction using EMSK and Freeboard UI !
 
 	- On the frontDoor Node
-	  - Press Button L to control the Lock and send the status to UI. LED0 shows the Lock status.
+	  - Press **Button L** to control the Lock and send its status to UI. LED0 shows the Lock status.
 	- On the livingRoom Node
-	  - Press Button L to control the Light and send the status to UI. LED0 shows the Light status.
-	  - Press Button R to start/stop sending the Temperature value to UI every 5s. LED1 blinking when it reports.
+	  - Press **Button L** to control the Light and send its status to UI. LED0 shows the Light status.
+	  - Press **Button R** to start/stop sending the **Temperature value** to UI every 5s. LED1 blinking when it reports data.
 	- On the Freeboard UI
-	  - Control Lock status and Light status by clicking on the light components.
+	  - Control **Lock status** and **Light status** by clicking on the according components.
 
-[1]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/blob/master/example/baremetal/openthread/ncp/README.md "embARC OpenThread NCP example"
+> Notice
+
+> Before restart Gateway, it is better to restart all Thread Nodes.
+
+[1]: https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/tree/master/example/baremetal/openthread/ncp "embARC OpenThread NCP example"
 [2]: https://www.raspberrypi.org/products/raspberry-pi-3-model-b/    "Raspberry Pi 3"
-[3]: https://www.raspberrypi.org/downloads/raspbian/ "Raspbian Stretch Lite 2017-07-05"
+[3]: https://www.raspberrypi.org/downloads/raspbian/ "Raspbian Stretch Lite"
 [4]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
 [5]: http://store.digilentinc.com/pmod-rf2-ieee-802-15-rf-transceiver/    "Digilent PMOD RF2 (MRF24J40)"
 [6]: http://store.digilentinc.com/pmod-tmp2-temperature-sensor/    "Digilent PMOD TMP2"
