@@ -425,7 +425,7 @@ int main(void)
 	coap_init();
 
 	EMBARC_PRINTF("OpenThread FrontDoor Node Started!\r\n \
-	Press Button L to control the Lock and send it's status to UI.\r\n\r\n");
+	Press Button L to control the Lock and send its status to UI.\r\n\r\n");
 
 	while (true) {
 		/* run all queued OpenThread tasklets at the time this is called */

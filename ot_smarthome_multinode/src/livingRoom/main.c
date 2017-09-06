@@ -574,8 +574,8 @@ int main(void)
 	coap_init();
 
 	EMBARC_PRINTF("OpenThread LivingRoom Node Started!\r\n \
-	Press Button L to control the Light and send it's status to UI.\r\n \
-	Press Button R to start/stop sending the Temperature value to UI every 5s.\r\n\r\n");
+	Press Button L to control the Light and send its status to UI.\r\n \
+	Press Button R to start/stop sending the Temperature value to UI (every 5s).\r\n\r\n");
 
 	while (true)
 	{
