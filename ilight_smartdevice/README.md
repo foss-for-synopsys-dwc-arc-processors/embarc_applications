@@ -84,10 +84,6 @@ Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for example to show how to ru
 3. Interact using EMSK and App.
 
 
-[0]: ./doc/img/hard_ware.JPG        "iLight_hardware"
-
-[30]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
-[40]: http://embarc.org/embarc_osp/doc/embARC_Document/html/page_example.html   " embARC Example User Guide"
 #### Makefile
 
 - Selected FreeRTOS here, then you can use [FreeRTOS API][39] in your application:
@@ -145,5 +141,10 @@ Placing the C source file and header file in the corresponding subfolder.
 	|  light_mode         |        working modes.                                       |
 	|  mic                |        get data of voice and ouput                          |
     |  scope              |        output data and build it in visual scope             |
-[39]: http://www.freertos.org/a00106.html   "FreeRTOS API"
+[0]: ./doc/img/hard_ware.JPG        "iLight_hardware"
+[31]:http://www.huamaosoft.cn/bluetooth.asp?id=0
+[32]:http://pan.baidu.com/s/1geX2nNt
+[30]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
+[35]:https://itunes.apple.com/cn/app/i-lighting/id1273641607?mt=8
 [40]: http://embarc.org/embarc_osp/doc/embARC_Document/html/page_example.html   " embARC Example User Guide"
+[39]: http://www.freertos.org/a00106.html   "FreeRTOS API"
