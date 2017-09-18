@@ -1,10 +1,3 @@
--------
-IOS App Usage Manual
-
-
-
-> Written with [StackEdit](https://stackedit.io/).
-
 # iLight SmartDevice Application
 This application is designed to show how to develop a **Smart Device** using embARC. iLight can be controlled by gestures and iOS App.It has lots of working modes and can make great convenience for you in your daily life.The connection between EMSK and the SmartPhone is based on bluetooth. Let's start a interesting trip with iLight!
 
@@ -27,24 +20,30 @@ This application is designed to show how to develop a **Smart Device** using emb
 
 ### Function
 
-* Running mode. It is used when you are running in the night and can provide you safety.
-* Alarm mode.Blue light and red light alternating flashing.
-* Riding mode.It will light in red when you decrease you speed and in colors when you ride in uniform speed.
-* Timing mode.You can set the time by your mobilephone and turn off the lights in same time.
-* Music mode.It can get the data of music by mic and switch lights according to the rhythm of music.
-* Weather mode.The iLight can get the data of weather by ble and show the data by color of lights.
-* Shaking mode.You can set those words which you want to show and shake the iLight.
+* **Running mode**. It is used when you are running in the night and can provide you safety.   
+	![Running_mode][2]
+* **Alarm mode**.Blue light and red light alternating flashing.   
+    ![Alarm_mode][3]
+* **Riding mode**.It will light in red when you decrease you speed and in colors when you ride in uniform speed.   
+    ![Riding_mode][4]
+* **Timing mode**.You can set the time by your mobilephone and turn off the lights in same time.
+	![Timing_mode][5]
+* **Music mode**.It can get the data of music by mic and switch lights according to the rhythm of music.
+	![music_mode][6]
+* **Weather mode**.The iLight can get the data of weather by ble and show the data by color of lights.
+* **Shaking mode**.You can set those words which you want to show and shake the iLight.
+
 
 ### iOS App
 iLight can be controlled by an IOS App [I-Lighting][35], you can download it in Appstore. Basically you can use the App to change modes of iLight, and more you can do some detailed setting to iLight. For example,  you can set the brightness of iLight in Running mode、Riding mode and Alarm mode, etc. You can set the time in Timing mode.   
-####Q&A
+#### Q&A
 * How to connect to the iLight device?   
   The App will automatically connect the iLight device when you start the App and please input the default password "000000" . If you can`t control the iLight device,  please restart the App.
 * How to fetch weather information？   
   Weather mode fetchs weather information by the App, At first you can click the "City select button" to change the city where you are in, the default city is "Wuhan,CN" . The App will automatically fetch weather information once when you start it, If you needs more times weather information, please click the "Refresh button". And the App will send the weather data to the iLight device to show.   
 * Can we input chinese in fans mode?   
   ilight can`t shows chinese in fans mode right now.    
-![app_pic][1]  
+	![app_pic][1]  
 
 ## Hardware and Software Setup
 ### Required Hardware
@@ -54,10 +53,10 @@ iLight can be controlled by an IOS App [I-Lighting][35], you can download it in 
 - 1 [iLight bar(Homemade)][32]
 - 1 SD Card
 - 1 iOS SmartPhone
-
-The iLight bar is a integrated module made by ourselves. The physical picture of it is as follows:
-
-![ilight_bar][0]
+The list of haraware is shown in the picture following.      
+	![ilight_hardware][7]   
+The iLight bar is a integrated module made by ourselves. The physical picture of it is as follows:   
+	![ilight_bar][0]
 
 ### Required Software
 - Metaware or ARC GNU Toolset
@@ -145,7 +144,7 @@ Placing the C source file and header file in the corresponding subfolder.
 
 #### Function Module
 
-- The `function` folder contains the API implementations of functions.
+The `function` folder contains the API implementations of functions.
 
 	|  folder/file        |            Function                                         |
 	| ------------------- | ------------------------------------------------------------|
@@ -154,8 +153,14 @@ Placing the C source file and header file in the corresponding subfolder.
 	|  light_mode         |        working modes.                                       |
 	|  mic                |        get data of voice and ouput                          |
     |  scope              |        output data and build it in visual scope             |
-[0]: ./doc/img/hard_ware.JPG        "iLight_hardware"
-[1]: ./doc/img/app_weather.JPG		"app_pic"
+[0]: ./doc/screenshots/hard_ware.JPG        "iLight_hardware"
+[1]: ./doc/screenshots/app_weather.JPG		"app_pic"
+[2]: ./doc/screenshots/running_mode.gif
+[3]: ./doc/screenshots/alarming_mode.gif
+[4]: ./doc/screenshots/riding_mode.gif
+[5]: ./doc/screenshots/timing_mode.gif
+[6]: ./doc/screenshots/music_mode.gif
+[7]: ./doc/screenshots/equipment.png
 [31]:http://www.huamaosoft.cn/bluetooth.asp?id=0
 [32]:http://pan.baidu.com/s/1geX2nNt
 [30]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
