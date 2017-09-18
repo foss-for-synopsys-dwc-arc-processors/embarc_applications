@@ -1,3 +1,10 @@
+-------
+IOS App Usage Manual
+
+
+
+> Written with [StackEdit](https://stackedit.io/).
+
 # iLight SmartDevice Application
 This application is designed to show how to develop a **Smart Device** using embARC. iLight can be controlled by gestures and iOS App.It has lots of working modes and can make great convenience for you in your daily life.The connection between EMSK and the SmartPhone is based on bluetooth. Let's start a interesting trip with iLight!
 
@@ -27,11 +34,17 @@ This application is designed to show how to develop a **Smart Device** using emb
 * Music mode.It can get the data of music by mic and switch lights according to the rhythm of music.
 * Weather mode.The iLight can get the data of weather by ble and show the data by color of lights.
 * Shaking mode.You can set those words which you want to show and shake the iLight.
-* 
 
 ### iOS App
-
-* 
+iLight can be controlled by an IOS App [I-Lighting][35], you can download it in Appstore. Basically you can use the App to change modes of iLight, and more you can do some detailed setting to iLight. For example,  you can set the brightness of iLight in Running mode、Riding mode and Alarm mode, etc. You can set the time in Timing mode.   
+####Q&A
+* How to connect to the iLight device?   
+  The App will automatically connect the iLight device when you start the App and please input the default password "000000" . If you can`t control the iLight device,  please restart the App.
+* How to fetch weather information？   
+  Weather mode fetchs weather information by the App, At first you can click the "City select button" to change the city where you are in, the default city is "Wuhan,CN" . The App will automatically fetch weather information once when you start it, If you needs more times weather information, please click the "Refresh button". And the App will send the weather data to the iLight device to show.   
+* Can we input chinese in fans mode?   
+  ilight can`t shows chinese in fans mode right now.    
+![app_pic][1]  
 
 ## Hardware and Software Setup
 ### Required Hardware
@@ -142,6 +155,7 @@ Placing the C source file and header file in the corresponding subfolder.
 	|  mic                |        get data of voice and ouput                          |
     |  scope              |        output data and build it in visual scope             |
 [0]: ./doc/img/hard_ware.JPG        "iLight_hardware"
+[1]: ./doc/img/app_weather.JPG		"app_pic"
 [31]:http://www.huamaosoft.cn/bluetooth.asp?id=0
 [32]:http://pan.baidu.com/s/1geX2nNt
 [30]: https://www.synopsys.com/dw/ipdir.php?ds=arc_em_starter_kit    "DesignWare ARC EM Starter Kit(EMSK)"
