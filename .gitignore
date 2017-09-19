@@ -29,6 +29,10 @@
 # Map file
 *.map
 
+# Mac OS file
+.DS_Store
+*/.DS_Store
+
 # vim swap file
 *.swp
 
