@@ -59,18 +59,18 @@ This application is designed to show how to develop a **Smart Device** using emb
 	**"Say" words** to you by shaking the iLight, and you can set the words via the iOS App.
 
 ### iOS App
-iLight can be controlled by the [IOS App][35]. Download it from the Appstore. Then, you can change the iLight's working mode using it, and it will be easier to modify the configuratons of iLight. For example, change the brightness in Running mode, Riding mode or Alarm mode, etc.
+iLight can be controlled by the [iLight IOS App][35]. Download it from the Appstore. Then, you can change the iLight's working mode using it, and it will be easier to modify the configuratons of iLight. For example, change the brightness in Running mode, Riding mode or Alarm mode, etc.
 
 ![app_pic][1]
 
 #### Q&A
 * How to **connect** it to the iLight?
 
-	The App will connect the iLight automatically **as soon as starting up**, entering the default password: **000000**. Restart it when it fails.
+	The App will connect the iLight automatically as soon as starting up, entering the default password: *000000*. Restart it when it fails.
 
 * How to refresh the **weather**？
 
-	The iLight gets weather information by the App in weather mode. Click **City select button** to choose the city, and the default is **Wuhan, CN**. Then, The App will get weather information automatically. If you want more information about the weather, click **Refresh button**. Then, the app will send it to the iLight to show.
+	The iLight gets weather information by the App in weather mode. Click **City select button** to choose the city, and the default is *Wuhan, CN*. Then, The App will get weather information automatically. If you want more information about the weather, click **Refresh button**. Then, the app will send it to the iLight to show.
 
 * Can it show **Chinese character** in the fans mode?
 
@@ -85,10 +85,10 @@ iLight can be controlled by the [IOS App][35]. Download it from the Appstore. Th
 - 1 SD Card
 - 1 iOS SmartPhone
 
-The list of haraware is shown in the picture following.  
 ![ilight_hardware][7]
 
 The iLight bar is a integrated module made by ourselves. The physical picture of it is as follows:
+
 ![ilight_bar][0]
 
 ### Required Software
@@ -103,9 +103,7 @@ The iLight bar is a integrated module made by ourselves. The physical picture of
 
 ## User Manual
 ### Before Running This Application
-Firstly, download source code of **iLight SmartDevice** from github, and install **iLight iOS App** in your iOS smartphone.
-
-Secondly,you have to install our app by downloading it in APPLESTORE if you want to have a better experience.
+Download source code of **iLight SmartDevice** from github, and install [**iLight iOS App**][35] in your iOS smartphone.
 
 The hardware resources are allocated as following table.
 
@@ -116,9 +114,9 @@ The hardware resources are allocated as following table.
 
 ### Run This Application
 
-Modify the settings for connecting to the App, as shown below:
+Modify the settings for connecting iLight to the App, as shown below:
 
-Open your ble and app after thie application is running.
+Start the bluetooth and app after iLight running on the EMSK.
 
 Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for example to show how to run this application.
 
@@ -131,7 +129,7 @@ Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for example to show how to ru
 
 #### Makefile
 
-- Selected FreeRTOS here, then you can use [FreeRTOS API][39] in your application:
+- Select FreeRTOS here, then you can use [FreeRTOS API][39] in your application:
 
 		# Selected OS
 		OS_SEL ?= freertos
