@@ -49,16 +49,16 @@ OS_SEL ?= freertos
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../..
+EMBARC_ROOT = ../../..
 
 MID_SEL = common
 
 # application source dirs
-APPL_CSRC_DIR = . ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
+APPL_CSRC_DIR = . ./function/os_task ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
 APPL_ASMSRC_DIR = .
 
 # application include dirs
-APPL_INC_DIR = . ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
+APPL_INC_DIR = . ./function/os_task ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
 
 APPL_DEFINES =
 
