@@ -43,7 +43,7 @@ iLight can be controlled by an IOS App [I-Lighting][35], you can download it in 
 * **Can we input chinese in fans mode?**   
   ilight can`t shows chinese in fans mode right now.   
  
-![app_pic][1]  
+	![app_pic][1]   
 ### Control method
 ![ilight_hardware][8]
 
@@ -166,7 +166,7 @@ The `function` folder contains the API implementations of functions.
 	|  mic                |        get data of voice and ouput                          |
     |  scope              |        output data and build it in visual scope             |
 [0]: ./doc/screenshots/hard_ware.JPG        "iLight_hardware"
-[1]: ./doc/screenshots/app_weather.JPG		"app_pic"
+[1]: ./doc/screenshots/app_weather.png		"app_pic"
 [2]: ./doc/screenshots/running_mode.gif
 [3]: ./doc/screenshots/alarming_mode.gif
 [4]: ./doc/screenshots/riding_mode.gif
