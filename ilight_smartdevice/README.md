@@ -41,8 +41,9 @@ iLight can be controlled by an IOS App [I-Lighting][35], you can download it in 
 * **How to fetch weather information？**   
   Weather mode fetchs weather information by the App, At first you can click the "City select button" to change the city where you are, the default city is "Wuhan,CN" . The App will automatically fetch weather information once when you start it, If you needs more times weather information, please click the "Refresh button". And the App will send the weather data to the iLight device to show.   
 * **Can we input chinese in fans mode?**   
-  ilight can`t shows chinese in fans mode right now.    
-	![app_pic][1]  
+  ilight can`t shows chinese in fans mode right now.   
+ 
+![app_pic][1]  
 ### Control method
 ![ilight_hardware][8]
 
