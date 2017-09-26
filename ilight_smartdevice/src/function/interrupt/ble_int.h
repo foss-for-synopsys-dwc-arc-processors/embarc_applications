@@ -57,4 +57,4 @@ extern uint32_t ble_uart_init(uint32_t baudrate);
 extern uint32_t ble_send(uint8_t *psend, uint8_t cnt);
 
 #endif /*_BLE_INT_H_ */
-/** @} end of group EMBARC_APP_FREERTOS_ILIGHT_SMARTDEVICE */
+/** @} end of group EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE */

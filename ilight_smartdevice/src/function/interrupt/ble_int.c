@@ -33,12 +33,12 @@
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IOT_ILIGHTING
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
  * \brief	function for bluetooth initial and interupt to devide mode
  */
 
 /**
- * \addtogroup	EMBARC_APP_FREERTOS_IOT_ILIGHTING
+ * \addtogroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
  * @{
  */
 /* embARC HAL */
@@ -48,7 +48,7 @@
 #include "task.h"
 #include "ble_int.h"
 
-#ifdef BLE_UART_EN
+#ifdef	BLE_UART_EN
 
 #define BLE_RX_HEAD_FIRST		'@' /* protocol of data transmission, the first head sign */
 #define BLE_RX_HEAD_SECOND		'#' /* protocol of data transmission, the second head sign */
@@ -117,21 +117,19 @@ static void ble_rx_state_second(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_ha
 		ble_mode_info_ptr->mode = LIGHT_MODE_MUSIC;
 		xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 		xTaskResumeFromISR( pattern_change_task_handle );
-	}
-	else if (data == BLE_RX_COMFOR_MODE) {
+	} else if (data == BLE_RX_COMFOR_MODE) {
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
 		ble_mode_info_ptr->mode = LIGHT_MODE_COMFOR;
 		xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 		xTaskResumeFromISR( pattern_change_task_handle );
-	}
-	else {
+	} else {
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = THIRD_STATE;
 		ble_rx_handle_ptr[BLE_MODE_TAG_BYTE] = data;
 	}
 }
 
 /**
- * \brief	 Function for deviding weather mode、running mode、alarm mode、riding mode、lighting mode、clock mode、time mode and fans mode.
+ * \brief	Function for deviding weather mode、running mode、alarm mode、riding mode、lighting mode、clock mode、time mode and fans mode.
  */
 static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_handle_ptr, uint8_t data)
 {
@@ -146,7 +144,6 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 			ble_rx_handle_ptr[BLE_STATE_BYTE] = FOURTH_STATE;
 			ble_mode_info_ptr->weather = data - '0';				
 		}
-		
 		break;
 	case BLE_RX_RUNNING_MODE:
 	case BLE_RX_ALARM_MODE:
@@ -209,8 +206,9 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 	case BLE_RX_ALARM_MODE:
 	case BLE_RX_RIDING_MODE:
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
-		if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_BRIGHT)
+		if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_BRIGHT) {
 			ble_mode_info_ptr->bright = data;
+		}
 		else if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_FREQUENCE) {
 			switch (data) {
 				case BLE_FREQUENCY_SLOW      : ble_mode_info_ptr->frequence = FREQUENCY_SLOW; 		break;
@@ -230,8 +228,7 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 				ble_mode_info_ptr->frequence = 0;
 			}
 			ble_mode_info_ptr->mode = LIGHT_MODE_ALARM;
-		}
-		else if (ble_rx_handle_ptr[BLE_MODE_TAG_BYTE] == BLE_RX_RIDING_MODE) {
+		} else if (ble_rx_handle_ptr[BLE_MODE_TAG_BYTE] == BLE_RX_RIDING_MODE) {
 			if (ble_mode_info_ptr->mode != LIGHT_MODE_RIDING) {
 				ble_mode_info_ptr->frequence = 0;
 			}
@@ -325,17 +322,17 @@ static void ble_irs(void *ptr)
 {
 	static uint8_t i;
 
- 	if (i % 2 == 0) {
- 		ble_data_recesive(ble_rx_buffer); /* Recive data from bluetooth */
+	if (i % 2 == 0) {
+		ble_data_recesive(ble_rx_buffer); /* Recive data from bluetooth */
 		EMBARC_PRINTF("ble uart input %d.\r\n", ble_rx_buffer);
- 	}
+	}
 
 	i++;
 	if (ble_uart->uart_control(UART_CMD_SET_RXINT_BUF, (void *)&ble_uart_int_buffer) != E_OK) {
 		EMBARC_PRINTF("ble_isr_buffer config error\r\n");
 	}
 
- 	if (ble_uart->uart_control(UART_CMD_SET_RXINT, (void *)(1)) != E_OK) {
+	if (ble_uart->uart_control(UART_CMD_SET_RXINT, (void *)(1)) != E_OK) {
 		EMBARC_PRINTF("Enable ble interrupt error\r\n");
 	}
 }
@@ -351,22 +348,22 @@ uint32_t ble_uart_init(uint32_t baudrate)
 	ble_uart = uart_get_dev(DW_UART_0_ID);
 
 	if (ble_uart == NULL) {
- 		EMBARC_PRINTF("Failed to get device of uart0 for blueteeth.\r\n");
- 		return -1;
- 	}
+		EMBARC_PRINTF("Failed to get device of uart0 for blueteeth.\r\n");
+		return -1;
+	}
 
 	if (ble_uart->uart_open(baudrate) == E_OPNED) {
 		ble_uart->uart_control(UART_CMD_SET_BAUD,(void *)(baudrate));
 		EMBARC_PRINTF("ble_uart open succeed\r\n");
-  	}
+	}
 
-  	DEV_BUFFER_INIT(&ble_uart_int_buffer, &ble_rx_buffer,1);
-  	if (ble_uart->uart_control(UART_CMD_SET_RXINT_BUF,(void *) & ble_uart_int_buffer) != E_OK){
+	DEV_BUFFER_INIT(&ble_uart_int_buffer, &ble_rx_buffer,1);
+	if (ble_uart->uart_control(UART_CMD_SET_RXINT_BUF,(void *) & ble_uart_int_buffer) != E_OK) {
 		EMBARC_PRINTF("ble_isr_buffer config error\r\n");
 		return -1;
 	}
 
-  	if (ble_uart->uart_control(UART_CMD_SET_RXCB,(void *) & ble_irs) != E_OK) {
+	if (ble_uart->uart_control(UART_CMD_SET_RXCB,(void *) & ble_irs) != E_OK) {
 		EMBARC_PRINTF("ble_isr config error\r\n");
 		return -1;
 	}
