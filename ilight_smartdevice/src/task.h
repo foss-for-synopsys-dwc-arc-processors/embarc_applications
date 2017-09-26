@@ -106,7 +106,6 @@ extern uint8_t light_num;
 
 extern uint8_t task_init(void);
 
-
 #endif /* _TASK_H_ */
 
 /** @} end of group EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE */

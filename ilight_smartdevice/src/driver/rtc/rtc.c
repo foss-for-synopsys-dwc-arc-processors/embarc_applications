@@ -54,7 +54,7 @@
 
 DEV_IIC *IIC_port;
 
-uint8_t point = (RTC_ADDR_IIC >> 1);
+uint32_t point = (RTC_ADDR_IIC >> 1);
 
 _RTC rtc;
 

@@ -53,14 +53,14 @@
 /*!<IIC write when the address byte data, + 1 for the read */
 #define	MUPADDRESS		0xD0	
 /* X-axis acceleration measurement value register,ACCEL_XOUT_H is those high 8 bits */
-#define	ACCEL_XOUT_H			0x3B
-#define ACCEL_XOUT_L			0x3C
+#define	ACCEL_XOUT_H		0x3B
+#define ACCEL_XOUT_L		0x3C
 /* Y-axis acceleration measurement value register,ACCEL_YOUT_H is those high 8 bits */
-#define	ACCEL_YOUT_H			0x3D
-#define ACCEL_YOUT_L			0x3E
+#define	ACCEL_YOUT_H		0x3D
+#define ACCEL_YOUT_L		0x3E
 /* Z-axis acceleration measurement value register,ACCEL_ZOUT_H is those high 8 bits */
-#define	ACCEL_ZOUT_H			0x3F
-#define ACCEL_ZOUT_L			0x40
+#define	ACCEL_ZOUT_H		0x3F
+#define ACCEL_ZOUT_L		0x40
 
 /*!<using IIC interface 0 */
 #define MPU6050_IIC_NUM         DW_IIC_0_ID

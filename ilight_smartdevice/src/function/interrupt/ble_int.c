@@ -46,7 +46,6 @@
 #include "embARC_debug.h"
 
 #include "task.h"
-
 #include "ble_int.h"
 
 #ifdef BLE_UART_EN

@@ -27,7 +27,7 @@
  *
  * \version 2017.07
  * \date 2017-08-20
- * \author Mr.WangS(mrwangs@huast.edu.cn)
+ * \author WangShuai(mrwangs@huast.edu.cn)
 --------------------------------------------- */
 /**
  * \file
@@ -39,7 +39,7 @@
  * \addtogroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
  * @{
  */
-#include <math.h>
+#include <stdlib.h>
 
 #include "imu.h"
 #include "mpu6050.h"
@@ -65,22 +65,22 @@
 #define WAVE_PNPNPN 		1638
 
 /* Some flags definition.*/
-#define GET_PEAK_PO 		0x11 /* The flag of getting the first positive peak order. */
-#define GET_PEAK_NE 		0x10 /* The flag of getting the first negative peak order. */
+#define GET_PEAK_PO 			0x11 /* The flag of getting the first positive peak order. */
+#define GET_PEAK_NE 			0x10 /* The flag of getting the first negative peak order. */
 
 /* Some threshold which is used in data dealing definition. */
-#define JUDGE_WAVE_PO_THRESHOLD 0.3  /* The threshold of determing the acceleration waveform peak is positive. */
-#define JUDGE_WAVE_NE_THRESHOLD 0.5  /* The threshold of determing the acceleration waveform peak is negative. */
-#define JUDGE_SYMBOL_THRESHOLD 	800  /* The threshold of determing the symbol of acc. */
-#define JUDGE_START_THRESHOLD 	200  
-#define JUDGE_STOP_THRESHOLD 	40
-#define JUDGE_YACC_SWING_THRESHOLD 400
-#define JUDGE_YACC_CIRLE_THRESHOLD 300
+#define JUDGE_WAVE_PO_THRESHOLD 	0.3  /* The threshold of determing the acceleration waveform peak is positive. */
+#define JUDGE_WAVE_NE_THRESHOLD 	0.5  /* The threshold of determing the acceleration waveform peak is negative. */
+#define JUDGE_SYMBOL_THRESHOLD 		800  /* The threshold of determing the symbol of acc. */
+#define JUDGE_START_THRESHOLD 		200  
+#define JUDGE_STOP_THRESHOLD 		40
+#define JUDGE_YACC_SWING_THRESHOLD 	400
+#define JUDGE_YACC_CIRLE_THRESHOLD 	300
 
-#define PEAK_WAVE_NEGATIVE 	0x02 /* The record of negative peak. */
-#define PEAK_WAVE_POSITIVE 	0x01 /* The record of negative peak. */     
-#define ACC_FILTER_NUM 		10   /* The number of filtering windows. */	
-#define ACC_BUF_WINDOW_NUM 	15   /* The number of dynamically updated caches. */			
+#define PEAK_WAVE_NEGATIVE 		0x02 /* The record of negative peak. */
+#define PEAK_WAVE_POSITIVE 		0x01 /* The record of negative peak. */     
+#define ACC_FILTER_NUM 			10   /* The number of filtering windows. */	
+#define ACC_BUF_WINDOW_NUM 		15   /* The number of dynamically updated caches. */			
 
 /* Acceleration filter cache.*/
 typedef struct acc_upbuf {
@@ -115,6 +115,16 @@ static uint8_t partern_rec_startflag;
 static uint8_t shaking_rec_startflag;		
 
 /**
+ * \brief	Init the device which is used to get data of acceleration.
+ * \parameter gyro_rng	Set the range of gyro,0(250 degree/s),1(500 degree/2),2(1000 degree/s),3(2000 degree/s).
+ * \parameter accel_rng	Set the range of accelerometer,0(2g),1(4g),2(8g),3(16g).
+ */
+void imu_init(uint8_t gyro_rng,uint8_t acc_rng)
+{
+	mpu6050_init(gyro_rng,acc_rng);
+}
+
+/**
  * \brief	Get the start and stop point and set the first position of partern_rec_startflag.
  */
 void imu_get_stastp_point(void)
@@ -123,7 +133,7 @@ void imu_get_stastp_point(void)
 	if ((imu_mpu6050_update_ptr->acc_judge_dif_buf[1] >= JUDGE_START_THRESHOLD) && \
  		(imu_mpu6050_update_ptr->acc_judge_dif_buf[0] >= JUDGE_START_THRESHOLD)) {
 		if(imu_mpu6050_update_ptr->acc_judge_dif_buf[3] <= JUDGE_START_THRESHOLD) {
-			partern_rec_startflag|=0x01;
+			partern_rec_startflag |= 0x01;
 		}
 	}
 	/* If the start action has been got and the value of acceleration difference is smaller than the threshold of stop,set the eighth bit of partern_rec_startflag one. */
@@ -239,13 +249,13 @@ void imu_acc_feature_get(int32_t *point,float multi_throd,uint32_t *recognition,
 	{
 	/* If the last feature is not negative(Judge by the second bit of last_value_flag,if the second bit of last_value_flag is not one.),\
 	   and the value is smaller than min_value.*/
-		if (((*point) < min_value) && ((last_value_flag&0x02) == 0x00)) {
-			(*recognition) = ((*recognition)<<2) | PEAK_WAVE_NEGATIVE;
+		if (((*point) < min_value) && ((last_value_flag & 0x02) == 0x00)) {
+			(*recognition) = ((*recognition) << 2) | PEAK_WAVE_NEGATIVE;
 			last_value_flag &= 0x00;
 			last_value_flag |= PEAK_WAVE_NEGATIVE;
 		}
 	/* If the last feature is not zero(Judge by the first and second bits of last_value_flag,if these bits of last_value_flag are zero.) */
-		if ((last_value_flag&0x03) != 0x00) {
+		if ((last_value_flag & 0x03) != 0x00) {
 			if (((*point) > nega_zero_value) && (*point) < posi_zero_value) {
 				last_value_flag &= 0x00;
 			}
@@ -287,9 +297,9 @@ void imu_mpu6050_update(void)
 	acc_temp[1] = acc_temp[1] / ACC_FILTER_NUM;
 	acc_temp[2] = acc_temp[2] / ACC_FILTER_NUM;
 
-	imu_mpu6050_update_ptr->acc_x = 16*((acc_temp[0]) * 1000) / (32768);
-	imu_mpu6050_update_ptr->acc_y = 16*((acc_temp[1]) * 1000) / (32768);
-	imu_mpu6050_update_ptr->acc_z = 16*((acc_temp[2]) * 1000) / (32768);
+	imu_mpu6050_update_ptr->acc_x = 16 * ((acc_temp[0]) * 1000) / (32768);
+	imu_mpu6050_update_ptr->acc_y = 16 * ((acc_temp[1]) * 1000) / (32768);
+	imu_mpu6050_update_ptr->acc_z = 16 * ((acc_temp[2]) * 1000) / (32768);
 	/* Upte those buffer which is update dynamically. */
 	for (i = ACC_BUF_WINDOW_NUM-1;i > 0;i--) {
 		imu_mpu6050_update_ptr->acc_judge_x_buf[i] = imu_mpu6050_update_ptr->acc_judge_x_buf[i-1];

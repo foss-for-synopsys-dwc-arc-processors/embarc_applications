@@ -66,7 +66,7 @@ uint8_t adc_get(void)
  */
 void mic_init(void)
 {
-	uint8_t point;
+	uint32_t point;
 	point = (0x90 >> 1);
 	adc_iic_port = iic_get_dev( DW_IIC_0_ID );
 }
@@ -77,7 +77,7 @@ void mic_init(void)
  */
 void iic_point_mic(void)
 {
-	uint8_t point = (0x90 >> 1);
+	uint32_t point = (0x90 >> 1);
 	if (adc_iic_port->iic_control( IIC_CMD_MST_SET_TAR_ADDR, (void *)point) == E_OK) {
 		EMBARC_PRINTF("Target reset mic OK!\n");
 	}

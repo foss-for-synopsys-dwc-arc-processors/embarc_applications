@@ -27,17 +27,14 @@
  *
  * \version 2017.09
  * \date 2017-09-1
- * \author Mr.WangS(mrwangshuai@hust.edu.cn)
+ * \author WangShuai(mrwangshuai@hust.edu.cn)
 --------------------------------------------- */
 
 /**
  * \defgroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE	embARC IOT iLight synthesize
  * \ingroup	EMBARC_APPS_TOTAL
  * \ingroup	EMBARC_APPS_OS_FREERTOS
- * \ingroup	EMBARC_APPS_MID_LWIP
- * \ingroup	EMBARC_APPS_MID_WAKAAMA
  * \ingroup	EMBARC_APPS_MID_FATFS
- * \ingroup	EMBARC_APPS_MID_AWS
  * \brief	embARC IOT iLight smartdevice
  *
  * \details
@@ -67,7 +64,7 @@
 
 /**
  * \file
- * \ingroup	EMBARC_APP_FREERTOS_IOT_IBABY_SMARTHOME_MULTINODE_WEARABLE_NODE
+ * \ingroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
  * \brief	main source of iLight Smartdevice 
  */
 
@@ -78,28 +75,26 @@
 /* embARC HAL */
 #include "embARC.h"
 #include "embARC_debug.h"
-#include "task.h"
+/* embARC HAL*/
 #include "light_mode.h"
-#include "mpu6050.h"
 #include "imu.h"
 #include "scope.h"
 #include "ble_int.h"
-
-
-// #define SCOPE_EN	(1) 
+#include "mic.h"
+#include "task.h"
+ 
 void main()
 {
-	#ifdef SCOPE_EN
-		scope_init(UART_BAUDRATE_115200);
-	#else
-		ble_uart_init(UART_BAUDRATE_9600);
-	#endif
+#ifdef SCOPE_EN
+	scope_init(UART_BAUDRATE_115200);
+#else
+	ble_uart_init(UART_BAUDRATE_9600);
+#endif
 	light_ctr_init();
 	mic_init();
-	mpu6050_init(2,3);
+	imu_init(GYRO_RNG,ACCEL_RNG);
 	task_init();
-	while(1) 
-	{
+	while(1)  {
 		vTaskSuspend(NULL);
 	}
 }

@@ -56,6 +56,10 @@
 /* The max number of data. */
 #define ACC_DATA_CON_NUM 	120 
 
+#define GYRO_RNG 			2
+#define ACCEL_RNG 			3
+
+
 /* MPU6050 data update structure */
 typedef struct imu_mpu6050_update {
 	int32_t acc_x; /* The acceleration of x_axis */
@@ -68,6 +72,9 @@ typedef struct imu_mpu6050_update {
 }MPU050_UPDATA,*MPU050_UPDATA_PTR;
 
 MPU050_UPDATA *imu_mpu6050_update_ptr;
+
+/*function init the mpu6050*/
+extern void imu_init(uint8_t gyro_rng,uint8_t acc_rng);
 
 /* function pattern recognition */
 extern uint8_t imu_pattern_recongnition(void);
