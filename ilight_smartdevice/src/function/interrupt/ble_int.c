@@ -142,8 +142,7 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 			ble_mode_info_ptr->mode = LIGHT_MODE_WEATHER;
 			xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 			xTaskResumeFromISR( pattern_change_task_handle );				
-		}
-		else {
+		} else {
 			ble_rx_handle_ptr[BLE_STATE_BYTE] = FOURTH_STATE;
 			ble_mode_info_ptr->weather = data - '0';				
 		}
@@ -308,12 +307,11 @@ Inline void ble_data_recesive(uint8_t data)
 	} else if ((ble_rx_handle[BLE_STATE_BYTE] == SECOND_STATE) && \
 			(data <= (BLE_RX_MIN_MODE + MAX_MODE)) && (data >= BLE_RX_MIN_MODE)) {
 			ble_rx_state_second(&ble_mode_info, ble_rx_handle, data);
-		} else if (ble_rx_handle[BLE_STATE_BYTE] == THIRD_STATE) {
+	} else if (ble_rx_handle[BLE_STATE_BYTE] == THIRD_STATE) {
 			ble_rx_state_third(&ble_mode_info, ble_rx_handle, data);
-		} else if (ble_rx_handle[BLE_STATE_BYTE] == FOURTH_STATE) {
+	} else if (ble_rx_handle[BLE_STATE_BYTE] == FOURTH_STATE) {
 			ble_rx_state_forth(&ble_mode_info, ble_rx_handle, data);
-		}
-	else {
+	} else {
 		ble_rx_handle[BLE_STATE_BYTE] = INITIAL_STATE;
 	}
 }
@@ -331,10 +329,12 @@ static void ble_irs(void *ptr)
  		ble_data_recesive(ble_rx_buffer); /* Recive data from bluetooth */
 		EMBARC_PRINTF("ble uart input %d.\r\n", ble_rx_buffer);
  	}
+
 	i++;
 	if (ble_uart->uart_control(UART_CMD_SET_RXINT_BUF, (void *)&ble_uart_int_buffer) != E_OK) {
 		EMBARC_PRINTF("ble_isr_buffer config error\r\n");
 	}
+
  	if (ble_uart->uart_control(UART_CMD_SET_RXINT, (void *)(1)) != E_OK) {
 		EMBARC_PRINTF("Enable ble interrupt error\r\n");
 	}
@@ -354,23 +354,28 @@ uint32_t ble_uart_init(uint32_t baudrate)
  		EMBARC_PRINTF("Failed to get device of uart0 for blueteeth.\r\n");
  		return -1;
  	}
+
 	if (ble_uart->uart_open(baudrate) == E_OPNED) {
 		ble_uart->uart_control(UART_CMD_SET_BAUD,(void *)(baudrate));
 		EMBARC_PRINTF("ble_uart open succeed\r\n");
   	}
+
   	DEV_BUFFER_INIT(&ble_uart_int_buffer, &ble_rx_buffer,1);
   	if (ble_uart->uart_control(UART_CMD_SET_RXINT_BUF,(void *) & ble_uart_int_buffer) != E_OK){
 		EMBARC_PRINTF("ble_isr_buffer config error\r\n");
 		return -1;
 	}
+
   	if (ble_uart->uart_control(UART_CMD_SET_RXCB,(void *) & ble_irs) != E_OK) {
 		EMBARC_PRINTF("ble_isr config error\r\n");
 		return -1;
 	}
+
 	if (ble_uart->uart_control(UART_CMD_SET_RXINT, (void *)(1)) != E_OK) {
 		EMBARC_PRINTF("Enable ble interrupt error\r\n");
 		return -1;
 	}
+	
 	return 0;
 }
 
