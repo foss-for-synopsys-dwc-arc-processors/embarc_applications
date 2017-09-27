@@ -1,4 +1,3 @@
-
 /* ------------------------------------------
  * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
@@ -29,7 +28,7 @@
  *
  * \version 2017.03
  * \date 2017-08-20
- * \author Zhiwei Zhang
+ * \author Zhiwei Zhang(1812816853@qq.com)
 --------------------------------------------- */
 
 

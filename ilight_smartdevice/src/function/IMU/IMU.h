@@ -44,9 +44,6 @@
 #ifndef _IMU_H_
 #define _IMU_H_
 
-#include "embARC.h"
-#include "embARC_debug.h"
-
 /* The type of action definition. */
 #define ACTION_LEFT		0x01
 #define ACTION_RIGHT		0x02

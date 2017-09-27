@@ -28,7 +28,7 @@
  *
  * \version 2017.03
  * \date 2017-08-20
- * \author Zhiwei Zhang
+ * \author Zhiwei Zhang(1812816853@qq.com)
 --------------------------------------------- */
 
 
@@ -72,7 +72,6 @@ uint64_t word[26][8] =	{
 void light_show_word(uint8_t num)
 {
 	int i;
-	//EMBARC_PRINTF("WORD SHOW!!%d\r\n",num);
 	for(i = 0;i < 7;i++) {
 		light_ctr_rgb(0xff00,LIGHT_ROW_MIDDLE,0x00,0x0f,0x00);
 		vTaskDelay(1);

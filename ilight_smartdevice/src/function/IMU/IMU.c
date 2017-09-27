@@ -39,8 +39,13 @@
  * \addtogroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
  * @{
  */
-#include <stdlib.h>
 
+/* embARC HAL */
+#include "embARC.h"
+#include "embARC_debug.h"
+/* standard HAL */
+#include <stdlib.h>
+/* custom HAL */
 #include "imu.h"
 #include "mpu6050.h"
 #include "scope.h"
@@ -61,26 +66,26 @@
 #define WAVE_PNPNP 		409
 #define WAVE_PNNPN 		422
 #define WAVE_NPNPN 		614
-#define WAVE_NPNPP 		618
-#define WAVE_PNPNPN 		1638
+#define WAVE_NPNPP		618
+#define WAVE_PNPNPN		1638
 
 /* Some flags definition.*/
-#define GET_PEAK_PO 			0x11 /* The flag of getting the first positive peak order. */
-#define GET_PEAK_NE 			0x10 /* The flag of getting the first negative peak order. */
+#define GET_PEAK_PO			0x11 /* The flag of getting the first positive peak order. */
+#define GET_PEAK_NE			0x10 /* The flag of getting the first negative peak order. */
 
 /* Some threshold which is used in data dealing definition. */
 #define JUDGE_WAVE_PO_THRESHOLD 	0.3  /* The threshold of determing the acceleration waveform peak is positive. */
 #define JUDGE_WAVE_NE_THRESHOLD 	0.5  /* The threshold of determing the acceleration waveform peak is negative. */
 #define JUDGE_SYMBOL_THRESHOLD 		800  /* The threshold of determing the symbol of acc. */
-#define JUDGE_START_THRESHOLD 		200  
+#define JUDGE_START_THRESHOLD 		200
 #define JUDGE_STOP_THRESHOLD 		40
 #define JUDGE_YACC_SWING_THRESHOLD 	400
 #define JUDGE_YACC_CIRLE_THRESHOLD 	300
 
 #define PEAK_WAVE_NEGATIVE 		0x02 /* The record of negative peak. */
-#define PEAK_WAVE_POSITIVE 		0x01 /* The record of negative peak. */     
-#define ACC_FILTER_NUM 			10   /* The number of filtering windows. */	
-#define ACC_BUF_WINDOW_NUM 		15   /* The number of dynamically updated caches. */			
+#define PEAK_WAVE_POSITIVE 		0x01 /* The record of negative peak. */
+#define ACC_FILTER_NUM 			10   /* The number of filtering windows. */
+#define ACC_BUF_WINDOW_NUM 		15   /* The number of dynamically updated caches. */
 
 /* Acceleration filter cache.*/
 typedef struct acc_upbuf {
@@ -112,7 +117,7 @@ MPU050_UPDATA *imu_mpu6050_update_ptr=&n_data;
  * 0 bit 	Set 1 if capture the start signal of action.
 */
 static uint8_t partern_rec_startflag;
-static uint8_t shaking_rec_startflag;		
+static uint8_t shaking_rec_startflag;
 
 /**
  * \brief	Init the device which is used to get data of acceleration.
@@ -129,16 +134,18 @@ void imu_init(uint8_t gyro_rng,uint8_t acc_rng)
  */
 void imu_get_stastp_point(void)
 {
-	/* If the value of acceleration difference is bigger than the threshold of start,set the first bit of partern_rec_startflag one.Get the start of action. */
+	/* If the value of acceleration difference is bigger than the threshold of start,set the first bit of  \
+	
+		partern_rec_startflag one.Get the start of action. */
 	if ((imu_mpu6050_update_ptr->acc_judge_dif_buf[1] >= JUDGE_START_THRESHOLD) && \
- 		(imu_mpu6050_update_ptr->acc_judge_dif_buf[0] >= JUDGE_START_THRESHOLD)) {
+		(imu_mpu6050_update_ptr->acc_judge_dif_buf[0] >= JUDGE_START_THRESHOLD)) {
 		if(imu_mpu6050_update_ptr->acc_judge_dif_buf[3] <= JUDGE_START_THRESHOLD) {
 			partern_rec_startflag |= 0x01;
 		}
 	}
 	/* If the start action has been got and the value of acceleration difference is smaller than the threshold of stop,set the eighth bit of partern_rec_startflag one. */
 	if ((imu_mpu6050_update_ptr->acc_judge_dif_buf[1] <= JUDGE_STOP_THRESHOLD) && \
- 		(imu_mpu6050_update_ptr->acc_judge_dif_buf[0] <= JUDGE_STOP_THRESHOLD)) {
+		(imu_mpu6050_update_ptr->acc_judge_dif_buf[0] <= JUDGE_STOP_THRESHOLD)) {
 		if ((partern_rec_startflag&0x01) && (imu_mpu6050_update_ptr->acc_judge_dif_buf[3] >= JUDGE_STOP_THRESHOLD)) {
 			partern_rec_startflag &= 0xfe;
 			partern_rec_startflag |= 0x80;

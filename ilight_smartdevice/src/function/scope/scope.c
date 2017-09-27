@@ -28,7 +28,7 @@
  *
  * \version 2017.03
  * \date 2017-08-20
- * \author Zhiwei Zhang
+ * \author Zhiwei Zhang(1812816853@qq.com)
 --------------------------------------------- */
 
 
@@ -43,9 +43,10 @@
  * @{
  */
 
+/*embARC HAL*/
 #include "embARC.h"
 #include "embARC_debug.h"
-
+/*custom HAL*/
 #include "scope.h"
 
 /* scope operation */
@@ -54,9 +55,8 @@ static DEV_UART *scope_uart;
 /**
  * \brief	CRC check
  * \details	Software crc check.
- * \param[in]	pbuf: the buffer of date to crc check,
-		crc_cnt: the number of bytes to crc check    
- * \param[out]	the result of crc check  
+ * \param	pbuf: the buffer of date to crc check,crc_cnt: the number of bytes to crc check
+ * \param	the result of crc check
  */
 static uint16_t crc_check(uint8_t *pbuf, uint8_t crc_cnt)
 {
@@ -74,10 +74,10 @@ static uint16_t crc_check(uint8_t *pbuf, uint8_t crc_cnt)
 }
 
 /**
- * \brief  Initial the scope 
- * \details Initial the scope using uart0.
- * \param[in] baudrate: the baudrate of uart0
- * \param[out] -1 for error, 0 for succeed 
+ * \brief	Initial the scope 
+ * \details	Initial the scope using uart0
+ * \param[in]	baudrate: the baudrate of uart0
+ * \param[out]	-1 for error, 0 for succeed 
  */
 uint32_t scope_init(uint32_t baudrate)
 {
@@ -107,8 +107,9 @@ uint32_t output_data(int16_t *out_data)
 	uint16_t temp[4] = {0};
 	uint8_t i;
 	uint16_t crc16 = 0;
-	for (i = 0; i < 4; i++ )
+	for (i = 0; i < 4; i++ ) {
 		temp[i] = (uint16_t)out_data[i];
+	}
 
 	for (i = 0; i < 4; i++ ) {
 		data_buf[i * 2] = (uint8_t)(temp[i] % 256);

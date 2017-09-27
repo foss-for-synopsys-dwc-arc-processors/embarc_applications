@@ -44,7 +44,7 @@
 /* embARC HAL */
 #include "embARC.h"
 #include "embARC_debug.h"
-
+/*custom HAL*/
 #include "task.h"
 #include "ble_int.h"
 
@@ -87,7 +87,7 @@
 #define THIRD_STATE			3
 #define FOURTH_STATE			4
 
-#define BLE_STATE_BYTE			(BLE_RX_HANDLE_BUF_MAX-1) 
+#define BLE_STATE_BYTE			(BLE_RX_HANDLE_BUF_MAX-1)
 #define BLE_DATA_LEN_BYTE		(BLE_RX_HANDLE_BUF_MAX-2)
 #define BLE_DATA_CNT_BYTE		(BLE_RX_HANDLE_BUF_MAX-3)
 #define BLE_MODE_TAG_BYTE		(BLE_RX_HANDLE_BUF_MAX-4)
@@ -139,10 +139,10 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 			ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
 			ble_mode_info_ptr->mode = LIGHT_MODE_WEATHER;
 			xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
-			xTaskResumeFromISR( pattern_change_task_handle );				
+			xTaskResumeFromISR( pattern_change_task_handle );
 		} else {
 			ble_rx_handle_ptr[BLE_STATE_BYTE] = FOURTH_STATE;
-			ble_mode_info_ptr->weather = data - '0';				
+			ble_mode_info_ptr->weather = data - '0';
 		}
 		break;
 	case BLE_RX_RUNNING_MODE:
@@ -211,7 +211,7 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 		}
 		else if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_FREQUENCE) {
 			switch (data) {
-				case BLE_FREQUENCY_SLOW      : ble_mode_info_ptr->frequence = FREQUENCY_SLOW; 		break;
+				case BLE_FREQUENCY_SLOW	     : ble_mode_info_ptr->frequence = FREQUENCY_SLOW; 		break;
 				case BLE_FREQUENCY_NORMAL    : ble_mode_info_ptr->frequence = FREQUENCY_NORMAL; 	break;
 				case BLE_FREQUENCY_FAST      : ble_mode_info_ptr->frequence = FREQUENCY_FAST; 		break;
 				case BLE_FREQUENCY_VERY_FAST : ble_mode_info_ptr->frequence = FREQUENCY_VERY_FAST; 	break;
@@ -290,7 +290,7 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 /**
  * \brief	Recive data from bluetooth
  * \details	Transfer the data to the useful format.
- * \param[in]	data:the data received   
+ * \param	data:the data received   
  */
 Inline void ble_data_recesive(uint8_t data)
 {
@@ -316,7 +316,7 @@ Inline void ble_data_recesive(uint8_t data)
 /**
  * \brief	The isr of bluetooth
  * \details	The callback function of bluetooth isr.
- * \param[in]	ptr: nonsense   
+ * \param	ptr: nonsense   
  */
 static void ble_irs(void *ptr)
 {
@@ -340,8 +340,8 @@ static void ble_irs(void *ptr)
 /**
  * \brief	Initialize the bluetooth device
  * \details	Initialize the uart0 driver for bluetooth
- * \param[in]	baudrate: the baudrate of uart0
- * \param[out]	-1 for error,0 for succeed  
+ * \param	baudrate: the baudrate of uart0
+ * \param	-1 for error,0 for succeed  
  */
 uint32_t ble_uart_init(uint32_t baudrate)
 {
@@ -379,9 +379,9 @@ uint32_t ble_uart_init(uint32_t baudrate)
 /**
  * \brief	Send data by bluetooth 
  * \details	Send cnt bytes using bluetooth in uart0.
- * \param[in]	psend: the buffer of date sended in uart0
+ * \param	psend: the buffer of date sended in uart0
  *		cnt: the number of bytes to send
- * \param[out]	-1 for error
+ * \param	-1 for error
  *		0 for succeed    
  */
 uint32_t ble_send(uint8_t *psend, uint8_t cnt)

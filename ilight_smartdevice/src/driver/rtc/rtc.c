@@ -28,7 +28,7 @@
  *
  * \version 2017.03
  * \date 2017-08-20
- * \author Zhiwei Zhang
+ * \author Zhiwei Zhang(1812816853@qq.com)
 --------------------------------------------- */
 
 
@@ -54,11 +54,13 @@
 
 DEV_IIC *IIC_port;
 
-uint32_t point = (RTC_ADDR_IIC >> 1);
+uint8_t point = (RTC_ADDR_IIC >> 1);
 
 _RTC rtc;
 
-/** initialize pcf8563 */
+/** 
+ * \brief	initialize pcf8563 
+ */
 void pcf8563_iic_init()
 {
 	IIC_port = iic_get_dev(DW_IIC_0_ID);
@@ -78,8 +80,8 @@ void pcf8563_iic_init()
 
 /**
  * \brief	Write one byte date to RTC.
- * \parameter address	Befor write dataake the slave device address point to pcf8653.
- * \parameter time_data	The time data you want to write
+ * \parameter	address	Befor write dataake the slave device address point to pcf8653.
+ * \parameter	time_data	The time data you want to write
  */
 void pcf8653_write_data(uint8_t address, uint8_t time_data)
 {
@@ -97,8 +99,8 @@ void pcf8653_write_data(uint8_t address, uint8_t time_data)
 
 /**
  * \brief	Converts data from decimal to BCD.
- * \parameter	num 	The data you want to convert
- * \retval	 num 	The data after converting
+ * \parameter	num	The data you want to convert
+ * \retval	num	The data after converting
  */
 uint8_t he2bcd(uint8_t num)
 {
@@ -111,7 +113,7 @@ uint8_t he2bcd(uint8_t num)
 
 /**
  * \brief	Read data from pcf8563
- * \param	address 	The address of data you want to read
+ * \param	address	The address of data you want to read
  * \param	count 	The length of data
  * \param	buff 	The data read buff
  */
@@ -156,7 +158,7 @@ void pcf8563_bcd2de()
 
 /**
  * \brief	make the slave device of iic be rtc.
-*/
+ */
 void iic0_point_rtc(void)
 {
 	if (IIC_port->iic_control(IIC_CMD_ENA_DEV, (void *)point) != E_OK) {
@@ -270,7 +272,7 @@ void check_cnt()
 	uint8_t read;
 	pcf8563_data_read(0x01, 1, &read);
 	/* check flag */
-	if (read & 0x04) {        //0000_0100
+	if (read & 0x04) {
 		/* times up */
 
 		/* clear_flag */
