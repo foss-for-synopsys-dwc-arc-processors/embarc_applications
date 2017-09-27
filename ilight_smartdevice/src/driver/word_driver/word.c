@@ -42,10 +42,10 @@
  * \addtogroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
  * @{
  */
-#include "embARC.h"
-#include "embARC_debug.h"
 
 #include "word.h"
+#include "dev_common.h"
+#include "light_driver.h"
 
 /* word model matrix */
 uint64_t word[26][8] =	{

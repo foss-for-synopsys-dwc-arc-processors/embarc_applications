@@ -53,15 +53,15 @@
 /* The max number of data. */
 #define ACC_DATA_CON_NUM 	120 
 
-#define GYRO_RNG 			2
-#define ACCEL_RNG 			3
+#define GYRO_RNG 		2
+#define ACCEL_RNG 		3
 
 
 /* MPU6050 data update structure */
 typedef struct imu_mpu6050_update {
 	int32_t acc_x; /* The acceleration of x_axis */
-	int32_t acc_y;					
-	int32_t acc_z;						
+	int32_t acc_y;
+	int32_t acc_z;
 	int32_t acc_judge_x_buf[ACC_DATA_CON_NUM]; /* The buffer of x_axis's acceleration that is used to pattern reconition.*/
 	int32_t acc_judge_y_buf[ACC_DATA_CON_NUM];		
 	int32_t acc_judge_z_buf[ACC_DATA_CON_NUM];	

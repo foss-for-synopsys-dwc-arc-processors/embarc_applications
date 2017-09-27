@@ -45,13 +45,6 @@
 
 #include "embARC.h"
 #include "embARC_debug.h"
-#include "light_mode.h"
-#include "light_driver.h"
-#include "imu.h"
-#include "scope.h"
-#include "mic.h"
-#include "mpu6050.h"
-#include "rtc.h"
 
 #define MPU_PERIOD_TICK		15
 #define REC_PERIOD_TICK		30

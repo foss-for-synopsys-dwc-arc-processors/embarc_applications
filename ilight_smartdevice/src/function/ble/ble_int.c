@@ -47,6 +47,7 @@
 /*custom HAL*/
 #include "task.h"
 #include "ble_int.h"
+#include "light_mode.h"
 
 #ifdef	BLE_UART_EN
 

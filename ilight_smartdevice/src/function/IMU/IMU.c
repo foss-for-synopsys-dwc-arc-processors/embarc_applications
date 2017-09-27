@@ -143,7 +143,8 @@ void imu_get_stastp_point(void)
 			partern_rec_startflag |= 0x01;
 		}
 	}
-	/* If the start action has been got and the value of acceleration difference is smaller than the threshold of stop,set the eighth bit of partern_rec_startflag one. */
+	/* If the start action has been got and the value of acceleration difference is smaller than the threshold of stop,set 
+		the eighth bit of partern_rec_startflag one. */
 	if ((imu_mpu6050_update_ptr->acc_judge_dif_buf[1] <= JUDGE_STOP_THRESHOLD) && \
 		(imu_mpu6050_update_ptr->acc_judge_dif_buf[0] <= JUDGE_STOP_THRESHOLD)) {
 		if ((partern_rec_startflag&0x01) && (imu_mpu6050_update_ptr->acc_judge_dif_buf[3] >= JUDGE_STOP_THRESHOLD)) {
@@ -158,7 +159,8 @@ void imu_get_stastp_point(void)
  */
 void imu_shaing_get_stastp_point(void)
 {
-	/* If the value of acceleration difference is bigger than the threshold of start,set the first bit of partern_rec_startflag one.Get the start of action. */
+	/* If the value of acceleration difference is bigger than the threshold of start,set the first bit of 
+		partern_rec_startflag one.Get the start of action. */
 	if ((imu_mpu6050_update_ptr->acc_judge_dif_buf[1] >= JUDGE_START_THRESHOLD) && \
 		(imu_mpu6050_update_ptr->acc_judge_dif_buf[0] >= JUDGE_START_THRESHOLD)) {
 		if (imu_mpu6050_update_ptr->acc_judge_dif_buf[3] <= JUDGE_START_THRESHOLD) {
@@ -248,26 +250,31 @@ void imu_acc_feature_get(int32_t *point,float multi_throd,uint32_t *recognition,
 	min_value = (min_value*multi_throd < -JUDGE_SYMBOL_THRESHOLD) ? min_value * multi_throd : -JUDGE_SYMBOL_THRESHOLD;
 
 	/* Judge the positive and negative of the intercept waveform 
-	  If the judgment waveform is positive，the variable "(*recognition)" is shifted by two bits and takes 0x02.Take "last_value_flag" with 0x02. \
-	  If the judgment waveform is negative，the variable "(*recognition)" is shifted by two bits and takes 0x01.Take "last_value_flag" with 0x01. \
+	  If the judgment waveform is positive，the variable "(*recognition)" is shifted by two bits and 
+	  	takes 0x02.Take "last_value_flag" with 0x02. \
+	  If the judgment waveform is negative，the variable "(*recognition)" is shifted by two bits and 
+	  	takes 0x01.Take "last_value_flag" with 0x01. \
 	  Take "last_value_flag" with 0x00.
 	*/
 	for (i = ACC_DATA_CON_NUM-1;i >= ACC_BUF_WINDOW_NUM;i--)
 	{
-	/* If the last feature is not negative(Judge by the second bit of last_value_flag,if the second bit of last_value_flag is not one.),\
+	/* If the last feature is not negative(Judge by the second bit of last_value_flag,if the second 
+		bit of last_value_flag is not one.),\
 	   and the value is smaller than min_value.*/
 		if (((*point) < min_value) && ((last_value_flag & 0x02) == 0x00)) {
 			(*recognition) = ((*recognition) << 2) | PEAK_WAVE_NEGATIVE;
 			last_value_flag &= 0x00;
 			last_value_flag |= PEAK_WAVE_NEGATIVE;
 		}
-	/* If the last feature is not zero(Judge by the first and second bits of last_value_flag,if these bits of last_value_flag are zero.) */
+	/* If the last feature is not zero(Judge by the first and second bits of last_value_flag,if these 
+		bits of last_value_flag are zero.) */
 		if ((last_value_flag & 0x03) != 0x00) {
 			if (((*point) > nega_zero_value) && (*point) < posi_zero_value) {
 				last_value_flag &= 0x00;
 			}
 		}
-	/* If the last feature is not positive(Judge by the first bit of last_value_flag,if the first bit of last_value_flag is not one.) */
+	/* If the last feature is not positive(Judge by the first bit of last_value_flag,if the first bit
+		 of last_value_flag is not one.) */
 		if(((*point) > max_value) && (((*recognition) & 0x01) == 0x00)) {
 			(*recognition) = ((*recognition) << 2) | PEAK_WAVE_POSITIVE;
 			last_value_flag &= 0x00;
@@ -290,7 +297,7 @@ void imu_mpu6050_update(void)
 	uint32_t acc_dif_temp = 0;
 	int acc_temp[3] = {0};
 
-	acc_upbuf.acc_x_buf[filter_cnt] = mpu6050_get_data(ACCEL_XOUT_H);		//Update the moving average
+	acc_upbuf.acc_x_buf[filter_cnt] = mpu6050_get_data(ACCEL_XOUT_H);	//Update the moving average
 	acc_upbuf.acc_y_buf[filter_cnt] = mpu6050_get_data(ACCEL_YOUT_H);
 	acc_upbuf.acc_z_buf[filter_cnt] = mpu6050_get_data(ACCEL_ZOUT_H); 	
 
@@ -298,7 +305,7 @@ void imu_mpu6050_update(void)
 		acc_temp[0] += acc_upbuf.acc_x_buf[i];
 		acc_temp[1] += acc_upbuf.acc_y_buf[i];
 		acc_temp[2] += acc_upbuf.acc_z_buf[i];
-  	}
+	}
 
 	acc_temp[0] = acc_temp[0] / ACC_FILTER_NUM;
 	acc_temp[1] = acc_temp[1] / ACC_FILTER_NUM;
@@ -347,17 +354,11 @@ void imu_mpu6050_update(void)
 	}
 	imu_mpu6050_update_ptr->acc_judge_dif_buf[0] = acc_dif_temp;
 
-	// scope_data[0]=imu_mpu6050_update_ptr->acc_y;
-	// scope_data[1]=imu_mpu6050_update_ptr->acc_z;
-	// scope_data[2]=imu_mpu6050_update_ptr->acc_judge_y_buf[ACC_BUF_WINDOW_NUM];
-	// scope_data[3]=imu_mpu6050_update_ptr->acc_judge_z_buf[ACC_BUF_WINDOW_NUM];
-
 	filter_cnt++;
 	
 	if (filter_cnt == ACC_FILTER_NUM) {
 		filter_cnt = 0;
 	}
-	//OutPut_Data(scope_data);
 }
 
 /**
@@ -373,8 +374,10 @@ uint8_t imu_get_action_shaking(void)
 	imu_shaing_get_stastp_point();
 	if (shaking_rec_startflag & 0x80)
 	{
-		imu_acc_feature_get(&(imu_mpu6050_update_ptr->acc_judge_y_buf[ACC_DATA_CON_NUM-1]),JUDGE_WAVE_NE_THRESHOLD,&recognition_y,&y_order,GET_PEAK_PO);
-		imu_acc_feature_get(&(imu_mpu6050_update_ptr->acc_judge_z_buf[ACC_DATA_CON_NUM-1]),JUDGE_WAVE_PO_THRESHOLD,&recognition_z,&z_order,GET_PEAK_NE);
+		imu_acc_feature_get(&(imu_mpu6050_update_ptr->acc_judge_y_buf[ACC_DATA_CON_NUM-1]), \
+			JUDGE_WAVE_NE_THRESHOLD,&recognition_y,&y_order,GET_PEAK_PO);
+		imu_acc_feature_get(&(imu_mpu6050_update_ptr->acc_judge_z_buf[ACC_DATA_CON_NUM-1]), \
+			JUDGE_WAVE_PO_THRESHOLD,&recognition_z,&z_order,GET_PEAK_NE);
 		if ((recognition_z >= WAVE_PN) || (recognition_y >= WAVE_PN)) {
 			shaking_rec_startflag = 0;
 			return ACTION_SHAKING;

@@ -38,6 +38,14 @@
 /* custom HAL */
 #include "task.h"
 
+#include "light_mode.h"
+#include "light_driver.h"
+#include "imu.h"
+#include "scope.h"
+#include "mic.h"
+#include "mpu6050.h"
+#include "rtc.h"
+
 #define led_display_task_prioroties 		( (configMAX_PRIORITIES - 1) | portPRIVILEGE_BIT )
 #define pattern_change_task_prioroties 		( (configMAX_PRIORITIES - 2) | portPRIVILEGE_BIT )
 #define light_mode_task_prioroties 		( (configMAX_PRIORITIES - 3) | portPRIVILEGE_BIT )

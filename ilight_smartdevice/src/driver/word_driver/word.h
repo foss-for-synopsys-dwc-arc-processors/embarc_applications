@@ -46,8 +46,8 @@
 #ifndef _WORD_H_
 #define _WORD_H_
 
-#include "dev_common.h"
-#include "light_mode.h"
+#include "embARC.h"
+#include "embARC_debug.h"
 
 #define SHOW_DELAY 1
 

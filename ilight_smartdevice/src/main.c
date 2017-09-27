@@ -75,7 +75,7 @@
 /* embARC HAL */
 #include "embARC.h"
 #include "embARC_debug.h"
-/* embARC HAL*/
+/* custom HAL*/
 #include "light_mode.h"
 #include "imu.h"
 #include "scope.h"
@@ -94,7 +94,7 @@ void main()
 	mic_init();
 	imu_init(GYRO_RNG,ACCEL_RNG);
 	task_init();
-	while(1)  {
+	while(1) {
 		vTaskSuspend(NULL);
 	}
 }
