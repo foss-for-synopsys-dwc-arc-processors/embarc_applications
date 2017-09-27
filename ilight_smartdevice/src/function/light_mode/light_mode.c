@@ -131,16 +131,16 @@
 #define LIGHT_UNIT_BRI			(0x04)
 
 /**
- * \ brief	Init those Pmods which is used to control lights.
-*/
+ * \brief	Init those Pmods which is used to control lights.
+ */
 void light_ctr_init()
 {
 	light_ctr_gpio_init();
 }
 
 /**
- * \ brief 	Turn off all the lights.
- * \ details 	Send 0x00,0x00,0x00 to all the lights to turn off lights.
+ * \brief	Turn off all the lights.
+ * \details	Send 0x00,0x00,0x00 to all the lights to turn off lights.
  */
 void light_mode_alloff()
 {
@@ -149,10 +149,10 @@ void light_mode_alloff()
 	vTaskDelay(1);
 }
 /**
- * \ brief		Running mode.
- * \ details 		The blue light is on and the white light flashes.
- * \ parameter[in] 	freq	The frequency of  white flashing, One unit represents 500ms.
- * \ parameter[in] 	bri	The brightness of lights,0~16.
+ * \brief	Running mode.
+ * \details 	The blue light is on and the white light flashes.
+ * \param	freq	The frequency of  white flashing, One unit represents 500ms.
+ * \param	bri	The brightness of lights,0~16.
  */
 void light_mode_run(uint8_t freq,uint8_t bri)
 {
@@ -180,8 +180,8 @@ void light_mode_run(uint8_t freq,uint8_t bri)
 }
 
 /**
- * \ brief		Light in warm.
- * \ parameter[in]	bri The brightness of lights.
+ * \brief	Light in warm.
+ * \param	bri. The brightness of lights.
  */
 void light_mode_lighting_warm(uint8_t bri)
 {
@@ -190,8 +190,8 @@ void light_mode_lighting_warm(uint8_t bri)
 }
 
 /**
- * \ brief		Light in cold.
- * \ parameter[in] 	bri	The brightness of lights.
+ * \brief	Light in cold.
+ * \param 	bri	The brightness of lights.
  */
 void light_mode_lighting_cold(uint8_t bri)
 {
@@ -200,9 +200,9 @@ void light_mode_lighting_cold(uint8_t bri)
 }
 
 /**
- * \ brief		Light in different weather
- * \ details 		different weather with different led graphic & led color.
- * \ parameter[in] 	weather sunny,rain,windy.
+ * \brief	Light in different weather
+ * \details 	different weather with different led graphic & led color.
+ * \param	weather sunny,rain,windy.
  */
 void light_mode_weather(uint8_t weather)
 {
@@ -266,10 +266,10 @@ void light_mode_weather(uint8_t weather)
 }
 
 /**
- * \brief		Alarm mode.
- * \details		The red and blue lights move to both sides.
- * \parameter[in] 	freq The speed of lights moving.One unit represents 20ms.
- * \parameter[in] 	bri The brightness of lights.
+ * \brief	Alarm mode.
+ * \details	The red and blue lights move to both sides.
+ * \param 	freq The speed of lights moving.One unit represents 20ms.
+ * \param 	bri The brightness of lights.
  */
 void light_mode_alarm(uint8_t freq,uint8_t bri)
 {
@@ -324,8 +324,8 @@ void light_mode_alarm(uint8_t freq,uint8_t bri)
 }
 
 /**
- * \brief		all lights flash in blue and red.
- * \parameter[in] 	freq	The speed of lights moving.One unit represents 300ms.
+ * \brief	all lights flash in blue and red.
+ * \param	freq	The speed of lights moving.One unit represents 300ms.
  */
 void light_change_alldouble(uint8_t freq)
 {
@@ -341,10 +341,10 @@ void light_change_alldouble(uint8_t freq)
 }
 
 /**
- * \brief		Ride mode.
- * \details		Distinguish acceleration & deceleration from uniform velocity.
- * \parameter[in] 	freq The speed of lights moving.One unit represents 20ms.
- * \parameter[in] 	bri The brightness of lights.
+ * \brief	Ride mode.
+ * \details	Distinguish acceleration & deceleration from uniform velocity.
+ * \param 	freq The speed of lights moving.One unit represents 20ms.
+ * \param 	bri The brightness of lights.
  */
 void light_mode_ride(uint8_t freq,uint8_t bri)
 {
@@ -446,9 +446,9 @@ void light_mode_ride(uint8_t freq,uint8_t bri)
 }
 
 /**
- * \brief		Countdown time mode.
- * \details		Increase the number of lights with the time going by.
- * \parameter[in] 	time the duration of countdown.
+ * \brief	Countdown time mode.
+ * \details	Increase the number of lights with the time going by.
+ * \param	time the duration of countdown.
  */
 void light_mode_timing_land(uint32_t time)
 {
@@ -508,9 +508,9 @@ void light_mode_timing_land(uint32_t time)
 }
 
 /**
- * \brief		Countdown time mode.
- * \details		Decrease the number of lights with the time going by.
- * \parameter[in] 	time the duration of countdown.
+ * \brief	Countdown time mode.
+ * \details	Decrease the number of lights with the time going by.
+ * \param	time the duration of countdown.
  */
 void light_mode_fitness(uint32_t time)
 {
@@ -559,9 +559,9 @@ void light_mode_fitness(uint32_t time)
 }
 
 /**
- * \brief		Music mode.
- * \details		LED flash with music rhythm
- * \parameter[in] 	fftout 		Audio Signal after fft transform
+ * \brief	Music mode.
+ * \details	LED flash with music rhythm
+ * \param 	fftout 		Audio Signal after fft transform
  */
 void light_mode_music(uint8_t *fftOut)
 {
@@ -597,15 +597,15 @@ void light_mode_music(uint8_t *fftOut)
 			if ((i <= 4) && (cnt_flag_down <= 5)) {
 				range_flag_down++;
 				cnt_flag_down = 0;
-			} else if((i <= 4) && (cnt_flag_up > 5)) {
+			} else if ((i <= 4) && (cnt_flag_up > 5)) {
 					range_flag_down = 0;
 					cnt_flag_down = 0;
 					clolor_flag_change = 1;
 				}
 			break;
-		} else if(hsound_amplitude < 6 * range){
+		} else if (hsound_amplitude < 6 * range) {
 				hstall = 0;
-				if(cnt_flag_up > 4){
+				if(cnt_flag_up > 4) {
 					range_flag_down++;
 					cnt_flag_up = 0;
 				}
@@ -809,9 +809,9 @@ void light_mode_comfor(void)
 }
 
 /**
- * \brief		Shaking mode.
- * \details		Shaking light beads to show characters
- * \parameter[in] 	string 		string want to be shown
+ * \brief	Shaking mode.
+ * \details	Shaking light beads to show characters
+ * \param 	string 		string want to be shown
  */
 void light_mode_shaking(char *string)
 {
@@ -874,7 +874,11 @@ void light_mode_sos()
 	}
 	vTaskDelay(5000);
 }
-
+/**
+ * \brief	used to indicates that the ilight is switching mode and different color represents 
+ 		different mode
+ * \param 	mode.	The number of mode right now.
+ */
 void light_mode_change_flag(uint8_t mode)
 {
 	vTaskDelay(2);
@@ -967,39 +971,39 @@ void light_mode_change_flag(uint8_t mode)
 }
 
 /**
- *\brief		Light control function Top pack.
- *\parameter[IN]	mode	The light mode that you want to choose.
- *\parameter[IN]	bri	The brightness of all lights.
- *\parameter[IN]	freq	The speed of lights moving.
- *\parameter[IN]	time	Used in timing mode.
- *\parameter[IN]	string	Used in shaking mode.
+ *\brief	Light control function Top pack.
+ *\param	mode	The light mode that you want to choose.
+ *\param	bri	The brightness of all lights.
+ *\param	freq	The speed of lights moving.
+ *\param	time	Used in timing mode.
+ *\param	string	Used in shaking mode.
  */
 void light_mode_top_pack(uint8_t mode,uint8_t bri,uint8_t freq,uint8_t time,uint8_t *string,uint8_t weather)
 {
 	static uint8_t freq1,bri1,time1,mode1 = 0x1a;
 
 	/*! <  If there is no brightness ,set the brightness as 20.*/
-	if (bri ==  0) {
+	if (bri == 0) {
 		if (mode ==  LIGHT_MODE_TIMING_FIT) {
 			bri1 = DEFAULT_BRI_DIM;
 		} else bri1 = DEFAULT_BRI_LIGHT;
 	} else bri1 = bri;
 
-	if (freq ==  0) {
+	if (freq == 0) {
 		freq1 = 0x02;
 	} else freq1 = freq;
 
-	if (time ==  0) {
+	if (time == 0) {
 		time1 = 1;
 	} else time1 = time;
 
-	if(mode  !=  mode1) {
+	if(mode != mode1) {
 		light_mode_change_success();
 		mode1 = mode;
 	}
 	switch(mode) {
 	case LIGHT_MODE_RUNNING:
-					light_mode_run(freq1,bri1);
+				light_mode_run(freq1,bri1);
 				break;
 	case LIGHT_MODE_ALARM:
 				light_mode_alarm(freq1,bri1);

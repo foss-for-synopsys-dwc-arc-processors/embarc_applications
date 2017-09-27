@@ -45,10 +45,6 @@
 /* custom HAL */
 #include "mpu6050.h"
 
-/* embARC HAL */
-#include "embARC.h"
-#include "embARC_debug.h"
-
 /**
  * MPU6050 internal register address macro definition
  * Gyroscope sampling rate, typical: 0x07 (125Hz)
