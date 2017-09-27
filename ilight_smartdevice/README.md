@@ -4,6 +4,7 @@ This application is designed to show how to develop a **Smart Device** using emb
 * [Introduction](#introduction)
 	* [Function](#function)
 	* [iOS App](#ios-app)
+	* [Control method](#control)
 * [Hardware and Software Setup](#hardware-and-software-setup)
 	* [Required Hardware](#required-hardware)
 	* [Required Software](#required-software)
@@ -20,26 +21,36 @@ This application is designed to show how to develop a **Smart Device** using emb
 
 ### Function
 
-* **Running mode**. It is used when you are running in the night and can provide you safety.   
+* **Running mode**.    
+	**The blinking light** will give you a more safe sports environment in your running at night.  
+
 	![Running_mode][2]
-* **Alarm mode**.Blue light and red light alternating flashing.   
+* **Alarm mode**.   
+   The Blue light and the red light blinking alternately when it alarms.
+
     ![Alarm_mode][3]
-* **Riding mode**.It will light in red when you decrease your speed and in colors when you ride in uniform speed.   
+* **Riding mode**.   
+   It will turn to red when you decrease your speed and in colors when you ride in uniform speed.   
+
     ![Riding_mode][4]
-* **Timing mode**.You can set the time by your mobilephone and turn off the lights in same time.
+* **Timing mode**.   
+   You can set the time by your mobilephone and it will show you the progress bar at timing and blink when the time is up.
+
 	![Timing_mode][5]
-* **Music mode**.It can get the data of music by mic and switch lights according to the rhythm of music.
+* **Music mode**.   
+   It can get the data of music by mic and switch lights according to the rhythm of music.
+
 	![music_mode][6]
-* **Weather mode**.The iLight can get the data of weather by ble and show the data by color of lights.
-* **Shaking mode**.You can set those words which you want to show and shake the iLight.
+* **Weather mode**.	Show you the current **weather** by the light's color. It can be updated in real time via the iOS App.
+* **Shaking mode**.You can set those words which you want to show and shake the iLight to show thos words.
 
 ### iOS App
 iLight can be controlled by an IOS App [I-Lighting][35], you can download it in Appstore. Basically you can use the App to change modes of iLight, and  you can make some detailed settings to iLight. For example,  you can set the brightness of iLight in Running mode、Riding mode and Alarm mode, etc. You can set the time in Timing mode.   
 #### Q&A
 * **How to connect to the iLight device?**   
-  The App will automatically connect the iLight device when you start the App and please input the default password "000000" . If you can`t control the iLight device,  please restart the App.
+  The App will connect the iLight automatically when you start the App and please input the default password "000000" . If you can`t control the iLight device,  please restart the App.
 * **How to fetch weather information？**   
-  Weather mode fetchs weather information by the App, At first you can click the "City select button" to change the city where you are, the default city is "Wuhan,CN" . The App will automatically fetch weather information once when you start it, If you needs more times weather information, please click the "Refresh button". And the App will send the weather data to the iLight device to show.   
+  Weather mode fetchs weather information by the App.At first you can click the "City select button" to change the city where you are, the default city is "Wuhan,CN" . The App will automatically fetch weather information once when you start it. If you needs more information abou the weather, please click the "Refresh button". And the App will send the weather data to the iLight device.   
 * **Can we input chinese in fans mode?**   
   ilight can`t shows chinese in fans mode right now.   
  
@@ -82,9 +93,7 @@ iLight can be controlled by an IOS App [I-Lighting][35], you can download it in 
 
 ## User Manual
 ### Before Running This Application
-Firstly, download source code of **iLight SmartDevice** from github, and install **iLight iOS App** in your iOS smartphone.
-
-Secondly,you have to install our app by downloading it in APPLESTORE if you want to have a better experience.
+Download source code of **iLight SmartDevice** from github, and install **iLight iOS App** in your iOS smartphone.
 
 The hardware resources are allocated as following table.
 
@@ -97,7 +106,7 @@ The hardware resources are allocated as following table.
 
 Modify the settings for connecting to the App, as shown below:
 
-Open your ble and app after thie application is running.
+Start your ble and app after the application is running.
 
 Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for example to show how to run this application.
 
@@ -132,12 +141,13 @@ Here take **EMSK2.2 - ARC EM11D** with GNU Toolset for example to show how to ru
 - Directories of source files and header files, notice that it **is not recursive**:
 
 		# application source dirs
-		APPL_CSRC_DIR = . ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
+		APPL_CSRC_DIR = . ./function/ble ./function/imu ./function/light ./function/mic ./function/scope \
+							./driver/imu_driver ./driver/light_driver ./driver/rtc_driver ./driver/word_driver
 		APPL_ASMSRC_DIR = .
 
 		# application include dirs
-		APPL_INC_DIR = . ./function/light_mode ./driver/mpu6050 ./function/imu ./function/scope ./function/interrupt ./driver/word ./function/mic ./driver/rtc ./driver/light
-		
+		APPL_INC_DIR = . ./function/ble ./function/imu ./function/light ./function/mic ./function/scope \
+						./driver/imu_driver ./driver/light_driver ./driver/rtc_driver ./driver/word_driver
 		APPL_DEFINES =
 
 See [ embARC Example User Guide][40], **"Options to Hard-Code in the Application Makefile"** for more detailed information about **Makefile Options**.
@@ -158,13 +168,14 @@ Placing the C source file and header file in the corresponding subfolder.
 
 The `function` folder contains the API implementations of functions.
 
-	|  folder/file        |            Function                                         |
-	| ------------------- | ------------------------------------------------------------|
-	|  imu                |        action recongnition                                  |
-	|  interrupt          |        get and deal with data from ble                      |
-	|  light_mode         |        working modes.                                       |
-	|  mic                |        get data of voice and ouput                          |
-    |  scope              |        output data and build it in visual scope             |
+|  folder/file        |            Function                                         |
+| ------------------- | ------------------------------------------------------------|
+|  imu                |        action recongnition                                  |
+|  interrupt          |        get and deal with data from ble                      |
+|  light_mode         |        working modes.                                       |
+|  mic                |        get data of voice and ouput                          |
+|  scope              |        output data and build it in visual scope             |
+    
 [0]: ./doc/screenshots/hard_ware.JPG        "iLight_hardware"
 [1]: ./doc/screenshots/app_weather.png		"app_pic"
 [2]: ./doc/screenshots/running_mode.gif
