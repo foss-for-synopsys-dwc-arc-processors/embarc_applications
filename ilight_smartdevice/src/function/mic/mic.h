@@ -24,11 +24,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Ruige Lee(295054118@whut.edu.cn)
 --------------------------------------------- */
-
 
 /**
  * \file
@@ -59,13 +58,11 @@
  */
 extern uint8_t adc_get(void);
 
-
 /**
  * \brief   Initial the mic 
  * \details Initial the mic using iic0.
  */
 extern void mic_init(void);
-
 
 /**
  * \brief   IIC address point to mic 
@@ -73,6 +70,6 @@ extern void mic_init(void);
  */
 extern void iic_point_mic(void);
 
-
 #endif/* _MIC_H_ */
+
 /** @} end of group EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE */

@@ -26,7 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * \version 2017.09
- * \date 2017-09-1
+ * \date 2017-09-27
  * \author WangShuai(mrwangshuai@hust.edu.cn)
 --------------------------------------------- */
 
@@ -55,7 +55,7 @@
  *     It can report the following information to the iLight.
  *     - the Motion Intensity (uint16_t) - Connected to J3 (Based on Acceleration sensor)
  *     - the MIC (uint8_t) - Connected to J3 (Based on AD conversion)
- *     - the Middle lights(uint16_t) - Connected to J1 
+ *     - the Middle lights(uint16_t) - Connected to J1
  *     - the Side lights (uint64_t) - Connected to J4 (Based on Acceleration sensor)
  *
  * ### Extra Comments
@@ -65,7 +65,7 @@
 /**
  * \file
  * \ingroup	EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE
- * \brief	main source of iLight Smartdevice 
+ * \brief	main source of iLight Smartdevice
  */
 
 /**
@@ -82,7 +82,7 @@
 #include "ble_int.h"
 #include "mic.h"
 #include "task.h"
- 
+
 void main()
 {
 #ifdef SCOPE_EN
@@ -92,8 +92,9 @@ void main()
 #endif
 	light_ctr_init();
 	mic_init();
-	imu_init(GYRO_RNG,ACCEL_RNG);
+	imu_init(GYRO_RNG, ACCEL_RNG);
 	task_init();
+	
 	while(1) {
 		vTaskSuspend(NULL);
 	}

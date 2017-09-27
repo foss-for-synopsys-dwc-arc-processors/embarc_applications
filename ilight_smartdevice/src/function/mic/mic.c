@@ -24,11 +24,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Ruige Lee(295054118@whut.edu.cn)
 --------------------------------------------- */
-
 
 /**
  * \file
@@ -44,31 +43,34 @@
 /* coustom HAL */
 #include "mic.h"
 
-/***********    mic operation     ********/
+/* mic operation */
 static DEV_IIC *adc_iic_port;
 
 /**
  * \brief	Adc value get of mic
- * \details	Get the adc value of mic using iic0.  
- * \param[out]	the value of adc convert  
+ * \details	Get the adc value of mic using iic0.
+ * \param[out]	the value of adc convert
  */
 uint8_t adc_get(void)
 {
 	uint8_t REG_data;
-	adc_iic_port -> iic_read((void*)(&REG_data),1);
-	EMBARC_PRINTF("ADC_DATA:%d\r\n",REG_data);
+
+	adc_iic_port -> iic_read((void*)(&REG_data), 1);
+	EMBARC_PRINTF("ADC_DATA:%d\r\n", REG_data);
+
 	return REG_data;
 }
 
 /**
- * \brief	Initial the mic 
+ * \brief	Initial the mic
  * \details	Initial the mic using iic0.
  */
 void mic_init(void)
 {
 	uint32_t point;
+
 	point = (0x90 >> 1);
-	adc_iic_port = iic_get_dev( DW_IIC_0_ID );
+	adc_iic_port = iic_get_dev(DW_IIC_0_ID);
 }
 
 /**
@@ -78,8 +80,10 @@ void mic_init(void)
 void iic_point_mic(void)
 {
 	uint32_t point = (0x90 >> 1);
+
 	if (adc_iic_port->iic_control( IIC_CMD_MST_SET_TAR_ADDR, (void *)point) == E_OK) {
 		EMBARC_PRINTF("Target reset mic OK!\n");
 	}
 }
+
 /** @} */

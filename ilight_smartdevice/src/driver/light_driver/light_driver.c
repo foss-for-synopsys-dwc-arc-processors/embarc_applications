@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author dbHu(wwmhu@outlook.com)
 --------------------------------------------- */
 /**
@@ -76,24 +76,24 @@ static DW_GPIO_PORT_PTR port_middle;
 static DEV_GPIO_INFO_PTR port_info_ptr_middle;
 
 /**
- *Some variables definition related gpio initialization .
- *Middle row of lights.
+ * Some variables definition related gpio initialization .
+ * Middle row of lights.
  */
 static DEV_GPIO_PTR port_gpio_side;
 static DW_GPIO_PORT_PTR port_side;
 static DEV_GPIO_INFO_PTR port_info_ptr_side;
 
 
-static uint32_t low_val_middle=0,low_val_side=0;
-static uint32_t temp_reg_middle,temp_reg_side;
+static uint32_t low_val_middle = 0, low_val_side = 0;
+static uint32_t temp_reg_middle, temp_reg_side;
 
 /**
  * \brief	Initialize light control gpio.2 pins will be initialized in this
- 		 function,and output low after initialization.
+ 		function,and output low after initialization.
  */
 void light_ctr_gpio_init()
 {
-	uint32_t val_middle,val_side;
+	uint32_t val_middle, val_side;
 
 	port_gpio_middle = gpio_get_dev(GPIO_OUT_PORT_MIDDLE);
 	port_gpio_middle->gpio_open(GPIO_OUT_MASK_MIDDLE);
@@ -107,10 +107,10 @@ void light_ctr_gpio_init()
 	port_gpio_side->gpio_control(GPIO_CMD_SET_BIT_DIR_OUTPUT, (void *)(GPIO_OUT_MASK_SIDE));
 	port_gpio_side->gpio_control(GPIO_CMD_DIS_BIT_INT, (void *)(GPIO_OUT_MASK_SIDE));
 
-	port_info_ptr_middle =& (port_gpio_middle->gpio_info);
+	port_info_ptr_middle = &(port_gpio_middle->gpio_info);
 	port_middle = (DW_GPIO_PORT_PTR)(port_info_ptr_middle->gpio_ctrl);
 
-	port_info_ptr_side =& (port_gpio_side->gpio_info);
+	port_info_ptr_side = &(port_gpio_side->gpio_info);
 	port_side = (DW_GPIO_PORT_PTR)(port_info_ptr_side->gpio_ctrl);
 
 	low_val_middle &= GPIO_H_CFG_MIDDLE;
@@ -143,7 +143,7 @@ void light_ctr_gpio_init()
 void light_send_bit_0(uint16_t row)
 {
 	uint8_t j;
-	uint32_t value_high,value_low;
+	uint32_t value_high, value_low;
 	DW_GPIO_PORT_PTR row_send;
 
 	if (row == LIGHT_ROW_MIDDLE) {
@@ -156,14 +156,14 @@ void light_send_bit_0(uint16_t row)
 		value_low = low_val_side;
 	}
 
-	/*!< 0.35us high level output */
+	/* 0.35us high level output */
 	row_send->regs->SWPORTS[row_send->no].DR = value_high;
-	for (j = 0;j < 6;j++) {
+	for (j = 0; j < 6; j++) {
 		asm("nop");
 	}
 	asm("nop");
 
-	/*!< Pull the pin low */
+	/* Pull the pin low */
 	row_send->regs->SWPORTS[row_send->no].DR = value_low;
 }
 
@@ -184,8 +184,9 @@ void light_ctr_reset()
 void light_send_bit_1(uint16_t row)
 {
 	uint8_t j;
-	uint32_t value_high,value_low;
+	uint32_t value_high, value_low;
 	DW_GPIO_PORT_PTR row_send;
+
 	if (row == LIGHT_ROW_MIDDLE) {
 		row_send = port_middle;
 		value_high = temp_reg_middle;
@@ -209,7 +210,7 @@ void light_send_bit_1(uint16_t row)
 	}
 	asm("nop");
 
-	/*!< Pull the pin low */
+	/* Pull the pin low */
 	row_send->regs->SWPORTS[row_send->no].DR = value_low;
 }
 
@@ -219,9 +220,10 @@ void light_send_bit_1(uint16_t row)
  * \param 	color_data	The low 24 bits of the parameter is effective.
  * \param	row 		Indicates which pin is going to send data.If it is not LIGHT_ROW_MIDDLE,it will be LIGHT_SIDE by default.
  */
-void light_send_colordata(uint32_t color_data,uint16_t row)
+void light_send_colordata(uint32_t color_data, uint16_t row)
 {
 	int8_t i;
+
 	for (i = 23; i >= 0; i--) {
 		if ((color_data >> i) & 0x01) {
 			light_send_bit_1(row);
@@ -250,7 +252,7 @@ void delay_10us(uint32_t mul)
  * \param	row	Indicates which pin is going to send data.If it is not LIGHT_ROW_MIDDLE,it will be LIGHT_SIDE by default.
  * \param	rgb	The data of clolor.
  */
-void light_ctr_rgb(uint64_t mask,uint16_t row,uint8_t red,uint8_t green,uint8_t blue)
+void light_ctr_rgb(uint64_t mask, uint16_t row, uint8_t red, uint8_t green, uint8_t blue)
 {
 	uint8_t i;
 	uint32_t colordata = 0;
@@ -267,20 +269,20 @@ void light_ctr_rgb(uint64_t mask,uint16_t row,uint8_t red,uint8_t green,uint8_t 
 		piLight = ilight_side;
 	}
 
-	/*!< Place the data of RGB colors into a 32-bit variable */
+	/* Place the data of RGB colors into a 32-bit variable */
 	colordata |= green;
-	colordata = (colordata<<8) | red;
-	colordata = (colordata<<8) | blue;
+	colordata = (colordata << 8) | red;
+	colordata = (colordata << 8) | blue;
 
 
-	/*!< Update the array element data */
-	/*!< In order to avoid the shift operation is optimized,set the 64 bit one */
+	/* Update the array element data */
+	/* In order to avoid the shift operation is optimized,set the 64 bit one */
 	for (i = 0; i < light_num; i++) {
 		if ((mask >> i) & 0x01) {
 			ilight_color[i].color = colordata;
 		}
 	}
-	xQueueSendToFront(led_queue,(void *) & piLight,(TickType_t)0);
+	xQueueSendToFront(led_queue, (void *) & piLight, (TickType_t)0);
 	delay_10us(5);
 }
 
@@ -291,7 +293,7 @@ void light_ctr_rgb(uint64_t mask,uint16_t row,uint8_t red,uint8_t green,uint8_t 
  * \param 	shift num	How many bits you want to shift.
  * \retval	aim_num<<shift_num
  */
-uint64_t light_ctr_mask_lshift(uint64_t aim_num,uint64_t shift_num)
+uint64_t light_ctr_mask_lshift(uint64_t aim_num, uint64_t shift_num)
 {
 	aim_num |= 0x1000000000000000;
 	return aim_num = aim_num << shift_num;
@@ -304,11 +306,12 @@ uint64_t light_ctr_mask_lshift(uint64_t aim_num,uint64_t shift_num)
  * \param	row	Indicates which pin is going to send data.If it is not LIGHT_ROW_MIDDLE,it will be LIGHT_SIDE by default.
  * \param	rgb	The data of clolor.
 */
-void light_ctr_rgb_update(uint64_t mask,uint16_t row,uint8_t red,uint8_t green,uint8_t blue)
+void light_ctr_rgb_update(uint64_t mask, uint16_t row, uint8_t red, uint8_t green, uint8_t blue)
 {
 	uint8_t i;
 	uint32_t colordata = 0;
 	RGB_T *ilight_color;
+
 	if (row == LIGHT_ROW_MIDDLE) {
 		light_num = LIGHT_NUM_MIDDLE;
 		ilight_color = &ilight_middle[0];
@@ -316,12 +319,14 @@ void light_ctr_rgb_update(uint64_t mask,uint16_t row,uint8_t red,uint8_t green,u
 		light_num = LIGHT_NUM_SIDE;
 		ilight_color = &ilight_side[0];
 	}
-	/*!< In order to avoid the shift operation is optimized,set the 64 bit one */
+
+	/* In order to avoid the shift operation is optimized,set the 64 bit one */
 	colordata |= green;
 	colordata = (colordata << 8) | red;
 	colordata = (colordata << 8) | blue;
-	/*!<  Update the array element data */
-	for (i = 0;i < light_num;i++) {
+
+	/* Update the array element data */
+	for (i = 0; i < light_num; i++) {
 		if ((mask >> i) & 0x01) {
 			ilight_color[i].color = colordata;
 		}

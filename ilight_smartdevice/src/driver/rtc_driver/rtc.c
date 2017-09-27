@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.03
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Zhiwei Zhang(1812816853@qq.com)
 --------------------------------------------- */
 
@@ -51,15 +51,12 @@
 /* custom HAL */
 #include "rtc.h"
 
-
 DEV_IIC *IIC_port;
-
 uint32_t point = (RTC_ADDR_IIC >> 1);
-
 _RTC rtc;
 
-/** 
- * \brief	initialize pcf8563 
+/**
+ * \brief	initialize pcf8563
  */
 void pcf8563_iic_init()
 {
@@ -90,7 +87,7 @@ void pcf8653_write_data(uint8_t address, uint8_t time_data)
 	send_data[0] = address;
 	send_data[1] = time_data;
 
-	if (IIC_port->iic_control(IIC_CMD_MST_SET_NEXT_COND,(void*)(IIC_MODE_STOP)) != E_OK) {
+	if (IIC_port->iic_control(IIC_CMD_MST_SET_NEXT_COND, (void*)(IIC_MODE_STOP)) != E_OK) {
 		EMBARC_PRINTF("error!!!\n");
 	}
 
@@ -122,18 +119,18 @@ void pcf8563_data_read(uint8_t address, uint8_t count, uint8_t *buff)
 	if (IIC_port->iic_control(IIC_CMD_MST_SET_NEXT_COND, (void*)(IIC_MODE_RESTART)) != E_OK) {
 		EMBARC_PRINTF("error!!!\n");
 	}
-	
-	IIC_port->iic_write((void*)(&address),1);
+
+	IIC_port->iic_write((void*)(&address), 1);
 
 	if (IIC_port->iic_control(IIC_CMD_MST_SET_NEXT_COND, (void*)(IIC_MODE_STOP)) != E_OK) {
 		EMBARC_PRINTF("error!!!");
 	}
 
-	IIC_port->iic_read((void*)(buff),count);
+	IIC_port->iic_read((void*)(buff), count);
 
 }
 
-/** 
+/**
  * \brief	Converts data from BCD to decimal.
  */
 void pcf8563_bcd2de()
@@ -144,12 +141,12 @@ void pcf8563_bcd2de()
 	one = rtc.hour & 0x0f;
 	ten = (rtc.hour >> 4) & 0x03;
 	rtc.hour = one + ten * 10;
-	
+
 	/* min */
 	one = rtc.min & 0x0f;
 	ten = (rtc.min >> 4) & 0x07;
 	rtc.min = one + ten * 10;
-	
+
 	/* second */
 	one = rtc.sec & 0x0f;
 	ten = (rtc.sec >> 4) & 0x07;
@@ -169,8 +166,8 @@ void iic0_point_rtc(void)
 	}
 }
 
-/** 
- * \brief	updata the time data. 
+/**
+ * \brief	updata the time data.
  */
 uint8_t pcf8563_date_updata(uint8_t clock_day, uint8_t clock_hour, uint8_t clock_min)
 {
@@ -178,24 +175,24 @@ uint8_t pcf8563_date_updata(uint8_t clock_day, uint8_t clock_hour, uint8_t clock
 	iic0_point_rtc();
 	pcf8563_data_read(0x02, 0x05, time);
 
-	/*If the num of second is zero,update the date again!*/
+	/* If the num of second is zero,update the date again! */
 	if (rtc.sec == 0) {
 		pcf8563_data_read(0x02, 0x05, time);
 	}
 
-	/* Process the data which read from the register.*/
-	/* The bits from 0 to 6 are effective.*/
+	/* Process the data which read from the register */
+	/* The bits from 0 to 6 are effective */
 	rtc.sec = *(time + 0) & 0x7f; /* second */
-	/* The bits from 0 to 6 are effective.*/
+	/* The bits from 0 to 6 are effective */
 	rtc.min = *(time + 1) & 0x7f; /* minute */
-	/* The bits from 0 to 5 are effective.*/
+	/* The bits from 0 to 5 are effective */
 	rtc.hour = *(time + 2) & 0x3f; /* hour */
-	/* The bits from 0 to 3 are effective. */
+	/* The bits from 0 to 3 are effective */
 	rtc.day = *(time + 4) & 0x07; /* week */
 
 	pcf8563_bcd2de();
 	//EMBARC_PRINTF("Second:%d. Min:%d. hour:%d. day:%d.\r\n", rtc.sec, rtc.min, rtc.hour, rtc.day);
-	
+
 	if (rtc.hour == clock_hour) {
 		if (rtc.min == clock_min) {
 			return CLOCK_START;
@@ -204,21 +201,21 @@ uint8_t pcf8563_date_updata(uint8_t clock_day, uint8_t clock_hour, uint8_t clock
 	return 0;
 }
 
-/** 
+/**
  * \brief	Set the time value 8.
  */
 void P8563_settime()
 {
-	pcf8653_write_data(8, rtc.year); 
-	pcf8653_write_data(7, rtc.month); 
-	pcf8653_write_data(5, rtc.date); 
-	pcf8653_write_data(4, rtc.hour); 
-	pcf8653_write_data(3, rtc.min); 
+	pcf8653_write_data(8, rtc.year);
+	pcf8653_write_data(7, rtc.month);
+	pcf8653_write_data(5, rtc.date);
+	pcf8653_write_data(4, rtc.hour);
+	pcf8653_write_data(3, rtc.min);
 	pcf8653_write_data(2, rtc.sec);
 }
 
-/** 
- *\brief	Set initial time of 13:13:30,06,27,TUE,2017. 
+/**
+ *\brief	Set initial time of 13:13:30,06,27,TUE,2017.
  */
 void P8563_init()
 {
@@ -241,8 +238,8 @@ DEV_GPIO_INFO_PTR port_info_ptr_rtc;
 DEV_GPIO_INT_CFG_PTR port_int_ptr_rtc;
 DEV_GPIO_BIT_ISR_PTR port_isr_ptr_rtc;
 
-/** 
- *\brief	Set initial time of 13:13:30,06,27,TUE,2017. 
+/**
+ *\brief	Set initial time of 13:13:30,06,27,TUE,2017.
  */
 void cnt_stop()
 {
@@ -251,26 +248,27 @@ void cnt_stop()
 	pcf8653_write_data(0x01, 0x13); //0001_0011
 }
 
-/** 
- *\brief	Set initial time of 13:13:30,06,27,TUE,2017. 
+/**
+ *\brief	Set initial time of 13:13:30,06,27,TUE,2017.
  */
 void cnt_start(uint8_t time)
 {
 	/* 1s */
 	pcf8653_write_data(0x0e, 0x02); //0000_0010  //1hz
 	/* 1min */
-	pcf8653_write_data(0x01, 0x01); //0001_0001   //0001_0011
+	pcf8653_write_data(0x01, 0x01); //0001_0001  //0001_0011
 	pcf8653_write_data(0x0f, time);
 	pcf8653_write_data(0x0e, 0x82); //1000_0010  //1hz
 }
 
-/** 
- *\brief	Set initial time of 13:13:30,06,27,TUE,2017. 
+/**
+ *\brief	Set initial time of 13:13:30,06,27,TUE,2017.
  */
 void check_cnt()
 {
 	uint8_t read;
 	pcf8563_data_read(0x01, 1, &read);
+
 	/* check flag */
 	if (read & 0x04) {
 		/* times up */
@@ -278,7 +276,6 @@ void check_cnt()
 		/* clear_flag */
 		pcf8653_write_data(0x01, 0x11); //0001_0000   //0001_0011
 	}
-
 }
 
 /** @} */

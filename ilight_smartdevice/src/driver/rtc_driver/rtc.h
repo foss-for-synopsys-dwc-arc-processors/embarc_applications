@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.03
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Zhiwei Zhang(1812816853@qq.com)
 --------------------------------------------- */
 
@@ -43,28 +43,26 @@
  * @{
  */
 
-
 #ifndef _RTC_H_
 #define _RTC_H_
 
-
-
 /**
- *Some macro definitions of date register
- *The macro definition of IIC address of RTC device.
+ * Some macro definitions of date register
+ * The macro definition of IIC address of RTC device.
  */
 #define RTC_ADDR_IIC		0xa2
-/* The macro definition of register date of week. */
+/*!< The macro definition of register date of week */
 #define RTC_ADDR_WEEK		0x06
-/* The macro definition of register date of hour. */
+/*!< The macro definition of register date of hour */
 #define RTC_ADDR_HOUR		0x04
-/* The macro definition of register date of minute. */
+/*!< The macro definition of register date of minute */
 #define RTC_ADDR_MIN		0x03
-/* The macro definition of register date of second. */
+/*!< The macro definition of register date of second */
 #define RTC_ADDR_SEC  		0x02
 
 #define CLOCK_START 		0x11
-/* Some macro definitions of week's date. */
+
+/*!< Some macro definitions of week's date */
 #define RTC_WEEK_MON		0
 #define RTC_WEEK_TUES 		1
 #define RTC_WEEK_WEDNES 	2
@@ -85,10 +83,10 @@ typedef struct _rtc {
 
 extern _RTC rtc;
 
-/* Initialize the RTC's IIC device */
+/*!< Initialize the RTC's IIC device */
 extern void pcf8563_iic_init(void);
 
-/* Update the date of week,hour,minute,and second */
+/*!< Update the date of week,hour,minute,and second */
 uint8_t pcf8563_date_updata(uint8_t clock_day, uint8_t clock_hour, uint8_t clock_min);
 
 /* Reset RTC data!

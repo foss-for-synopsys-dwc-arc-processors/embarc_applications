@@ -26,11 +26,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.03
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Zhiwei Zhang(1812816853@qq.com)
 --------------------------------------------- */
-
 
 /**
  * \file
@@ -45,13 +44,11 @@
 #ifndef _SCOPE_H_
 #define _SCOPE_H_
 
-
-
-/* Initial the scope using uart0 */
-/* Attention: only use without blueteeth */
+/*!< Initial the scope using uart0 */
+/*!< Attention: only use without blueteeth */
 extern uint32_t scope_init(uint32_t baudrate);
 
-/* Output the date to scope */
+/*!< Output the date to scope */
 extern uint32_t output_data(int16_t *out_data);
 
 #endif /*_SCOPE_H_ */

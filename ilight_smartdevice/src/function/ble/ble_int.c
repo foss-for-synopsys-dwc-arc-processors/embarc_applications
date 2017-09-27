@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Yibing Peng(Virus@hust.edu.cn)
 --------------------------------------------- */
 
@@ -105,8 +105,8 @@ static DEV_UART *ble_uart;
 static uint8_t ble_rx_buffer;
 static DEV_BUFFER ble_uart_int_buffer;
 
-/** 
- * \brief	Function for deviding music mode and comfortable mode. 
+/**
+ * \brief	Function for deviding music mode and comfortable mode.
  * \param[in]	ble_mode_info_ptr. used to trans data received.
  * \param[in]	ble_rx_handle_ptr.
  * \param[in]	data.used to judge mode.
@@ -136,7 +136,7 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 {
 	switch (ble_rx_handle_ptr[BLE_MODE_TAG_BYTE]) {
 	case BLE_RX_WEATHER_MODE:
-		if( data == '0') {
+		if ( data == '0') {
 			ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
 			ble_mode_info_ptr->mode = LIGHT_MODE_WEATHER;
 			xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
@@ -146,6 +146,7 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 			ble_mode_info_ptr->weather = data - '0';
 		}
 		break;
+
 	case BLE_RX_RUNNING_MODE:
 	case BLE_RX_ALARM_MODE:
 	case BLE_RX_RIDING_MODE:
@@ -153,6 +154,7 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = FOURTH_STATE;
 		ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] = data;
 		break;
+
 	case BLE_RX_CLOCK_MODE:
 	case BLE_RX_TIME_MODE:
 		ble_rx_handle_ptr[ ble_rx_handle_ptr[BLE_DATA_CNT_BYTE]++ ] = data - '0';
@@ -166,17 +168,19 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 			} else {
 				ble_mode_info_ptr->mode = LIGHT_MODE_TIMING_LAND;
 			}
-			
+
 			ble_mode_info_ptr->time = ble_rx_handle_ptr[0] * 600 + ble_rx_handle_ptr[1] * 60 + \
-				ble_rx_handle_ptr[2] * 10 + ble_rx_handle_ptr[3];
+			                          ble_rx_handle_ptr[2] * 10 + ble_rx_handle_ptr[3];
 			xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 			xTaskResumeFromISR( pattern_change_task_handle );
 		}
 		break;
+
 	case BLE_RX_FANSE_MODE:
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = FOURTH_STATE;
 		ble_rx_handle_ptr[BLE_DATA_LEN_BYTE] = data;
 		break;
+
 	default:
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
 		EMBARC_PRINTF("Wrong input %d in state 3.\r\n", ble_rx_handle_ptr[BLE_MODE_TAG_BYTE]);
@@ -184,7 +188,7 @@ static void ble_rx_state_third(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 	}
 }
 
-/** 
+/**
  * \brief	Function for deviding weather mode、running mode、alarm mode、riding mode、
  *		lighting mode、clock mode、time mode and fans mode.
  */
@@ -203,6 +207,7 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 			xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 		}
 		break;
+
 	case BLE_RX_RUNNING_MODE:
 	case BLE_RX_ALARM_MODE:
 	case BLE_RX_RIDING_MODE:
@@ -212,13 +217,24 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 		}
 		else if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_FREQUENCE) {
 			switch (data) {
-				case BLE_FREQUENCY_SLOW	     : ble_mode_info_ptr->frequence = FREQUENCY_SLOW; 		break;
-				case BLE_FREQUENCY_NORMAL    : ble_mode_info_ptr->frequence = FREQUENCY_NORMAL; 	break;
-				case BLE_FREQUENCY_FAST      : ble_mode_info_ptr->frequence = FREQUENCY_FAST; 		break;
-				case BLE_FREQUENCY_VERY_FAST : ble_mode_info_ptr->frequence = FREQUENCY_VERY_FAST; 	break;
-				default : ble_mode_info_ptr->frequence = 0; 	break;
+			case BLE_FREQUENCY_SLOW :
+				ble_mode_info_ptr->frequence = FREQUENCY_SLOW;
+				break;
+			case BLE_FREQUENCY_NORMAL :
+				ble_mode_info_ptr->frequence = FREQUENCY_NORMAL;
+				break;
+			case BLE_FREQUENCY_FAST :
+				ble_mode_info_ptr->frequence = FREQUENCY_FAST;
+				break;
+			case BLE_FREQUENCY_VERY_FAST :
+				ble_mode_info_ptr->frequence = FREQUENCY_VERY_FAST;
+				break;
+			default :
+				ble_mode_info_ptr->frequence = 0; 	
+				break;
 			}
 		}
+
 		if (ble_rx_handle_ptr[BLE_MODE_TAG_BYTE] == BLE_RX_RUNNING_MODE) {
 			if (ble_mode_info_ptr->mode != LIGHT_MODE_RUNNING) {
 				ble_mode_info_ptr->frequence = 0;
@@ -239,23 +255,26 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 		xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 		xTaskResumeFromISR( pattern_change_task_handle );
 		break;
+
 	case BLE_RX_LIGHTING_MODE:
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
+
 		if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_BRIGHT) {
 			ble_mode_info_ptr->bright = data;
 		} else if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_COOL_OR_WARM) {
-				if (data == BLE_TAG_LIGHT_WARM) {
-					ble_rx_handle_ptr[BLE_LIGHT_TAG_BYTE] = BLE_TAG_LIGHT_WARM;
-				} else {
-					ble_rx_handle_ptr[BLE_LIGHT_TAG_BYTE] = BLE_TAG_LIGHT_COOL;
-				}
+			if (data == BLE_TAG_LIGHT_WARM) {
+				ble_rx_handle_ptr[BLE_LIGHT_TAG_BYTE] = BLE_TAG_LIGHT_WARM;
+			} else {
+				ble_rx_handle_ptr[BLE_LIGHT_TAG_BYTE] = BLE_TAG_LIGHT_COOL;
+			}
 		} else if (ble_rx_handle_ptr[BLE_MODE_AUX_TAG_BYTE] == BLE_TAG_ANIMATION) {
-				if (data == BLE_TAG_LIGHT_ANIM) {
-					ble_rx_handle_ptr[BLE_COLOR_TAG_BYTE] = BLE_TAG_LIGHT_ANIM;
-				} else {
-					ble_rx_handle_ptr[BLE_COLOR_TAG_BYTE] = BLE_TAG_LIGHT_NOT_ANIM;
-				}
+			if (data == BLE_TAG_LIGHT_ANIM) {
+				ble_rx_handle_ptr[BLE_COLOR_TAG_BYTE] = BLE_TAG_LIGHT_ANIM;
+			} else {
+				ble_rx_handle_ptr[BLE_COLOR_TAG_BYTE] = BLE_TAG_LIGHT_NOT_ANIM;
+			}
 		}
+
 		if (ble_rx_handle_ptr[BLE_COLOR_TAG_BYTE] == BLE_TAG_LIGHT_ANIM) {
 			ble_mode_info_ptr->mode = LIGHT_MODE_ANIMATION;
 		} else {
@@ -269,21 +288,24 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 		xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 		xTaskResumeFromISR(pattern_change_task_handle);
 		break;
+
 	case BLE_RX_FANSE_MODE:
 		ble_mode_info_ptr->fance_txt[ ble_rx_handle_ptr[BLE_DATA_CNT_BYTE]++ ] = data;
+
 		if (ble_rx_handle_ptr[BLE_DATA_CNT_BYTE] == ble_rx_handle_ptr[BLE_DATA_LEN_BYTE]) {
 			ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
 			ble_mode_info_ptr->fance_txt[ ble_rx_handle_ptr[BLE_DATA_CNT_BYTE] ] = '\0';
 			ble_rx_handle_ptr[BLE_DATA_CNT_BYTE] = 0;
-			
+
 			ble_mode_info_ptr->mode = LIGHT_MODE_SHAKING;
 			xQueueOverwrite(mode_info_queue, ble_mode_info_ptr);
 			xTaskResumeFromISR(pattern_change_task_handle);
 		}
 		break;
+
 	default:
 		ble_rx_handle_ptr[BLE_STATE_BYTE] = INITIAL_STATE;
-		EMBARC_PRINTF("Wrong mode input %d in state 4.\r\n",ble_rx_handle_ptr[BLE_MODE_TAG_BYTE]);
+		EMBARC_PRINTF("Wrong mode input %d in state 4.\r\n", ble_rx_handle_ptr[BLE_MODE_TAG_BYTE]);
 		break;
 	}
 }
@@ -291,7 +313,7 @@ static void ble_rx_state_forth(mode_info *ble_mode_info_ptr, uint8_t *ble_rx_han
 /**
  * \brief	Recive data from bluetooth
  * \details	Transfer the data to the useful format.
- * \param	data:the data received   
+ * \param	data:the data received
  */
 Inline void ble_data_recesive(uint8_t data)
 {
@@ -303,12 +325,12 @@ Inline void ble_data_recesive(uint8_t data)
 	} else if (ble_rx_handle[BLE_STATE_BYTE] == FIRST_STATE && data == BLE_RX_HEAD_SECOND) {
 		ble_rx_handle[BLE_STATE_BYTE] = SECOND_STATE;
 	} else if ((ble_rx_handle[BLE_STATE_BYTE] == SECOND_STATE) && \
-			(data <= (BLE_RX_MIN_MODE + MAX_MODE)) && (data >= BLE_RX_MIN_MODE)) {
-			ble_rx_state_second(&ble_mode_info, ble_rx_handle, data);
+	           (data <= (BLE_RX_MIN_MODE + MAX_MODE)) && (data >= BLE_RX_MIN_MODE)) {
+		ble_rx_state_second(&ble_mode_info, ble_rx_handle, data);
 	} else if (ble_rx_handle[BLE_STATE_BYTE] == THIRD_STATE) {
-			ble_rx_state_third(&ble_mode_info, ble_rx_handle, data);
+		ble_rx_state_third(&ble_mode_info, ble_rx_handle, data);
 	} else if (ble_rx_handle[BLE_STATE_BYTE] == FOURTH_STATE) {
-			ble_rx_state_forth(&ble_mode_info, ble_rx_handle, data);
+		ble_rx_state_forth(&ble_mode_info, ble_rx_handle, data);
 	} else {
 		ble_rx_handle[BLE_STATE_BYTE] = INITIAL_STATE;
 	}
@@ -317,14 +339,15 @@ Inline void ble_data_recesive(uint8_t data)
 /**
  * \brief	The isr of bluetooth
  * \details	The callback function of bluetooth isr.
- * \param	ptr: nonsense   
+ * \param	ptr: nonsense
  */
 static void ble_irs(void *ptr)
 {
 	static uint8_t i;
 
 	if (i % 2 == 0) {
-		ble_data_recesive(ble_rx_buffer); /* Recive data from bluetooth */
+		/* Recive data from bluetooth */
+		ble_data_recesive(ble_rx_buffer);
 		EMBARC_PRINTF("ble uart input %d.\r\n", ble_rx_buffer);
 	}
 
@@ -342,7 +365,7 @@ static void ble_irs(void *ptr)
  * \brief	Initialize the bluetooth device
  * \details	Initialize the uart0 driver for bluetooth
  * \param	baudrate: the baudrate of uart0
- * \param	-1 for error,0 for succeed  
+ * \param	-1 for error,0 for succeed
  */
 uint32_t ble_uart_init(uint32_t baudrate)
 {
@@ -354,17 +377,17 @@ uint32_t ble_uart_init(uint32_t baudrate)
 	}
 
 	if (ble_uart->uart_open(baudrate) == E_OPNED) {
-		ble_uart->uart_control(UART_CMD_SET_BAUD,(void *)(baudrate));
+		ble_uart->uart_control(UART_CMD_SET_BAUD, (void *)(baudrate));
 		EMBARC_PRINTF("ble_uart open succeed\r\n");
 	}
 
-	DEV_BUFFER_INIT(&ble_uart_int_buffer, &ble_rx_buffer,1);
-	if (ble_uart->uart_control(UART_CMD_SET_RXINT_BUF,(void *) & ble_uart_int_buffer) != E_OK) {
+	DEV_BUFFER_INIT(&ble_uart_int_buffer, &ble_rx_buffer, 1);
+	if (ble_uart->uart_control(UART_CMD_SET_RXINT_BUF, (void *) & ble_uart_int_buffer) != E_OK) {
 		EMBARC_PRINTF("ble_isr_buffer config error\r\n");
 		return -1;
 	}
 
-	if (ble_uart->uart_control(UART_CMD_SET_RXCB,(void *) & ble_irs) != E_OK) {
+	if (ble_uart->uart_control(UART_CMD_SET_RXCB, (void *) & ble_irs) != E_OK) {
 		EMBARC_PRINTF("ble_isr config error\r\n");
 		return -1;
 	}
@@ -373,21 +396,23 @@ uint32_t ble_uart_init(uint32_t baudrate)
 		EMBARC_PRINTF("Enable ble interrupt error\r\n");
 		return -1;
 	}
-	
+
 	return 0;
 }
 
 /**
- * \brief	Send data by bluetooth 
+ * \brief	Send data by bluetooth
  * \details	Send cnt bytes using bluetooth in uart0.
  * \param	psend: the buffer of date sended in uart0
  *		cnt: the number of bytes to send
  * \param	-1 for error
- *		0 for succeed    
+ *		0 for succeed
  */
 uint32_t ble_send(uint8_t *psend, uint8_t cnt)
 {
 	return ble_uart->uart_write(psend, cnt);
 }
+
 #endif /* BLE_UART_EN */
+
 /** @} */

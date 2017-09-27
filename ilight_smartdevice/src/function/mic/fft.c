@@ -24,11 +24,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Ruige Lee(295054118@whut.edu.cn)
 --------------------------------------------- */
-
 
 /**
  * \file
@@ -58,8 +57,8 @@ void fft_Data(uint16_t *fftIn, compx *fftData)
 {
 	int i = 0;
 	for ( i = 0; i < fft_N; i++ ) {
-		fftData[List[i]].real = (float)fftIn[i];	/* Copy the data to fft,using the method of search the table */
-		fftData[List[i]].imag = 0;			/* Clear the imaginary part */       
+		fftData[List[i]].real = (float)fftIn[i]; /* Copy the data to fft,using the method of search the table */
+		fftData[List[i]].imag = 0;               /* Clear the imaginary part */       
 	}
 }
 
@@ -74,12 +73,14 @@ void fft_Convert(compx *xin)
 	compx t, ws;
 	for (L = 1; L <= M; L++) {
 		le = (2 << L) >> 1;
-		B = le / 2;	   	 
-		for (j = 0; j <= B - 1; j++) {	   
+		B = le / 2;
+
+		for (j = 0; j <= B - 1; j++) {
 			p = (((2 << M) >> L) >> 1) * j;
 			ws.real = cos_tab[p];
 			ws.imag = sin_tab[p];
-			for (i = j; i <= fft_N - 1; i = i + le) { 
+
+			for (i = j; i <= fft_N - 1; i = i + le) {
 				ip = i + B;
 				t.real = xin[ip].real * ws.real - xin[ip].imag * ws.imag;
 				t.imag = xin[ip].real * ws.imag + xin[ip].imag * ws.real;
@@ -102,6 +103,7 @@ void fft_powerMag(compx *fftData, uint8_t *fftOut)
 {
 	uint8_t i;
 	uint16_t tempfft = 0;
+
 	for (i = 1; i < fft_N / 2; i++) {
 		fftData[i].real = (float)(sqrt(fftData[i].real * fftData[i].real + fftData[i].imag * fftData[i].imag)
 			  / (i == 0 ? fft_N : (fft_N / 2)));
@@ -110,4 +112,5 @@ void fft_powerMag(compx *fftData, uint8_t *fftOut)
 		fftOut[i] = tempfft;
 	}
 }
+
 /** @} */

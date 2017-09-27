@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Yibing Peng(Virus@hust.edu.cn)
 --------------------------------------------- */
 /**
@@ -48,13 +48,13 @@
  * Function for initialization of bluetooth 
  * Only used without scope
  */
-
 #define BLE_UART_EN	(1)
 
 extern uint32_t ble_uart_init(uint32_t baudrate);
 
-/** Function for sending data to bluetooth */
+/*!< Function for sending data to bluetooth */
 extern uint32_t ble_send(uint8_t *psend, uint8_t cnt);
 
 #endif /*_BLE_INT_H_ */
+
 /** @} end of group EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE */

@@ -24,11 +24,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Ruige Lee(295054118@whut.edu.cn)
 --------------------------------------------- */
-
 
 /**
  * \file
@@ -41,16 +40,13 @@
  * @{
  */
 
-
 #ifndef _FFT_H_
 #define _FFT_H_
-
 
 /**
  * @file
  *   This file includes definitions for channel number of fast fourier transform.
  */
-
 
 /*!< the buffer of input and output for fast fourier transform */
 typedef struct { 
@@ -58,8 +54,7 @@ typedef struct {
 	float imag;
 }compx;
 
-
-/* choose the number of fast fourier transform channel number. */
+/* choose the number of fast fourier transform channel number */
 #define fft_16
 //#define fft_64
 //#define fft_128
@@ -102,14 +97,11 @@ typedef struct {
 /* the list table of fft */
 extern const int List[fft_N];
 
-
 /* the sin table of fft */
 extern const float sin_tab[fft_N / 2];
 
-
 /* the cos table of fft */
 extern const float cos_tab[fft_N / 2];
-
 
 /**
  * \brief  	fast fourier transform step1.
@@ -135,4 +127,5 @@ extern void fft_Convert(compx *xin);
 extern void fft_powerMag(compx *fftData, uint8_t *fftOut);
 
 #endif/* _FFT_H_ */
+
 /** @} end of group EMBARC_APP_FREERTOS_IOT_ILIGHT_SMARTDEVICE */

@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author Mr.WangS(mrwangs@hust.edu.cn)
 --------------------------------------------- */
 /**
@@ -44,42 +44,43 @@
 #ifndef _IMU_H_
 #define _IMU_H_
 
-/* The type of action definition. */
+/*!< The type of action definition */
 #define ACTION_LEFT		0x01
 #define ACTION_RIGHT		0x02
 #define ACTION_OVER		0X03
 #define ACTION_START		0x04
 #define ACTION_SHAKING		0x05
-/* The max number of data. */
+
+/*!< The max number of data */
 #define ACC_DATA_CON_NUM 	120 
 
 #define GYRO_RNG 		2
 #define ACCEL_RNG 		3
 
 
-/* MPU6050 data update structure */
+/*!< MPU6050 data update structure */
 typedef struct imu_mpu6050_update {
 	int32_t acc_x; /* The acceleration of x_axis */
 	int32_t acc_y;
 	int32_t acc_z;
-	int32_t acc_judge_x_buf[ACC_DATA_CON_NUM]; /* The buffer of x_axis's acceleration that is used to pattern reconition.*/
+	int32_t acc_judge_x_buf[ACC_DATA_CON_NUM]; /* The buffer of x_axis's acceleration that is used to pattern reconition */
 	int32_t acc_judge_y_buf[ACC_DATA_CON_NUM];		
 	int32_t acc_judge_z_buf[ACC_DATA_CON_NUM];	
-	int32_t acc_judge_dif_buf[ACC_DATA_CON_NUM]; /* The buffer of energy. */
+	int32_t acc_judge_dif_buf[ACC_DATA_CON_NUM]; /* The buffer of energy */
 }MPU050_UPDATA,*MPU050_UPDATA_PTR;
 
 MPU050_UPDATA *imu_mpu6050_update_ptr;
 
-/*function init the mpu6050*/
+/*!< function init the mpu6050*/
 extern void imu_init(uint8_t gyro_rng,uint8_t acc_rng);
 
-/* function pattern recognition */
+/*!< function pattern recognition */
 extern uint8_t imu_pattern_recongnition(void);
 
-/* function get the start of action of shaking,used in light_mode_word() */
+/*!< function get the start of action of shaking,used in light_mode_word() */
 extern int8_t imu_get_shaking_start(void);
 
-/* function get the action of shaking */
+/*!< function get the action of shaking */
 extern uint8_t imu_get_action_shaking(void);
 
 extern void imu_mpu6050_update(void);

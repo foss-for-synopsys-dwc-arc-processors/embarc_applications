@@ -26,8 +26,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * \version 2017.08
- * \date 2017-08-20
+ * \version 2017.09
+ * \date 2017-09-27
  * \author dbHu(wwmhu@outlook.com)
 --------------------------------------------- */
 /**
@@ -44,7 +44,7 @@
 #ifndef LIGHT_MODE_H_
 #define LIGHT_MODE_H_
 
-/*! <  Light mode definition*/
+/*!< Light mode definition */
 #define LIGHT_MODE_CLOCK		0x10
 #define LIGHT_MODE_RUNNING 		0x11
 #define LIGHT_MODE_ALARM 		0X12
@@ -60,7 +60,7 @@
 #define LIGHT_MODE_SHAKING 		0x1c
 #define LIGHT_MODE_SOS			0x1d
 
-/*! <  Frequency definition */
+/*!< Frequency definition */
 #define FREQUENCY_SLOW 			4
 #define FREQUENCY_NORMAL		3
 #define FREQUENCY_FAST   		2
