@@ -19,6 +19,15 @@ Here are steps to use this repo.
     + [AWS IoT Smarthome Demo - Multi Node](aws_iot_smarthome_multinode)
         * This application implements a demo which shows embARC Smarthome Demo based on AWS IoT Cloud.
         * This smarthome demo implements 3 different nodes to talk to AWS IoT Cloud.
+    + [iBaby Smarthome Demo - Multi Node](ibaby_smarthome_multinode)
+        * This application implements a demo which shows embARC Smarthome Demo based on LwM2M protocol.
+        * This smarthome demo implements 2 different nodes to talk to iBaby Smarthome Gateway.
+    + [iLight Smartdevice Demo](ilight_smartdevice)
+        * This application implements a demo which shows embARC Smartdevice Demo based on Bluetooth.
+        * This smartdevice demo can be controlled by gestures and iOS App.
+    + [OpenThread Smarthome Demo - Multi Node](ot_smarthome_multinode)
+        * This application implements a demo which shows embARC Smarthome Demo based on OpenThread.
+        * This smarthome demo implements 2 different nodes to talk to OpenThread Smarthome Gateway.
 
 ## How to contribute to it
 We welcome embARC Applications community contributions. Please check out the [Contributing to embARC OSP](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/blob/master/.github/CONTRIBUTING.md) for guidelines on how to proceed. Users participating in the embARC Community and its sub-projects codebases and issue trackers are expected to follow the [embARC code of conduct](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/blob/master/.github/CODE_OF_CONDUCT.md).
