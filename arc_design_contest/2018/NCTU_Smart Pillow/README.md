@@ -135,7 +135,7 @@ Here take **EMSK2.2 - ARC EM7DFPU**
 
 #### Makefile
 
-- Selected FreeRTOS here, then you can use [FreeRTOS API][39] in your application:
+- Selected FreeRTOS here, then you can use FreeRTOS API in your application:
 
         # Application name
         APPL ?= freertos_kernel
