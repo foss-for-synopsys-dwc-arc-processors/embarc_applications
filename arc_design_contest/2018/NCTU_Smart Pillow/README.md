@@ -86,10 +86,10 @@ We hope we can popularize the smart pillow in the future, smart pillow records a
 
 ## User Manual
 ### Before Running This Application
-In order to open **UART_2**
+In order to open **UART_2**<br>
 We need to modify following files
 
-* emsk_init.c
+* emsk_init.c (board\emsk\common)
 ```
 set_pmod_mux(mux_regs, PM1_UR_UART_0 | PM1_LR_SPI_S	\
 				| PM2_I2C_HRI			\
@@ -98,7 +98,7 @@ set_pmod_mux(mux_regs, PM1_UR_UART_0 | PM1_LR_SPI_S	\
 				| PM5_UR_SPI_M1 | PM5_LR_UART_2	\
 				| PM6_UR_SPI_M0 | PM6_LR_GPIO_A );
 ```
-* mux.h
+* mux.h (board\emsk\drivers)
 ```
 /**
  * \name	PMOD 5 Multiplexor
@@ -111,13 +111,13 @@ set_pmod_mux(mux_regs, PM1_UR_UART_0 | PM1_LR_SPI_S	\
 #define PM5_LR_UART_2		((1 << BIT2) << PM5_OFFSET)	/*!< Pmod5[10:7] are connected to DW UART Master signals using CS2_N */
 /** @} end of name */
 ```
-* dw_uart_obj.h
-* dw_uart_obj.c
+* dw_uart_obj.h (board\emsk\drivers)
+* dw_uart_obj.c (board\emsk\drivers)
 
-In order to calculate **CPU Loading**
+In order to calculate **CPU Loading**<br>
 We need to modify following files
-* task.h
-* task.c
+* task.h (os\freertos)
+* task.c (os\freertos\inc)
 ### Run This Application
 
 Here take **EMSK2.2 - ARC EM7DFPU**
