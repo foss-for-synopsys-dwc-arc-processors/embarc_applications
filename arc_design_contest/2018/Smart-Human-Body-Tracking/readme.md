@@ -40,7 +40,7 @@ Contents
 ## Require Software
 * Metaware or ARC GNU Toolset
 * OpenNI
-* Robot OS (ROS)
+* Robot OS (ROS) (for linux environment)
 * Client display
 
 ## Hardware Connection
@@ -106,7 +106,7 @@ There are three part to start our work. **PC for human body tracking**, **ARC pl
     
 ### Windows application   
 2018/7, Add the **win10 x86-64 executable** to run the skeleton applications.   
-Just run the ShowViewer.exe can start to skeleton by using kinect.   
+Just run the Viewer.exe can start to skeleton by using kinect.   
 
 
 ### ARC platform
