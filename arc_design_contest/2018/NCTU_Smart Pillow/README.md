@@ -59,6 +59,7 @@ We hope we can popularize the smart pillow in the future, smart pillow records a
 - 1 Vibration motor
 - 1 DFPlayer Mini
 - 1 Speaker
+- 1 LED Light
 - 1 Bluetooth sensor
 - 1 SD Card
 - WiFi Hotspot
@@ -69,6 +70,18 @@ We hope we can popularize the smart pillow in the future, smart pillow records a
 - ARC GNU Toolset
 - Serial port terminal, such as putty, tera-term or minicom
 
+
+### Hardware Connection
+* Connect Bluetooth to J1
+* Connect Pmod AD2 to J2 and J4
+* Connect pressure sensors and Sound Detect Sensor to Pmod AD2
+* Connect DFPlayer Mini to J5
+* Connect LED Light and Vibration motor to J3
+* Connect speaker to DFPlayer Mini
+
+![](https://i.imgur.com/jDXibCu.jpg)
+
+![](https://i.imgur.com/oZA201y.jpg)
 
 ## User Manual
 ### Before Running This Application
