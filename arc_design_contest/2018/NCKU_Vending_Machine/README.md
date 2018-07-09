@@ -78,7 +78,13 @@ TOOLCHAIN ?= gnu
 ## User Manual <div id='usermanual'/>
 ### Before Running This Application <div id='before'/>
 Firstly, download source code of vending machine from GitHub.
-* Source code download link: https://github.com/cstandy/ARC_team_5_vending_machine.git
+- For whole new application
+    * Source code download link: https://github.com/cstandy/ARC_team_5_vending_machine.git
+
+- For who already have embARC_osp-master
+    * Source code download link:
+https://github.com/cstandy/embarc_applications
+    * Paste your `embarc_osp-master` to `embarc_applications/arc_design_contest/2018/vending_machine/embarc_osp-master/` for additional files
 
 ### Run the server_side code <div id='server'/>
 1. open the Apache HTTP server .
