@@ -98,14 +98,15 @@ At least, you must to be familier with the tutorial [100](https://docs.microsoft
 ## Usage
 There are three part to start our work. **PC for human body tracking**, **ARC platform for saving power and handle data transmission**, **Client for user applications realization**  
 
-### PC 
+### Linux-x64 
     $ cd skeleton/
     $ catkin_make -DCMAKE_BUILD_TYPE=release  
     $ source devel/setup.bash
     $ roslaunch skeleton_markers ARC_demo.launch
     
-#### 2018/7 Windows applications
-Add the **win10 x86-64 executable** to run the skeleton applications. Just run the ShowViewer.exe can start to skeleton by using kinect.
+### Windows application   
+2018/7, Add the **win10 x86-64 executable** to run the skeleton applications.   
+Just run the ShowViewer.exe can start to skeleton by using kinect.   
 
 
 ### ARC platform
