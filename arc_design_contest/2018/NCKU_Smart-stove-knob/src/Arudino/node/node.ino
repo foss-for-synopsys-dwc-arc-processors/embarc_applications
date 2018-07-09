@@ -81,20 +81,20 @@ void loop()
  Serial.println(valeur);
 */ Serial.print("Temperature=");
   Serial.println(temperature);
-  delay(100); 
-  if(temperature>=40) 
-  {
+  //delay(100); 
+  //if(temperature>=40) 
+  //{
     if(stove_on_cnt<1){
       Serial.println("STOVE ON!");
       stove_on_cnt++;
     }
     human_state = digitalRead(infrared_pin);
-    smoke = digitalRead(smoke_pin);;
-    if(smoke=='h') stove_condition = 's';
-    else if(human_state==HIGH) stove_condition = 'h';
+    smoke = digitalRead(smoke_pin);
+    if(smoke == LOW) stove_condition = 's'; 
+    else if(human_state == HIGH) stove_condition = 'h';
     else stove_condition = 'n';  
-   }
-  else stove_condition = 'l';
+  //}
+  //else stove_condition = 'l';
   BT1.write(stove_condition);
   delay(1000);
 }
