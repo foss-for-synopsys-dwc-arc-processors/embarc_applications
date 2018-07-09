@@ -1,4 +1,4 @@
-arc-2018-Team4 承佑賴床是我不隊
+arc-2018-Team4 electronic bookcases
 ==================
 
 * [Introduction](#overview)
