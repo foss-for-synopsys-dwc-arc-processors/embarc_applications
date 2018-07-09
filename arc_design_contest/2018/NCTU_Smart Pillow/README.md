@@ -113,6 +113,11 @@ set_pmod_mux(mux_regs, PM1_UR_UART_0 | PM1_LR_SPI_S	\
 ```
 * dw_uart_obj.h
 * dw_uart_obj.c
+
+In order to calculate **CPU Loading**
+We need to modify following files
+* task.h
+* task.c
 ### Run This Application
 
 Here take **EMSK2.2 - ARC EM7DFPU**

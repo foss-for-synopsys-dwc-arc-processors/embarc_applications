@@ -72,7 +72,7 @@
 static void breath_task(void * par);
 static void turn_task(void * par);
 static void mp3_task(void * par);
-static void ble_task(void * par);
+// static void ble_task(void * par);
 static void start_task(void * par);
 
 /**
@@ -82,7 +82,7 @@ static void start_task(void * par);
 static TaskHandle_t breath_task_handle = NULL;
 static TaskHandle_t turn_task_handle = NULL;
 static TaskHandle_t mp3_task_handle = NULL;
-static TaskHandle_t ble_task_handle = NULL;
+// static TaskHandle_t ble_task_handle = NULL;
 static TaskHandle_t start_task_handle = NULL;
 
 static DEV_GPIO *gpio;
@@ -133,39 +133,48 @@ void start();  //
  */
 int main(void)
 {	
+	EMBARC_PRINTF("Part 1 \n");
 	cpu_lock();   //
 	board_init();          //
 	cpu_unlock();            //
 	
+	EMBARC_PRINTF("Part 2 \n");
 	my_emsk_gpio_init();
 	my_emsk_iic_init(iic_slvaddr);
 	my_emsk_ble_init();
 	my_emsk_mp3_init();       //
 	init();          //
-	volume(30);      //
+	volume(10);      //
 	
+	EMBARC_PRINTF("Part 3 \n");
 	uint8_t config[2];
 	config[0] = 0x08; // configuration of the I2C communication in HIGH SPEED Mode
 	config[1] = 0x10; // configuration of Pmod AD2 (read of V1)
 	iic_0->iic_write(config,2);
 	
+	EMBARC_PRINTF("Part 4 \n");
 	config[0] = 0x08; // configuration of the I2C communication in HIGH SPEED Mode
 	config[1] = 0x70; // configuration of Pmod AD2 (read of V1 to V3)
 	iic_1->iic_write(config,2);
 	
+	/*
+	EMBARC_PRINTF("Part 5 \n");
 	char start_message[5];
 	ble->uart_read(start_message, 5);
 	if(strstr(start_message, "start") == NULL)
 	{
 		return 0;
-	}
+	}*/
 	
+	
+	
+	EMBARC_PRINTF("Part 6 \n");
 	if (xTaskCreate(start_task, "start_task", 128, (void *)NULL, 1, &start_task_handle)
 		!= pdPASS) {	/*!< FreeRTOS xTaskCreate() API function */
 		EMBARC_PRINTF("create start_task error\r\n");
 		return -1;
 	}
-	
+	EMBARC_PRINTF("Part 7 \n");
 	vTaskStartScheduler();
 error_exit:
 	return 0;
@@ -178,6 +187,12 @@ error_exit:
  */
 static void start_task(void * par)
 {
+	
+	#if(usercfgCPU_USAGE_CALCULATE==1)
+    uTaskCPUUsageInit();
+    #endif
+	
+	
 	if (xTaskCreate(breath_task, "breath_task", 256, (void *)NULL, 2, &breath_task_handle)
 		!= pdPASS) {	/*!< FreeRTOS xTaskCreate() API function */
 		EMBARC_PRINTF("create breath_task error\r\n");
@@ -193,11 +208,12 @@ static void start_task(void * par)
 		EMBARC_PRINTF("create mp3_task error\r\n");
 		return ;
 	}
+	/*
 	if (xTaskCreate(ble_task, "ble_task", 128, (void *)NULL, 5, &ble_task_handle)
-		!= pdPASS) {	/*!< FreeRTOS xTaskCreate() API function */
+		!= pdPASS) {	//!< FreeRTOS xTaskCreate() API function 
 		EMBARC_PRINTF("create ble_task error\r\n");
 		return ;
-	}
+	}*/
 	vTaskDelete(start_task_handle);
 }
 
@@ -209,7 +225,7 @@ static void start_task(void * par)
 static void breath_task(void * par)
 {
 	while(1)
-	{	
+	{
 		int i;
 		int val;
 		uint8_t data[1];
@@ -341,7 +357,7 @@ static void turn_task(void * par)
 				EMBARC_PRINTF("%c",send_message[i]);
 			EMBARC_PRINTF("\n");
 		}
-		vTaskDelay(100);
+		vTaskDelay(1);
 	}
 }
 
@@ -391,18 +407,53 @@ static void mp3_task(void * par)
 			play(7);
 			EMBARC_PRINTF("Get message 7 \n");
 		}
+		/*
 		if(strstr(read_message, "8") != NULL) {
 			play(8);
 			EMBARC_PRINTF("Get message 8 \n");
-		}
+		}*/
 		if(strstr(read_message, "p") != NULL) { // pause
 			pause();
 			EMBARC_PRINTF("Get message p \n");
 		}
-		if(strstr(read_message, "c") != NULL) { // continue
+		if(strstr(read_message, "r") != NULL) { // resume
 			start();
-			EMBARC_PRINTF("Get message c \n");
+			EMBARC_PRINTF("Get message r \n");
 		}
+		//
+		if(strstr(read_message, "l") != NULL) {
+			led_off = 0;
+			gpio->gpio_write(GPIO_BITS_MASK_ALL,GPIO_BITS_MASK_ALL);
+			EMBARC_PRINTF("Get message l \n");
+		}
+		if(strstr(read_message, "o") != NULL) {
+			led_off = 1;
+			gpio->gpio_write(GPIO_BITS_MASK_NONE,GPIO_BITS_MASK_ALL);
+			EMBARC_PRINTF("Get message o \n");
+		}
+		if(strstr(read_message, "w") != NULL) {
+			led_off = 0;
+			play(7);
+			gpio->gpio_write(GPIO_BITS_MASK_NONE,GPIO_BITS_MASK_ALL);
+			EMBARC_PRINTF("Get message w \n");
+		}
+		if(strstr(read_message, "d") != NULL) {
+			led_off = 0;
+			play(8);
+			gpio->gpio_write(GPIO_BITS_MASK_NONE,GPIO_BITS_MASK_ALL);
+			EMBARC_PRINTF("Get message d \n");
+		}
+		if(led_off) {
+			int k = 0; 
+			if(respiration >= 2048)
+				k = (respiration - 2048)*8/1200;
+			else
+				k = (2048 - respiration)*8/1200;
+			brightness(k);
+			EMBARC_PRINTF("%d",k);
+		}
+		// EMBARC_PRINTF("Cpu use %d \n", OSCPUusage);
+		
 		read_message[0] = " ";
 		vTaskDelay(1);
 	}
@@ -422,7 +473,7 @@ void init()
 	_sending[8] = 0xEE;
 	_sending[9] = 0xEF;
 	mp3->uart_write(_sending, 10);
-	vTaskDelay(1000);
+	// vTaskDelay(1000);
 }
 void volume(uint8_t vol) //Set volume value. From 0 to 30
 {
@@ -438,7 +489,7 @@ void volume(uint8_t vol) //Set volume value. From 0 to 30
 	_sending[8] = 0xF4 - vol;
 	_sending[9] = 0xEF;
 	mp3->uart_write(_sending, 10);
-	vTaskDelay(1000);
+	// vTaskDelay(1000);
 }
 
 void play(uint8_t num)
@@ -526,7 +577,7 @@ void brightness(int k)
  * \brief  ble_task in FreeRTOS
  * \details 
  * \param[in] *par
- */
+ *//*
 static void ble_task(void * par)
 {
 	while(1)
@@ -563,7 +614,7 @@ static void ble_task(void * par)
 		read_message[0] = " ";
 		vTaskDelay(1);
 	}
-}
+}*/
 
 /** emsk on-board gpio init, gpio default off */
 void my_emsk_gpio_init(void)

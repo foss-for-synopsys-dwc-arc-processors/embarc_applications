@@ -111,3 +111,9 @@ to exclude the API function. */
 #define INCLUDE_xTaskGetCurrentTaskHandle	1
 
 #endif /* FREERTOS_CONFIG_H */
+
+
+#define usercfgCPU_USAGE_CALCULATE 1
+#ifdef usercfgCPU_USAGE_CALCULATE
+#define usercfgCPU_USAGE_CALC_PERIOD 500//ms
+#endif
