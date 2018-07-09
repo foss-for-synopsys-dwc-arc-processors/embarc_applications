@@ -1,6 +1,6 @@
 # Smart Pillow Application 
-*Hong-Shuo Chen National Chiao Tung University
-Bo-Ying Chen National Tsing Hua University
+*Hong-Shuo Chen National Chiao Tung University<br>
+Bo-Ying Chen National Tsing Hua University<br>
 Kuan-Cheng Chen National Chiao Tung University*
 
 Smart pillow uses the breath frequency and turns of user. The algorithms processes the information and determine what sleep stages are users in. thus we can analyze the sleep cycle, and avoid waking users when they are in deep sleep.  Moreover, for those who suffer from sleep apnea, when smart pillow detect no breath for a period of time, smart pillow will vibrate gently to make user to start to breathe.
@@ -44,7 +44,7 @@ We hope we can popularize the smart pillow in the future, smart pillow records a
 
 | Main page | Clock | Record |
 | -------- | -------- | -------- |
-| ![](https://i.imgur.com/NNz1bgZ.png)     | ![](https://i.imgur.com/y4yej8B.png)     | ![](https://i.imgur.com/XYl1ToO.png)     |
+| ![](https://i.imgur.com/NNz1bgZ.png)     | ![](https://i.imgur.com/y4yej8B.png)     | ![](https://i.imgur.com/M8xJkWT.png)     |
 
 
 
