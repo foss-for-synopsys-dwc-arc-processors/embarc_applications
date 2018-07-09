@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration buildProperties="" description="" id="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802.1345793231" name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.825739829" name="GNU Toolchain for ARC EM" superClass="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base">
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.processor.1811627101" name="ARC EM (-mcpu)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.processor"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.endiannes.1129633308" name="Endianness" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.endiannes"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.mpyem.1605451943" name="Multiply instructions (ARC EM)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.mpyem"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.fpuem.2013546615" name="FPU Type (ARC EM)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.fpuem"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.level.709108968" name="Debug level" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.level"/>
+							<option id="org.eclipse.cdt.cross.arc.gnue.em.linux.option.debugging.format.1714736645" name="Debug format" superClass="org.eclipse.cdt.cross.arc.gnue.em.linux.option.debugging.format"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.other.1648359137" name="Other debugging flags" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.other"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.prof.128692680" name="Generate prof information (-p)" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.prof"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.gprof.1361291954" name="Generate gprof information (-pg)" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.debugging.gprof"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.addtools.printsize.1766062606" name="Print Size" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.addtools.printsize"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.barrelshifter.1435615685" name="Barrel shifter (-mbarrel-shifter)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.barrelshifter"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.codedensity.1613250636" name="Code density (-mcode-density)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.codedensity"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.divide.1676239353" name="Integer divide instructions (-mdiv-rem)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.divide"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.normalize.152338421" name="Bitscan instruction (-mnorm)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.normalize"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.linux.option.target.swap.13774742" name="Swap instruction (-mswap)" superClass="org.eclipse.cdt.cross.arc.gnu.linux.option.target.swap"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.tcf.1522278691" name="TCF" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.tcf"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.filefortcf.1103773725" name="TCF path" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.filefortcf"/>
+							<option id="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.maptcf.131857403" name="Use memory map from TCF" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.option.target.maptcf"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="org.eclipse.cdt.cross.arc.gnu.em.linux.platform.base.1729935104" isAbstract="false" name="All Platform" osList="linux,win32" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.platform.base"/>
+							<builder id="org.eclipse.cdt.cross.arc.gnu.em.linux.builder.base.1471964444" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU Make Builder for ARC" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.builder.base"/>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base.144302178" name="ARC ELF32 GCC Assembler" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base">
+								<inputType id="org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base.input.1287093178" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base.479171352" name="ARC ELF32 GCC C Compiler" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base">
+								<option id="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.include.paths.711922986" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arc.gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\os&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\options&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\device&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\board&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\example\freertos\FreeRTOS\app&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\example\freertos\FreeRTOS\appinc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\embarc_osp-master\example\freertos\FreeRTOS\hardware&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base.input.1382159257" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base.406797488" name="ARC ELF32 GCC C++ Compiler" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base">
+								<inputType id="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base.input.127208712" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.c.linker.base.1944035711" name="ARC ELF32 GCC C Linker" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.c.linker.base"/>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.linker.base.1242428325" name="ARC ELF32 GCC C++ Linker" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.linker.base">
+								<inputType id="org.eclipse.cdt.cross.arc.gnu.cpp.linker.input.593887588" superClass="org.eclipse.cdt.cross.arc.gnu.cpp.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.archiver.base.1418276882" name="ARC ELF32 GCC Archiver" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.archiver.base"/>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.createflash.base.1623139453" name="ARC ELF32 GNU Create Flash Image" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.createflash.base"/>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.em.linux.createlisting.base.939243005" name="ARC ELF32 GNU Create Listing" superClass="org.eclipse.cdt.cross.arc.gnu.em.linux.createlisting.base"/>
+							<tool id="org.eclipse.cdt.cross.arc.gnu.linux.printsize.base.298163480" name="ARC ELF32 GNU Print Size" superClass="org.eclipse.cdt.cross.arc.gnu.linux.printsize.base"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="os|device|crc32|app|options|inc|hardware|appinc|obj_emsk_22/gnu_arcem7d/device|board" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="appinc"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="board"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="device"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="hardware"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="inc"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="options"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="os"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="FreeRTOS.null.667303404" name="FreeRTOS"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802;org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802.1345793231;org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base.479171352;org.eclipse.cdt.cross.arc.gnu.em.linux.c.compiler.base.input.1382159257">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arc.gnu.ARC_GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="0.1282533133">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802;org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802.1345793231;org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base.406797488;org.eclipse.cdt.cross.arc.gnu.em.linux.cpp.compiler.base.input.127208712">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arc.gnu.ARC_GCCManagedMakePerProjectProfileCXX"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802;org.eclipse.cdt.cross.arc.gnu.linux.toolchain.base.1704381802.1345793231;org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base.144302178;org.eclipse.cdt.cross.arc.gnu.em.linux.assembler.base.input.1287093178">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arc.gnu.ARC_GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+</cproject>
