@@ -25,7 +25,7 @@ The lamp can realize stepless natural dimming in 8 different light intensity ran
 * **remote control**<br>
 The APP can support the frequent operation of the user, and there is no problem of wrong operation or invalid operation under the high-intensity round-trip conversion test.
 ## **System Architecture** <div id='architecture'/>
-<img src="https://github.com/tyhucosiii/smart-lamp/blob/master/pictures/system.jpg" width = "500" alt="图片名称" align=center /> <br>
+<img src="https://github.com/tyhucosiii/smart-lamp/blob/master/pictures/system.png" width = "500" alt="图片名称" align=center /> <br>
 
 ----
 # **System Config** <div id='config'/>
