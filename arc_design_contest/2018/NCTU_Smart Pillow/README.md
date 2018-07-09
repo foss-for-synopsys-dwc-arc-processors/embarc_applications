@@ -31,6 +31,7 @@ We hope we can popularize the smart pillow in the future, smart pillow records a
 - **Alarm Clock** Setting 
 - **Music** based on Uart protocol (Supports file umlimited songs)
 - **Alexa** Voice assistant, connecting and communicating with Wifi.
+- **CPU Loading** Calculate the power used by the board
 
 
 
@@ -86,7 +87,7 @@ We hope we can popularize the smart pillow in the future, smart pillow records a
 ## User Manual
 ### Before Running This Application
 In order to open **UART_2**
-We need to modify following file
+We need to modify following files
 
 * emsk_init.c
 ```
