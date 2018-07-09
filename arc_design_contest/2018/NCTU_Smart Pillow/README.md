@@ -44,7 +44,7 @@ We hope we can popularize the smart pillow in the future, smart pillow records a
 
 | Main page | Clock | Record |
 | -------- | -------- | -------- |
-| ![](https://i.imgur.com/NNz1bgZ.png)     | ![](https://i.imgur.com/y4yej8B.png)     | Text     |
+| ![](https://i.imgur.com/NNz1bgZ.png)     | ![](https://i.imgur.com/y4yej8B.png)     | ![](https://i.imgur.com/XYl1ToO.png)     |
 
 
 
