@@ -7,7 +7,7 @@
 #include "u8g.h"
 #include <string.h>
 #include "arc.h"
-#define FOLLOW_DISTANCE  120 //跟随距离
+#define FOLLOW_DISTANCE  120 
 #define STOP_DISTANCE  80
 #define LOST_DISTANCE 300
 #define ALARM_DISTANCE 400
@@ -53,7 +53,7 @@ void u8g_prepare(void)
 }
 static void draw(int32_t temp, uint16_t pmm) 
 {	
-	char s[]="Temperature:  .  C";		//温度
+	char s[]="Temperature:  .  C";		
 	s[12]=(int)(temp/100)+48;
 	s[13]=(int)((temp-((int)(temp/100))*100)/10)+48;
 	s[15]=(int)(temp%10)+48;
@@ -162,14 +162,14 @@ static void stop(void)
 int main(void)
 {
 	uint8_t rcv_buf[28];
-	int a0_to_a1;//基站0到基站1距离
-	int a0_to_a2;//基站0到基站2距离
-	int a1_to_a2;//基站1到基站2距离
-        int t_to_a0;//标签到基站0距离
-	int t_to_a1;//标签到基站1距离
-	int t_to_a2;//标签到基站2距离
-        double a=20.0;//等边三角形边长
-	double b,c,d,f,jiaodu,y;//坐标表示
+	int a0_to_a1;
+	int a0_to_a2;
+	int a1_to_a2;
+        int t_to_a0;
+	int t_to_a1;
+	int t_to_a2;
+        double a=20.0;
+	double b,c,d,f,jiaodu,y;
 	uint32_t rcv_cnt;
 	uint32_t i = 0;
 	uint32_t baudrate = 115200;
@@ -231,15 +231,15 @@ int main(void)
 						a0_to_a2=(rcv_buf[25]<<8) |(rcv_buf[24]) ;
 						a1_to_a2=(rcv_buf[27]<<8) |(rcv_buf[26]) ;
 					   }					   
-			                   y=(t_to_a0*t_to_a0-t_to_a1*t_to_a1)/(2*a);//标签y方向坐标
+			                   y=(t_to_a0*t_to_a0-t_to_a1*t_to_a1)/(2*a);
 					   b=2*a*a+2*t_to_a2*t_to_a2-t_to_a0*t_to_a0-t_to_a1*t_to_a1;
 					   c=t_to_a0*t_to_a0+t_to_a1*t_to_a1-2*a*a-2*t_to_a2*t_to_a2;					   
 					   d=t_to_a0*t_to_a0-t_to_a1*t_to_a1;
 					   f=sqrt1(c*c+3*d*d);
 					   jiaodu=b/f;  					
-            	                           jiaodu=acos1(jiaodu)*180.0/PI;      ////////基于三点定位原理，建立空间直角坐标系，计算方位角
+            	                           jiaodu=acos1(jiaodu)*180.0/PI;      
 					   printf("jiaodu=%lf\n",jiaodu);
-					   if(t_to_a2>FOLLOW_DISTANCE&&t_to_a2<LOST_DISTANCE) //如果距离大于跟随距离
+					   if(t_to_a2>FOLLOW_DISTANCE&&t_to_a2<LOST_DISTANCE)
 						{   
 						   if(right_obstacle>0)
 							    right_obstacle--;								 
@@ -247,7 +247,7 @@ int main(void)
 								left_obstacle--;
 						   if(turn_left)		 
 							{					
-							    if(dis_m<80)	//正前方障碍物距离小于80cm，继续转，否则前进。
+							    if(dis_m<80)	
 								   {
 								      left();
 								   }
@@ -269,11 +269,11 @@ int main(void)
 									  left_obstacle = 2;
 								   }
 							}
-						   else if(dis_l<30||dis_m<30||dis_r<30) //如果障碍物距离小于30，小车后退
+						   else if(dis_l<30||dis_m<30||dis_r<30) 
 							{
 								back();
 							}
-						   else if(dis_l<50||dis_r<50)//如果障碍物距离小于50，小车朝另一边走。
+						   else if(dis_l<50||dis_r<50)
 							{
 								if(dis_l<50)
 								   {
@@ -286,7 +286,7 @@ int main(void)
 									  right_obstacle  =2;
 								   }
 							}
-						   else if(y<=0&&(jiaodu>=40&&dis_l>=80||jiaodu>=70)&&left_obstacle==0)//标签在小车左边40度，并且左边没有障碍物。或者标签在小车左边大于70度。朝标签方向旋转。
+						   else if(y<=0&&(jiaodu>=40&&dis_l>=80||jiaodu>=70)&&left_obstacle==0)
 							{ 
 								left();	  								   
 							}
@@ -294,21 +294,21 @@ int main(void)
 							{		   							  
 							    right();								  
 							}
-						   else if(dis_m<50) //如果正前方障碍物小于50cm
+						   else if(dis_m<50) 
 							{
-								if(dis_r>50||dis_l>50)//左边或者右边障碍物大于50cm，则朝没有障碍物的地方转。
+								if(dis_r>50||dis_l>50)
 								   {
-									  if(dis_r>dis_l)	//1：进入朝右转模式，一直转到正前方没有障碍物，再往前走。
+									  if(dis_r>dis_l)	
 									  {		 
 									     turn_right=1; 
 									  }
 									  else
 									  {		 
-									     turn_left = 1;	  //进入朝左转模式，一直转到正前方没有障碍物，再往前走。
+									     turn_left = 1;	 
 									  }
 								   }
 							}
-						   else if(right_obstacle==0&&left_obstacle==0) //标签在正前方，并且左右没有障碍物	 
+						   else if(right_obstacle==0&&left_obstacle==0) 	 
 						        {
 							    forward();
 						        }
