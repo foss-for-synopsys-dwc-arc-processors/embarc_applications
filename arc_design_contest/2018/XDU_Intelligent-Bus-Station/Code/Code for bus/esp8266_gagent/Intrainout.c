@@ -3,18 +3,18 @@
 #include "embARC_debug.h"
 
 #include "dev_gpio.h" //GPIO API头文件
-#include "../../../board/emsk/drivers/mux/mux.h"	// Pmod端口配置API`
+#include "../../../board/emsk/drivers/mux/mux.h"	
 #include "../../../board/emsk/drivers/mux/mux_hal.h"
 
 #define BUTTON_MASK 						0x7
 
-uint8_t 				ct = 0; //上车人数
+uint8_t 				ct = 0;
 
 uint8_t 				crowd = 0;
 uint8_t 				CT = 0;
 
 
-uint8_t intra_inout (void) //车载人数统计函数
+uint8_t intra_inout (void) 
 
 {
 	uint8_t 				cp	= 0;													//下车人数
@@ -40,10 +40,10 @@ uint8_t intra_inout (void) //车载人数统计函数
 			dw_gpio_read (gpio_read_port, &data, 0x4400);
 			board_delay_ms (10, 1);
 
-			if (data == 1024) //此时仅检测到有人上车
+			if (data == 1024) 
 				{
 					board_delay_ms (10, 1);
-					dw_gpio_read (gpio_read_port, &data, 0x4400); //延迟10ms再进行读数
+					dw_gpio_read (gpio_read_port, &data, 0x4400);
 
 					if (data == 0)
 						{
@@ -55,7 +55,7 @@ uint8_t intra_inout (void) //车载人数统计函数
 					else 
 						continue;
 				}
-			else if (data == 0x4000) //此时仅有人下车
+			else if (data == 0x4000)
 				{
 					board_delay_ms (10, 1);
 					dw_gpio_read (gpio_read_port, &data, 0x4000);
