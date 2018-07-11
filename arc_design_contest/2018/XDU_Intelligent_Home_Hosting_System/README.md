@@ -2,9 +2,9 @@
 
 ## Introduction 
 
-###Our Team
+### Our Team
 The name of our team is "haier brothers".  We come from XIDIAN University .
-###Our Work
+### Our Work
 Based on the ARC EM Starter Kit development board, this design completes a smart home hosting system that implements the following features:
 
 - Aquarium automatic timing and remote control feeding, automatic water circulation
