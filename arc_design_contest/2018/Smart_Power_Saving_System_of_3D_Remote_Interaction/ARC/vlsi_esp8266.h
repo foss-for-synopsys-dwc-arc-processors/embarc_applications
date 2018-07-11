@@ -66,6 +66,7 @@ int vlsi_esp8266_mode_set(VLSI_ESP *obj);
 
 /** \brief esp8266 connect
 *          Connect to the AP by given it ssid and key.
+*     This function still not very robust, make sure the ssid and key in this function are correct.
 */
 int vlsi_esp8266_connect(VLSI_ESP *obj, char* ssid, char* key);
 

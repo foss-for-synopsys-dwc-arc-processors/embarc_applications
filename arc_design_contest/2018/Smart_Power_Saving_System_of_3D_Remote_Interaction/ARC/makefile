@@ -4,7 +4,7 @@
 ##
 
 # Application name
-APPL ?= test
+APPL ?= NCKU_Smart_Power_Saving_System_of_3D_Remote_Interaction
 
 # Optimization Level
 # Please Refer to toolchain_xxx.mk for this option
@@ -47,7 +47,7 @@ TOOLCHAIN ?= gnu
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../..
+EMBARC_ROOT = ../../../../..
 
 MID_SEL = common
 

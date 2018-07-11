@@ -181,12 +181,16 @@ int vlsi_esp8266_mode_set(VLSI_ESP *obj)
 
 int vlsi_esp8266_connect(VLSI_ESP *obj, char* ssid, char* key)
 {
-  char cmd[] = "AT+CWJAP_CUR=\"VLSILAB_2G2\",\"vlsi95514\"\r\n";
-  /* EMBARC_PRINTF("wifi cmd: %s\r\n", cmd); */
+  /**To simplify the flow, I directly assigned the cmd*/
+  char cmd[] = "AT+CWJAP_CUR=\"ssid\",\"passwd\"\r\n";
 
+  if(strstr(cmd, ssid) == NULL)
+  {
+    EMBARC_PRINTF("Make shure the ssid and key in cmd string (vlsi_esp8266.c 189) are correct \r\n");
+    return AT_ERROR;
+  }
   obj->uart->uart_write(cmd, sizeof(cmd));
 
-  /* int f = vlsi_esp8266_get_repley(obj, NULL, 100); */
   int f = vlsi_esp8266_wait_repley(obj);
   return f;
 }
