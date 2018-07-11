@@ -93,12 +93,12 @@ int32_t play_mp3(int32_t filelenth, uint8_t location)
 
 	while (1) {
 		if ( location == IN_NET ) {
-			buff_ofs = uart_obj -> uart_info.rx_buf.ofs;  		//网络下载的缓冲区大小
+			buff_ofs = uart_obj -> uart_info.rx_buf.ofs; 
 		}
 
 		if ( buff_ofs  > (int32_t)(dec_sum) + ( 20 * 1024 )
 			 || flag_netend == true
-			 || location == IN_FILE ) {	//如果接收到的量比解压完的多20KB或者下载完毕
+			 || location == IN_FILE ) {
 
 			offset = MP3FindSyncWord(read_ptr, byte_left);		//Find the Location of Start
 
@@ -177,8 +177,8 @@ int32_t play_mp3(int32_t filelenth, uint8_t location)
 				xEventGroupWaitBits(
 					evt1_cb,
 					BIT_0 | BIT_1 | BIT_2, 						//Regard BIT0 as Dma Transfer Finish,Regard BIT1 as Outside FIFO Full Flag
-					pdFALSE, 								//BIT_0 and BIT_1 Should Not be Cleared manually.
-					pdTRUE, 								// Wait for both Bits
+					pdFALSE, 									//BIT_0 and BIT_1 Should Not be Cleared manually.
+					pdTRUE, 									// Wait for both Bits
 					portMAX_DELAY );
 				break;
 			}
@@ -193,8 +193,8 @@ int32_t play_mp3(int32_t filelenth, uint8_t location)
 			xEventGroupWaitBits(
 				evt1_cb,
 				BIT_0 | BIT_1 | BIT_2, 						//Regard BIT0 as Dma Transfer Finish,Regard BIT1 as Outside FIFO Full Flag
-				pdFALSE, 								//BIT_0 and BIT_1 Should Not be Cleared manually.
-				pdTRUE, 								// Wait for both Bits
+				pdFALSE, 									//BIT_0 and BIT_1 Should Not be Cleared manually.
+				pdTRUE, 									// Wait for both Bits
 				portMAX_DELAY );
 			break;
 		}

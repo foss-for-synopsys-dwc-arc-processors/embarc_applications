@@ -110,15 +110,9 @@ void OLED_CLS(void)
 }
 
 
-//==============================================================
-//函数名： void LCD_PutPixel(uint8 x,uint8 y)
-//功能描述：绘制一个点（x,y）
-//参数：真实坐标值(x,y),x的范围0～127，y的范围0～64
-//返回：无
-//==============================================================
 void OLED_PutPixel(uint8_t x, uint8_t y)
 {
-	uint8_t data1;  //data1当前点的数据
+	uint8_t data1;  
 
 	OLED_Set_Pos(x, y);
 	data1 = 0x01 << (y % 8);
@@ -127,14 +121,7 @@ void OLED_PutPixel(uint8_t x, uint8_t y)
 	Write_IIC_Command((x & 0x0f) | 0x00);
 	Write_IIC_Data(data1);
 }
-//==============================================================
-//函数名： void LCD_Rectangle(uint8 x1,uint8 y1,
-//                   uint8 x2,uint8 y2,uint8 color,uint8 gif)
-//功能描述：绘制一个实心矩形
-//参数：左上角坐标（x1,y1）,右下角坐标（x2，y2）
-//      其中x1、x2的范围0～127，y1，y2的范围0～63，即真实坐标值
-//返回：无
-//==============================================================
+
 void OLED_Rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t gif)
 {
 	uint8_t n;
@@ -143,28 +130,17 @@ void OLED_Rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t gif)
 
 	for (n = x1; n <= x2; n++) {
 		Write_IIC_Data(0x01 << (y1 % 8));
-
-		// if (gif == 1) { OLED_DLY_ms(50); }
 	}
 
 	OLED_Set_Pos(x1, y2 >> 3);
 
 	for (n = x1; n <= x2; n++) {
 		Write_IIC_Data(0x01 << (y2 % 8));
-		// if(gif == 1)
-		// 	OLED_DLY_ms(5);
 	}
 
 }
-/**==============================================================
-函 数 名: LED_P6x8Char
-功能描述: 显示一个6x8标志ASCII字符串
-输入数据:  uint8 ucIdxX       显示横坐标0~122
-uint8 ucIdxY       页范围0~7
-uint8 ucData       显示的字符串
-输出数据: NONE
-返 回 值: NONE
-==============================================================**/
+
+
 void OLED_P6x8Char(uint8_t ucIdxX, uint8_t ucIdxY, uint8_t ucData)
 {
 	uint8_t i, ucDataTmp;
@@ -209,12 +185,8 @@ void OLED_P8x16Char(uint8_t x, uint8_t y, uint8_t ch)
 
 }
 
-//==============================================================
-//函数名：LCD_P6x8Str(uint8 x,uint8 y,uint8 *p)
-//功能描述：写入一组标准ASCII字符串
-//参数：显示的位置（x,y），y为页范围0～7，要显示的字符串
-//返回：无
-//==============================================================
+
+
 void OLED_P6x8Str(uint8_t x, uint8_t y, uint8_t ch[])
 {
 	uint8_t c = 0, i = 0, j = 0;
@@ -234,12 +206,9 @@ void OLED_P6x8Str(uint8_t x, uint8_t y, uint8_t ch[])
 		j++;
 	}
 }
-//==============================================================
-//函数名：LCD_P8x16Str(uint8 x,uint8 y,uint8 *p)
-//功能描述：写入一组标准ASCII字符串
-//参数：显示的位置（x,y），y为页范围0～7，要显示的字符串
-//返回：无
-//==============================================================
+
+
+
 void OLED_P8x16Str(uint8_t x, uint8_t y, uint8_t ch[])
 {
 	uint8_t c = 0, i = 0, j = 0;
@@ -265,7 +234,9 @@ void OLED_P8x16Str(uint8_t x, uint8_t y, uint8_t ch[])
 		j++;
 	}
 }
-//输出汉字字符串
+
+
+
 void OLED_P14x16Str(uint8_t x, uint8_t y, uint8_t ch[])
 {
 	uint8_t wm = 0, ii = 0;
@@ -290,7 +261,7 @@ void OLED_P14x16Str(uint8_t x, uint8_t y, uint8_t ch[])
 
 		OLED_Set_Pos(x , y);
 
-		if (adder != 1) { // 显示汉字
+		if (adder != 1) { 
 			OLED_Set_Pos(x , y);
 
 			for (wm = 0; wm < 14; wm++) {
@@ -304,7 +275,7 @@ void OLED_P14x16Str(uint8_t x, uint8_t y, uint8_t ch[])
 				Write_IIC_Data(F14x16[adder]);
 				adder += 1;
 			}
-		} else {		 //显示空白字符
+		} else {		
 			ii += 1;
 			OLED_Set_Pos(x, y);
 
@@ -323,7 +294,9 @@ void OLED_P14x16Str(uint8_t x, uint8_t y, uint8_t ch[])
 		ii += 2;
 	}
 }
-//输出汉字和字符混合字符串
+
+
+
 void OLED_Print(uint8_t x, uint8_t y, uint8_t ch[])
 {
 	uint8_t ch2[3];
@@ -333,26 +306,22 @@ void OLED_Print(uint8_t x, uint8_t y, uint8_t ch[])
 		if (ch[ii] > 127) {
 			ch2[0] = ch[ii];
 			ch2[1] = ch[ii + 1];
-			ch2[2] = '\0';			//汉字为两个字节
-			OLED_P14x16Str(x , y, ch2);	//显示汉字
+			ch2[2] = '\0';		
+			OLED_P14x16Str(x , y, ch2);	
 			x += 14;
 			ii += 2;
 		} else {
 			ch2[0] = ch[ii];
-			ch2[1] = '\0';			//字母占一个字节
-			OLED_P8x16Str(x , y , ch2);	//显示字母
+			ch2[1] = '\0';			
+			OLED_P8x16Str(x , y , ch2);	
 			x += 8;
 			ii += 1;
 		}
 	}
 }
 
-//==============================================================
-//函数名： void Draw_BMP(uint8 x,uint8 y)
-//功能描述：显示BMP图片128×64
-//参数：起始点坐标(x,y),x的范围0～127，y为页的范围0～7
-//返回：无
-//==============================================================
+
+
 void Draw_BMP(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t bmp[])
 {
 	uint16_t ii = 0;
@@ -384,22 +353,15 @@ void OLED_PrintInt16(uint8_t ucIdxX, uint8_t ucIdxY, int16_t sData)
 	j  = (uint16_t)(sData / 10) % 10;
 	k  = (uint16_t) sData % 10;
 
-
-	//十位
 	OLED_P6x8Char(ucIdxX , ucIdxY, (uint8_t)0 + 48);
 	OLED_P6x8Char(ucIdxX + 6, ucIdxY, (uint8_t)j + 48);
 
-
-	//个位
 	OLED_P6x8Char(ucIdxX + 12, ucIdxY, (uint8_t)k + 48);
 
 
 	return;
 }
 
-/**
- * 画7个频谱条 0-128
- */
 
 void draw_fft()
 {
@@ -411,7 +373,7 @@ void draw_fft()
 
 	for ( i = 0; i < 4; i++ ) {
 
-		if ( gui_info.fft[i] < gui_info.fft_show[i] ) {		//下降条
+		if ( gui_info.fft[i] < gui_info.fft_show[i] ) {
 
 			if ( gui_info.fft_show[i] >= 3 ) {
 				gui_info.fft_show[i] -= 3;

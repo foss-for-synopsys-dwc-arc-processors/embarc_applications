@@ -6,7 +6,6 @@ This appilcation is a prototype of **Internet Radio** designed on ARC EM Starter
 
 * [Introduction](#Introduction)
     - [Function](#function)
-    - [System Architecture](#system-architecture)
     - [Appearance](#appearance)
     - [Video](#video)
 * [Hardware and Software Setup](#hardware-and-software-setup)
@@ -31,9 +30,6 @@ Through an amplifier outside,the online music can be play out from two big speak
 * Protocol transit form SPI to I2S 
 * Power Amplification 
 * Performance data display
-
-### System Architecture
-![System Architecture][1]
 
 ### Appearance
 * **System Top View -- Control Part**
@@ -225,7 +221,6 @@ Placing the HEADER source file.
 |  Dsp_assembly.h     |   optimize code for Arc Dsp   |
 
 
-[1]: ./doc/pic/sysarch.png
 [2]: ./doc/pic/top.jpg
 [3]: ./doc/pic/mid.jpg
 [4]: ./doc/pic/mid2.jpg

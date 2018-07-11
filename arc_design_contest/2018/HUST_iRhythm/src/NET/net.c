@@ -30,7 +30,7 @@ char dllink[500] = { 0 };				//Store Song Download Url
 char songpoint[50] = { 0 };				//Store Song Name Download Form Net ,Unnecessart Now
 static char http_cmd[500] = {0};		//Structure HTTP Command
 
-static char net_info[102400] = { 0 };	//存放网络临时信息和解析
+static char net_info[102400] = { 0 };	
 
 
 ESP8266_DEF __ESP8266_A;				//Define ESP8266 Control Struct
