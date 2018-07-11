@@ -103,7 +103,7 @@ int main (void)
 
 	setupAP4 ();
 
-	while (1) //ARC板子读取wifi发送的数据函数
+	while (1) 
 		{
 			esp8266_uart->uart_control (UART_CMD_GET_RXAVAIL, (void *) (&rd_avail));
 			rd_cnt							= (MAX_READ_CNT > rd_avail) ? rd_avail: MAX_READ_CNT;
@@ -129,7 +129,7 @@ int main (void)
 										mcu2wifi_product_info ();
 										break; //MCU传入产品的Key与Secret
 
-									case 0x03: //Wifi控制设备，MCU读入改变的数据点
+									case 0x03: 
 											{
 												if (read_data[9] == 01)
 													{
@@ -140,9 +140,9 @@ int main (void)
 														Crowd 							= read_data[11];
 													}
 
-												//EMBARC_PRINTF("SN=%d,CR=%d\r\n",StaNum,Crowd);	//临时显示debug						
-												LEDRGB (StaNum, Crowd); 		//云端数据改变对应引起指示灯的变化
-												mcu2wifi_wifi_ctrl_dev (read_data); //MCU回复wifi的控制指令
+												//EMBARC_PRINTF("SN=%d,CR=%d\r\n",StaNum,Crowd);							
+												LEDRGB (StaNum, Crowd); 		
+												mcu2wifi_wifi_ctrl_dev (read_data); 
 												break;
 											}
 
@@ -151,7 +151,7 @@ int main (void)
 
 									case 0x07:
 										mcu2wifi_heartbeat ();
-										break; //MCU回复心跳包
+										break; 
 
 									case 0x0a:
 										break;
@@ -161,7 +161,7 @@ int main (void)
 
 									case 0x0d:
 										mcu2wifi_wifi_statu (read_data);
-										break; //wifi将最新的工作状态推送至MCU
+										break;
 
 									default:
 										EMBARC_PRINTF ("Undefine commond or error!!!\r\n");
