@@ -7,23 +7,23 @@
 #define I2C_SLAVE_ADDR1  0x02
 #define uchar unsigned char
 #define uint unsigned int
-#define HEADLEN       5  //Êı¾İ°üÍ·µÄ³¤¶È
+#define HEADLEN       5  
 DEV_IIC *dev_iicyu=NULL;
-static DEV_GPIO_PTR port_swt1;//ÔİÍ£¼ü
-static DEV_GPIO_PTR port_swt2;//ÖĞÓ¢ÇĞ»»
-static DEV_GPIO_PTR port_swt3;//×Ô¶¯²¥·Å
-static DEV_GPIO_PTR port_call;//Ò»¼üÇóÖú
+static DEV_GPIO_PTR port_swt1;
+static DEV_GPIO_PTR port_swt2;
+static DEV_GPIO_PTR port_swt3;
+static DEV_GPIO_PTR port_call;
 static DEV_GPIO_PTR port_PA4;
 static DEV_GPIO_PTR port_PA5;
 static DEV_GPIO_PTR port_PA6;
 static DEV_GPIO_PTR port_PA7;
-int adc[4];//ÍäÇú´«¸ĞÆ÷Êı¾İ
-double aValue[3];//ÊÖ²¿ÔË¶¯¼ÓËÙ¶È
-double wValue[3];//ÊÖ²¿ÔË¶¯½ÇËÙ¶È
-double AValue[3];//ÊÖ²¿ÔË¶¯½Ç¶È
+int adc[4];
+double aValue[3];
+double wValue[3];
+double AValue[3];
 int cmd;
 u8g_t u8g;
-//********************ÑÓ³Ùµ¥Ôª************************************
+//********************************************************
 static void delay_ms(volatile int z) //1ms
 {
 	volatile uint32_t x,y;
@@ -32,30 +32,30 @@ static void delay_ms(volatile int z) //1ms
 }
 //*****************************************************************
 
-//*****************************ÓïÒôºÏ³É****************************
+//*********************************************************
 void  yuyin(char text[]) 
 {    
     dev_iicyu = iic_get_dev(DW_IIC_1_ID	);
     dev_iicyu->iic_open(DEV_MASTER_MODE, IIC_SPEED_STANDARD);
 	dev_iicyu->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(I2C_SLAVE_ADDR1));
-/****************ĞèÒª·¢ËÍµÄÎÄ±¾**********************************/ 
+/**************************************************/ 
 	uint8_t  length=0x00;  
-    char  ecc  = 0x00;  			//¶¨ÒåĞ£Ñé×Ö½Ú
+    char  ecc  = 0x00;  			
 	uint8_t i=0; 
     while(text[length++]);
         char head[HEADLEN] = {0xfd,0x00,0x00,0x01,0x00};
 		head[2] = length + 3;
-		 for(i = 0; i<5; i++)   				//ÒÀ´Î·¢ËÍ¹¹ÔìºÃµÄ5¸öÖ¡Í·×Ö½Ú
+		 for(i = 0; i<5; i++)   				
 	     {  
-	         ecc=ecc^(head[i]); 		//¶Ô·¢ËÍµÄ×Ö½Ú½øĞĞÒì»òĞ£Ñé	
+	         ecc=ecc^(head[i]); 		
 		 }   
 	     
              dev_iicyu->iic_write(head, 5);
 	   	 
 		 
-		 for(i = 0; i<length+1; i++)   		//ÒÀ´Î·¢ËÍ´ıºÏ³ÉµÄÎÄ±¾Êı¾İ
+		 for(i = 0; i<length+1; i++)   		
 	     {  
-	          				//¶Ô·¢ËÍµÄ×Ö½Ú½øĞĞÒì»òĞ£Ñé	
+	          				
 			 if(i==length) 
 				 text[i] = ecc;
 			 else 
@@ -120,7 +120,7 @@ while(1)
 			  delay_ms(400);
 			  send_msg();
 		   }	
-//**************************ÓïÒôÊ¶±ğ********************************************		
+//**********************************************************************		
 	   port_PA4 -> gpio_read(&PA4, 0x10000);	
 	   port_PA5 -> gpio_read(&PA5, 0x20000);	
 	   port_PA6 -> gpio_read(&PA6, 0x40000);	
@@ -138,7 +138,7 @@ while(1)
 	   printf("Y[2]=0x%x\r\n",Y[2]);
 	   printf("Y[3]=0x%x\r\n",Y[3]);
      if(Y[0]==0x0&Y[1]==0x0&Y[2]==0x0&Y[3]==0x0)	
-         {printf("ÄãºÃ\r\n"); 
+         {printf("ä½ å¥½\r\n"); 
 	      u8g_FirstPage(&u8g);
 		  do 
 			  {
@@ -149,7 +149,7 @@ while(1)
 	     
 	    
 	 if(Y[0]==0x80000&Y[1]==0x0&Y[2]==0x0&Y[3]==0x0)		
-	     {printf("Äã½ĞÊ²Ã´\r\n");	
+	     {printf("ä½ å«ä»€ä¹ˆ\r\n");	
 	      u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -160,7 +160,7 @@ while(1)
 		 
 	     
 	 if(Y[0]==0x0&Y[1]==0x40000&Y[2]==0x0&Y[3]==0x0)	
-	     {printf("ÎÒ½ĞÀîËÄ\r\n");	
+	     {printf("æˆ‘å«æå››\r\n");	
 	      u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -171,7 +171,7 @@ while(1)
 		
 	     
 	 if(Y[0]==0x80000&Y[1]==0x40000&Y[2]==0x0&Y[3]==0x0)		
-	    {printf("ÎÒ22\r\n");
+	    {printf("æˆ‘22\r\n");
 	     u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -181,7 +181,7 @@ while(1)
 		}	
 		 
 	 if(Y[0]==0x0&Y[1]==0x0&Y[2]==0x20000&Y[3]==0x0)	
-	    { printf("ÄãÄØ\r\n");
+	    { printf("ä½ å‘¢\r\n");
 	      u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -192,7 +192,7 @@ while(1)
 		
 	     
 	 if(Y[0]==0x80000&Y[1]==0x0&Y[2]==0x20000&Y[3]==0x0)		
-	    {printf("ÎÒÒ²ÊÇ\r\n");	
+	    {printf("æˆ‘ä¹Ÿæ˜¯\r\n");	
 	     u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -203,7 +203,7 @@ while(1)
 			
 	  
 	 if(Y[0]==0x0&Y[1]==0x40000&Y[2]==0x20000&Y[3]==0x0)		
-        {printf("ÎÒÒªÈ¥Ì¨Íå\r\n");
+        {printf("æˆ‘è¦å»å°æ¹¾\r\n");
 	    u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -214,7 +214,7 @@ while(1)
 		 
 	    
 	  if(Y[0]==0x80000&Y[1]==0x40000&Y[2]==0x20000&Y[3]==0x0)	
-         {printf("ÎÒ½ø¾öÈüÁË\r\n");
+         {printf("æˆ‘è¿›å†³èµ›äº†\r\n");
 	      u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -225,7 +225,7 @@ while(1)
 		 
 	    
 	 if(Y[0]==0x0&Y[1]==0x0&Y[2]==0x0&Y[3]==0x10000)		
-        {printf("ÄãÖªµÀÌ¨ÍåÓĞÊ²Ã´ÃûÊ¤\r\n");
+        {printf("ä½ çŸ¥é“å°æ¹¾æœ‰ä»€ä¹ˆåèƒœ\r\n");
 	     u8g_FirstPage(&u8g);
 		  do 
 			  {
@@ -236,7 +236,7 @@ while(1)
 		
 	    
 	  if(Y[0]==0x80000&Y[1]==0x0&Y[2]==0x0&Y[3]==0x10000)	
-	     {printf("ºÃ°É\r\n");	
+	     {printf("å¥½å§\r\n");	
 	      u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -247,7 +247,7 @@ while(1)
 		
 	   
 	  if(Y[0]==0x0&Y[1]==0x40000&Y[2]==0x0&Y[3]==0x10000)	
-       {printf("Ğ»Ğ»\r\n");		
+       {printf("è°¢è°¢\r\n");		
         u8g_FirstPage(&u8g); 
 		  do 
 			  {
@@ -262,39 +262,39 @@ while(1)
 	   port_swt3->gpio_control(GPIO_CMD_SET_BIT_DIR_INPUT, (void *)0x400);
 	   port_swt3->gpio_read(&DIP3, 0x400);
 	   printf("DIP3=0x%x\r\n",DIP3);
-//**************************×Ô¶¯²¥±¨*****************************************	 
+//**************************è‡ªåŠ¨æ’­æŠ¥*****************************************	 
 	  if(DIP3==0x400)
 		{
-			EMBARC_PRINTF("×Ô¶¯²¥·Å\r\n");
+			EMBARC_PRINTF("è‡ªåŠ¨æ’­æ”¾\r\n");
 			data(adc,aValue,wValue,AValue);
 		    cmd=judge(aValue,wValue,AValue,adc,cmd);
 			if(cmd==1)
 		        {
-		          char texta1[]={"´ó¼ÒºÃ£¬ÎÒÊÇÕÅÈı£¬ÎÒÀ´×ÔÎ÷°²£¬ÏÖÔÚÎÒÔÚÎ÷µç¶ÁÑĞ¾¿Éú"};
+		          char texta1[]={"å¤§å®¶å¥½ï¼Œæˆ‘æ˜¯å¼ ä¸‰ï¼Œæˆ‘æ¥è‡ªè¥¿å®‰ï¼Œç°åœ¨æˆ‘åœ¨è¥¿ç”µè¯»ç ”ç©¶ç”Ÿ"};
                    yuyin(texta1);
 		            cmd=0;
 		        }
 		    else if(cmd==2)
 		        {
-			      char textb1[]={"ÄúºÃ£¬ÎÒÃÔÂ·ÁË£¬Äú¿ÉÒÔ°ïÎÒÒ»ÏÂÂğ"};
+			      char textb1[]={"æ‚¨å¥½ï¼Œæˆ‘è¿·è·¯äº†ï¼Œæ‚¨å¯ä»¥å¸®æˆ‘ä¸€ä¸‹å—"};
 			      yuyin(textb1);
 			        cmd=0;
 		        }
 		    else if(cmd==3)
 		        {
-		            char textc1[]={"ºÜ¸ßĞËÈÏÊ¶Äã"};
+		            char textc1[]={"å¾ˆé«˜å…´è®¤è¯†ä½ "};
 			        yuyin(textc1);
 			        cmd=0;
 			    }
 		    else if(cmd==4)
 		        {
-			        char textd1[]={"ÎÒÃÇÒ»»á¶ùÈ¥ÄÄ¶ù"};
+			        char textd1[]={"æˆ‘ä»¬ä¸€ä¼šå„¿å»å“ªå„¿"};
 			        yuyin(textd1);
 			        cmd=0;
 			    }
 			else if(cmd==5)
 		        {
-			        char textE1[]={"½ñÌìÌìÆøÕæºÃ°¡"};
+			        char textE1[]={"ä»Šå¤©å¤©æ°”çœŸå¥½å•Š"};
 			        yuyin(textE1);
 			         cmd=0;
 		         }
@@ -302,7 +302,7 @@ while(1)
 		}
 //*****************************************************************************
 
-//**********************************ÖĞÓ¢ÎÄÊÖÊÆÊ¶±ğ*****************************
+//***************************************************************
 	  else
 		   {
 		     port_swt2 = gpio_get_dev(DW_GPIO_PORT_A);
@@ -519,7 +519,7 @@ while(1)
 		       cmd=judge1(aValue,wValue,AValue,adc,cmd);
 			  if(cmd==1)
 		        {
-		          char text1[]={"¶à´ó"};
+		          char text1[]={"å¤šå¤§"};
                    yuyin(text1);
 			       u8g_FirstPage(&u8g); 
 		           do 
@@ -530,7 +530,7 @@ while(1)
 		        }
 		       else if(cmd==2)
 		        {
-			      char text2[]={"¿ÉÒÔ"};
+			      char text2[]={"å¯ä»¥"};
 			      yuyin(text2);
 			      u8g_FirstPage(&u8g);
 		           do 
@@ -541,7 +541,7 @@ while(1)
 		        }
 		       else if(cmd==3)
 		        {
-		            char text3[]={"ÓĞ"};
+		            char text3[]={"æœ‰"};
 			        yuyin(text3);
 			        drawyou();
 		            do 
@@ -552,7 +552,7 @@ while(1)
 			    }
 		       else if(cmd==4)
 		        {
-			        char text4[]={"´ÏÃ÷"};
+			        char text4[]={"èªæ˜"};
 			        yuyin(text4);
 			        u8g_FirstPage(&u8g); 
 		            do
@@ -563,7 +563,7 @@ while(1)
 			    }
 			   else if(cmd==5)
 		        {
-			        char text5[]={"ÕÅ"};
+			        char text5[]={"å¼ "};
 			        yuyin(text5);
 			        u8g_FirstPage(&u8g); 
 		            do 
@@ -574,7 +574,7 @@ while(1)
 		         }
 		       else if(cmd==6)
 		         {
-		              char text6[]={"Ê¹ÓÃ"};
+		              char text6[]={"ä½¿ç”¨"};
 			           yuyin(text6);
 			           u8g_FirstPage(&u8g); 
 		               do 
@@ -585,7 +585,7 @@ while(1)
 			      }
 		       else if(cmd==7)
 		          {
-			            char text7[]={"È¥"};
+			            char text7[]={"å»"};
 			            yuyin(text7);
 			            u8g_FirstPage(&u8g); 
 		                do
@@ -607,7 +607,7 @@ while(1)
 		            }
 		       else if(cmd==9)
 		            {
-		               char text9[]={"ºÜ"};
+		               char text9[]={"å¾ˆ"};
 			            yuyin(text9);
 			            u8g_FirstPage(&u8g); 
 		                do 
@@ -618,7 +618,7 @@ while(1)
 			        }
 		       else if(cmd==10)
 		           {
-			            char text10[]={"Æ¯ÁÁ"};
+			            char text10[]={"æ¼‚äº®"};
 			             yuyin(text10);
 			             u8g_FirstPage(&u8g);
 		                 do
@@ -629,7 +629,7 @@ while(1)
 			        }
 			   else if(cmd==11)
 		            {
-			            char text11[]={"Äã"};
+			            char text11[]={"ä½ "};
 			             yuyin(text11);
 			             u8g_FirstPage(&u8g); 
 		                 do 
@@ -640,7 +640,7 @@ while(1)
 		            }
 		       else if(cmd==12)
 	             	{
-	                 	char text12[]={"ºÃ"};
+	                 	char text12[]={"å¥½"};
 			            yuyin(text12);
 			            u8g_FirstPage(&u8g); 
 		                do 
@@ -651,7 +651,7 @@ while(1)
 			        }
 		       else if(cmd==13)
 		            {
-			           char text13[]={"×£"};
+			           char text13[]={"ç¥"};
 			           yuyin(text13);
 			           u8g_FirstPage(&u8g); 
 		                do
@@ -662,7 +662,7 @@ while(1)
 			        }
 			   else if(cmd==14)
 		            {
-			           char text14[]={"ÂÃÍ¾"};
+			           char text14[]={"æ—…é€”"};
 			           yuyin(text14);
 			          u8g_FirstPage(&u8g); 
 		              do 
@@ -673,7 +673,7 @@ while(1)
 		            }
 		       else if(cmd==15)
 		            {
-		              char text15[]={"ÈÏÊ¶"};
+		              char text15[]={"è®¤è¯†"};
 		   	          yuyin(text15);
 			          u8g_FirstPage(&u8g); 
 		               do 
@@ -684,7 +684,7 @@ while(1)
 			        }
 		       else if(cmd==16)
 		           {
-			           char text16[]={"Èı"};
+			           char text16[]={"ä¸‰"};
 			           yuyin(text16);
 			           u8g_FirstPage(&u8g); 
 		                do
@@ -695,7 +695,7 @@ while(1)
 			        }
 			   else if(cmd==17)
 		            {
-			            char text17[]={"¸ßĞË"};
+			            char text17[]={"é«˜å…´"};
 			             yuyin(text17);
 			             u8g_FirstPage(&u8g); 
 		                 do 
@@ -706,7 +706,7 @@ while(1)
 		            }
 		       else if(cmd==18)
 		             {
-		                 char text18[]={"Óä¿ì"};
+		                 char text18[]={"æ„‰å¿«"};
 			              yuyin(text18);
 		                	u8g_FirstPage(&u8g); 
 		                  do 
@@ -717,7 +717,7 @@ while(1)
 			         }
 		       else if(cmd==19)
 		        {
-			      char text19[]={"²»"};
+			      char text19[]={"ä¸"};
 			      yuyin(text19);
 			      u8g_FirstPage(&u8g); 
 		           do 
@@ -728,7 +728,7 @@ while(1)
 		        }
 		       else if(cmd==20)
 		        {
-		            char text20[]={"ÄãºÃ"};
+		            char text20[]={"ä½ å¥½"};
 			        yuyin(text20);
 			        u8g_FirstPage(&u8g); 
 		            do 
@@ -739,7 +739,7 @@ while(1)
 			    }
 		       else if(cmd==21)
 		        {
-			        char text21[]={"Ê²Ã´"};
+			        char text21[]={"ä»€ä¹ˆ"};
 			        yuyin(text21);
 			        u8g_FirstPage(&u8g);
 		            do
@@ -750,7 +750,7 @@ while(1)
 			    }
 			   else if(cmd==22)
 		        {
-			        char text22[]={"ÃûÊ¤"};
+			        char text22[]={"åèƒœ"};
 			        yuyin(text22);
 			        u8g_FirstPage(&u8g);
 		            do 
@@ -761,7 +761,7 @@ while(1)
 		         }
 		       else if(cmd==23)
 		         {
-		              char text23[]={"Ğ»Ğ»"};
+		              char text23[]={"è°¢è°¢"};
 			           yuyin(text23);
 			           u8g_FirstPage(&u8g); 
 		               do 
@@ -772,7 +772,7 @@ while(1)
 			      }
 		       else if(cmd==24)
 		          {
-			            char text24[]={"´ó¼Ò"};
+			            char text24[]={"å¤§å®¶"};
 			            yuyin(text24);
 			            u8g_FirstPage(&u8g); 
 		                do
@@ -783,7 +783,7 @@ while(1)
 			       }
 			   else if(cmd==25)
 		           {
-			           char text25[]={"ÊÇ"};
+			           char text25[]={"æ˜¯"};
 			           yuyin(text25);
 			           u8g_FirstPage(&u8g);
 		               do 
@@ -794,7 +794,7 @@ while(1)
 		            }
 		       else if(cmd==26)
 		            {
-		               char text26[]={"ÎªÊ²Ã´"};
+		               char text26[]={"ä¸ºä»€ä¹ˆ"};
 			            yuyin(text26);
 			            u8g_FirstPage(&u8g); 
 		                do 
@@ -805,7 +805,7 @@ while(1)
 			        }
 		       else if(cmd==27)
 		           {
-			            char text27[]={"´òµç»°"};
+			            char text27[]={"æ‰“ç”µè¯"};
 			             yuyin(text27);
 			             u8g_FirstPage(&u8g); 
 		                 do
@@ -816,7 +816,7 @@ while(1)
 			        }
 			   else if(cmd==28)
 		            {
-			            char text28[]={"ÖªµÀ"};
+			            char text28[]={"çŸ¥é“"};
 			             yuyin(text28);
 			             u8g_FirstPage(&u8g); 
 		                 do 
@@ -827,7 +827,7 @@ while(1)
 		            }
 		       else if(cmd==29)
 	             	{
-	                 	char text29[]={"¶Ô²»Æğ"};
+	                 	char text29[]={"å¯¹ä¸èµ·"};
 			            yuyin(text29);
 			            u8g_FirstPage(&u8g); 
 		                do 
@@ -838,7 +838,7 @@ while(1)
 			        }
 		       else if(cmd==30)
 		            {
-			           char text30[]={"ÎÒ"};
+			           char text30[]={"æˆ‘"};
 			           yuyin(text30);
 			           u8g_FirstPage(&u8g); 
 		                do
@@ -849,7 +849,7 @@ while(1)
 			        }
 			   else if(cmd==31)
 		            { 
-			           char text30[]={"½Ğ"};
+			           char text30[]={"å«"};
 			           yuyin(text30);
 			           u8g_FirstPage(&u8g); 
 		                do
