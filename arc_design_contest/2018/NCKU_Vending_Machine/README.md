@@ -4,6 +4,7 @@
 
 * [Introduction](#introduction)
 * [Video](#video)
+* [Document](#doc)
 * [hardware](#hardware)
     * [EMSK Board firmware used in this application](#firmware)
     * [The peripheral devices used in this application](#peripheral)
@@ -26,6 +27,11 @@ Our vending machine system provides maintainance issue related to vending machin
 
 ## Video <div id='video'/>
 http://v.youku.com/v_show/id_XMzYzMDE0MTg1Mg==.html?spm=a2h0k.8191407.0.0&from=s1.8-1-1.2
+
+## Document <div id='doc'/>
+For the documentation, please refer to https://drive.google.com/drive/folders/1Ae3eZAxOxhwls43yeXHgO07RQz1IF__S?usp=sharing
+
+For the presentation slides, please refer to https://prezi.com/p/hvdr4jdcaljk/arc/
 
 ## hardware connection <div id='hardware'/>
 ### EMSK Board firmware used in this application <div id='firmware'/>
