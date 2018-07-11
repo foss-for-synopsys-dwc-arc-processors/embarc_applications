@@ -14,15 +14,15 @@
 #include "step_motor.h"
 
 
-/**************定义esp8266的接口**************/
-//串口
-//esp8266的TX接口----J1-pin3
-//esp8266的RX接口----J1-pin2
+/**************define the esp8266's interface'**************/
+
+//esp8266 TX ----J1-pin3
+//esp8266 RX ----J1-pin2
 DEV_UART_PTR esp8266_uart;
 #define ESP8266_UART_ID DW_UART_0_ID
 #define ESP8266_UART_BAUDRATE UART_BAUDRATE_9600
 
-/**********ESP8266串口初始化函数***************/
+/**********ESP8266 initial***************/
 void esp8266_init(void) 
 {
 	// set pmod mux and uart map		
@@ -34,7 +34,7 @@ void esp8266_init(void)
 			esp8266_uart->uart_control(UART_CMD_SET_BAUD, (void *)(ESP8266_UART_BAUDRATE));
 		}
 }
-/**********ESP8266串口接收函数***************/
+/**********ESP8266 receive***************/
 uint32_t esp8266_read(uint8_t *buf, uint32_t cnt)
 {
 	if (esp8266_uart == NULL) return 0;
@@ -47,7 +47,7 @@ uint32_t esp8266_read(uint8_t *buf, uint32_t cnt)
 	}
 	return cnt;
 }
-/**********ESP8266串口发送函数***************/
+/**********ESP8266 send***************/
 uint32_t esp8266_write(uint8_t *buf, uint32_t cnt)
 {
 	if (esp8266_uart == NULL) return 0;
@@ -57,18 +57,18 @@ uint32_t esp8266_write(uint8_t *buf, uint32_t cnt)
 
 
 
-/*********定义步进电机的接口、数据和函数********/
+/*********Define the interface, data, and functions of the stepper motor********/
 #define STEP_MOTER_PORT  DW_GPIO_PORT_C
 #define STEP_MOTER_MASK  (0xF0000)
 
 
 
-/*********定义水泵的接口、数据和函数********/
+/*********Define pump interfaces, data and functions********/
 DEV_GPIO_PTR pump;
 #define PUMP_PORT DW_GPIO_PORT_C
 #define PUMP_MASK (0X800000)
 #define PUMP_DIR  (0X800000)
-/*********打开水泵*************************/
+/*********open pump*************************/
 void pump_open(void)
 {
 	pump = gpio_get_dev(PUMP_PORT);
@@ -76,7 +76,7 @@ void pump_open(void)
 	pump->gpio_control(GPIO_CMD_SET_BIT_DIR_OUTPUT,(void *)(PUMP_MASK));
 	pump->gpio_write(0xFFFFFFFF & PUMP_MASK,PUMP_MASK);
 }
-/*********关闭水泵*************************/
+/*********close pump*************************/
 void pump_close(void)
 {
 	pump = gpio_get_dev(PUMP_PORT);
@@ -85,13 +85,13 @@ void pump_close(void)
 	pump->gpio_write(0x00000,PUMP_MASK);
 }
 
-/*********定义灯光的接口、数据和函数********/
+/*********Define the interfaces, data, and functions of the light********/
 //J5 - pin4
 DEV_GPIO_PTR light;
 #define LIGHT_PORT DW_GPIO_PORT_C
 #define LIGHT_MASK (0X8000000)
 #define LIGHT_DIR  (0X8000000)
-/*********打开水泵*************************/
+/*********open*************************/
 void lignt_open(void)
 {
 	light = gpio_get_dev(LIGHT_PORT);
@@ -99,7 +99,7 @@ void lignt_open(void)
 	light->gpio_control(GPIO_CMD_SET_BIT_DIR_OUTPUT,(void *)(LIGHT_MASK));
 	light->gpio_write(0xFFFFFFFF & LIGHT_MASK,LIGHT_MASK);
 }
-/*********关闭水泵*************************/
+/*********close*************************/
 void light_close(void)
 {
 	light = gpio_get_dev(LIGHT_PORT);
@@ -109,7 +109,7 @@ void light_close(void)
 }
 
 
-/****************定义按键的接口和函数*********************/
+/****************Define the interface and function of the button*********************/
 DEV_GPIO_PTR button;
 #define BUTTON_MASK 0x07
 void gpio_keyL_isr(void *ptr)
@@ -152,10 +152,10 @@ void button_init(void)
 }
 
 
-/**********定时器1 中断服务子程序***********/
+/**********Timer 1 ISR***********/
 void timer0_isr(void *ptr)
 {
-	//每10秒钟测量一次温度，1分钟上报一次设备状态
+	
 	timer_int_clear(TIMER_0);
 	float temperatuer;
 	ds18b20_port_ptr = gpio_get_dev(DS18B20_PORT);
@@ -176,7 +176,7 @@ void timer0_isr(void *ptr)
 void timer1_isr(void *ptr)
 {
 	timer_int_clear(TIMER_1);	
-	//水族箱投食频率，可写；0.一天一次 1.一天两次 2.一天三次 3.一天四次 4.一天五次 5.关闭自动投食
+	
 	switch(Aquarius_Feed_Freq)
 	{
 		case 0: 
@@ -205,17 +205,16 @@ void timer1_isr(void *ptr)
 		default: break;
 	}
 
-	//获取网络时间，每分钟获取一次	
+	
 	mcu2wifi_request_time(esp8266_uart);
 }
 
-//水族箱子系统的产品标识码和产品密匙
 uint8_t *product_key = "96dcc24b14ae4c69927cce0d3903fc54";
 uint8_t *product_secret = "6c43c195b1174bdaa9bac97f2db90e90";
 int main(void)
 {
-	cpu_lock();  /* 锁定CPU以初始化定时器 */	
-	board_init();  /* 板级初始化 */		
+	cpu_lock();  
+	board_init(); 
 
 	timer_stop(TIMER_0); /* Stop it first since it might be enabled before */
 	int_handler_install(INTNO_TIMER0, timer0_isr);
@@ -236,10 +235,10 @@ int main(void)
 		PM6_UR_GPIO_C | PM6_LR_GPIO_A
 		);
 	button_init();
-	cpu_unlock();    /* 解锁CPU */
+	cpu_unlock();   
 
-	esp8266_init();	  /* ESP8266初始化 */
-	step_motor_init(STEP_MOTER_PORT, STEP_MOTER_MASK);  /* 步进电机初始化 */
+	esp8266_init();	  
+	step_motor_init(STEP_MOTER_PORT, STEP_MOTER_MASK); 
 
 	uint32_t rd_cnt = 0;
 	uint8_t read_data[MAX_READ_CNT];
@@ -249,7 +248,7 @@ int main(void)
 	led-> gpio_control(GPIO_CMD_SET_BIT_DIR_OUTPUT,(void *)(0x80));
 	uint8_t led_count = 0;
 	
-	//数据点初始化
+	
 	Aquarius_Feed_Amount = 1;
 	Aquarius_Light = 0;
 	while(1)
@@ -264,11 +263,11 @@ int main(void)
 		{			
 			for(uint8_t i=0;i<rd_cnt;i++) EMBARC_PRINTF("%2x ",read_data[i]);
 			EMBARC_PRINTF("\r\n");
-			//判断是否为合法数据包，合法数据包以固定包头0xFFFF开始。
+			
 			if(read_data[0]==0xFF && read_data[1]==0xFF) 
 			{			
 				sn = read_data[5];
-				switch(read_data[4]) //判断命令
+				switch(read_data[4])
 				{
 					case 0x01: mcu2wifi_product_info(esp8266_uart, product_key, product_secret);break;					
 					case 0x03: 
@@ -292,11 +291,11 @@ int main(void)
 			}
 			else
 			{
-				mcu2wifi_receive_error(esp8266_uart);//串口接收数据错误，申请WiFi重新发送
+				mcu2wifi_receive_error(esp8266_uart);
 			}
 		}
 
-		//水族箱增氧频率，可写；0.常开 1.间隔15分钟 2.间隔30分钟 3.间隔45分钟 4.间隔1小时 5.间隔两小时 6.常关
+		
 		switch(Aquarius_Oxy_Freq)
 		{
 			case 0: pump_open();break;

@@ -17,15 +17,11 @@
 #include "GP2Y1051.h"
 
 
-/**************定义esp8266的接口**************/
-//串口
-//esp8266的TX接口----J1-pin3
-//esp8266的RX接口----J1-pin2
+//
 DEV_UART_PTR esp8266_uart;
 #define ESP8266_UART_ID DW_UART_0_ID
 #define ESP8266_UART_BAUDRATE UART_BAUDRATE_9600
 
-/**********ESP8266串口初始化函数***************/
 void esp8266_init(void)
 {
 	// set pmod mux and uart map
@@ -38,7 +34,6 @@ void esp8266_init(void)
 			esp8266_uart->uart_control(UART_CMD_SET_BAUD, (void *)(ESP8266_UART_BAUDRATE));
 		}		
 }
-/**********ESP8266串口接收函数***************/
 uint32_t esp8266_read(uint8_t *buf, uint32_t cnt)
 {
 	if (esp8266_uart == NULL) return 0;
@@ -51,7 +46,6 @@ uint32_t esp8266_read(uint8_t *buf, uint32_t cnt)
 	}
 	return cnt;
 }
-/**********ESP8266串口发送函数***************/
 uint32_t esp8266_write(uint8_t *buf, uint32_t cnt)
 {
 	if (esp8266_uart == NULL) return 0;
@@ -59,24 +53,19 @@ uint32_t esp8266_write(uint8_t *buf, uint32_t cnt)
 	return esp8266_uart->uart_write(buf, cnt);
 }
 
-/**************定义DHT11的接口和数据**************/
-//DHT11的数据端 ---- J3-pin4
 DEV_GPIO_PTR  dht11;
 DHT11_DEF_PTR dht11_data;
 #define DHT11_PORT DW_GPIO_PORT_C
 #define DHT11_BIT  (19)
-/**********DHT11初始化函数***************/
 void DHT11_init(void)
 {
 	dht11 = gpio_get_dev(DHT11_PORT);
 	dht11->gpio_open(GPIO_DIR_OUTPUT);
 }
 
-/******************定义AD的接口和数据*********************/
 AD7991_DEF_PTR ad7991;
 float ad7991_data[4];
 #define AD7991_ID  (0)
-/**********AD7991初始化函数***************/
 void ad7991_init(void)
 {
 	ad7991->dev_id = AD7991_ID;
@@ -84,7 +73,6 @@ void ad7991_init(void)
 	ad7991_adc_init(ad7991);
 }
 
-/****************定义按键的接口和函数*********************/
 DEV_GPIO_PTR button;
 #define BUTTON_MASK 0x07
 void gpio_keyL_isr(void *ptr)
@@ -126,8 +114,6 @@ void button_init(void)
 	button->gpio_control(GPIO_CMD_ENA_BIT_INT, (void *)(0x7));
 }
 
-/****************定义人体红外的接口和函数*********************/
-// 人体红外数据端 J3-pin10
 DEV_GPIO_PTR  body_ir;
 #define BODY_PORT DW_GPIO_PORT_A
 #define BODY_BIT  (19)
@@ -145,8 +131,6 @@ uint32_t body_ir_read(void)
 	return read_data;
 }
 
-/*******************定义风扇接口及函数*******************************/
-// 风扇数据端 J6-pin4
 DEV_GPIO_PTR fan;
 #define FAN_PORT DW_GPIO_PORT_C
 #define FAN_BIT  (31)
@@ -167,8 +151,6 @@ void fan_close(void)
 	fan->gpio_write(0x00, FAN_MASK);
 }
 
-/*******************定义蜂鸣器接口及函数*******************************/
-// 蜂鸣器数据端 J6-pin10
 DEV_GPIO_PTR buzzer;
 #define BUZZER_PORT DW_GPIO_PORT_A
 #define BUZZER_BIT  (31)
@@ -189,7 +171,6 @@ void buzzer_close(void)
 	buzzer->gpio_write(0x00, BUZZER_MASK);
 }
 
-/****************定义日光灯的接口和函数*********************/
 DEV_GPIO_PTR roomLamp;
 #define roomLamp_PORT DW_GPIO_PORT_C
 #define roomLamp_BIT (23)
@@ -212,7 +193,6 @@ void roomLamp_close(void)
 
 
 
-/**********定时器0 中断服务子程序***********/
 void timer0_isr(void *ptr)
 {
 	
@@ -223,7 +203,6 @@ void timer0_isr(void *ptr)
 	mcu2wifi_dev_report_status(esp8266_uart);
 	
 }
-/**********定时器1 中断服务子程序***********/
 void timer1_isr(void *ptr)
 {	
 	timer_int_clear(TIMER_1);
@@ -246,8 +225,8 @@ uint8_t *product_secret = "f13add71b9d749b496cba0d84c46f0b4";
 
 int main(void)
 {
-	cpu_lock();	/* 锁定CPU以初始化定时器 */
-	board_init();	/* 板级初始化 */	
+	cpu_lock();	
+	board_init();	
 
 	timer_stop(TIMER_0); /* Stop it first since it might be enabled before */
 	int_handler_install(INTNO_TIMER0, timer0_isr);
@@ -269,14 +248,14 @@ int main(void)
 		);
 
 	button_init();
-	cpu_unlock();	/* 解锁CPU */	
+	cpu_unlock();		
 
 	
 
 	//step_motor_init(STEP_MOTOR_PORT, STEP_MOTOR_MASK);
-	DHT11_init();   /* DHT11初始化 */
-	ad7991_init();  /* AD7991初始化*/
-	esp8266_init(); /* ESP8266初始化 */
+	DHT11_init();  
+	ad7991_init();  
+	esp8266_init(); 
 	body_ir_init();
 
 	roomLamp_close();
@@ -301,11 +280,11 @@ int main(void)
 		{
 			for(uint8_t i=0;i<rd_cnt;i++) EMBARC_PRINTF("%2x ",read_data[i]);
 			EMBARC_PRINTF("\r\n");
-			//判断是否为合法数据包，合法数据包以固定包头0xFFFF开始。
+			
 			if(read_data[0]==0xFF && read_data[1]==0xFF) 
 			{			
 				sn = read_data[5];
-				switch(read_data[4]) //判断命令
+				switch(read_data[4]) 
 				{
 					case 0x01: mcu2wifi_product_info(esp8266_uart,product_key,product_secret);break;					
 					case 0x03: 
@@ -328,13 +307,13 @@ int main(void)
 			}
 			else
 			{
-				mcu2wifi_receive_error(esp8266_uart);//串口接收数据错误，申请WiFi重新发送
+				mcu2wifi_receive_error(esp8266_uart);
 			}
 		}
 		uint64_t start_us,end_us;
 
 		start_us = board_get_cur_us();
-		//读取光线传感器和敏感气体传感器数据
+		//
 		ad7991_init();
 		ad7991_data[0] = 0;ad7991_data[1] = 0;ad7991_data[2] = 0;ad7991_data[3] = 0;
 		ad7991_adc_read(ad7991, ad7991_data);	
@@ -342,7 +321,7 @@ int main(void)
 		//printf("MQ-2 Analog voltage is %f, send adta is %d\r\n",ad7991_data[0],  Room_Smoke);
 		Room_Light = (uint8_t)(100.49058-0.03045 * ad7991_data[1]); 
 		//printf("Photoresistance Analog voltage is %f, send adta is %d\r\n",ad7991_data[1],  Room_Light);
-		//控制日光灯		
+		//		
 		if(Room_Lamp == 0) 
 		{
 			if(Room_Light < 50)	roomLamp_open();
@@ -351,7 +330,7 @@ int main(void)
 		else if(Room_Lamp == 1) roomLamp_open();
 		else roomLamp_close();
 		
-		//控制风扇
+		//
 		if(Fan_switch == 0)
 		{
 			if((Room_PM25 > 135) | (Room_Smoke > 30) | (Room_Env_Tepm > 35)) fan_open();
@@ -359,10 +338,10 @@ int main(void)
 		}
 		else if(Fan_switch == 1) fan_open();
 		else  fan_close();
-		//控制蜂鸣器
+		//
 		if(Room_Smoke > 30) buzzer_open();
 		else buzzer_close();
-		//人体红外传感器数据处理
+		//
 		if (Leave_home)
 		{
 			Body_infrared = (body_ir_read())?0x01:0x00;	

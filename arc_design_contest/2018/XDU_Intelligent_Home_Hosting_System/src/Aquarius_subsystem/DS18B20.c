@@ -8,8 +8,7 @@
 
 
 
-//延时函数，设y是实际延迟时间，x是设置值，则y=0.87911111*x
-//如需延时50us，即y=50,则x=（y/0.87911111）取整
+
 static void delay_us( uint32_t us) 
 {
 	uint32_t volatile x,y;
@@ -113,27 +112,26 @@ void DS18b20_ReadTemperature(DEV_GPIO_PTR ds18b20_port, uint8_t ds18b20_bit, DS1
 	uint8_t tempL=0,tempH=0;
 	uint16_t temp_data;
 	DS18b20_init(ds18b20_port,ds18b20_bit);	
-	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0xcc);//跳过读序列号的操作
-	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0x44);//启动温度转换
-	delay_us(200000);//转换需要一点时间，延时 
+	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0xcc);
+	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0x44);
 
 	DS18b20_init(ds18b20_port,ds18b20_bit);
-	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0xcc);//跳过读序列号的操作
-	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0xbe);//读温度寄存器（头两个值分别为温度的低位和高位） 
-	tempL = DS18b20_ReadOneChar(ds18b20_port,ds18b20_bit);//读出温度的低位LSB
-	tempH = DS18b20_ReadOneChar(ds18b20_port,ds18b20_bit);//读出温度的高位MSB	
+	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0xcc);
+	DS18b20_WriteOneChar(ds18b20_port,ds18b20_bit,0xbe);
+	tempL = DS18b20_ReadOneChar(ds18b20_port,ds18b20_bit);
+	tempH = DS18b20_ReadOneChar(ds18b20_port,ds18b20_bit);
 	printf("tempH = %2x, tempL = %2x\r\n",tempH,tempL);
 	
 	temp_data = tempH *256 + tempL;
 
 	if(temp_data & 0xf800) 
 	{
-		obj->temperature_sign = 1; //温度是负值
-		temp_data = (~temp_data) + 1; //转化成正值
+		obj->temperature_sign = 1; 
+		temp_data = (~temp_data) + 1; 
 	}
 	else
 	{
-		obj->temperature_sign = 0; //温度是正值
+		obj->temperature_sign = 0; 
 	}
 
 	obj->temperature_int = (temp_data & 0x7f0)/16;

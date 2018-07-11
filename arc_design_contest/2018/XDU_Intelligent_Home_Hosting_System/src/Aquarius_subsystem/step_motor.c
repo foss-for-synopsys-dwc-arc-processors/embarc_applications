@@ -17,16 +17,8 @@ static void delay_us( uint32_t us)
 	
 }
 /*
-	步进电机初始化程序
-	指定步进电机连接的GPIO端口和端口mask
-	参数： 	gpio_port  输入，GPIO端口，可选值为 DW_GPIO_PORT_A 
-												DW_GPIO_PORT_B
-												DW_GPIO_PORT_C
-												DW_GPIO_PORT_D
-			gpio_port_mask  输入，GPIO端口MASK，可选值为0x00 --- 0xFFFFFFFF
-							需要用到哪一位就把相应的位置位
-
-	用例：step_motor_init( DW_GPIO_PORT_A, 0xF000)  代表步进电机的in1~in4分别连接PORT A的12,13,14，15位
+	Stepper motor initialization program
+	
 */
 void step_motor_init(uint32_t gpio_port, uint32_t gpio_port_mask)
 {
@@ -40,12 +32,7 @@ void step_motor_init(uint32_t gpio_port, uint32_t gpio_port_mask)
 
 
 /*
-	步进电机控制程序
-	控制步进电机的旋转方向，旋转角度，旋转速度
-	参数：	step_dir	输入，旋转方向，可选值为	0 --- 顺时针旋转
-													1 --- 逆时针旋转
-			step_angle	输入，旋转角度，可选值为	1 --- 65534
-			step_speed	输入，旋转速度，可选值为	1 --- 254
+	Stepper motor control program	
 */
 void step_motor_active(uint8_t step_dir, uint16_t step_angle, uint8_t step_speed)
 {

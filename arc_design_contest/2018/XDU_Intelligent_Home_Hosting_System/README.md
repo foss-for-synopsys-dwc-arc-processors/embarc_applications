@@ -2,6 +2,9 @@
 
 ## Introduction 
 
+###Our Team
+The name of our team is "haier brothers".  We come from XIDIAN University .
+###Our Work
 Based on the ARC EM Starter Kit development board, this design completes a smart home hosting system that implements the following features:
 
 - Aquarium automatic timing and remote control feeding, automatic water circulation
@@ -9,6 +12,8 @@ Based on the ARC EM Starter Kit development board, this design completes a smart
 - Indoor living environment monitoring, including temperature and humidity detection, sensitive gas detection, PM2.5 detection, adaptive ventilation, etc.
 
 All data can be uploaded to the IoT cloud platform via WiFi, support remote viewing and control of mobile APP, and also support close-range voice control.
+
+![Overall picture](https://github.com/BarryWang2017/2018_ARC_competition/blob/master/Overall_picture.jpg)
 
 [Show video](http://v.youku.com/v_show/id_XMzYzMTYyNzY4MA==.html?spm=a2h0k.11417342.searchresults.dtitle)
 
@@ -133,3 +138,10 @@ Please visit the Gizwits website for detailed information.[Gizwits Introduction]
 - Open the device management app, bind the device and control it.
 
 ![](./doc/screen/APP_4.gif)
+
+For more information, see the following link:
+
+[Picture of Work details No.1](https://github.com/BarryWang2017/2018_ARC_competition/blob/master/close_up_1.png)
+[Picture of Work details No.2](https://github.com/BarryWang2017/2018_ARC_competition/blob/master/close_up_2.png)
+[Picture of Work details No.3](https://github.com/BarryWang2017/2018_ARC_competition/blob/master/close_up_3.png)
+[Picture of Work details No.4](https://github.com/BarryWang2017/2018_ARC_competition/blob/master/APP_interface.png)

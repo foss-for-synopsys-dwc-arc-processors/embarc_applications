@@ -3,15 +3,15 @@
 #include "embARC_debug.h"
 #include <stdio.h>
 #include "board.h"
-#include "dev_gpio.h"    //GPIO API 头文件
-#include "dev_uart.h"    //UART API 头文件
-#include "dev_iic.h"     //I2C  API 头文件
-#include "dev_spi.h"     //SPI  API 头文件
+#include "dev_gpio.h"    //GPIO API 
+#include "dev_uart.h"    //UART API 
+#include "dev_iic.h"     //I2C  API 
+#include "dev_spi.h"     //SPI  API 
 
 #include "GP2Y1051.h"
 
 
-/**********GP2Y1051串口初始化函数***************/
+
 static void GP2Y1051_init(void)
 {
 	GP2Y1051_uart = uart_get_dev(GP2Y1051_UART_ID);

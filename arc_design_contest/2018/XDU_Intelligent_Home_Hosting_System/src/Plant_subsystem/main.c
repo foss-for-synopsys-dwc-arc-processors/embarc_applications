@@ -18,14 +18,10 @@
 
 
 
-/**************定义esp8266的接口**************/
-//串口
-//esp8266的TX接口----J1-pin3
-//esp8266的RX接口----J1-pin2
 DEV_UART_PTR esp8266_uart;
 #define ESP8266_UART_ID DW_UART_0_ID
 #define ESP8266_UART_BAUDRATE UART_BAUDRATE_9600
-/**********ESP8266串口初始化函数***************/
+
 void esp8266_init(void) 
 {
 	// set pmod mux and uart map
@@ -37,7 +33,7 @@ void esp8266_init(void)
 			esp8266_uart->uart_control(UART_CMD_SET_BAUD, (void *)(ESP8266_UART_BAUDRATE));
 		}	
 }
-/**********ESP8266串口接收函数***************/
+
 uint32_t esp8266_read(uint8_t *buf, uint32_t cnt)
 {
 	if (esp8266_uart == NULL) return 0;
@@ -50,7 +46,7 @@ uint32_t esp8266_read(uint8_t *buf, uint32_t cnt)
 	}
 	return cnt;
 }
-/**********ESP8266串口发送函数***************/
+
 uint32_t esp8266_write(uint8_t *buf, uint32_t cnt)
 {
 	if (esp8266_uart == NULL) return 0;
@@ -60,24 +56,22 @@ uint32_t esp8266_write(uint8_t *buf, uint32_t cnt)
 
 
 
-/**************定义DHT11的接口和数据**************/
-//DHT11的数据端 ---- J3-pin4
+
 DEV_GPIO_PTR  dht11;
 DHT11_DEF_PTR dht11_data;
 #define DHT11_PORT DW_GPIO_PORT_C
 #define DHT11_BIT  (19)
-/**********DHT11初始化函数***************/
+
 void DHT11_init(void)
 {
 	dht11 = gpio_get_dev(DHT11_PORT);
 	dht11->gpio_open(GPIO_DIR_OUTPUT);
 }
 
-/******************定义AD的接口和数据*********************/
 AD7991_DEF_PTR ad7991;
 float ad7991_data[4];
 #define AD7991_ID  (0)
-/**********AD7991初始化函数***************/
+
 void ad7991_init(void)
 {
 	ad7991->dev_id = AD7991_ID;
@@ -87,13 +81,13 @@ void ad7991_init(void)
 
 
 
-/****************定义继电器的接口*********************/
+
 //J4-pin4
 DEV_GPIO_PTR relay;
 #define RELAY_PORT DW_GPIO_PORT_C
 #define RELAY_BIT (23)
 #define RELAY_MASK (0x01<<RELAY_BIT)
-/*************打开继电器***************************/
+
 void relay_open(void)
 {
 	relay = gpio_get_dev(RELAY_PORT);
@@ -101,7 +95,7 @@ void relay_open(void)
 	relay->gpio_control(GPIO_CMD_SET_BIT_DIR_OUTPUT,(void *)(RELAY_MASK));
 	relay->gpio_write(0x01 << RELAY_BIT, RELAY_MASK);
 }
-/*************关闭继电器***************************/
+
 void relay_close(void)
 {
 	relay = gpio_get_dev(RELAY_PORT);
@@ -112,7 +106,7 @@ void relay_close(void)
 
 
 
-/****************定义按键的接口和函数*********************/
+
 DEV_GPIO_PTR button;
 #define BUTTON_MASK 0x07
 void gpio_keyL_isr(void *ptr)
@@ -156,8 +150,7 @@ void button_init(void)
 
 
 
-/**********定时器1 中断服务子程序***********/
-//每10秒获取一次温湿度信息
+
 int times=0;
 void timer1_isr(void *ptr)
 {	
@@ -173,24 +166,24 @@ void timer1_isr(void *ptr)
 	
 	if(times % 2 == 0)
 	{
-		//每20秒获取一次时间；
+		//
 		mcu2wifi_request_time(esp8266_uart);
 	}
 	if(times % 6 == 0)
 	{
-		//每60秒上报一次数据
+		//
 		mcu2wifi_dev_report_status(esp8266_uart);		
 	}
 	times++;	
 }
-//植物生存维持子系统的产品标识码和产品密匙
+//
 uint8_t *product_key = "f2bbf37ccea74a18a08fbfcc2e03818b";
 uint8_t *product_secret = "14380ffd6f2c44db87dd441d7d8dca8c";
 
 int main(void)
 {
-	cpu_lock();	/* 锁定CPU以初始化定时器 */
-	board_init();	/* 板级初始化 */	
+	cpu_lock();	
+	board_init();		
 
 	timer_stop(TIMER_1); /* Stop it first since it might be enabled before */
 	int_handler_install(INTNO_TIMER1, timer1_isr);
@@ -206,11 +199,11 @@ int main(void)
 		PM6_UR_GPIO_C | PM6_LR_GPIO_A
 		);
 	button_init();
-	cpu_unlock();	/* 解锁CPU */
+	cpu_unlock();	
 
-	esp8266_init(); /* ESP8266初始化 */
-	DHT11_init();   /* DHT11初始化 */
-	ad7991_init();  /* AD7991初始化*/	
+	esp8266_init(); 
+	DHT11_init();   
+	ad7991_init();  
 
 	
 
@@ -237,11 +230,11 @@ int main(void)
 		{			
 			for(uint8_t i=0;i<rd_cnt;i++) EMBARC_PRINTF("%2x ",read_data[i]);
 			EMBARC_PRINTF("\r\n");
-			//判断是否为合法数据包，合法数据包以固定包头0xFFFF开始。
+			//
 			if(read_data[0]==0xFF && read_data[1]==0xFF) 
 			{			
 				sn = read_data[5];
-				switch(read_data[4]) //判断命令
+				switch(read_data[4]) //
 				{
 					case 0x01: mcu2wifi_product_info(esp8266_uart,product_key,product_secret);break;					
 					case 0x03: 
@@ -264,7 +257,7 @@ int main(void)
 			}
 			else
 			{
-				mcu2wifi_receive_error(esp8266_uart);//串口接收数据错误，申请WiFi重新发送
+				mcu2wifi_receive_error(esp8266_uart);//
 			}
 		}
 
