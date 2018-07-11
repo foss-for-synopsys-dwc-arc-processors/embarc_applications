@@ -24,8 +24,8 @@ Let's us begin introduce eCare with you!
 **Andorid App**
 - The data that collect from eCare will transmit to the andorid app. you can easily observe ECG and EMG waveform form mobile and it can also be saved as a txt file
 
-![ECG][4]
-![EMG][5]
+![ ECG ][4]
+![ EMG ][5]
 
 
 
@@ -78,9 +78,9 @@ Let's us begin introduce eCare with you!
                                      
 
 
-[1]: ./pictures/IMG_0239.jpg
-[2]: ./pictures/IMG_0294.jpg
-[3]: ./pictures/Architecture.png
-[4]: ./pictures/ECG.png
-[5]: ./pictures/EMG.png
+[1]: https://imgur.com/EpYaR3I " embARC "
+[2]: https://imgur.com/TnxRAPJ " EM "
+[3]: https://imgur.com/ghY7syy " System " 
+[4]: https://imgur.com/uQ2K9uZ " ECG "
+[5]: https://imgur.com/TpbTt8X " EMG "
 [6]: https://v.youku.com/v_show/id_XMzcxMzc5ODI0NA==.html?spm=a2h3j.8428770.3416059.1 " Demo "
