@@ -2,7 +2,7 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
-#include "dev_gpio.h" //GPIO API头文件
+#include "dev_gpio.h" 
 #include "../../../board/emsk/drivers/mux/mux.h"	
 #include "../../../board/emsk/drivers/mux/mux_hal.h"
 
