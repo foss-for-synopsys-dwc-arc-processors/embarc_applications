@@ -14,14 +14,17 @@ static void delay_ms(volatile int z) //1ms
 void beep(void)
 {
 	port_alarm = gpio_get_dev(DW_GPIO_PORT_C);
-	port_alarm->gpio_open(0x10000000);//C28
-	port_alarm->gpio_control(GPIO_CMD_SET_BIT_DIR_OUTPUT, (void *)10000000);
+	port_alarm->gpio_open(0x10000000);
+	port_alarm->gpio_control(GPIO_CMD_SET_BIT_DIR_OUTPUT, (void *)0x10000000);
 
 	port_alarm->gpio_write(0x10000000, 0x10000000);
-	
-	delay_ms(5000);
-	
+	port_alarm->gpio_read(&data, 0x10000000);
+	EMBARC_PRINTF(" gpio is :%x\n", data);
+	delay_ms(1000);
 	port_alarm->gpio_write(0x00000000, 0x10000000);
+	port_alarm->gpio_read(&data, 0x10000000);
+	EMBARC_PRINTF(" gpio is :%x\n", data);
+	delay_ms(1000);
 	EMBARC_PRINTF("beep");
 
 }
