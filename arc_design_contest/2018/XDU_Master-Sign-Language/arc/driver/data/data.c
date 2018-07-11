@@ -27,11 +27,11 @@ double aValue[3];
 double wValue[3];
 double AValue[3];
 int adc[4];
-//*************************************处理姿态传感器数据*************************************************
+//*************************************Processing attitude sensor data*************************************************
 void mpu6050_isr(unsigned char ucstra[6] ,unsigned char ucStrw[6],unsigned char ucStrAngle[6],uint8_t Re_buf[33])
 {    
-	    if(Re_buf[0]!=0x55) return;      //第0号数据不是帧头
-	                          //重新赋值，准备下一帧数据的接收        
+	    if(Re_buf[0]!=0x55) return;      //No. 0 data is not a frame header
+	                              
 			switch(Re_buf [1])
 			{
 			case 0x51:
@@ -73,7 +73,7 @@ void mpu6050_isr(unsigned char ucstra[6] ,unsigned char ucStrw[6],unsigned char 
 //*********************************
 void data( int adc[4],double aValue[3],double wValue[3],double AValue[3])
 {
-//****************************采集弯曲传感器数据****************************************	     
+//****************************Collecting bending sensor data****************************************	     
     dev_iicAD = iic_get_dev(DW_IIC_1_ID	);
     dev_iicAD->iic_open(DEV_MASTER_MODE, IIC_SPEED_STANDARD);
 	dev_iicAD->iic_control(IIC_CMD_MST_SET_TAR_ADDR, CONV2VOID(I2C_SLAVE_ADDRAD));
@@ -96,7 +96,7 @@ void data( int adc[4],double aValue[3],double wValue[3],double AValue[3])
 	    		adc[0], adc[1], adc[2], adc[3]);
 //**************************************************************************************************
 
-//***************************************采集姿态传感器数据*****************************************
+//***************************************Collecting attitude sensor data*****************************************
           dev_uart0->uart_control(UART_CMD_GET_RXAVAIL, (void *)(&rd_avail));
 		  if(rd_avail > 0)
 		  {
