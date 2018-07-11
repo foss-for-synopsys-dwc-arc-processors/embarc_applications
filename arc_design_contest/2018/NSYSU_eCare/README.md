@@ -19,13 +19,13 @@ Let's us begin introduce eCare with you!
 - Finally, user can see the EMG and ECG signal from the mobile
 
 **System Architecture**
-![System](https://imgur.com/ghY7syy)
+![System](https://imgur.com/ghY7syy.jpg)
 
 **Andorid App**
 - The data that collect from eCare will transmit to the andorid app. you can easily observe ECG and EMG waveform form mobile and it can also be saved as a txt file
 
-![ECG](https://imgur.com/uQ2K9uZ)
-![EMG](https://imgur.com/TpbTt8X)
+![ECG](https://imgur.com/uQ2K9uZ.jpg)
+![EMG](https://imgur.com/TpbTt8X.jpg)
 
 
 
@@ -38,7 +38,7 @@ Let's us begin introduce eCare with you!
   - smartphone(andorid system)
   - Analog Front End(AFE)
   
-![EM](https://imgur.com/TnxRAPJ)
+![EM](https://imgur.com/TnxRAPJ.jpg)
 
 * Required Software 
   - ARC GNU toolset
@@ -50,7 +50,7 @@ Let's us begin introduce eCare with you!
   - Connect the AFE to PmodAD2
   - Insert HM-10 to the board  and set the board version to arcem11d
 
-![embARC](https://imgur.com/EpYaR3I)
+![embARC](https://imgur.com/EpYaR3I.jpg)
 
 * Demo Video
 
