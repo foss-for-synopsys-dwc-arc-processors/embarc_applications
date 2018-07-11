@@ -1,11 +1,10 @@
-//PMOD5下行端口，接 AT-wifi指令模块，建立AP，模式为2
 #include "embARC.h"
 #include "embARC_debug.h"
 #include <string.h>
 #include <stdlib.h>
 
-#include "dev_uart.h"    //UART API 头文件`
-#include "../../../board/emsk/drivers/mux/mux.h"  // Pmod端口配置API`
+#include "dev_uart.h"    
+#include "../../../board/emsk/drivers/mux/mux.h"  
 #include "../../../board/emsk/drivers/mux/mux_hal.h"
 
 
