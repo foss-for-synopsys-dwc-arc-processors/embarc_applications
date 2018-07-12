@@ -54,7 +54,7 @@
 #include <netdb.h>
 #include <sys/stat.h>
 #include <errno.h>
-#include "lwip_pmwifi.h"
+#include "lwip_wifi.h"
 
 /* custom HAL */
 #include "common.h"
@@ -110,7 +110,7 @@ extern int32_t lwm2m_client_start(void)
 	task_lwm2m_client_handle = 0;
 
 	/* check to see if wifi works */
-	if (!lwip_pmwifi_isup()) {
+	if (!lwip_wifi_isup()) {
 		EMBARC_PRINTF("Error: Wifi is not ready for lwM2M client.\r\n");
 		goto error_exit;
 	}
