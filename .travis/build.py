@@ -43,6 +43,8 @@ if __name__ == '__main__':
 		print("application[%s]=" %k,v)
 		pathin = v.replace("\\", "/")
 		os.chdir(pathin)
+		print("make configuration: ",sys.argv[1])
+		print("start compile")
 		os.system("make "+sys.argv[1]+" clean") 
 
 		if os.system("make "+sys.argv[1]+" -k") != 0:
@@ -50,8 +52,10 @@ if __name__ == '__main__':
 			result[k] = 1
 		pathout = cwd_path 
 		os.chdir(pathout)
+	print("Compilation result")
 	print(result)
 	for (k,v) in result.items():
 		if v == 1:
+			print("build failed")
 			sys.exit(1)
 	sys.exit(0)
