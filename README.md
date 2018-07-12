@@ -1,4 +1,7 @@
+
 # embARC Applications
+[![Build Status](https://travis-ci.org/foss-for-synopsys-dwc-arc-processors/embarc_applications.svg?branch=master)](https://travis-ci.org/foss-for-synopsys-dwc-arc-processors/embarc_applications)
+
 This repository contains various applications based on embARC OSP, developed by the embARC team and the community (users, ARC licensees, students, hobbyists, etc).
 
 ## How to use it
