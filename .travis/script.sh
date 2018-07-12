@@ -1,5 +1,3 @@
-embARC_OSP_REPO="https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp.git"
-
 die() {
     echo " *** ERROR: " $*
     exit 1
@@ -11,12 +9,13 @@ set -x
 
     export PATH=/tmp/arc_gnu_2017.09_prebuilt_elf32_le_linux_install/bin:$PATH || die
     git checkout -- . || die
-    cd ../ || die
-    tar -czvf application.tar.gz embarc_applications || die
-    cd embarc_applications || die
+    git archive --format zip -o applications.zip --prefix embarc_applications/ HEAD || die
+    [ $embARC_OSP_REPO ] || {
+        embARC_OSP_REPO="https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp.git"
+    }
     git clone ${embARC_OSP_REPO} embarc_osp
     cd embarc_osp || die
-    tar -zxvf ../../application.tar.gz || die
+    unzip ../applications.zip || die
     bash apply_embARC_patch.sh || die
     cd ../ || die
     cd .travis || die
