@@ -1,0 +1,34 @@
+language: python
+
+sudo: required
+dist: trusty
+
+python:
+  - "3.6"
+
+before_install:
+  - bash .travis/before_install.sh
+  # setup git
+  - git config --global user.name "${U_NAME}"
+  - git config --global user.email "${U_EMAIL}"
+
+script:
+  - bash .travis/script.sh
+
+matrix:
+  include:
+    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="11" CUR_CORE="arcem6"
+      os: linux
+      compiler: gcc
+    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="22" CUR_CORE="arcem7d"
+      os: linux
+      compiler: gcc
+    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="22" CUR_CORE="arcem11d"
+      os: linux
+      compiler: gcc
+    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="23" CUR_CORE="arcem7d"
+      os: linux
+      compiler: gcc
+    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="23" CUR_CORE="arcem11d"
+      os: linux
+      compiler: gcc
