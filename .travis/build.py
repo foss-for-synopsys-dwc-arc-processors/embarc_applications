@@ -38,13 +38,16 @@ if __name__ == '__main__':
 	os.chdir(os.path.join(applications_path,"embarc_osp"))
 	get_makefile(osp_application)
 	embarc_makefile(make_path)
+
 	for (k,v) in make_path.items():
 		result[k] = 0
-		print("application[%s]=" %k,v)
+		print("Application[%s]=" %k,v)
 		pathin = v.replace("\\", "/")
 		os.chdir(pathin)
-		print("make configuration: ",sys.argv[1])
-		print("start compile")
+		print("Make Configuration: ",sys.argv[1])
+		print("Start compile this application")
+		sys.stdout.flush()
+
 		os.system("make "+sys.argv[1]+" clean") 
 
 		if os.system("make "+sys.argv[1]+" -k") != 0:
@@ -52,7 +55,8 @@ if __name__ == '__main__':
 			result[k] = 1
 		pathout = cwd_path 
 		os.chdir(pathout)
-	print("Compilation result")
+
+	print("\r\nCompilation result as follows")
 	print(result)
 	for (k,v) in result.items():
 		if v == 1:
