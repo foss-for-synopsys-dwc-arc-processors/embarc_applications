@@ -2,7 +2,7 @@
 #include "embARC.h"
 #include "embARC_debug.h"
 
-#include "OLED.h"
+#include "oled.h"
 
 #include "stdio.h"
 
