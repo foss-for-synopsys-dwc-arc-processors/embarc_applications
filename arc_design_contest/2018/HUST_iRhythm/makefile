@@ -22,7 +22,7 @@ STACKSZ ?= 2097152
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../..
+EMBARC_ROOT = ../../../..
 MID_SEL = common fatfs
 OS_SEL = freertos
 # application source dirs
