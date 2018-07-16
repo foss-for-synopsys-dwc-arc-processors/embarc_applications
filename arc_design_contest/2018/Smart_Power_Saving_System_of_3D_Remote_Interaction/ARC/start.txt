@@ -1,0 +1,1 @@
+make BOARD=emsk BD_VER=22 CUR_CORE=arcem7d TOOLCHAIN=gnu OPENOCD_SCRIPT_ROOT=D:/env/arc_gnu/share/openocd/scripts -j4 run
