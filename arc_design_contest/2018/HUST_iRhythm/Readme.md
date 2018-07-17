@@ -1,6 +1,6 @@
 # iRhythm Internet MP3 Radio
 
-This appilcation is a prototype of **Internet Radio** designed on ARC EM Starter Kit,which could find music from online audition websites,like *douban FM*,*Baidu FM*,*KuWo*,Download mp3 file among the music,and decode them by using **ARC DSP Instruction** and **optimized code** for mp3 decode.By adding a I2S peripheral with a **FPGA**,song can be sent out and outputted from two **speaker**.
+This application is a prototype of **Internet Radio** designed on ARC EM Starter Kit, which can find music from online audition websites, like *douban FM*,*Baidu FM*,*KuWo*,etc.  Download mp3 file among the music and decode them by using **ARC DSP Instruction** and **optimized code** for mp3 decode. By adding a I2S peripheral with a **FPGA**, song can be sent out and output from two **speaker**.
 
 -----------------------------------------
 
@@ -20,9 +20,9 @@ This appilcation is a prototype of **Internet Radio** designed on ARC EM Starter
 -------------------------------
 
 ## Introduction
-iRhythm is a Internet Radio,which can download music from online audition websites,decompress the file and play,while the music file in SD card can also be decoded and played.
-With the help of a FPGA, the digital music data in SPI format can be converted into I2S format,which can be recognize by audio D/A convertor.
-Through an amplifier outside,the online music can be play out from two big speaker.And it's a really good feeling!
+iRhythm is a Internet Radio, which can download music from online audition websites, decompress the file and play, while the music file in SD card can also be decoded and played.
+With the help of a FPGA, the digital music data in SPI format can be converted into I2S format, which can be recognize by audio D/A convertor.
+Through an amplifier outside,the online music can be play out from two big speaker. And it's a really good feeling!
 
 ### Function
 * Online Music Crawling and Download
@@ -92,14 +92,14 @@ Through an amplifier outside,the online music can be play out from two big speak
 
 ### Before Running This Application
 * Download source code of iRhythm from github.
-* Download ./doc/spi2i2s.bit,which is the bitstram file of Cmod A7 to extend a i2s peripherals
+* Download ./doc/spi2i2s.bit,which is the bitstream file of Cmod A7 to extend a i2s peripherals
 * Make sure all connection is correct again.
 * Make sure iRhythm is in the Wifi environment,which is matching with the setting in the code,including wifi name and wifi password.
 * Check the switch 1 and 2 of EMSK are in off state to boot as ARCem_7d core.
 
 ### Run This Application
 * Download with USB-JTAG or use bootloader to boot the program.
-* After iRhythm connect the wifi,initialization will complete very fast and OLED may light to show the song reading from SD card.
+* After iRhythm connect the wifi, initialization will complete very fast and OLED may light to show the song reading from SD card.
 * After that song can be heard from the speaker and OLED shows download speed and decode speed.If not,try to rotate the volume bar to increase the volume.
 * the user can control with the key any time.
 
