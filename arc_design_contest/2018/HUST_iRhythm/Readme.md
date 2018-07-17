@@ -19,7 +19,7 @@ This appilcation is a prototype of **Internet Radio** designed on ARC EM Starter
 
 -------------------------------
 
-## Intruduction
+## Introduction
 iRhythm is a Internet Radio,which can download music from online audition websites,decompress the file and play,while the music file in SD card can also be decoded and played.
 With the help of a FPGA, the digital music data in SPI format can be converted into I2S format,which can be recognize by audio D/A convertor.
 Through an amplifier outside,the online music can be play out from two big speaker.And it's a really good feeling!
