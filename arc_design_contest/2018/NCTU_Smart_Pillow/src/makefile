@@ -11,7 +11,7 @@ OS_SEL ?= freertos
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../embARC
+EMBARC_ROOT = ../../../../../
 
 MID_SEL = common
 

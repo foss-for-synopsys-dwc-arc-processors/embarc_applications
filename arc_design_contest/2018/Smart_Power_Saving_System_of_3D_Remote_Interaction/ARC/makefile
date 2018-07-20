@@ -4,7 +4,7 @@
 ##
 
 # Application name
-APPL ?= NCKU_Smart_Power_Saving_System_of_3D_Remote_Interaction
+APPL ?= NCKU_SPSSo3DRI
 
 # Optimization Level
 # Please Refer to toolchain_xxx.mk for this option

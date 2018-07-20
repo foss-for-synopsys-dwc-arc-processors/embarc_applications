@@ -10,7 +10,7 @@ typedef struct{
 }VarAndName;
 
 //const int varnum = 16 + 4 + 2 + 4 + 4;
-VarAndName varname[varnum];
+extern VarAndName varname[varnum];
 void paramCorr(void);
 	
 #endif
