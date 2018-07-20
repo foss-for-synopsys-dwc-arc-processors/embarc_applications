@@ -151,7 +151,7 @@ int imuGetValues(ImuValues* imuVal, uint8_t i2cId)
 	int ercd = E_OK;
 
 	/* read 14 data from mpu6050 */
-	ercd = mpu6050_reg_read(MPU6050_REG_ACCEL_XOUT_H, imuData.buf, 14, i2cId);
+	ercd = mpu6050_reg_read(MPU6050_REG_ACCEL_XOUT_H, (uint8_t *)(imuData.buf), 14, i2cId);
 
 	if (ercd != 14) {
 		ercd = E_OBJ;

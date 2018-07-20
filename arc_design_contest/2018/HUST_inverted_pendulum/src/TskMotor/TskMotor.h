@@ -141,7 +141,7 @@ Inline int32_t pidTick_q(Pid *pid, int32_t diff)
     else if(pid->accI < -65536)
         pid->accI = -65536;
 
-    dout = ((diff * pid->d) >> 8 - pid->accD) * pid->n >> 8;    
+    dout = ((diff * pid->d) >> (8 - pid->accD)) * pid->n >> 8;    
     pid->accD += dout / 500;
 
     if(pid->accD > 65536)

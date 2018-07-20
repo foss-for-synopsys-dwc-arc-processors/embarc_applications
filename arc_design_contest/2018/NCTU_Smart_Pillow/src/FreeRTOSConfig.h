@@ -113,7 +113,7 @@ to exclude the API function. */
 #endif /* FREERTOS_CONFIG_H */
 
 
-#define usercfgCPU_USAGE_CALCULATE 1
+#define usercfgCPU_USAGE_CALCULATE 0
 #ifdef usercfgCPU_USAGE_CALCULATE
 #define usercfgCPU_USAGE_CALC_PERIOD 500//ms
 #endif

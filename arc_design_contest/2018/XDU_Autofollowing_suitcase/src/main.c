@@ -7,6 +7,7 @@
 #include "u8g.h"
 #include <string.h>
 #include "arc.h"
+#include "emsk_temperature.h"
 #define FOLLOW_DISTANCE  120 
 #define STOP_DISTANCE  80
 #define LOST_DISTANCE 300

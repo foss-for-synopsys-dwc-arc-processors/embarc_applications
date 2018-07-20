@@ -107,7 +107,7 @@ static void spi_select(void)
 	/*select spi slave device*/
 	spi->spi_control(SPI_CMD_MST_SEL_DEV, CONV2VOID(EMSK_SPI_LINE_0));
 	/* write 0 to CS pin, pull-down */
-	gpio->gpio_write((~CS_MASK), CS_MASK);
+	gpio->gpio_write((~(CS_MASK)), CS_MASK);
 }
 
 static void spi_deselect(void)
@@ -128,11 +128,11 @@ static void spi_deselect(void)
 int32_t spi_read_qei(int16_t *qei, int dir)
 {
 	int32_t ercd = 0;
-	static uint64_t cnt;
+	//static uint64_t cnt;
 
 	DEV_SPI_TRANSFER xfer;
 	char qeiTmp[2]={0, 0};
-	unsigned int cs_cpu_status;
+	//unsigned int cs_cpu_status;
 
 	DEV_SPI_XFER_SET_TXBUF(&xfer, NULL, 0, 0);
 	DEV_SPI_XFER_SET_RXBUF(&xfer, qeiTmp, 0, 2);
@@ -188,11 +188,11 @@ int32_t spi_write_pwm(int16_t *pwm, int dir)
 		 * convert pwm to 8bits
 		 */
 		case 0:
-			local_buf[0] = (int8_t)((pwm[0] >> 8) & 0x0F | PWM_L);
+			local_buf[0] = (int8_t)(((pwm[0] >> 8) & 0x0F) | PWM_L);
 			local_buf[1] = (int8_t)((pwm[0] << 8) >> 8);
 			break;
 		case 1:
-			local_buf[0] = (int8_t)((pwm[0] >> 8) & 0x0F | PWM_R);
+			local_buf[0] = (int8_t)(((pwm[0] >> 8) & 0x0F) | PWM_R);
 			local_buf[1] = (int8_t)((pwm[0] << 8) >> 8);
 			break;
 

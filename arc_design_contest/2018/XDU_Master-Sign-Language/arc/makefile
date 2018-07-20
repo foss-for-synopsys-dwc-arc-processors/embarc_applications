@@ -9,7 +9,7 @@ OLEVEL ?= O2
 # Current Board And Core
 ##
 BOARD ?= emsk
-BD_VER ?= 20
+BD_VER ?= 22
 CUR_CORE ?= arcem7d
 TOOLCHAIN ?= gnu
 ##
@@ -37,16 +37,16 @@ JTAG ?= usb
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../../..
+EMBARC_ROOT = ../../../../..
 
 MID_SEL = common u8glib
 
 # application source dirs
-APPL_CSRC_DIR = .
+APPL_CSRC_DIR = . ./driver/draw ./driver/data  ./driver/gprs  ./driver/judge ./driver/uart
 APPL_ASMSRC_DIR = .
 
 # application include dirs
-APPL_INC_DIR = .
+APPL_INC_DIR = .  ./driver/draw ./driver/data  ./driver/gprs  ./driver/judge ./driver/uart
 
 # application defines
 APPL_DEFINES =

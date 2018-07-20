@@ -21,9 +21,9 @@ char msg[128];
 
 static bool InitFlag = 0;
 static DEV_UART *dbg_uart;
-static uint8_t RxBuff;
-static DEV_BUFFER UartRxBuff;
-static DEV_BUFFER UartTxBuff;
+//static uint8_t RxBuff;
+//static DEV_BUFFER UartRxBuff;
+//static DEV_BUFFER UartTxBuff;
 
 int putData(char *num, uint8_t size)
 {    
@@ -68,7 +68,7 @@ int putStr(const char *format, ...)
 
 static void UartRxISR(void *ptr)
 {
-    int len;
+    //int len;
     char c;
     dbg_uart->uart_control(UART_CMD_SET_RXINT, (void *)0);
 
@@ -139,7 +139,7 @@ void UartInit(void)
 
 void dbgTask(void *pvParameters)
 {
-    BaseType_t rtn;
+    //BaseType_t rtn;
     uint8_t len;
 
     while(true){

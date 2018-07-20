@@ -4,6 +4,11 @@
 #include "embARC_debug.h"
 #include "embARC_error.h"
 #include "u8g.h"
+#include "draw.h"
+#include "send_msg.h"
+#include "judge.h"
+#include "dw_uart_obj.h"
+#include "data.h"
 #define I2C_SLAVE_ADDR1  0x02
 #define uchar unsigned char
 #define uint unsigned int

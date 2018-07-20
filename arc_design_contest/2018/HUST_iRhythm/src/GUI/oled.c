@@ -237,88 +237,88 @@ void OLED_P8x16Str(uint8_t x, uint8_t y, uint8_t ch[])
 
 
 
-void OLED_P14x16Str(uint8_t x, uint8_t y, uint8_t ch[])
-{
-	uint8_t wm = 0, ii = 0;
-	uint16_t adder = 1;
+// void OLED_P14x16Str(uint8_t x, uint8_t y, uint8_t ch[])
+// {
+// 	uint8_t wm = 0, ii = 0;
+// 	uint16_t adder = 1;
 
-	while (ch[ii] != '\0') {
-		wm = 0;
-		adder = 1;
+// 	while (ch[ii] != '\0') {
+// 		wm = 0;
+// 		adder = 1;
 
-		while (F14x16_Idx[wm] > 127) {
-			if (F14x16_Idx[wm] == ch[ii]) {
-				if (F14x16_Idx[wm + 1] == ch[ii + 1]) {
-					adder = wm * 14;
-					break;
-				}
-			}
+// 		while (F14x16_Idx[wm] > 127) {
+// 			if (F14x16_Idx[wm] == ch[ii]) {
+// 				if (F14x16_Idx[wm + 1] == ch[ii + 1]) {
+// 					adder = wm * 14;
+// 					break;
+// 				}
+// 			}
 
-			wm += 2;
-		}
+// 			wm += 2;
+// 		}
 
-		if (x > 118) {x = 0; y++;}
+// 		if (x > 118) {x = 0; y++;}
 
-		OLED_Set_Pos(x , y);
+// 		OLED_Set_Pos(x , y);
 
-		if (adder != 1) { 
-			OLED_Set_Pos(x , y);
+// 		if (adder != 1) { 
+// 			OLED_Set_Pos(x , y);
 
-			for (wm = 0; wm < 14; wm++) {
-				Write_IIC_Data(F14x16[adder]);
-				adder += 1;
-			}
+// 			for (wm = 0; wm < 14; wm++) {
+// 				Write_IIC_Data(F14x16[adder]);
+// 				adder += 1;
+// 			}
 
-			OLED_Set_Pos(x, y + 1);
+// 			OLED_Set_Pos(x, y + 1);
 
-			for (wm = 0; wm < 14; wm++) {
-				Write_IIC_Data(F14x16[adder]);
-				adder += 1;
-			}
-		} else {		
-			ii += 1;
-			OLED_Set_Pos(x, y);
+// 			for (wm = 0; wm < 14; wm++) {
+// 				Write_IIC_Data(F14x16[adder]);
+// 				adder += 1;
+// 			}
+// 		} else {		
+// 			ii += 1;
+// 			OLED_Set_Pos(x, y);
 
-			for (wm = 0; wm < 16; wm++) {
-				Write_IIC_Data(0);
-			}
+// 			for (wm = 0; wm < 16; wm++) {
+// 				Write_IIC_Data(0);
+// 			}
 
-			OLED_Set_Pos(x, y + 1);
+// 			OLED_Set_Pos(x, y + 1);
 
-			for (wm = 0; wm < 16; wm++) {
-				Write_IIC_Data(0);
-			}
-		}
+// 			for (wm = 0; wm < 16; wm++) {
+// 				Write_IIC_Data(0);
+// 			}
+// 		}
 
-		x += 14;
-		ii += 2;
-	}
-}
+// 		x += 14;
+// 		ii += 2;
+// 	}
+// }
 
 
 
-void OLED_Print(uint8_t x, uint8_t y, uint8_t ch[])
-{
-	uint8_t ch2[3];
-	uint8_t ii = 0;
+// void OLED_Print(uint8_t x, uint8_t y, uint8_t ch[])
+// {
+// 	uint8_t ch2[3];
+// 	uint8_t ii = 0;
 
-	while (ch[ii] != '\0') {
-		if (ch[ii] > 127) {
-			ch2[0] = ch[ii];
-			ch2[1] = ch[ii + 1];
-			ch2[2] = '\0';		
-			OLED_P14x16Str(x , y, ch2);	
-			x += 14;
-			ii += 2;
-		} else {
-			ch2[0] = ch[ii];
-			ch2[1] = '\0';			
-			OLED_P8x16Str(x , y , ch2);	
-			x += 8;
-			ii += 1;
-		}
-	}
-}
+// 	while (ch[ii] != '\0') {
+// 		if (ch[ii] > 127) {
+// 			ch2[0] = ch[ii];
+// 			ch2[1] = ch[ii + 1];
+// 			ch2[2] = '\0';		
+// 			OLED_P14x16Str(x , y, ch2);	
+// 			x += 14;
+// 			ii += 2;
+// 		} else {
+// 			ch2[0] = ch[ii];
+// 			ch2[1] = '\0';			
+// 			OLED_P8x16Str(x , y , ch2);	
+// 			x += 8;
+// 			ii += 1;
+// 		}
+// 	}
+// }
 
 
 
