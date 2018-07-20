@@ -6,6 +6,11 @@ die() {
 set -x
 
 [ $TRAVIS_OS_NAME != linux ] || {
+    U_NAME=${U_NAME:=embARC_Bot}
+    U_EMAIL=${U_EMAIL:=info@embARC.org}
+    echo $UNAME, $U_EMAIL
+    git config --global user.name "${U_NAME}"
+    git config --global user.email "${U_EMAIL}"
 
     export PATH=/tmp/arc_gnu_2017.09_prebuilt_elf32_le_linux_install/bin:$PATH || die
     git checkout -- . || die
@@ -19,6 +24,7 @@ set -x
     bash apply_embARC_patch.sh || die
     cd ../ || die
     cd .travis || die
+
     [ $TOOLCHAIN != gnu -o $BOARD != emsk -o $BD_VER != 11 -o $CUR_CORE != arcem6 ] || {
 
         python3 build.py "TOOLCHAIN=${TOOLCHAIN} BOARD=${BOARD} BD_VER=${BD_VER} CUR_CORE=${CUR_CORE}" || die
