@@ -7,7 +7,7 @@
 #include "embARC_toolchain.h"
 #include "embARC_error.h"
 #include "judge.h"
-//#include "data.h"
+#include "data.h"
 int cmd;
 mvector T1[]={
 {13,0x911,0xB9A,0xCD0,0xC46,0.015,-0.116,-0.889,32.654,-54.688,-22.217,-179.34,-4.60,76.00},

@@ -3,7 +3,7 @@
 #include "timer.h"
 #include "imu.h"
 #include "spi.h"
-#include "FastMath_table.h"
+#include "FastMath_Table.h"
 #include "Queue/Queue.h"
 
 #include "embARC.h"
@@ -140,7 +140,7 @@ void motorTask(void *pvParameters)
     char cmdr[2] = {0xFC, 0x03};
 
     /** velocity timeout, default value: 65535 * 2ms, about 2 minutes*/
-    int timeCnt = 0, timeout = 65535, tsCtl = 0;
+    int timeCnt = 0, timeout = 65535;//, tsCtl = 0;
 
     /** angle status check, if less than starting threshold 1s, enter upright mode*/
     int16_t status = 0;
@@ -163,12 +163,12 @@ void motorTask(void *pvParameters)
      *  ------------------------|---------------------------
      *  H -> Horizontal, V -> vertical
      */
-    ImuValues imuValsH, imuValsV;
+    ImuValues imuValsV;//, imuValsH;
     int16_t staticCnt = 0, staticCntCyced = 0;
     int16_t GyroX = 0, GyroY = 0, AcclX = 0, AcclZ = 0;
     int16_t XBias = 164, ZBias = 2785;
     int16_t GyroXZero = 0, GyroYZero = 0;
-    int32_t accl2Ang = 0, acclIndex = 0;
+    int32_t accl2Ang = 0;//, acclIndex = 0;
     int32_t gyroXZeroAcc = 0, gyroYZeroAcc = 0;
     int32_t angle1 = 0, angle = 0, lqrGyroY = 0;
     int16_t AngParam = 0, YawParam = 0;
@@ -182,7 +182,7 @@ void motorTask(void *pvParameters)
     int 	angXout = 0, speed = 0, pos = 0, posDes = 0;
     int 	angTmp = 0, spdTmp = 0;
     int32_t lqrOut = 0, pidOut = 0;
-    int posL = 0, posR = 0;
+    //int posL = 0, posR = 0;
     putStr("MOT TIME:%s, %s\r\n",  __DATE__, __TIME__);
 
     /** initialize spi */
@@ -445,7 +445,7 @@ void motorTask(void *pvParameters)
                     data[5] = angXout >> 11;
                     data[6] = pidOut;
                     data[7] = end_us;
-                    putData(data, 8 * sizeof(int));     
+                    putData((char *)data, 8 * sizeof(int));     
                 }
 
                 else if(PRINT_PWM){                    
@@ -457,7 +457,7 @@ void motorTask(void *pvParameters)
                     data[5] = angTmp >> 11;
                     data[6] = timeout;
                     data[7] = end_us;
-                    putData(data, 8 * sizeof(int));     
+                    putData((char *)data, 8 * sizeof(int));     
                 }
 
                 else if(PRINT_IMU){                    
@@ -469,7 +469,7 @@ void motorTask(void *pvParameters)
                     data[5] = angle >> 11;
                     data[6] = AngParam;
                     data[7] = end_us;
-                    putData(data, 8 * sizeof(int));     
+                    putData((char *)data, 8 * sizeof(int));     
                 }
 
                 putData(cmdr, 2);

@@ -46,6 +46,7 @@
 #include "coder.h"
 
 #include "include.h"
+extern void fft_cal();
 /**************************************************************************************
  * Function:    Subband
  *

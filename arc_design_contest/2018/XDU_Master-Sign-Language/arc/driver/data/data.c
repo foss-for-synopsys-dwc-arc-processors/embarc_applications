@@ -5,6 +5,7 @@
 #include "embARC_error.h"
 #include "dev_iic.h"
 #include "dev_uart.h"
+#include "stdio.h"
 #define I2C_SLAVE_ADDRAD  0x28
 #define CHANNEL_0  0x10
 #define CHANNEL_1  0x20

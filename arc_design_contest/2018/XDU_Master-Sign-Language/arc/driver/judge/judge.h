@@ -55,4 +55,5 @@ extern int VDTWTemplate(mvector *A,int I,mvector *B,int J,mvector *temp,int turn
 extern uint8_t  tst_beg(double test_buffer[13],double aValue[3],double wValue[3],double AValue[3],int adc[4]);
 extern int VDTWD(mvector *TEST,int J,int r);
 extern int judge(double aValue[3],double wValue[3],double AValue[3],int adc[4],int cmd);
+extern int judge1(double aValue[3],double wValue[3],double AValue[3],int adc[4],int cmd);
 #endif

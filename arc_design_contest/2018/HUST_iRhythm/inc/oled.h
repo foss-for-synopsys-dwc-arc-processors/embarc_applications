@@ -42,6 +42,7 @@ extern void OLED_P6x8Str(uint8_t x, uint8_t y, uint8_t ch[]);
 extern void OLED_P8x16Str(uint8_t x, uint8_t y, uint8_t ch[]);
 extern void OLED_P14x16Str(uint8_t x, uint8_t y, uint8_t ch[]);
 extern void draw_fft();
+extern void OLED_PrintInt16(uint8_t ucIdxX, uint8_t ucIdxY, int16_t sData);
 
 #endif
 
