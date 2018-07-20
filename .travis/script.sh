@@ -8,7 +8,7 @@ set -x
 [ $TRAVIS_OS_NAME != linux ] || {
     U_NAME=${U_NAME:=embARC_Bot}
     U_EMAIL=${U_EMAIL:=info@embARC.org}
-    echo $UNAME, $U_EMAIL
+    echo $U_NAME, $U_EMAIL
     git config --global user.name "${U_NAME}"
     git config --global user.email "${U_EMAIL}"
 
