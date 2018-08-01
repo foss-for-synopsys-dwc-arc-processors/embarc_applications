@@ -1,11 +1,16 @@
 language: python
+python: 2.7
 
 sudo: required
 dist: trusty
+cache:
+  pip: true
 
-python:
-  - "3.6"
-
+cache:
+  pip: true
+  directories:
+    - $HOME/.cache/result
+    - $HOME/.cache/toolchain 
 before_install:
   - bash .travis/before_install.sh
   # setup git
@@ -17,18 +22,21 @@ script:
 
 matrix:
   include:
-    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="11" CUR_CORE="arcem6"
+    - env: OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" GNU_VER="2017.09" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="22" CUR_CORE="arcem7d"
+    - env: OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" GNU_VER="2018.03" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="22" CUR_CORE="arcem11d"
+    - env: OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" GNU_VER="2017.09" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="23" CUR_CORE="arcem7d"
+    - env: OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" GNU_VER="2018.03" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: TOOLCHAIN="gnu" BOARD="emsk" BD_VER="23" CUR_CORE="arcem11d"
+    - env: OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" GNU_VER="2017.09" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
+    - env: OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" GNU_VER="2018.03" EXAMPLES="embarc_applications"
+      os: linux
+      compiler: gcc    
