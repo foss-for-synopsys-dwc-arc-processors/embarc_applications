@@ -15,4 +15,5 @@ set -x
     pip install --upgrade pip || die
     pip install PrettyTable || die
     pip install colorama || die
+    pip install configparser || die
 }
