@@ -17,6 +17,7 @@ env:
       "context": "travis-ci/$NAME",
       "target_url": "https://travis-ci.org/$TRAVIS_REPO_SLUG/jobs/$TRAVIS_JOB_ID"
       }\nDATA'
+    - EXPECTED="../.travis/expected.ini"
 
 cache:
   pip: true
