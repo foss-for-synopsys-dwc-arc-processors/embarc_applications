@@ -20,11 +20,12 @@ set -x
     }
     git clone ${embARC_OSP_REPO} embarc_osp
     cd embarc_osp || die
-    unzip ../applications.zip || die
+    unzip ../applications.zip>/dev/null 2>&1 || die
     bash apply_embARC_patch.sh || die
     # cd ../ || die
 
     echo $EXPECTED
+    EXPECTED="../""${EXPECTED}"
     cd .travis || die
     {
         BUILD_OPTS="OSP_ROOT=${OSP_ROOT} TOOLCHAIN=${TOOLCHAIN} BOARD=${BOARD} BD_VER=${BD_VER} CUR_CORE=${CUR_CORE} GNU_VER=${GNU_VER} EXAMPLES=${EXAMPLES} EXPECTED=${EXPECTED}"
