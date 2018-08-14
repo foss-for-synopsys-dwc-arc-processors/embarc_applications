@@ -40,21 +40,21 @@ script:
 
 matrix:
   include:
-    - env: NAME="emsk-gnu-201709-11" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" GNU_VER="2017.09" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-11-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" GNU_VER="2017.09" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-gnu-201803-11" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" GNU_VER="2018.03" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-11-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" GNU_VER="2018.03" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-gnu-201709-22" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" GNU_VER="2017.09" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-22-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" GNU_VER="2017.09" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-gnu-201803-22" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" GNU_VER="2018.03" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-22-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" GNU_VER="2018.03" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-gnu-201709-23" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" GNU_VER="2017.09" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-23-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" GNU_VER="2017.09" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-gnu-201803-23" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" GNU_VER="2018.03" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-23-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" GNU_VER="2018.03" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc    
