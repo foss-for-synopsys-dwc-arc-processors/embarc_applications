@@ -5,8 +5,6 @@ die() {
 	exit 1 
 
 }
-set -x 
-
 if [ "${TRAVIS}" == "true" ] ; then
     [ "${TRAVIS_OS_NAME}" != "linux" ] || {
         sudo apt-get update || die
