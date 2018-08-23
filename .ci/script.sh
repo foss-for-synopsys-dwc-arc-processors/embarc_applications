@@ -21,17 +21,15 @@ git config --global user.name "${U_NAME}"
 git config --global user.email "${U_EMAIL}"
 git checkout -- . || die
 git archive --format zip -o applications.zip --prefix embarc_applications/ HEAD || die
-[ $embARC_OSP_REPO ] || {
-    embARC_OSP_REPO="https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp.git"
-}
+
+embARC_OSP_REPO=${embARC_OSP_REPO:="https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp.git"}
+
 git clone ${embARC_OSP_REPO} embarc_osp
 cd embarc_osp || die
 unzip ../applications.zip>/dev/null 2>&1 || die
 
-
 [ "$TRAVIS" == "true" ] && {
-    if [ "${TOOLCHAIN}" == "gnu" ]; then
-
+    if [ "${TOOLCHAIN}" == "gnu" ] ; then
         python .ci/toolchain.py -v $TOOLCHAIN_VER -c $TOOLCHAIN_CACHE_FOLDER  || die
         if [ -d $TOOLCHAIN_CACHE_FOLDER ] ;then
             if [ -d $TOOLCHAIN_CACHE_FOLDER/$TOOLCHAIN_VER ] ; then
@@ -49,11 +47,11 @@ if [ -d $ARC_DEV_TOOL_ROOT ] ; then
     source arctool.env || die
     rm -rf arctool.env || die
 else
-    die "The toolchain path does not exist "
+    die "The toolchain path ${ARC_DEV_TOOL_ROOT} does not exist "
 fi
 
 
-if [ "${TOOLCHAIN}" == "gnu" ]; then
+if [ "${TOOLCHAIN}" == "gnu" ] ; then
     arc-elf32-gcc -v || die "ARC GNU toolchain is not installed correctly"
 else
     ccac -v || die "MWDT toolchain is not installed correctly"
@@ -61,7 +59,6 @@ fi
 
 
 {
-
     bash apply_embARC_patch.sh || die
 
     EXPECTED="../${EXPECTED}"
