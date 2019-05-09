@@ -1,0 +1,237 @@
+{
+	"version": 1,
+	"allow_edit": true,
+	"plugins": [],
+	"panes": [
+		{
+			"width": 1,
+			"row": {
+				"3": 1
+			},
+			"col": {
+				"3": 1
+			},
+			"col_width": "3",
+			"widgets": [
+				{
+					"type": "picture",
+					"settings": {
+						"src": "https://embarc.org/images/embarc_logo-bright.png",
+						"refresh": 18000
+					}
+				}
+			]
+		},
+		{
+			"title": "SmartHome Dashboard for AWS IoT Cloud",
+			"width": 1,
+			"row": {
+				"3": 11,
+				"5": 11
+			},
+			"col": {
+				"3": 1,
+				"5": 1
+			},
+			"col_width": "3",
+			"widgets": [
+				{
+					"type": "text_widget",
+					"settings": {
+						"size": "regular",
+						"value": "SmartHome Dashboard: ARC EMSK and AWS IoT Cloud Solution",
+						"animate": true
+					}
+				}
+			]
+		},
+		{
+			"title": "Reported Status",
+			"width": 1,
+			"row": {
+				"3": 15,
+				"4": 1,
+				"5": 1,
+				"7": 1
+			},
+			"col": {
+				"3": 3,
+				"4": 2,
+				"5": 2,
+				"7": 2
+			},
+			"col_width": "1",
+			"widgets": [
+				{
+					"type": "gauge",
+					"settings": {
+						"title": "Home Temperature",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"reported\"][\"temperature\"].toFixed(2)",
+						"units": "C",
+						"min_value": "-20",
+						"max_value": "60"
+					}
+				},
+				{
+					"type": "indicator",
+					"settings": {
+						"title": "Home Door Lock",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"reported\"][\"DoorLocked\"]",
+						"on_text": "LOCKED",
+						"off_text": "UNLOCKED"
+					}
+				},
+				{
+					"type": "indicator",
+					"settings": {
+						"title": "Living Room Lights",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"reported\"][\"LivingRoomLights\"]",
+						"on_text": "ON",
+						"off_text": "OFF"
+					}
+				},
+				{
+					"type": "indicator",
+					"settings": {
+						"title": "Kitchen Lights",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"reported\"][\"KitchenLights\"]",
+						"on_text": "ON",
+						"off_text": "OFF"
+					}
+				}
+			]
+		},
+		{
+			"title": "CONNECTION STATUS",
+			"width": 1,
+			"row": {
+				"3": 15,
+				"5": 7,
+				"7": 7
+			},
+			"col": {
+				"3": 1,
+				"5": 1,
+				"7": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "interactive_indicator",
+					"settings": {
+						"title": "AWS IOT CONNECTION STATUS",
+						"value": "datasources[\"aws\"][\"connected\"]",
+						"callback": "datasources[\"aws\"][\"connected\"]",
+						"on_text": "CONNECTED",
+						"off_text": "DISCONNECTED"
+					}
+				},
+				{
+					"type": "interactive_indicator",
+					"settings": {
+						"title": "DEVICE DATA READY STATUS",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"ready\"]",
+						"callback": "datasources[\"aws\"][\"SmartHome\"][\"ready\"]",
+						"on_text": "READY",
+						"off_text": "NOT READY"
+					}
+				}
+			]
+		},
+		{
+			"title": "HOME TEMPERATURE",
+			"width": 1,
+			"row": {
+				"3": 15,
+				"5": 7,
+				"7": 7
+			},
+			"col": {
+				"3": 2,
+				"5": 2,
+				"7": 2
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "sparkline",
+					"settings": {
+						"title": "Temperature History",
+						"value": [
+							"datasources[\"aws\"][\"SmartHome\"][\"reported\"][\"temperature\"]"
+						],
+						"include_legend": true,
+						"legend": "C"
+					}
+				}
+			]
+		},
+		{
+			"title": "Desired Status",
+			"width": 1,
+			"row": {
+				"3": 21,
+				"5": 13,
+				"7": 13
+			},
+			"col": {
+				"3": 1,
+				"5": 1,
+				"7": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "interactive_indicator",
+					"settings": {
+						"title": "Home Door Lock ",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"desired\"][\"DoorLocked\"]",
+						"callback": "datasources[\"aws\"][\"SmartHome\"][\"desired\"][\"DoorLocked\"]",
+						"on_text": "LOCKED",
+						"off_text": "UNLOCKED"
+					}
+				},
+				{
+					"type": "interactive_indicator",
+					"settings": {
+						"title": "Living Room Lights",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"desired\"][\"LivingRoomLights\"]",
+						"callback": "datasources[\"aws\"][\"SmartHome\"][\"desired\"][\"LivingRoomLights\"]",
+						"on_text": "ON",
+						"off_text": "OFF"
+					}
+				},
+				{
+					"type": "interactive_indicator",
+					"settings": {
+						"title": "Kitchen Lights",
+						"value": "datasources[\"aws\"][\"SmartHome\"][\"desired\"][\"KitchenLights\"]",
+						"callback": "datasources[\"aws\"][\"SmartHome\"][\"desired\"][\"KitchenLights\"]",
+						"on_text": "ON",
+						"off_text": "OFF"
+					}
+				}
+			]
+		}
+	],
+	"datasources": [
+		{
+			"name": "aws",
+			"type": "aws_iot",
+			"settings": {
+				"endpoint": "input_your_own_endpoint",
+				"region": "input_your_own_region",
+				"clientId": "",
+				"accessKey": "input_your_own_accesskey",
+				"secretKey": "input_your_own_secretKey",
+				"things": [
+					{
+						"thing": "SmartHome"
+					}
+				],
+				"name": "aws"
+			}
+		}
+	],
+	"columns": 3
+}
