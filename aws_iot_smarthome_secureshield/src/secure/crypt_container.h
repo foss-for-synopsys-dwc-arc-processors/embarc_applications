@@ -1,5 +1,5 @@
-/* ------------------------------------------
- * Copyright (c) 2019, Synopsys, Inc. All rights reserved.
+/*------------------------------------------
+ * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -27,37 +27,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
 --------------------------------------------- */
-/**
- * \file
- * \ingroup	EMBARC_APP_BAREMETAL_SECURESHIELD_SECRET_NORMAL
- * \brief	secureshield aws iot smarthome example container memory map information file
- */
 
-#ifndef _SECURESHIELD_APPL_CONFIG_H_
-#define _SECURESHIELD_APPL_CONFIG_H_
+#ifndef ENCRYPT_CONTAINER_H
+#define ENCRYPT_CONTAINER_H
 
-#define NORMAL_ROM_START 0x10000000
-#define NORMAL_ROM_SIZE	 0x00100000
+extern int32_t init_crypt(void);
+extern int32_t close_crypt(void);
+extern int32_t operate_encrypt(uint8_t *input, uint32_t input_len,
+						uint8_t *output, uint32_t *output_len);
+extern int32_t operate_decrypt(uint8_t *input, uint32_t input_len,
+						uint8_t *output, uint32_t *output_len);
 
-#define SECURE_ROM_START 0x10100000
-#define SECURE_ROM_SIZE	 0x00100000
-
-#define NORMAL_RAM_START 0x12000000
-#define NORMAL_RAM_SIZE	 0x02000000
-
-#define SECURE_RAM_START 0x14000000
-#define SECURE_RAM_SIZE	 0x02000000
-
-#define SECURESHIELD_REGION_CONTAINERS_ROM \
- 					GEN_CONTAINER_ROM_SECTION(device_container, 2048)
-
-#define SECURESHIELD_REGION_CONTAINERS_RAM \
- 					GEN_CONTAINER_RAM_SECTION(device_container, 2048)
-
-#define SECURESHIELD_REGION_SECURE_CONTAINERS_ROM \
- 					GEN_SECURE_CONTAINER_ROM_SECTION(crypt_container, 0)
-
-#define SECURESHIELD_REGION_SECURE_CONTAINERS_RAM \
- 					GEN_SECURE_CONTAINER_RAM_SECTION(crypt_container, 2048)
-
-#endif /* _SECURESHIELD_APPL_CONFIG_H_ */
+#endif

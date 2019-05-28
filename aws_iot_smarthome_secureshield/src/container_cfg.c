@@ -29,11 +29,12 @@
 --------------------------------------------- */
 
 #include "embARC.h"
-#include "device.h"
+#include "device_container.h"
+#include "secure/crypt_container.h"
 
 #define PERIPHERAL_ADDR_BASE 0xf0000000
 
-static CONTAINER_AC_TABLE device_container_act[] = {
+static CONTAINER_AC_TABLE g_device_container_act[] = {
 	{smarthome_init, 0, SECURESHIELD_AC_INTERFACE},
 	{smarthome_close, 0, SECURESHIELD_AC_INTERFACE},
 	{getRoomTemperature, 1, SECURESHIELD_AC_INTERFACE},
@@ -41,6 +42,13 @@ static CONTAINER_AC_TABLE device_container_act[] = {
 	{controlKitchenLights, 1, SECURESHIELD_AC_INTERFACE},
 	{controlLivingRoomLights, 1, SECURESHIELD_AC_INTERFACE},
 	{(void *)(PERIPHERAL_ADDR_BASE + REL_REGBASE_I2C0), 0x1000, SECURESHIELD_ACDEF_UPERIPH}
+ };
+
+static CONTAINER_AC_TABLE g_crypt_container_act[] = {
+	{init_crypt, 0, SECURESHIELD_AC_INTERFACE},
+	{close_crypt, 0, SECURESHIELD_AC_INTERFACE},
+	{operate_encrypt, 4, SECURESHIELD_AC_INTERFACE},
+	{operate_decrypt, 4, SECURESHIELD_AC_INTERFACE}
  };
 
 static CONTAINER_AC_TABLE g_main_container_act[] = {
@@ -65,4 +73,7 @@ static CONTAINER_AC_TABLE g_main_container_act[] = {
 SECURESHIELD_CONTAINER_BACKGROUND(g_main_container_act);
 
 /* configure the other container */
-SECURESHIELD_CONTAINER_CONFIG(device_container, device_container_act, 1024);
+SECURESHIELD_CONTAINER_CONFIG(device_container, g_device_container_act, 1024);
+
+/* crypt container is secure container, it has access to most of the system resources */
+SECURESHIELD_CONTAINER_CONFIG(crypt_container, g_crypt_container_act, 4096, SECURESHIELD_CONTAINER_SECURE);

@@ -14,7 +14,8 @@ LOG_FLAGS += -DENABLE_IOT_WARN
 LOG_FLAGS += -DENABLE_IOT_ERROR
 
 APPL_DEFINES  = $(LOG_FLAGS) -DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\" \
-				-DTASK_STACK_SIZE_MAIN=4096*2 -DARC_FEATURE_STACK_CHECK=0
+				-DTASK_STACK_SIZE_MAIN=4096*2 -DARC_FEATURE_STACK_CHECK=0 \
+				-DSECURESHIELD_SECURE_RAM_USAGE=0x1800000
 ## Define whether demo include OLED
 # 1: Yes
 # 0: No
@@ -42,6 +43,14 @@ APPL_ASMSRC_DIR = .
 
 # application include dirs
 APPL_INC_DIR = .
+
+# application include dirs
+APPL_INC_DIR = . ./secure
+
+
+# the dir where src files should be compiled and linked with secure world
+APPL_SECURE_CSRC_DIR = ./secure
+SECURE_SYMBOL_LIST = ./secure/secure_symbol.txt
 
 # include current project makefile
 COMMON_COMPILE_PREREQUISITES += makefile

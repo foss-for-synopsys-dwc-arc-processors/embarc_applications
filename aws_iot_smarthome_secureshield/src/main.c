@@ -110,7 +110,6 @@
 #include <sys/time.h>
 #include <limits.h>
 
-
 #include "aws_iot_config.h"
 #include "aws_iot_log.h"
 #include "aws_iot_version.h"
@@ -118,7 +117,8 @@
 #include "aws_iot_shadow_interface.h"
 
 #include "embARC.h"
-#include "device.h"
+#include "device_container.h"
+#include "secure/crypt_container.h"
 
 #if defined(AWSDEMO_HAVE_OLED) && defined(MID_U8GLIB)
 #include "u8g.h"
@@ -135,6 +135,9 @@
 
 #define MAX_LENGTH_OF_UPDATE_JSON_BUFFER        512
 
+// use crypt container to encrypt upload data
+#define ENCRYPT_UPLOAD_DATA	true
+
 //#define SIMULATE_TEMPERATURE
 
 #define CERT_ROOTDIR                            "cert/smarthome"
@@ -149,6 +152,10 @@ static bool LivingRoomLights_updated = false;
 
 static char JsonDocumentBuffer[MAX_LENGTH_OF_UPDATE_JSON_BUFFER];
 static size_t sizeOfJsonDocumentBuffer = sizeof(JsonDocumentBuffer) / sizeof(JsonDocumentBuffer[0]);
+#if ENCRYPT_UPLOAD_DATA
+static char JsonDocumentBufferCipher[MAX_LENGTH_OF_UPDATE_JSON_BUFFER];
+static char JsonDocumentBufferDeCipher[MAX_LENGTH_OF_UPDATE_JSON_BUFFER];
+#endif
 
 static float temperature = STARTING_ROOMTEMPERATURE;
 static bool DoorLocked = false;
@@ -201,8 +208,8 @@ static void u8g_draw(void)
 
 		u8g_DrawStr(&u8g, 35, 0, "SmartHome");
 
-                sprintf(strbuf, "Connection: %s", ConnectionStatus ? "ok" : "lost");
-                u8g_DrawStr(&u8g, 15, 10, (const char*)strbuf);
+		sprintf(strbuf, "Connection: %s", ConnectionStatus ? "ok" : "lost");
+		u8g_DrawStr(&u8g, 15, 10, (const char*)strbuf);
 
 		sprintf(strbuf, "Temperature: %.1fC", temperature);
 		u8g_DrawStr(&u8g, 15, 20, (const char*)strbuf);
@@ -261,8 +268,9 @@ void FrontDoorActuate_Callback(const char *pJsonString, uint32_t JsonStringDataL
 	if (pContext != NULL) {
 		bool temp = *(bool *)(pContext->pData);
 		IOT_INFO("Delta - FrontDoor state changed to %d", temp);
-		// delete controlFrontDoor(DoorLocked);
+		vTaskSuspendAll();
 		container_call(device_container, controlFrontDoor, DoorLocked);
+		xTaskResumeAll();
 	}
 }
 
@@ -271,8 +279,9 @@ void KitchenLights_Callback(const char *pJsonString, uint32_t JsonStringDataLen,
 	if (pContext != NULL) {
 		bool temp = *(bool *)(pContext->pData);
 		IOT_INFO("Delta - KitchenLights light state changed to %d", temp);
-		//delete controlKitchenLights(KitchenLights);
+		vTaskSuspendAll();
 		container_call(device_container, controlKitchenLights, KitchenLights);
+		xTaskResumeAll();
 	}
 }
 
@@ -281,8 +290,9 @@ void LivingRoomLights_Callback(const char *pJsonString, uint32_t JsonStringDataL
 	if (pContext != NULL) {
 		bool temp = *(bool *)(pContext->pData);
 		IOT_INFO("Delta - LivingRoomLights light state changed to %d", temp);
-		//delete controlLivingRoomLights(LivingRoomLights);
+		vTaskSuspendAll();
 		container_call(device_container, controlLivingRoomLights, LivingRoomLights);
+		xTaskResumeAll();
 	}
 }
 
@@ -378,7 +388,7 @@ void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
 
 	IOT_UNUSED(data);
 
-        ConnectionStatus = false;
+	ConnectionStatus = false;
 
 	if (aws_iot_is_autoreconnect_enabled(pClient)) {
 		IOT_INFO("Auto Reconnect is enabled, Reconnecting attempt will start now");
@@ -407,7 +417,7 @@ int main(void)
 	DoorLocked_updated = false;
 	KitchenLights_updated = false;
 	LivingRoomLights_updated = false;
-        ConnectionStatus = false;
+	ConnectionStatus = false;
 
 	FrontDoorActuator.cb = FrontDoorActuate_Callback;
 	FrontDoorActuator.pData = &DoorLocked;
@@ -504,19 +514,15 @@ int main(void)
 			IOT_INFO("Shadow Register Delta OK");
 		}
 
+		vTaskSuspendAll();
 #ifndef SIMULATE_TEMPERATURE
-		//delete getRoomTemperature(&temperature);
 		container_call(device_container, getRoomTemperature, &temperature);
 #endif
-		//delete smarthome_init();
 		container_call(device_container, smarthome_init);
-
-		// delete controlFrontDoor(DoorLocked);
 		container_call(device_container, controlFrontDoor, DoorLocked);
-		//delete controlKitchenLights(KitchenLights);
 		container_call(device_container, controlKitchenLights, KitchenLights);
-		//delete controlLivingRoomLights(LivingRoomLights);
 		container_call(device_container, controlLivingRoomLights, LivingRoomLights);
+		xTaskResumeAll();
 
 		last_LivingRoomLights = !LivingRoomLights;
 		last_KitchenLights = !KitchenLights;
@@ -531,7 +537,7 @@ int main(void)
 				// If the client is attempting to reconnect we will skip the rest of the loop.
 				continue;
 			}
-                        ConnectionStatus = true;
+			ConnectionStatus = true;
 			/** Update desired messages */
 			act_idx = 0;
 			if (DoorLocked_updated) {
@@ -539,24 +545,27 @@ int main(void)
 				act_idx ++;
 				DoorLocked = !DoorLocked;
 				DoorLocked_updated = false;
-				// delete controlFrontDoor(DoorLocked);
+				vTaskSuspendAll();
 				container_call(device_container, controlFrontDoor, DoorLocked);
+				xTaskResumeAll();
 			}
 			if (KitchenLights_updated) {
 				curActuator[act_idx] = &KitchenLightsActuator;
 				act_idx ++;
 				KitchenLights = !KitchenLights;
 				KitchenLights_updated = false;
-				//delete controlKitchenLights(KitchenLights);
+				vTaskSuspendAll();
 				container_call(device_container, controlKitchenLights, KitchenLights);
+				xTaskResumeAll();
 			}
 			if (LivingRoomLights_updated) {
 				curActuator[act_idx] = &LivingRoomLightsActuator;
 				act_idx ++;
 				LivingRoomLights = !LivingRoomLights;
 				LivingRoomLights_updated = false;
-				//delete controlLivingRoomLights(LivingRoomLights);
+				vTaskSuspendAll();
 				container_call(device_container, controlLivingRoomLights, LivingRoomLights);
+				xTaskResumeAll();
 			}
 			if (act_idx > 0) {
 				rc = aws_iot_shadow_init_json_document(JsonDocumentBuffer, sizeOfJsonDocumentBuffer);
@@ -575,7 +584,17 @@ int main(void)
 						rc = aws_iot_finalize_json_document(JsonDocumentBuffer, sizeOfJsonDocumentBuffer);
 						if (rc == SUCCESS) {
 							IOT_INFO("Update Shadow Desired: %s", JsonDocumentBuffer);
+#if ENCRYPT_UPLOAD_DATA
+							IOT_INFO("now try to encrypt input:%s len:%d \r\n", JsonDocumentBuffer, sizeOfJsonDocumentBuffer);
+							vTaskSuspendAll();
+							container_call(crypt_container, operate_encrypt, JsonDocumentBuffer, sizeOfJsonDocumentBuffer, \
+												JsonDocumentBufferCipher, &sizeOfJsonDocumentBuffer);
+							xTaskResumeAll();
+							IOT_INFO("result of encrypt output:%s len:%d \r\n", JsonDocumentBufferCipher, sizeOfJsonDocumentBuffer);
+							rc = aws_iot_shadow_update(&mqttClient, AWS_IOT_MY_THING_NAME, JsonDocumentBufferCipher, ShadowUpdateStatusCallback, NULL, 4, true);
+#else
 							rc = aws_iot_shadow_update(&mqttClient, AWS_IOT_MY_THING_NAME, JsonDocumentBuffer, ShadowUpdateStatusCallback, NULL, 4, true);
+#endif
 						}
 					}
 				}
@@ -586,7 +605,9 @@ int main(void)
 				continue;
 			}
 			/** Update reported messages */
+			vTaskSuspendAll();
 			temperature_updated = container_call(device_container, getRoomTemperature, &temperature);
+			xTaskResumeAll();
 
 			rc = aws_iot_shadow_init_json_document(JsonDocumentBuffer, sizeOfJsonDocumentBuffer);
 			if (rc == SUCCESS) {
@@ -600,7 +621,7 @@ int main(void)
 					}
 				}
 			}
-        		u8g_draw();
+			u8g_draw();
 
 			toggleHeartbeatLed();
 
@@ -608,8 +629,9 @@ int main(void)
 			vTaskDelay(delay_ms);
 		}
 
-		//delete smarthome_close();
+		vTaskSuspendAll();
 		container_call(device_container, smarthome_close);
+		xTaskResumeAll();
 		if (SUCCESS != rc) {
 			IOT_ERROR("An error occurred in the loop %d", rc);
 		}

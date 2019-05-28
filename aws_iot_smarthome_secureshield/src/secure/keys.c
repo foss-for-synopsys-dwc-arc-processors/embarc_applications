@@ -27,37 +27,41 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
 --------------------------------------------- */
-/**
- * \file
- * \ingroup	EMBARC_APP_BAREMETAL_SECURESHIELD_SECRET_NORMAL
- * \brief	secureshield aws iot smarthome example container memory map information file
- */
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+#include "embARC.h"
+#include "embARC_debug.h"
+#include "embARC_assert.h"
 
-#ifndef _SECURESHIELD_APPL_CONFIG_H_
-#define _SECURESHIELD_APPL_CONFIG_H_
+#include "keys.h"
 
-#define NORMAL_ROM_START 0x10000000
-#define NORMAL_ROM_SIZE	 0x00100000
+CONTAINER_BSS(crypt_container) uint8_t aes_128_key_1[] = {
+	0xEA,0x3A,0xD2,0xC4,0xCD,0xF3,0xBB,0x21,
+	0xE9,0x89,0x08,0x7D,0x65,0x19,0xAA,0xA0
+};
 
-#define SECURE_ROM_START 0x10100000
-#define SECURE_ROM_SIZE	 0x00100000
+CONTAINER_BSS(crypt_container) uint8_t aes_128_key_2[] = {
+	0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,
+	0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x00
+};
 
-#define NORMAL_RAM_START 0x12000000
-#define NORMAL_RAM_SIZE	 0x02000000
+CONTAINER_BSS(crypt_container) uint8_t aes_128_key_3[] = {
+	0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31,
+	0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31
+};
 
-#define SECURE_RAM_START 0x14000000
-#define SECURE_RAM_SIZE	 0x02000000
 
-#define SECURESHIELD_REGION_CONTAINERS_ROM \
- 					GEN_CONTAINER_ROM_SECTION(device_container, 2048)
+CONTAINER_BSS(crypt_container) KEY_UNIT keys[] = {
+	{
+		.key = aes_128_key_1,
+		.type = ENCRYPT_AES_128,
+		.len = ENCRYPT_AES_128_KEY_LEN,
+		.data_size = ENCRYPT_AES_SIZE
+	}
+};
 
-#define SECURESHIELD_REGION_CONTAINERS_RAM \
- 					GEN_CONTAINER_RAM_SECTION(device_container, 2048)
+CONTAINER_BSS(crypt_container) uint32_t keys_num = sizeof(keys)/sizeof(keys[0]);
 
-#define SECURESHIELD_REGION_SECURE_CONTAINERS_ROM \
- 					GEN_SECURE_CONTAINER_ROM_SECTION(crypt_container, 0)
-
-#define SECURESHIELD_REGION_SECURE_CONTAINERS_RAM \
- 					GEN_SECURE_CONTAINER_RAM_SECTION(crypt_container, 2048)
-
-#endif /* _SECURESHIELD_APPL_CONFIG_H_ */
+CONTAINER_BSS(crypt_container) uint32_t exc_nest_count;
+CONTAINER_BSS(crypt_container) EXC_HANDLER exc_int_handler_table[] = {0};

@@ -34,7 +34,7 @@
 #include "embARC_debug.h"
 #include "embARC_assert.h"
 
-#include "device.h"
+#include "device_container.h"
 
 #include "adt7420.h"
 

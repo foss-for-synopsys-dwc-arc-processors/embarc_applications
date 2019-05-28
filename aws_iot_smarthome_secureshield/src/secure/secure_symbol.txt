@@ -1,0 +1,4 @@
+init_crypt
+close_crypt
+operate_encrypt
+operate_decrypt

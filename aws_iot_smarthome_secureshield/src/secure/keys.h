@@ -27,37 +27,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
 --------------------------------------------- */
-/**
- * \file
- * \ingroup	EMBARC_APP_BAREMETAL_SECURESHIELD_SECRET_NORMAL
- * \brief	secureshield aws iot smarthome example container memory map information file
- */
 
-#ifndef _SECURESHIELD_APPL_CONFIG_H_
-#define _SECURESHIELD_APPL_CONFIG_H_
+#define ENCRYPT_AES_128 1
+#define ENCRYPT_AES_192 2
+#define ENCRYPT_AES_256 3
+#define ENCRYPT_DES		4
 
-#define NORMAL_ROM_START 0x10000000
-#define NORMAL_ROM_SIZE	 0x00100000
+#define ENCRYPT_AES_128_KEY_LEN 128
+#define ENCRYPT_AES_192_KEY_LEN 192
+#define ENCRYPT_AES_256_KEY_LEN 256
+#define ENCRYPT_DES_KEY_LEN 	64
 
-#define SECURE_ROM_START 0x10100000
-#define SECURE_ROM_SIZE	 0x00100000
+#define ENCRYPT_AES_SIZE	16 // 16 bytes per round
 
-#define NORMAL_RAM_START 0x12000000
-#define NORMAL_RAM_SIZE	 0x02000000
+typedef struct key_unit {
+	uint8_t *key;
+	uint32_t type;
+	uint32_t len;
+	uint32_t data_size;
+} KEY_UNIT;
 
-#define SECURE_RAM_START 0x14000000
-#define SECURE_RAM_SIZE	 0x02000000
-
-#define SECURESHIELD_REGION_CONTAINERS_ROM \
- 					GEN_CONTAINER_ROM_SECTION(device_container, 2048)
-
-#define SECURESHIELD_REGION_CONTAINERS_RAM \
- 					GEN_CONTAINER_RAM_SECTION(device_container, 2048)
-
-#define SECURESHIELD_REGION_SECURE_CONTAINERS_ROM \
- 					GEN_SECURE_CONTAINER_ROM_SECTION(crypt_container, 0)
-
-#define SECURESHIELD_REGION_SECURE_CONTAINERS_RAM \
- 					GEN_SECURE_CONTAINER_RAM_SECTION(crypt_container, 2048)
-
-#endif /* _SECURESHIELD_APPL_CONFIG_H_ */
+extern uint32_t keys_num;
+extern KEY_UNIT keys[];
