@@ -112,42 +112,40 @@ This part can implement on both ARC IoTDK  and EMSK .
 
   - In the `main.c`, you need to set the SD card header file.
 
-  ```C
+  ```
   #include "emsk_sdcard.h"
   #include "emsk_sdcard_spi.h"
   ```
 
   - In the `Makefile`, you need to set up SD card environment.
 
-  ```C
+  ```
   MID_SEL = common fatfs
-  APPL_CSRC_DIR = ./scr ./scr/wifi ./scr/emsk_sdcard
+  APPL_CSRC_DIR = . ./wifi ./emsk_sdcard
   APPL_INC_DIR = ./inc ./inc/emsk_sdcard
   ```
-```
   
-##### For IoTDK
+  ##### For IoTDK
   
-- In the `main.c`, you need to set the SD card header file.
+  - In the `main.c`, you need to set the SD card header file.
   
-  ```C
-  #include "sdcard.h"
-  #include "sdcard_sdio.h"
-```
-
-- In the `Makefile`, you need to set up SD card environment.
+  ```
+  #include "emsk_sdcard.h"
+  #include "emsk_sdcard_spi.h"
+  ```
   
-  ```C
+  - In the `Makefile`, you need to set up SD card environment.
+  
+  ```
   MID_SEL = common fatfs
-  APPL_CSRC_DIR = ./scr ./scr/wifi ./scr/iotdk_sdcard
+  APPL_CSRC_DIR = . ./wifi ./iotdk_sdcard
   APPL_INC_DIR = ./inc ./inc/iotdk_sdcard
   ```
-
 #### Run This Application
 
 This example outputs to the console. It is supported by IoTDK and EMSK. The commands to run this example are as follows:
 
-	$ cd <embarc_root>/embarc_applications-master/arc_design_contest/2019/   SUStech_EdgeCrowdCountingSystem
+	$ cd <embarc_root>/embarc_applications-master/arc_design_contest/2019/   SUStech_EdgeCrowdCountingSystem/src
 	$ make BOARD=emsk BD_VER=22 CUR_CORE=arcem9d TOOLCHAIN=mw run
 ##### Sample Output
 
@@ -509,3 +507,4 @@ OK" (22)
 ## Demo
 
 [DEMO]( https://v.youku.com/v_show/id_XNDI4ODA4MTY0NA==.html?spm=a2h4v.8841035.uerCenter.5!3~5~5!2~DL~DD!2~A&firsttime=437.67)
+
