@@ -25,7 +25,7 @@
 extern mli_tensor * const load_identification_net_input;
 #define IN_POINTS (28 * 28 * 1)
 extern mli_tensor * const load_identification_net_output;
-#define OUT_POINTS (10)
+#define OUT_POINTS (6)
 
 extern void load_identification_net(void);
 

@@ -41,8 +41,8 @@
 
 // Intermediate data buffers (enough size for max intermediate results)
 //==============================
-#define IR_BUF_SZ_MOST (32*32*32) //32768
-#define IR_BUF_SZ_NEXT (32*16*16)
+#define IR_BUF_SZ_MOST (28*28*28) //32768
+#define IR_BUF_SZ_NEXT (28*14*14)
 static d_type  _Z    x_mem_buf[IR_BUF_SZ_MOST];
 static d_type  _Y    y_mem_buf[IR_BUF_SZ_NEXT];
 
@@ -50,8 +50,8 @@ static d_type  _Y    y_mem_buf[IR_BUF_SZ_NEXT];
 //============================================================
 static mli_tensor input = {
 	.data = (void *)x_mem_buf,
-	.capacity = sizeof(d_type) * (28 * 28 * 1),
-	.shape = IN_POINTS,
+	.capacity = sizeof(d_type) * IN_POINTS,
+	.shape = {28, 28, 1},
 	.rank = 3,
 	.el_type = D_EL_TYPE,
 	.el_params.fx.frac_bits = 7,
@@ -59,9 +59,9 @@ static mli_tensor input = {
 
 static mli_tensor output = {
 	.data = (void *)y_mem_buf,
-	.capacity = sizeof(d_type) * (10),
+	.capacity = sizeof(d_type) * OUT_POINTS,
 	.shape = OUT_POINTS,
-	.rank = 1,
+	.rank = {6},
 	.el_type = D_EL_TYPE,
 	.el_params.fx.frac_bits = 0,
 };
@@ -142,45 +142,26 @@ static mli_tensor L2_conv_bias = {
 };
 
 
-// Conv 3 Layer related data
+
+
+// FC3 Layer related data
 //===================================
-static mli_tensor L3_conv_wt = {
-	.data = (void *)L3_conv_wt_buf,
-	.capacity = CONV3_W_ELEMENTS * sizeof(w_type),
-	.shape = CONV3_W_SHAPE,
-	.rank = CONV3_W_RANK,
+static mli_tensor L3_fc_wt = {
+	.data = (void *)L3_fc_wt_buf,
+	.capacity = FC3_W_ELEMENTS * sizeof(w_type),
+	.shape = FC3_W_SHAPE,
+	.rank = FC3_W_RANK,
 	.el_type = W_EL_TYPE,
-	.el_params.fx.frac_bits = CONV3_W_FRAQ,
+	.el_params.fx.frac_bits = FC3_W_FRAQ,
 };
 
-static mli_tensor L3_conv_bias = {
-	.data = (void *)L3_conv_bias_buf,
-	.capacity = CONV3_B_ELEMENTS * sizeof(w_type),
-	.shape = CONV3_B_SHAPE,
-	.rank = CONV3_B_RANK,
+static mli_tensor L3_fc_bias = {
+	.data = (void *)L3_fc_bias_buf,
+	.capacity = FC3_B_ELEMENTS * sizeof(w_type),
+	.shape = FC3_B_SHAPE,
+	.rank = FC3_B_RANK,
 	.el_type = W_EL_TYPE,
-	.el_params.fx.frac_bits = CONV3_B_FRAQ,
-};
-
-
-// FC4 Layer related data
-//===================================
-static mli_tensor L4_fc_wt = {
-	.data = (void *)L4_fc_wt_buf,
-	.capacity = FC4_W_ELEMENTS * sizeof(w_type),
-	.shape = FC4_W_SHAPE,
-	.rank = FC4_W_RANK,
-	.el_type = W_EL_TYPE,
-	.el_params.fx.frac_bits = FC4_W_FRAQ,
-};
-
-static mli_tensor L4_fc_bias = {
-	.data = (void *)L4_fc_bias_buf,
-	.capacity = FC4_B_ELEMENTS * sizeof(w_type),
-	.shape = FC4_B_SHAPE,
-	.rank = FC4_B_RANK,
-	.el_type = W_EL_TYPE,
-	.el_params.fx.frac_bits = FC4_B_FRAQ,
+	.el_params.fx.frac_bits = FC3_B_FRAQ,
 };
 
 
@@ -255,19 +236,12 @@ void load_identification_net(void) {
 	//=======================================
 	ir_tensor_X.el_params.fx.frac_bits = CONV2_OUT_FRAQ;
 	conv2d_chw(&ir_tensor_Y, &L2_conv_wt, &L2_conv_bias, &shared_conv_cfg, &ir_tensor_X);
-	avepool_chw(&ir_tensor_X, &shared_pool_cfg, &ir_tensor_Y);
+	maxpool_chw(&ir_tensor_X, &shared_pool_cfg, &ir_tensor_Y);
 
 	// LAYER 3
 	//=======================================
-	ir_tensor_X.el_params.fx.frac_bits = CONV3_OUT_FRAQ;
-	conv2d_chw(&ir_tensor_Y, &L3_conv_wt, &L3_conv_bias, &shared_conv_cfg, &ir_tensor_X);
-	avepool_chw(&ir_tensor_X, &shared_pool_cfg, &ir_tensor_Y);
-
-	// LAYER 4
-	//=======================================
-	ir_tensor_X.el_params.fx.frac_bits = FC4_OUT_FRAQ;
-	fully_connected(&ir_tensor_Y, &L4_fc_wt, &L4_fc_bias, &ir_tensor_X);
-
+	ir_tensor_X.el_params.fx.frac_bits = FC3_OUT_FRAQ;
+	fully_connected(&ir_tensor_Y, &L3_fc_wt, &L3_fc_bias, &ir_tensor_X);
 
 	softmax(&ir_tensor_X, &output);
 

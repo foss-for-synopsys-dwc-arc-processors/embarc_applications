@@ -60,11 +60,11 @@ int main(void)
     display_welcome(&u8g);
     board_delay_ms(2000, 1);
 
-	EMBARC_PRINTF("Load Identification\r\n");
+	EMBARC_PRINTF("*************Load Identification****************\r\n");
     /* configuring GPIO to handle the "data ready" interrupt */
     while (1) {
         board_delay_ms(1, 1);
-		EMBARC_PRINTF("Hello ARC\r\n");
+//		EMBARC_PRINTF("Hello ARC\r\n");
 		if(proc_flag == 0){
 			if(one_frame_finish_flag == 0){
 				ad7991_adc_read(ad7991_sensor, ad_data);   
@@ -72,14 +72,17 @@ int main(void)
 			}
 			else{
 				my_result = Cnn_Net_Classify();
+			    u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x64_2x_i2c, U8G_COM_SSD_I2C);
+			    u8g_Begin(&u8g); /* reset display and put it into default state */
 				display_result(&u8g, my_result);
 				one_frame_finish_flag = 0;
+				EMBARC_PRINTF("Result:%d\r\n",my_result);
 				proc_flag = 1;
 			}
 		}
 		else{
 			proc_flag = 0;
-			board_delay_ms(100, 1);
+			board_delay_ms(500, 1);
 		}
     }
     return E_SYS;

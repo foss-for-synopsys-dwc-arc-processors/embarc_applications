@@ -14,6 +14,7 @@ void u8g_welcome(u8g_t *u8g_t) {
 }
 
 void u8g_result(u8g_t *u8g_t,uint8_t res){
+	u8g_DrawStr(u8g_t, 45, 0, "Result");
     switch (res)
     {
     case 0:

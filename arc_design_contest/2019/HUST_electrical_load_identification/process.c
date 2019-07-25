@@ -104,10 +104,10 @@ static RESULT get_result(float *dst,uint32_t dst_size){
 			_result = 4;
 			break;
 		case 4:
-			//_result = 5;
+			_result = 5;
 			break;
 		case 5:
-			//_result = 6;
+			_result = 6;
 			break;
 		case 6:
 			//_result = 7;
