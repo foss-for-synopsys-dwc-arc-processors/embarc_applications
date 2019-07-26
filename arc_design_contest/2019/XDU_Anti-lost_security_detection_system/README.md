@@ -109,7 +109,7 @@ line 107: change
          CUR_CORE ?= arcem7d
          TOOLCHAIN ?= gnu
 ```
-   - The relative series of the root directory, here the path of the Makefile is :
+   - The relative series of the root directory, here the path of the Makefile is 
 ```
          #
          # root dir of embARC
