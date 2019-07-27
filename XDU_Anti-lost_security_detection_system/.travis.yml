@@ -1,0 +1,60 @@
+language: python
+python: 2.7
+
+sudo: required
+dist: trusty
+
+env:
+  global:
+    - >
+      STATUS=$'curl -so/dev/null --user "$EMBARC_BOT" --request POST
+      https://api.github.com/repos/$TRAVIS_REPO_SLUG/statuses/${TRAVIS_PULL_REQUEST_SHA:-$TRAVIS_COMMIT}
+      --data @- << DATA\n{
+      "state": "$0",
+      "description": "$1",
+      "context": "travis-ci/$NAME",
+      "target_url": "https://travis-ci.org/$TRAVIS_REPO_SLUG/jobs/$TRAVIS_JOB_ID"
+      }\nDATA'
+    - EXPECTED=".ci/expected.ini"
+
+cache:
+  pip: true
+  directories:
+    - .cache/result
+    - .cache/toolchain 
+
+before_install:
+  - bash .ci/before_install.sh
+  # setup git
+  - git config --global user.name "${U_NAME}"
+  - git config --global user.email "${U_EMAIL}"
+
+after_success:
+  - bash -c "$STATUS" success "Local $NAME testing has passed"
+
+after_failure:
+  - bash -c "$STATUS" failure "Local $NAME testing has failed"
+
+script:
+  - bash .ci/script.sh
+
+matrix:
+  include:
+    - env: NAME="emsk-11-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" TOOLCHAIN_VER="2017.09" EXAMPLES="embarc_applications"
+      os: linux
+      compiler: gcc
+    - env: NAME="emsk-11-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" TOOLCHAIN_VER="2018.03" EXAMPLES="embarc_applications"
+      os: linux
+      compiler: gcc
+    - env: NAME="emsk-22-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" TOOLCHAIN_VER="2017.09" EXAMPLES="embarc_applications"
+      os: linux
+      compiler: gcc
+    - env: NAME="emsk-22-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" TOOLCHAIN_VER="2018.03" EXAMPLES="embarc_applications"
+      os: linux
+      compiler: gcc
+    - env: NAME="emsk-23-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" TOOLCHAIN_VER="2017.09" EXAMPLES="embarc_applications"
+      os: linux
+      compiler: gcc
+    - env: NAME="emsk-23-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" TOOLCHAIN_VER="2018.03" EXAMPLES="embarc_applications"
+      os: linux
+      compiler: gcc    
