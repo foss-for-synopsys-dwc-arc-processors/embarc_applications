@@ -30,11 +30,14 @@ void u8g_result(u8g_t *u8g_t,uint8_t res){
         u8g_DrawStr(u8g_t, 40, 30, "KIND C");
         break;
     case 4:
-        u8g_DrawStr(u8g_t, 40, 30, "KIND D");
+        u8g_DrawStr(u8g_t, 40, 30, "KIND AB");
         break;
     case 5:
-        u8g_DrawStr(u8g_t, 30, 30, "KIND A AND B");
+        u8g_DrawStr(u8g_t, 30, 30, "KIND AC");
         break;
+    case 6:
+    	u8g_DrawStr(u8g_t, 30, 30, "KIND BC");
+    	break;
     default:
         break;
     }

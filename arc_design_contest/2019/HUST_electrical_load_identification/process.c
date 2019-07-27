@@ -81,6 +81,7 @@ static mli_status mli_hlp_fx_tensor_to_float (const mli_tensor * src, float *dst
 
 static RESULT get_result(float *dst,uint32_t dst_size){
 	float tmp = dst[0];
+	float tmp_1=dst[1],tmp_2=dst[2],tmp_3=dst[3],tmp_4=dst[4],tmp_5=dst[5];
 	int max_idx = 0;
 	RESULT _result = 0;
 	for(int idx = 1; idx < dst_size; idx++){

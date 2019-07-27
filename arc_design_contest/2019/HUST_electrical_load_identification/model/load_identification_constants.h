@@ -117,10 +117,10 @@ extern const w_type  _W2  L3_fc_bias_buf[];
 
 // CONV2
 //================================================
-#define CONV2_W_SHAPE {2,4,5,5}
-#define CONV2_W_ELEMENTS (2*4*5*5)
-#define CONV2_B_SHAPE {2}
-#define CONV2_B_ELEMENTS (2)
+#define CONV2_W_SHAPE {8,4,5,5}
+#define CONV2_W_ELEMENTS (8*4*5*5)
+#define CONV2_B_SHAPE {8}
+#define CONV2_B_ELEMENTS (8)
 
 #define CONV2_W_RANK (4)
 #define CONV2_B_RANK (1)
@@ -134,8 +134,8 @@ extern const w_type  _W2  L3_fc_bias_buf[];
 
 // FC3
 //================================================
-#define FC3_W_SHAPE {6,(7*7*4)}
-#define FC3_W_ELEMENTS (6*(7*7*4))
+#define FC3_W_SHAPE {6,(7*7*8)}
+#define FC3_W_ELEMENTS (6*(7*7*8))
 #define FC3_B_SHAPE {6}
 #define FC3_B_ELEMENTS (6)
 #define FC3_W_RANK (2)
