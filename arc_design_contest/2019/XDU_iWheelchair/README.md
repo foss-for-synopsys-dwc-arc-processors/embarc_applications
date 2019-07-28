@@ -61,8 +61,8 @@ cloud computing.
 - embARC Open Software Platform(OSP)
 - ARC GNU Tool Chain
 - Serial port terminal, such as putty
-- HMSoft
-- M6SE-IDE
+- [HMSoft](https://github.com/YuaniLee/embarc_applications/blob/master/arc_design_contest/2019/XDU_iWheelchair/app/app-release.apk)
+- [M6SE-IDE](https://github.com/YuaniLee/embarc_applications/blob/master/arc_design_contest/2019/XDU_iWheelchair/app/M6SE-IDE.exe)
 
 ### Hardware Connection
 
@@ -105,7 +105,7 @@ Connect WEGASUN-M6 to PC by USB to serial port
 
 ![M6.jpg](https://github.com/YuaniLee/Intelligent-Wheelchair/blob/master/doc/picture/M6.jpg)
 
-Open M6SE-IDE with the following settings:
+Open [M6SE-IDE](https://github.com/YuaniLee/embarc_applications/blob/master/arc_design_contest/2019/XDU_iWheelchair/app/M6SE-IDE.exe) with the following settings:
 
 ![M6SE-IDE](https://github.com/YuaniLee/Intelligent-Wheelchair/blob/master/doc/picture/M6SE-IDE.JPG)
 
