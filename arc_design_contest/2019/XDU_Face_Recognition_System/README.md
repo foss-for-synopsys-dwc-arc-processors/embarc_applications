@@ -25,7 +25,7 @@ Face Recognition System can implement face recognition.
    - **Recognition mode**<br/>
      The processor recognizes the **Recognition function**, then the voice module broadcasts the recognition result.
      
-      ![image](https://github.com/lx960125/arc/tree/master/project%20picture)
+      ![image](https://github.com/lx960125/arc/blob/master/project%20picture/Overall%20appearance.png)
 ## System Architecture
    As shown in the figure below, the system consists of **three parts: input, master, and output**.
    - The **input** include oollecting image data.
