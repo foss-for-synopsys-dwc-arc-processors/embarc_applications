@@ -16,6 +16,7 @@ env:
       "target_url": "https://travis-ci.org/$TRAVIS_REPO_SLUG/jobs/$TRAVIS_JOB_ID"
       }\nDATA'
     - EXPECTED=".ci/expected.ini"
+    - TOOLCHAIN="gnu"
     - TOOLCHAIN_VER="latest"
 
 cache:
@@ -48,30 +49,30 @@ script:
 
 matrix:
   include:
-    - env: NAME="emsk-11-gnu_latest" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-11-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="11" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsk-22-gnu_latest" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-22-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="22" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" PARALLEL=8 EXAMPLES="embarc_applications"
+    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" PARALLEL=8 EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="hsdk-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu" BOARD="hsdk" EXAMPLES="embarc_applications"
+    - env: NAME="hsdk-gnu-latest" OSP_ROOT="." BOARD="hsdk" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="iotdk-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu" BOARD="iotdk" EXAMPLES="embarc_applications"
+    - env: NAME="iotdk-gnu-latest" OSP_ROOT="." BOARD="iotdk" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="nsim-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu"  BOARD="nsim" EXAMPLES="embarc_applications"
+    - env: NAME="nsim-gnu-latest" OSP_ROOT="."  BOARD="nsim" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsdp-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu"  BOARD="emsdp" EXAMPLES="embarc_applications"
+    - env: NAME="emsdp-gnu-latest" OSP_ROOT="."  BOARD="emsdp" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
