@@ -57,6 +57,20 @@ else
     ccac -v || die "MWDT toolchain is not installed correctly"
 fi
 
+# Get the modified applications
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    diff_example=$(git diff --name-only --diff-filter=a FETCH_HEAD..master \
+    | ( grep '.\(Makefile\|makefile\|c\|h\)$' || true ) \
+    | while read file; do
+        echo "${file%/*}"
+    done \
+    | uniq )
+
+    if [ ! "$diff_example" = "" ]; then
+        function join { local IFS="$1"; shift; echo "$*"; }
+        EXAMPLES=$(join , ${diff_example[@]})
+    fi
+fi
 
 {
     bash apply_embARC_patch.sh || die
