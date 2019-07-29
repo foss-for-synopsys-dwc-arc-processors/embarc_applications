@@ -57,6 +57,20 @@ else
     ccac -v || die "MWDT toolchain is not installed correctly"
 fi
 
+# Get the modified applications
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    diff_examples=$(git diff --name-only --diff-filter=a FETCH_HEAD..master \
+    | ( grep '.\(Makefile\|makefile\|c\|h\)$' || true ) \
+    | while read file; do
+        echo "${EXAMPLES}/$(dirname ${file})"
+    done \
+    | uniq )
+
+    if [ ! "$diff_examples" = "" ]; then
+        function join { local IFS="$1"; shift; echo "$*"; }
+        EXAMPLES=$(join , ${diff_example[@]})
+    fi
+fi
 
 {
     bash apply_embARC_patch.sh || die
@@ -64,7 +78,7 @@ fi
     EXPECTED="../${EXPECTED}"
     cd .ci || die
     {
-        BUILD_OPTS="OSP_ROOT=${OSP_ROOT} TOOLCHAIN=${TOOLCHAIN} BOARD=${BOARD} BD_VER=${BD_VER} CUR_CORE=${CUR_CORE} GNU_VER=${GNU_VER} EXAMPLES=${EXAMPLES} EXPECTED=${EXPECTED}"
+        BUILD_OPTS="OSP_ROOT=${OSP_ROOT} TOOLCHAIN=${TOOLCHAIN} BOARD=${BOARD} BD_VER=${BD_VER} CUR_CORE=${CUR_CORE} TOOLCHAIN_VER=${TOOLCHAIN_VER} EXAMPLES=${EXAMPLES} EXPECTED=${EXPECTED}"
         python build.py ${BUILD_OPTS} || die
     }
 
