@@ -60,18 +60,18 @@ matrix:
       os: linux
       compiler: gcc
 
-    - env: NAME="hsdk-gnu-latest" TOOLCHAIN="gnu" BOARD="hsdk" EXAMPLES="embarc_applications"
+    - env: NAME="hsdk-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu" BOARD="hsdk" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="iotdk-gnu-latest" TOOLCHAIN="gnu" BOARD="iotdk" EXAMPLES="embarc_applications"
+    - env: NAME="iotdk-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu" BOARD="iotdk" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="nsim-gnu-latest" TOOLCHAIN="gnu"  BOARD="nsim" EXAMPLES="embarc_applications"
+    - env: NAME="nsim-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu"  BOARD="nsim" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsdp-gnu-latest" TOOLCHAIN="gnu"  BOARD="emsdp" EXAMPLES="embarc_applications"
+    - env: NAME="emsdp-gnu-latest" OSP_ROOT="." TOOLCHAIN="gnu"  BOARD="emsdp" EXAMPLES="embarc_applications"
       os: linux
       compiler: gcc
