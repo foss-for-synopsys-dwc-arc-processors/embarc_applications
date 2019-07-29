@@ -62,7 +62,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     diff_example=$(git diff --name-only --diff-filter=a FETCH_HEAD..master \
     | ( grep '.\(Makefile\|makefile\|c\|h\)$' || true ) \
     | while read file; do
-        echo "${file%/*}"
+        echo "${EXAMPLES}/${file%/*}"
     done \
     | uniq )
 
