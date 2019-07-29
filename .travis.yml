@@ -18,6 +18,7 @@ env:
     - EXPECTED=".ci/expected.ini"
     - TOOLCHAIN="gnu"
     - TOOLCHAIN_VER="latest"
+    - EXAMPLES="embarc_applications"
 
 cache:
   pip: true
@@ -49,30 +50,30 @@ script:
 
 matrix:
   include:
-    - env: NAME="emsk-11-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="11" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-11-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="11"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsk-22-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="22" EXAMPLES="embarc_applications"
+    - env: NAME="emsk-22-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="22"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" PARALLEL=8 EXAMPLES="embarc_applications"
+    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" PARALLEL=8
       os: linux
       compiler: gcc
 
-    - env: NAME="hsdk-gnu-latest" OSP_ROOT="." BOARD="hsdk" EXAMPLES="embarc_applications"
+    - env: NAME="hsdk-gnu-latest" OSP_ROOT="." BOARD="hsdk"
       os: linux
       compiler: gcc
 
-    - env: NAME="iotdk-gnu-latest" OSP_ROOT="." BOARD="iotdk" EXAMPLES="embarc_applications"
+    - env: NAME="iotdk-gnu-latest" OSP_ROOT="." BOARD="iotdk"
       os: linux
       compiler: gcc
 
-    - env: NAME="nsim-gnu-latest" OSP_ROOT="."  BOARD="nsim" EXAMPLES="embarc_applications"
+    - env: NAME="nsim-gnu-latest" OSP_ROOT="."  BOARD="nsim"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsdp-gnu-latest" OSP_ROOT="."  BOARD="emsdp" EXAMPLES="embarc_applications"
+    - env: NAME="emsdp-gnu-latest" OSP_ROOT="."  BOARD="emsdp"
       os: linux
       compiler: gcc
