@@ -62,6 +62,10 @@ matrix:
       os: linux
       compiler: gcc
 
+    - env: NAME="emsk-23-arcem7d-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" CUR_CORE="arcem9d"
+      os: linux
+      compiler: gcc
+
     - env: NAME="hsdk-gnu-latest" OSP_ROOT="." BOARD="hsdk"
       os: linux
       compiler: gcc
