@@ -18,7 +18,7 @@ env:
     - EXPECTED=".ci/expected.ini"
     - TOOLCHAIN="gnu"
     - TOOLCHAIN_VER="latest"
-    - EXAMPLES="embarc_applications"
+    - EXAMPLES=$(basename ${TRAVIS_REPO_SLUG})
 
 cache:
   pip: true
@@ -58,11 +58,11 @@ matrix:
       os: linux
       compiler: gcc
 
-    - env: NAME="emsk-23-arcem7d-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" CUR_CORE="arcem7d"
+    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" EXAMPLES="embarc_applications/ilight_smartdevice,embarc_applications/ibaby_smarthome_multinode,embarc_applications/aws_iot_smarthome,embarc_applications/aws_iot_smarthome_multinode,embarc_applications/aws_iot_smarthome_secureshield"
       os: linux
       compiler: gcc
 
-    - env: NAME="emsk-23-arcem7d-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" CUR_CORE="arcem9d"
+    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" EXAMPLES="embarc_applications/arc_design_contest,embarc_applications/ot_smarthome_multinode"
       os: linux
       compiler: gcc
 

@@ -13,6 +13,20 @@ if [ "${TOOLCHAIN}" == "gnu" ]; then
 else
     ARC_DEV_TOOL_ROOT="${ARC_DEV_MW_ROOT}/mwdt_${TOOLCHAIN_VER}/linux/ARC"
 fi
+# Get the modified applications
+# if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+#     diff_examples=$(git diff --name-only --diff-filter=a FETCH_HEAD..master \
+#     | ( grep '.\(Makefile\|makefile\|c\|h\)$' || true ) \
+#     | while read file; do
+#         echo "$(basename ${TRAVIS_PULL_REQUEST_SLUG})/$(dirname ${file})"
+#     done \
+#     | uniq )
+
+#     if [ ! "$diff_examples" = "" ]; then
+#         function join { local IFS="$1"; shift; echo "$*"; }
+#         EXAMPLES=$(join , ${diff_example[@]})
+#     fi
+# fi
 
 U_NAME=${U_NAME:=embARC_Bot}
 U_EMAIL=${U_EMAIL:=info@embARC.org}
@@ -55,21 +69,6 @@ if [ "${TOOLCHAIN}" == "gnu" ] ; then
     arc-elf32-gcc -v || die "ARC GNU toolchain is not installed correctly"
 else
     ccac -v || die "MWDT toolchain is not installed correctly"
-fi
-
-# Get the modified applications
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-    diff_examples=$(git diff --name-only --diff-filter=a FETCH_HEAD..master \
-    | ( grep '.\(Makefile\|makefile\|c\|h\)$' || true ) \
-    | while read file; do
-        echo "${EXAMPLES}/$(dirname ${file})"
-    done \
-    | uniq )
-
-    if [ ! "$diff_examples" = "" ]; then
-        function join { local IFS="$1"; shift; echo "$*"; }
-        EXAMPLES=$(join , ${diff_example[@]})
-    fi
 fi
 
 {
