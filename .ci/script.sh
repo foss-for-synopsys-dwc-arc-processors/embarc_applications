@@ -13,20 +13,10 @@ if [ "${TOOLCHAIN}" == "gnu" ]; then
 else
     ARC_DEV_TOOL_ROOT="${ARC_DEV_MW_ROOT}/mwdt_${TOOLCHAIN_VER}/linux/ARC"
 fi
-# Get the modified applications
-# if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-#     diff_examples=$(git diff --name-only --diff-filter=a FETCH_HEAD..master \
-#     | ( grep '.\(Makefile\|makefile\|c\|h\)$' || true ) \
-#     | while read file; do
-#         echo "$(basename ${TRAVIS_PULL_REQUEST_SLUG})/$(dirname ${file})"
-#     done \
-#     | uniq )
 
-#     if [ ! "$diff_examples" = "" ]; then
-#         function join { local IFS="$1"; shift; echo "$*"; }
-#         EXAMPLES=$(join , ${diff_example[@]})
-#     fi
-# fi
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    EXAMPLES=$(.ci/get_examples.py --root ${HOME}--commit_start FETCH_HEAD --commit_end master)
+fi
 
 U_NAME=${U_NAME:=embARC_Bot}
 U_EMAIL=${U_EMAIL:=info@embARC.org}

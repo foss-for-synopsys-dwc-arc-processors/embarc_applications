@@ -23,8 +23,8 @@ env:
 cache:
   pip: true
   directories:
-    - .cache/result
-    - .cache/toolchain 
+    - $HOME/.cache/result
+    - $HOME/.cache/toolchain 
 
 before_install:
   # setup git
