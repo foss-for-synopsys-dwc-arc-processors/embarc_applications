@@ -40,7 +40,7 @@ JTAG ?= usb
 #
 EMBARC_ROOT = ../../../../..
 
-MID_SEL = common u8glib
+MID_SEL = common 
 
 # application source dirs
 APPL_CSRC_DIR = . ./driver/bluetooth ./driver/data  ./driver/gprs  ./driver/buzzer ./driver/gps
