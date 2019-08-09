@@ -115,7 +115,7 @@ line 107: change
          # root dir of embARC
          #
          EMBARC_ROOT = ../../..
-         MID_SEL = common u8glib
+         MID_SEL = common 
 ```  
   See [ embARC Example User Guide][40], "Options to Hard-Code in the Application Makefile" for more detailed information about Makefile Options
   
