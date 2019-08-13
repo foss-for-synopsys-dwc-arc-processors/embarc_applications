@@ -136,35 +136,3 @@ RESULT Cnn_Net_Classify(void){
 	
 	return get_result(pred_data,output_elements);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

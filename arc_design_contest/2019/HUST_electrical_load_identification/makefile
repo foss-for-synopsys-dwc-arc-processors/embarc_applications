@@ -17,7 +17,7 @@ OLEVEL = O0
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../../
+EMBARC_ROOT = ../../../..
 
 # use -Hpurge option to optimize the code size
 ifeq ($(TOOLCHAIN), gnu)

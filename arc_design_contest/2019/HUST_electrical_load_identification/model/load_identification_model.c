@@ -358,4 +358,3 @@ static inline mli_status fully_connected(
 	return mli_krn_fully_connected_fx8w16d(in, weights, bias, out);
 }
 #endif
-

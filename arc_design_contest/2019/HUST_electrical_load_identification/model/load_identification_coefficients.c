@@ -57,4 +57,3 @@ const w_type  _W2  L3_fc_wt_buf[FC3_W_ELEMENTS] = {
 const w_type  _W2  L3_fc_bias_buf[FC3_B_ELEMENTS] = {
 		L3_BQ(0.110076368),L3_BQ(0.099999987),L3_BQ(0.100000001),L3_BQ(0.089923650),L3_BQ(0.100000001),L3_BQ(0.100000001)\
 };
-

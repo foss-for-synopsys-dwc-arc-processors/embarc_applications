@@ -14,7 +14,4 @@ void display_result(u8g_t *u8g_t, uint8_t res);
 
 
 
-
-
-
 #endif
