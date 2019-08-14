@@ -6,7 +6,7 @@ APPL ?= SoundSnake
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../../..
+EMBARC_ROOT = ../../../../..
 
 LIB_SEL = embarc_mli
 MID_SEL = common
