@@ -50,6 +50,10 @@ script:
 
 matrix:
   include:
+    - env: NAME="code-style-check"
+      os: linux
+      compiler: gcc
+
     - env: NAME="emsk-11-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="11"
       os: linux
       compiler: gcc
@@ -71,13 +75,5 @@ matrix:
       compiler: gcc
 
     - env: NAME="iotdk-gnu-latest" OSP_ROOT="." BOARD="iotdk"
-      os: linux
-      compiler: gcc
-
-    - env: NAME="nsim-gnu-latest" OSP_ROOT="."  BOARD="nsim"
-      os: linux
-      compiler: gcc
-
-    - env: NAME="emsdp-gnu-latest" OSP_ROOT="."  BOARD="emsdp"
       os: linux
       compiler: gcc

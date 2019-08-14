@@ -25,4 +25,6 @@ fi
     pip install configparser || die
     pip install requests || die
     pip install XlsxWriter || die
+    pip install cpplint || die
+    pip install flake8 || die
 }
