@@ -4,7 +4,6 @@ die() {
 
 }
 if [ "$NAME" == "code-style-check" ]; then
-    ls
     bash .ci/code_check.sh || die
 else
     TOOLCHAIN_CACHE_FOLDER=".cache/toolchain"
@@ -18,7 +17,9 @@ else
     fi
 
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        .ci/get_examples.py --root ${HOME}--commit_start FETCH_HEAD --commit_end master
         EXAMPLES=$(.ci/get_examples.py --root ${HOME}--commit_start FETCH_HEAD --commit_end master)
+        echo $EXAMPLES
     fi
 
     U_NAME=${U_NAME:=embARC_Bot}
