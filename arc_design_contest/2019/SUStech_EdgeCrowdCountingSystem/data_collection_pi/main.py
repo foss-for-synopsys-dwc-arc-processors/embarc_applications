@@ -4,17 +4,21 @@ import os
 import sys
 from itertools import cycle
 import tensorflow as tf
-import cv2
 import numpy as np
+import socket
+
 
 def conv2d(x, w):
-    return tf.nn.conv2d(x, w, strides = [1, 1, 1, 1], padding = 'SAME')
+    return tf.nn.conv2d(x, w, strides=[1, 1, 1, 1], padding='SAME')
+
 
 def max_pool_2x2(x):
-    return tf.nn.max_pool(x, ksize = [1, 2, 2, 1], strides = [1, 2, 2, 1], padding = 'SAME')
+    return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
+                          strides=[1, 2, 2, 1], padding='SAME')
+
 
 def inf(x):
-    #tf.reset_default_graph()
+    # tf.reset_default_graph()
     # s net ###########################################################
     w_conv1_1 = tf.get_variable('w_conv1_1', [5, 5, 1, 24])
     b_conv1_1 = tf.get_variable('b_conv1_1', [24])
@@ -89,60 +93,55 @@ def inf(x):
 
     return y_pre
 
+
 graph1 = tf.Graph()
 with graph1.as_default():
-    x = tf.placeholder(tf.float32, [None, None, None, 1],name="input")
+    x = tf.placeholder(tf.float32, [None, None, None, 1], name="input")
     y_act = tf.placeholder(tf.float32, [None, None, None, 1])
     y_pre = inf(x)
 
 frame_path = './data/'
 filenames = os.listdir(frame_path)
-img_iter = cycle([cv2.imread(os.sep.join([frame_path,x]),0) for x in filenames])
+img_iter = cycle([cv2.imread(os.sep.join([frame_path, name]), 0)
+                 for name in filenames])
 
 key = 0
-cv2.namedWindow('image',cv2.WINDOW_NORMAL)
-cv2.resizeWindow('image',640,480)
+cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('image', 640, 480)
 
-SEVER_ADDR=('192.168.31.67',80)
+SEVER_ADDR = ('192.168.31.67', 80)
 
-client_socket = socket(AF_INET,SOCK_STREAM)
+client_socket = socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(SEVER_ADDR)
-print('connect sever(%s) success' %str(SEVER_ADDR))
+print('connect sever(%s) success' % str(SEVER_ADDR))
 
 with tf.Session(graph=graph1) as sess:
     saver = tf.train.Saver()
-    saver.restore(sess,'modelA/model.ckpt')
+    saver.restore(sess, 'modelA/model.ckpt')
 
     while key & 0xFF != 28:
         img = next(img_iter)
         img = np.array(img)
         img = (img-127.5)/128
-        data=[]
+        data = []
         data.append([img])
         d = data[0]
         x_in = d[0]
-        x_in = np.reshape(d[0],(1,d[0].shape[0],d[0].shape[1],1))
+        x_in = np.reshape(d[0], (1, d[0].shape[0], d[0].shape[1], 1))
         timea = time.time()
-        y_p_den = sess.run(y_pre,feed_dict={"input:0":x_in})
+        y_p_den = sess.run(y_pre, feed_dict={"input:0": x_in})
         timeb = time.time()
-        cv2.imshow('image',img)
-        
-        #process information send to server
-        tm = time.strftime("%Y%m%d%H%M%S",time.localtime())
+        cv2.imshow('image', img)
+
+        tm = time.strftime("%Y%m%d%H%M%S", time.localtime())
         real_num = "{:0>4d}".format(np.sum(y_p_den))
         send_data = 'A'+real_num+tm
         client_socket.send(send_data.encode())
 
-        print("prediction result:%f" %real)#
-        print('send message %s' %send_data)
+        print("prediction result:%f" % real_num)
+        print('send message %s' % send_data)
         print('=============================================================')
-        print('cost time: %.2f s' %(timea-timeb))
+        print('cost time: %.2f s' % (timea - timeb))
 
         sys.stdout.flush()
         key = cv2.waitKey(1000)
-
-
-
-
-
-
