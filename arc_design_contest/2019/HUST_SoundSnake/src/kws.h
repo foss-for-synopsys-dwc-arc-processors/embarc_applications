@@ -98,24 +98,24 @@ extern "C" {
 #endif
 
 /*
- * @brief cnn相关初始化
+ * @brief cnn initialization
  */
 void ds_cnn_init(void);
 /*
- * @brief 对缓存的语音数据做识别
- * @param audio_buf 音频数据
- * @return 返回识别结果对应的编号
+ * @brief Identify cached voice data
+ * @param audio_buf voice data
+ * @return Returns the number corresponding to the recognition result
  */
 int kws_using_ds_cnn(int16_t *audio_buf);
 /*
- * @brief 提取MFCC特征
- * @param mfcc_buffer 返回mfcc特征的buf
+ * @brief Extract MFCC features
+ * @param mfcc_buffer Returns the buf of the mfcc feature extraction
  */
 //void extract_features(MFCC_STR *str, const int16_t *audio_data, q7_t *mfcc_buffer);
 /*
- * @brief 提取完特征后执行cnn进行推理
- * @param in_data 输入特征
- * @param out_data 输出结果
+ * @brief execute CNN for inference after feature 
+ * @param in_data Input feature
+ * @param out_data Output result
  */
 void run_nn_to_classify(int8_t* in_data, int8_t* out_data);
 

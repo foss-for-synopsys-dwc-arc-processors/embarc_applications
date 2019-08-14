@@ -34,7 +34,7 @@ static void create_mel_fbank(MFCC_STR *mfcc_struct)
 	float mel_high_freq = MelScale(MEL_HIGH_FREQ);
 	float left_mel, center_mel, right_mel, freq, mel, weight;
 	int32_t first_index,last_index;
-	float mel_freq_delta = (mel_high_freq - mel_low_freq) / (NUM_FBANK_BINS+1); //mel频率三角滤波器的步长
+	float mel_freq_delta = (mel_high_freq - mel_low_freq) / (NUM_FBANK_BINS+1); //Step size of the Mel frequency delta filter
 
 	float *this_bin = (float *)malloc(sizeof(float)*num_fft_bins);
 
@@ -96,7 +96,7 @@ int32_t mfcc_init(MFCC_STR *mfcc_str, int num_mfcc_features, int frame_len, int 
 	mfcc_str->frame_len = frame_len;
 	mfcc_str->mfcc_dec_bits = mfcc_dec_bits;
 
-	/* 需要填充的数据个数，填充至2的n次方，便于做FFT */
+	/* The number of data to be filled, filled to the Nth power of 2, in order to do FFT */
 	mfcc_str->frame_len_padded = pow(2,ceil((log(mfcc_str->frame_len)/log(2))));
 
 	/* 大小为4kBytes */
@@ -107,7 +107,7 @@ int32_t mfcc_init(MFCC_STR *mfcc_str, int num_mfcc_features, int frame_len, int 
 		return -1;
 	}
 
-	/* 大小为4kBytes */
+	/* the size is 4kBytes */
 	mfcc_str->buffer = (float *)malloc(2 * sizeof(float) * mfcc_str->frame_len_padded);
 	if (mfcc_str->buffer == NULL)
 	{
@@ -115,7 +115,7 @@ int32_t mfcc_init(MFCC_STR *mfcc_str, int num_mfcc_features, int frame_len, int 
 		return -1;
 	}
 
-	/* 大小约为0.16k */
+	/* the size is about 0.16k */
 	mfcc_str->mel_energies = (float *)malloc(sizeof(float) * NUM_FBANK_BINS);
 	if(mfcc_str->mel_energies == NULL)
 	{
@@ -123,7 +123,7 @@ int32_t mfcc_init(MFCC_STR *mfcc_str, int num_mfcc_features, int frame_len, int 
 		return -1;
 	}
 
-	/* 大小约为0.16kBytes */
+	/* the size is about 0.16kBytes */
 	mfcc_str->fbank_filter_first = (int32_t *)malloc(sizeof(int32_t) * NUM_FBANK_BINS);
 	if(mfcc_str->fbank_filter_first == NULL)
 	{
@@ -131,7 +131,7 @@ int32_t mfcc_init(MFCC_STR *mfcc_str, int num_mfcc_features, int frame_len, int 
 		return -1;
 	}
 
-	/* 大小约为0.16kBytes */
+	/* the size is about 0.16kBytes */
 	mfcc_str->fbank_filter_last = (int32_t *)malloc(sizeof(int32_t) * NUM_FBANK_BINS);
 	if(mfcc_str->fbank_filter_last == NULL)
 	{
@@ -139,7 +139,7 @@ int32_t mfcc_init(MFCC_STR *mfcc_str, int num_mfcc_features, int frame_len, int 
 		return -1;
 	}
 
-	/* 大小约为2.5k */
+	/* the size is about 2.5k */
 	mfcc_str->window_func = (float *)malloc(sizeof(float) * mfcc_str->frame_len);
 	if(mfcc_str->window_func == NULL)
 	{
@@ -186,26 +186,26 @@ void mfcc_compute(MFCC_STR *mfcc_str, const int16_t * audio_data, int8_t* mfcc_o
 	float sum;
 	float first_energy, last_energy;
 
-	/* 临时变量 */
+	/* Temporary variables */
 	float *frame_tmp = mfcc_str->frame;
 	float *buffer_tmp = mfcc_str->buffer;
 	float **mel_fbank_tmp = mfcc_str->mel_fbank;
 	float *mel_energies_tmp = mfcc_str->mel_energies;
 	float *dct_matrix_tmp = mfcc_str->dct_matrix;
 
-	//将wav数据压缩到 (-1,1)
+	//Compress wav data to (-1,1)
 	for (i = 0; i < FRAME_LEN; i++) {
 		frame_tmp[i] = (float)audio_data[2*i] / (1<<15); 
 	}
 
-	//FFT变换需要2的n次方，这里将多于一帧的数据点填充0
+	//The FFT transform requires the Nth power of 2, datas here more than one frame are filled with zero
 	memset(&frame_tmp[FRAME_LEN], 0, sizeof(float) * (mfcc_str->frame_len_padded - FRAME_LEN));
 
 	for (i = 0; i < FRAME_LEN; i++) {
 		frame_tmp[i] *= mfcc_str->window_func[i];
 	}
 
-	//做傅里叶变换
+	//FFT
 	//arm_rfft_fast_f32(mfcc_str->rfft, frame_tmp, buffer_tmp, 0);
 	memset(buffer_tmp, 0, sizeof(float) * 1024 * 2);
 	for(i=0;i<1024;i++)
@@ -213,7 +213,7 @@ void mfcc_compute(MFCC_STR *mfcc_str, const int16_t * audio_data, int8_t* mfcc_o
 
 	fftx((Complex*)buffer_tmp, 10);
 
-	//获取各个频率分量的实际幅值
+	//Get the actual amplitude of each frequency component
 	//[real0, realN/2-1, real1, im1, real2, im2, ...]
 	half_dim = mfcc_str->frame_len_padded / 2;
 	first_energy = buffer_tmp[0] * buffer_tmp[0];
@@ -227,7 +227,7 @@ void mfcc_compute(MFCC_STR *mfcc_str, const int16_t * audio_data, int8_t* mfcc_o
 	buffer_tmp[0] = first_energy;
 	buffer_tmp[half_dim] = last_energy;  
 
-	//使用梅尔滤波器进行滤波
+	//Filtering with a Mel filter
 	for (bin = 0; bin < NUM_FBANK_BINS; bin++)
 	{
 		j = 0;
@@ -241,16 +241,16 @@ void mfcc_compute(MFCC_STR *mfcc_str, const int16_t * audio_data, int8_t* mfcc_o
 	  	}
 		mel_energies_tmp[bin] = mel_energy;
 
-		//这是为了下面去对数的时候不为0
+		//Logarithm cannot be based on 0
 		if (mel_energy == 0.0)
 			mel_energies_tmp[bin] = FLT_MIN;
 	}
 
-	//取对数
+	//Logarithm
 	for (bin = 0; bin < NUM_FBANK_BINS; bin++)
 		mel_energies_tmp[bin] = logf(mel_energies_tmp[bin]);
 
-	//做离散余弦变换
+	//DCT
 	for (i = 0; i < NUM_MFCC_COEFFS; i++) 
 	{
 		sum = 0.0;
@@ -259,7 +259,7 @@ void mfcc_compute(MFCC_STR *mfcc_str, const int16_t * audio_data, int8_t* mfcc_o
 			sum += dct_matrix_tmp[i * NUM_FBANK_BINS + j] * mel_energies_tmp[j];
 		}
 
-		//将MFCC特征量化为q7_t格式
+		//Convert MFCC feature quantities to q7_t format
 		sum *= (0x1<<(mfcc_str->mfcc_dec_bits));
 		sum = round(sum); 
 		if(sum >= 127)
