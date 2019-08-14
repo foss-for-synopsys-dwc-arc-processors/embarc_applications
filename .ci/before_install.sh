@@ -27,4 +27,5 @@ fi
     pip install XlsxWriter || die
     pip install cpplint || die
     pip install flake8 || die
+    pip install sh || die
 }
