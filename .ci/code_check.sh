@@ -23,7 +23,4 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     COMMENT_TAIL="</pre>"
     COMMENT="${COMMENT_HEAD}${COMMENT_CONTENT}${COMMENT_TAIL}"
     bash -c "$COMMENTS"
-    exit 0
-
 fi
-
