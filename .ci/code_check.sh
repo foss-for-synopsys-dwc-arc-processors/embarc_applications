@@ -19,7 +19,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
 
 
     COMMENT_CONTENT=$(sed 's/$/&<br>/g' result.log)
-    COMMENT_HEAD="# Sphinx link check result \n***********************\n<pre>"
+    COMMENT_HEAD="# Code style check result \n***********************\n<pre>"
     COMMENT_TAIL="</pre>"
     COMMENT="${COMMENT_HEAD}${COMMENT_CONTENT}${COMMENT_TAIL}"
     bash -c "$COMMENTS"
