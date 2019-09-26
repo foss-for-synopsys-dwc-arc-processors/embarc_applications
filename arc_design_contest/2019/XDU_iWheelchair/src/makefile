@@ -12,7 +12,7 @@ DEV_INCDIR +=  $(EMBARC_ROOT)/device/peripheral/adc/ad7991
 #
 # root dir of embARC
 #
-EMBARC_ROOT = ../../..
+EMBARC_ROOT = ../../../../..
 
 MID_SEL = common
 

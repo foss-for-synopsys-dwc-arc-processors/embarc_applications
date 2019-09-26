@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "FFT.h"
 
+#define M_PI 3.14159265358979323846
+
 static inline float MelScale(float freq) 
 {
 	return 1127.0f * logf (1.0f + freq / 700.0f);
