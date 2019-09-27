@@ -1,0 +1,6 @@
+version: 6.4.5.0.20190823(trial)(synopsys_limited)
+--------------------------------------
+-mcpu=em4_fpuda	-mlittle-endian	-mcode-density	-mdiv-rem -mswap -mnorm	-mmpy-option=6	-mbarrel-shifter -mfpu=fpuda_all
+--------------------------------------
+target: arc-elf32
+gcc_version: '8.2.1 20180814 (ARCompact/ARCv2 ISA elf32 toolchain 2018.09) '
