@@ -47,7 +47,7 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
 
 - Setup hardware connection
 
-- Goto (embarc_osp)\middleware\common\console_io.c
+- Goto `(embarc_osp)\middleware\common\console_io.c`
 
 - Change
 
@@ -66,8 +66,8 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
     	xdev_in(console_getchar);
     	xdev_out(console_putchar);
 
-- Goto python\read.py and python\build.py
-  - In `port='COM3',`change COM3 to the port which your IoTDK Board connect.
+- Goto `python\read.py` and `python\build.py`
+  - In `port='COM3',`change `COM3` to the port which your IoTDK Board connect.
 
 
 #### Run the application
