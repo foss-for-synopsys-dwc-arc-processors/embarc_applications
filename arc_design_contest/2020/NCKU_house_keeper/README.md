@@ -125,3 +125,7 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
 - Type `make run` to download and start the program on IoTDK Board.
 
 - Type any key and the system will sign up camera's current frame with `(yourname)`.
+
+##### To delete face ID you signed up
+
+- Type `python delete_data.py` and insert the ID you want to delete.
