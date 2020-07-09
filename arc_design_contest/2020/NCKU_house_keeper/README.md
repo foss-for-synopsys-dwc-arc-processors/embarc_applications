@@ -96,7 +96,9 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
           _e_mli_model = .;
           }
           } > REGION_XCCM AT > REGION_ICCM
+
 - to
+
         GROUP : {
         .mli_model_p2 ALIGN(8): {
         _f_mli_model_p2 = .;
