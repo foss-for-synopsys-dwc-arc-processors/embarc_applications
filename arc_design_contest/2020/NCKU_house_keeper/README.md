@@ -117,7 +117,7 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
         }
         } > REGION_DCCM AT > REGION_DCCM
 
-- 'make' again 
+- Type `make run` to download and start the program on IoTDK Board again
 
 ##### To sign up a new face ID in face recognition database
 - Type `python build.py (yourname)` ,you can set `(yourname)` parameter to any name you want and wait the terminal to print `Configured`.
