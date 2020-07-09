@@ -49,7 +49,7 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
 
 - Goto (embarc_osp)\middleware\common\console_io.c
 
-  - Change
+- Change
 
         console_uart = uart_get_dev(CONSOLE_UART_ID);
 
@@ -57,7 +57,7 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
 
         xdev_in(console_getchar);
         xdev_out(console_putchar);
-  - to
+- to
 
     	console_uart = uart_get_dev(CONSOLE_UART_ID);
 
@@ -76,7 +76,44 @@ Our goal is to implements light face detection CNN model on ARC IoTdk board, edg
 
 - Type `make run` to download and start the program on IoTDK Board
 
-- If terminal shows memory allocation error, relace `obj_iotdk_10\mw_arcem9d\linker_mw.ldf` with `linker_mw.ldf` and make again.
+- If terminal shows memory allocation error, open `obj_iotdk_10\mw_arcem9d\linker_mw.ldf`
+- change
+
+          GROUP : {
+          .mli_model_p2 ALIGN(8): {
+          _f_mli_model_p2 = .;
+          *(.mli_model_p2 .mli_model_p2.*)
+          _e_mli_model_p2 = .;
+          }
+          } > REGION_DCCM AT > REGION_ICCM
+
+          _load_addr_mli_model_p2 = LOADADDR(.mli_model_p2);
+
+          GROUP : {
+          .mli_model ALIGN(8): {
+          _f_mli_model = .;
+          *(.mli_model .mli_model.*)
+          _e_mli_model = .;
+          }
+          } > REGION_XCCM AT > REGION_ICCM
+- to
+        GROUP : {
+        .mli_model_p2 ALIGN(8): {
+        _f_mli_model_p2 = .;
+        *(.mli_model_p2 .mli_model_p2.*)
+        _e_mli_model_p2 = .;
+        }
+        } > REGION_DCCM AT > REGION_DCCM
+
+        _load_addr_mli_model_p2 = LOADADDR(.mli_model_p2);
+
+        GROUP : {
+        .mli_model ALIGN(8): {
+        _f_mli_model = .;
+        *(.mli_model .mli_model.*)
+        _e_mli_model = .;
+        }
+        } > REGION_DCCM AT > REGION_DCCM
 
 ##### To sign up a new face ID in face recognition database
 - Type `python build.py (yourname)` ,you can set `(yourname)` parameter to any name you want and wait the terminal to print `Configured`.
