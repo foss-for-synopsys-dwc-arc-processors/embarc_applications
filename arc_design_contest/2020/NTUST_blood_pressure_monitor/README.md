@@ -24,6 +24,14 @@ In addition, most of the current sphygmomanometers use a cuff measurement method
 
 
 ### System Architecture
+#### Hardware architecture
+<div align="center"><img width="330" height="200" src="images/hardware.PNG"></div>
+
+#### Software architecture
+<div align="center"><img width="330" height="200" src="images/Software.PNG"></div>
+
+#### Project overview
+<div align="center"><img width="330" height="200" src="images/project_photo (1).jpg"></div>
 
 ## Hardware and Software Setup
 ### Required Hardware
