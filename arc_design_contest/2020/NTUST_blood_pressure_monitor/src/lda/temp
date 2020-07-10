@@ -1,0 +1,48 @@
+int eigVector(double** a,double** evec,double** eval,matrix_s a_s,matrix_s evec_s,matrix_s eval_s){
+    int num=a_s.col;
+    double eValue;
+    double** temp1;
+    matrix_s temp1_s={a_s.row,a_s.col};
+    m_init(&temp1,temp1_s);
+    m_clr(temp1,temp1_s);
+
+    for(int count =0;count<num;count++){
+        eValue=eval[count][0]; //當前的特徵值
+        m_cpy(a,temp1,a_s,temp1_s); //這個每次都要重新複製，因為後面會破壞原矩陣(剛開始沒注意到這個找bug找了好久。。)
+        for(int i=0;i<temp1_s.row;i++){
+            temp1[i][i] -= eValue;
+        }
+        //將temp1化為階梯型矩陣(歸一性)對角線值為一
+        for(int i=0;i<temp1_s.row-1;i++){
+            double coe = temp1[i][i];
+            for(int j=i;j<temp1_s.col;j++){
+                temp1[i][j] /= coe;  //讓對角線值為一
+            }
+            for(int i1=i+1;i1<temp1_s.row;i++){
+                coe=temp1[i1][i];
+                for(int j1=i;j1<temp1_s.col;j1++){
+                    temp1[i1][j1] -= coe*temp1[i][j1];
+                }
+            }
+        }
+        //讓最後一行為1
+        double sum1 = evec[evec_s.row-1][count] = 1;
+        for(int i2=temp1_s.row-2;i2>=0;i2--){
+            double sum2 = 0;
+            for(int j2=i2+1;j2<temp1_s.col;j2++){
+                sum2 += temp1[i2][j2] * evec[j2][count];
+            }
+            sum2 = -sum2 / temp1[i2][i2];
+            sum1 += sum2 * sum2;
+            evec[i2][count]=sum2;
+        }
+        sum1 = sqrt(sum1);  //當前列的模
+        for(int i=0;i<evec_s.row;i++){
+            //單位化
+            evec[i][count] /= sum1;
+        }
+    }
+
+    m_free(&temp1,temp1_s);
+    return 0;
+}
