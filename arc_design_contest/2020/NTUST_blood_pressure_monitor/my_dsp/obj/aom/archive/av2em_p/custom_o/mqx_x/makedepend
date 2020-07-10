@@ -1,0 +1,29 @@
+aom.o: E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom.c \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_private.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_private_cconv_arc.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\inc\aom.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\inc\aom_types.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_private_arc.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_move.c
+fixup_overlay_package.o: \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\fixup_overlay_package.c \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\fixup_overlay_package.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\inc\aom.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\inc\aom_types.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\c\inc\setjmp.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\c\inc\string.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\c\inc\features.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\c\inc\sizet.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\c\inc\_na.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\c\inc\xlocale.h
+aom_tiny.o: E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_tiny.c \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom.c \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_private.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_private_cconv_arc.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\inc\aom.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\inc\aom_types.h \
+  E:\metaware_tool\MetaWare\arc\lib\src\aom\aom_g\aom_private_arc.h
+aom_handlers.o:	 E:/metaware_tool/MetaWare/arc/bin/arcexlib.s E:/metaware_tool/MetaWare/arc/lib/src/aom/aom_g/aom_handlers.s E:/metaware_tool/MetaWare/arc/lib/src/aom/aom_g/aom_handler_defines.i
+
+aom_overlay_end.o:	 E:/metaware_tool/MetaWare/arc/bin/arcexlib.s E:/metaware_tool/MetaWare/arc/lib/src/aom/aom_g/aom_overlay_end.s
+

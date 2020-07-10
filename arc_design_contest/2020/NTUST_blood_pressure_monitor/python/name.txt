@@ -1,0 +1,2 @@
+aaa,bbb,aaa,bbb,ccc,aaa,
+0,1,0,1,2,0,
