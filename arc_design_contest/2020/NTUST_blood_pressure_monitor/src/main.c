@@ -99,7 +99,9 @@ float  *nearest_tran;
 float people=0;
 
 int main(void){
-	matrix_f32_t near,pdm;
+	//matrix_f32_t near,pdm;
+	int32_t res1;
+	int32_t *p1=&res1;//暫存
 	mean=NULL;
 	pd=NULL;
 	int pd_row,pd_col,mean_row,mean_col;
@@ -158,8 +160,6 @@ int main(void){
 			}
 			case 1:{
 				////////////////////////////////////////////////////////////////ECG,PPG陣列ROW COL///////////
-				int32_t res1;
-				int32_t *p1=&res1;//暫存
 				state=recive(rcmd,1);
 				if(state==2){
 					ua->uart_read((void *)&buffer[0], 4);
@@ -317,6 +317,7 @@ int main(void){
 						nearest[q*52+s]=one_beat[list[q]*52+s];
 					}
 				}
+				free(one_beat);
 				//////////////////////////////////////////////////////////////////
 				//////////////////////////////血壓預測////////////////////////////
 				for (int q = 0; q < 1500; q++){
@@ -481,251 +482,60 @@ int main(void){
 					/*ua->uart_write((const void *)(&ptt_sum), 4);
 					ua->uart_write((const void *)(&blood), 4);*/
 					ua->uart_write((const void *)(&blood), 4);
-					if(!pd_ready){
-						people=9998;
+					if (!pd_ready)
+					{
+						people=9999;
 						ua->uart_write((const void *)(&people), 4);
-						state=recive(rcmd,1);
-						if(state==6){
-							raw_cmd[0]='X';
-							raw_cmd[1]='X';
-							raw_cmd[2]='C';
-							raw_cmd[3]='C';
-								for(int q=0;q<4;q++){
-									ua->uart_write((const void *)(&raw_cmd[q]), 1);
-											
-								}
-						}
-						state=recive(rcmd,1);
-						if(state==2){
-							ua->uart_read((void *)&buffer[0], 4);
-							dataAssmeblei(&p1,buffer);
-							row=res1;
-							ua->uart_read((void *)&buffer[0], 4);
-							dataAssmeblei(&p1,buffer);
-							col=res1;
-						}
-						else{
-							step=0;
-							break;
-						}
-						if(pd==NULL){
-								pd=malloc(sizeof(float)*row*col);
-						}
-						else{
-							free(pd);
-							pd=malloc(sizeof(float)*row*col);
-						}
-						state=recive(rcmd,1);
-						pd_row=row;
-						pd_col=col;
-						f32 res2;
-						f32 *p2=&res2;
-						if(state==3){
-							for(int q=0;q<row*col;q++){
-								pd[q]=0;
-							}
-							while (1) {
-							ua->uart_read((void *)&buffer[0], 4);
-							dataAssmeble(&p2,buffer);
-							pd[count]=res2;
-							if(count==(row*col-1)){
-								count=0;
-								break;
-							}
-							else count=count+1;
-							}
-						}
-						else{
-							step=0;
-							break;
-						}
-						state=recive(rcmd,1);
-						if(state==7){
-							raw_cmd[0]='X';
-							raw_cmd[1]='X';
-							raw_cmd[2]='D';
-							raw_cmd[3]='D';
-								for(int q=0;q<4;q++){
-									ua->uart_write((const void *)(&raw_cmd[q]), 1);
-											
-								}
-						}
-						state=recive(rcmd,1);
-						if(state==2){
-							ua->uart_read((void *)&buffer[0], 4);
-							dataAssmeblei(&p1,buffer);
-							row=res1;
-							ua->uart_read((void *)&buffer[0], 4);
-							dataAssmeblei(&p1,buffer);
-							col=res1;
-						}
-						else{
-							step=0;
-							break;
-						}
-						if(mean==NULL){
-							mean=malloc(sizeof(float)*row*col);
-						}
-						else{
-							free(mean);
-							mean=malloc(sizeof(float)*row*col);
-						}
-						mean_row=row;
-						mean_col=col;
-						state=recive(rcmd,1);
-						if(state==3){
-							while (1) {
-							ua->uart_read((void *)&buffer[0], 4);
-							dataAssmeble(&p2,buffer);
-							mean[count]=res2;
-							if(count==(col*row-1)){
-								count=0;
-								break;
-							}
-							else count=count+1;
-							}
-						}
-						state=recive(rcmd,1);
+						step=3;
+						break;
 					}
 					else{
-						matrix_f32_t near_tr;
-						matrix_f32_t data_pdm;
-						nearest_tran=malloc(sizeof(float)*5*52);
-						float  *data_pd=malloc(sizeof(float)*5*col);
-						dsp_mat_init_f32(&near,52,5,(__xy f32_t*)nearest);
-						dsp_mat_init_f32(&near_tr,5,52,(__xy f32_t*)nearest_tran);
-						dsp_mat_init_f32(&pdm,pd_row,pd_col,(__xy f32_t*)pd);
-						dsp_mat_init_f32(&data_pdm,5,pd_col,(__xy f32_t*)data_pd);
-						dsp_mat_trans_f32(&near,&near_tr);
-						dsp_mat_mult_f32(&near_tr,&pdm,&data_pdm);
-						float *mean_save=malloc(sizeof(float)*pd_col);
-						float *o1=malloc(sizeof(float)*52);
-						m_clr(&mean_save,pd_col);
-						for(int s=0;s<col;s++){
-							for(int q=0;q<5;q++){
-								mean_save[s]=nearest[s+q*52]+mean_save[s];
-							}
-						}
-						float distance1[5];
-						for(int q=0;q<mean_row;q++){
+						int list[5];
+						int save[5];
+						float swap[5];
+						float distance[5*mean_col];
+						float *data_tran=malloc(sizeof(float)*5*52);
+						matrix_f32_t near,nearest_tran,pdm,data_pdm;
+						dsp_mat_init_f32(&pd,52,5,(__xy f32_t *)nearest);
+						dsp_mat_init_f32(&near,52,5,(__xy f32_t *)nearest);
+						dsp_mat_init_f32(&nearest_tran,5,52,(__xy f32_t *)data_tran);
+						dsp_mat_init_f32(&pdm,52,mean_col,(__xy f32_t *)pd);
+						dsp_mat_trans_f32(&near,&nearest_tran);
+						float *data_pd=malloc(5*mean_col);
+						dsp_mat_init_f32(&data_pdm,5,mean_col,(__xy f32_t *)data_pd);
+						dsp_mat_mult_f32(&nearest_tran,&pdm,&data_pdm);
+						for(int q=0;q<5;q++){
 							for(int s=0;s<mean_col;s++){
-								o1[s]=pow(mean[q*mean_row+s]-mean_save[s],2);
-							}
-							distance1[q]=0;
-							for(int s=0;s<mean_row;s++){
-								distance1[q]=o1[s]+distance1[q];
+								distance[q*mean_col+s]=0;
+								for(int w=0;w<mean_col;w++){
+									distance[q*mean_col+s]+=data_pd[q*mean_col+w]-mean[s*mean_col+w];
+								}
 							}
 						}
-						float save_dis=0;
-						int user=0;
-						save_dis=distance1[0];
-						for(int q=1;q<5;q++){
-							if(save_dis>distance1[q]){
-								save_dis=distance1[q];
-								user=q;
+						for(int q=0;q<5;q++){
+							swap[q]=distance[q*5];
+						}
+						for(int q=0;q<5;q++){
+							swap[0]=distance[q*5];
+							list[q]=0;
+							for(int s=1;s<5;s++){
+								if(swap[q]>distance[q*5+s]){
+									swap[q]=distance[q*5+s];
+									list[q]=s;
+								}
 							}
 						}
-						if(save_dis>4000){
-							people=9999;
-							ua->uart_write((const void *)(&people), 4);
-							state=recive(rcmd,1);
-							if(state==6){
-								raw_cmd[0]='X';
-								raw_cmd[1]='X';
-								raw_cmd[2]='C';
-								raw_cmd[3]='C';
-									for(int q=0;q<4;q++){
-										ua->uart_write((const void *)(&raw_cmd[q]), 1);
-												
-									}
-							}
-							state=recive(rcmd,1);
-							if(state==2){
-								ua->uart_read((void *)&buffer[0], 4);
-								dataAssmeblei(&p1,buffer);
-								row=res1;
-								ua->uart_read((void *)&buffer[0], 4);
-								dataAssmeblei(&p1,buffer);
-								col=res1;
-							}
-							else{
-								step=0;
-								break;
-							}
-							state=recive(rcmd,1);
-							f32 res2;
-							f32 *p2=&res2;
-							if(state==3){
-								for(int q=0;q<row*col;q++){
-									pd[q]=0;
-								}
-								while (1) {
-								ua->uart_read((void *)&buffer[0], 4);
-								dataAssmeble(&p2,buffer);
-								pd[count]=res2;
-								if(count==(row*col-1)){
-									count=0;
-									break;
-								}
-								else count=count+1;
-								}
-							}
-							else{
-								step=0;
-								break;
-							}
-
-							state=recive(rcmd,1);
-							if(state==7){
-								raw_cmd[0]='X';
-								raw_cmd[1]='X';
-								raw_cmd[2]='D';
-								raw_cmd[3]='D';
-									for(int q=0;q<4;q++){
-										ua->uart_write((const void *)(&raw_cmd[q]), 1);
-												
-									}
-							}
-							state=recive(rcmd,1);
-							if(state==2){
-								ua->uart_read((void *)&buffer[0], 4);
-								dataAssmeblei(&p1,buffer);
-								row=res1;
-								ua->uart_read((void *)&buffer[0], 4);
-								dataAssmeblei(&p1,buffer);
-								col=res1;
-							}
-							else{
-								step=0;
-								break;
-							}
-							if(mean==NULL){
-								mean=malloc(sizeof(float)*row*col);
-							}
-							else{
-								free(mean);
-								mean=malloc(sizeof(float)*row*col);
-							}
-							
-							state=recive(rcmd,1);
-							if(state==3){
-								while (1) {
-								ua->uart_read((void *)&buffer[0], 4);
-								dataAssmeble(&p2,buffer);
-								mean[count]=res2;
-								if(count==(col*row-1)){
-									count=0;
-									break;
-								}
-								else count=count+1;
-								}
-							}
-							state=recive(rcmd,1);
+						swap[0]=(float)list[0];
+						ua->uart_write((const void *)(&swap[0]), 4);
+						raw_cmd[0]='A';
+						raw_cmd[1]='B';
+						raw_cmd[2]='C';
+						raw_cmd[3]='D';
+						for(int q=0;q<4;q++){
+							ua->uart_write((const void *)(&raw_cmd[q]), 1);
 						}
-						else{
-							people=(float)user;
-							ua->uart_write((const void *)(&people), 4);
-						}
+						free(data_tran);
+						free(data_pd);
 
 					}
 					step=0;
@@ -742,6 +552,108 @@ int main(void){
 					step=0;
 				}
 				break;*/
+			}
+			case 3:{
+				state=recive(rcmd,1);
+				if(state==6){
+					raw_cmd[0]='X';
+					raw_cmd[1]='X';
+					raw_cmd[2]='C';
+					raw_cmd[3]='C';
+					for(int q=0;q<4;q++){
+						ua->uart_write((const void *)(&raw_cmd[q]), 1);
+					}
+				}
+				state=recive(rcmd,1);
+				if(state==2){
+					ua->uart_read((void *)&buffer[0], 4);
+					dataAssmeblei(&p1,buffer);
+					row=res1;
+					ua->uart_read((void *)&buffer[0], 4);
+					dataAssmeblei(&p1,buffer);
+					col=res1;
+				}
+				else{
+					step=0;
+					break;
+				}
+				pd_col=col;
+				pd_row=row;
+				if(pd==NULL){
+					pd=malloc(sizeof(float)*pd_row*pd_col);
+				}
+				else{
+					free(pd);
+					pd=malloc(sizeof(float)*pd_row*pd_col);
+				}
+				state=recive(rcmd,1);
+				f32 res2;
+				f32 *p2=&res2;
+				if(state==3){
+					for(int q=0;q<row*col;q++){
+						pd[q]=0;
+					}
+					while (1) {
+						ua->uart_read((void *)&buffer[0], 4);
+						dataAssmeble(&p2,buffer);
+						pd[count]=res2;
+						if(count==(row*col-1)){
+							count=0;
+							break;
+						}
+						else count=count+1;
+						}
+					}
+				else{
+					step=0;
+					break;
+				}
+				state=recive(rcmd,1);
+				if(state==7){
+					raw_cmd[0]='X';
+					raw_cmd[1]='X';
+					raw_cmd[2]='D';
+					raw_cmd[3]='D';
+					for(int q=0;q<4;q++){
+						ua->uart_write((const void *)(&raw_cmd[q]), 1);						
+					}
+				}
+				state=recive(rcmd,1);
+				if(state==2){
+					ua->uart_read((void *)&buffer[0], 4);
+					dataAssmeblei(&p1,buffer);
+					row=res1;
+					ua->uart_read((void *)&buffer[0], 4);
+					dataAssmeblei(&p1,buffer);
+					col=res1;
+				}
+				else{
+					step=0;
+					break;
+				}
+				if(mean==NULL){
+					mean=malloc(sizeof(float)*row*col);
+				}
+				else{
+					free(mean);
+					mean=malloc(sizeof(float)*row*col);
+				}
+				mean_row=row;
+				mean_col=col;
+				state=recive(rcmd,1);
+				if(state==3){
+					while (1) {
+						ua->uart_read((void *)&buffer[0], 4);
+						dataAssmeble(&p2,buffer);
+						mean[count]=res2;
+						if(count==(col*row-1)){
+							count=0;
+							break;
+						}
+						else count=count+1;
+					}
+				}
+				state=recive(rcmd,1);
 			}
 		}
 		//m_clr(result,2000);
