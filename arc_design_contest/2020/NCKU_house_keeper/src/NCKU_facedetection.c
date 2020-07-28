@@ -34,106 +34,100 @@
 static int16_t  _X    x_mem_buf[IR_BUF_SZ_MOST];
 static int16_t  _Y    y_mem_buf[IR_BUF_SZ_NEXT];
 
-extern w_type  _W  LR_conv_wt_buf[];
-extern w_type  _W  LR_conv_bias_buf[];
+extern const w_type  _W  LR_conv_wt_buf[];
+extern const w_type  _W  LR_conv_bias_buf[];
 
-extern w_type  _W  L0_conv_wt_buf[];
-extern w_type  _W  L0_conv_bias_buf[];
+extern const w_type  _W  L0_conv_wt_buf[];
+extern const w_type  _W  L0_conv_bias_buf[];
 
-extern w_type  _W  L1_conv_wt_buf[];
-extern w_type  _W  L1_conv_bias_buf[];
-extern w_type  _W  L1_conv_prelu_buf[];
+extern const w_type  _W  L1_conv_wt_buf[];
+extern const w_type  _W  L1_conv_bias_buf[];
 
-extern w_type  _W  L2_conv_wt_buf[];
-extern w_type  _W  L2_conv_bias_buf[];
-extern w_type  _W  L2_conv_prelu_buf[];
+extern const w_type  _W  L2_conv_wt_buf[];
+extern const w_type  _W  L2_conv_bias_buf[];
 
-extern w_type  _W  L3_conv_wt_buf[];
-extern w_type  _W  L3_conv_bias_buf[];
-extern w_type  _W  L3_conv_prelu_buf[];
+extern const w_type  _W  L3_conv_wt_buf[];
+extern const w_type  _W  L3_conv_bias_buf[];
 
-extern w_type  _W  L4_conv_wt_buf[];
-extern w_type  _W  L4_conv_bias_buf[];
-extern w_type  _W  L4_conv_prelu_buf[];
+extern const w_type  _W  L4_conv_wt_buf[];
+extern const w_type  _W  L4_conv_bias_buf[];
 
-extern w_type  _W  L5_conv_wt_buf[];
-extern w_type  _W  L5_conv_bias_buf[];
-extern w_type  _W  L5_conv_prelu_buf[];
+extern const w_type  _W  L5_conv_wt_buf[];
+extern const w_type  _W  L5_conv_bias_buf[];
 
-extern w_type  _W  L6_conv_wt_buf[];
-extern w_type  _W  L6_conv_bias_buf[];
-extern w_type  _W  L6_conv_prelu_buf[];
+extern const w_type  _W  L6_conv_wt_buf[];
+extern const w_type  _W  L6_conv_bias_buf[];
 
-extern w_type  _W  L7_conv_wt_buf[];
-extern w_type  _W  L7_conv_bias_buf[];
+extern const w_type  _W  L7_conv_wt_buf[];
+extern const w_type  _W  L7_conv_bias_buf[];
 
 //------------------
 //Layer Function
 //------------------
-static mli_conv2d_cfg LR_conv_cfg = {
+static const mli_conv2d_cfg LR_conv_cfg = {
     .stride_height = 3, .stride_width = 3,
     .padding_bottom = 2, .padding_top = 2,
     .padding_left = 2, .padding_right = 2,
     .relu.type = MLI_RELU_NONE
 };
 
-static mli_conv2d_cfg L0_conv_cfg = {
+static const mli_conv2d_cfg L0_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
     .relu.type = MLI_RELU_NONE
 };
 
-static mli_conv2d_cfg L1_conv_cfg = {
+static const mli_conv2d_cfg L1_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
-    .relu.type = MLI_RELU_NONE
+    .relu.type = MLI_RELU_GEN
 };
 
-static mli_pool_cfg L1_pool_cfg = {
+static const mli_pool_cfg L1_pool_cfg = {
     .kernel_height = 2, .kernel_width = 2,
     .stride_height = 2, .stride_width = 2,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0
 };
 
-static mli_conv2d_cfg L2_conv_cfg = {
+static const mli_conv2d_cfg L2_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
-    .relu.type = MLI_RELU_NONE
+    .relu.type = MLI_RELU_GEN
 };
 
-static mli_conv2d_cfg L3_conv_cfg = {
+static const mli_conv2d_cfg L3_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
-    .relu.type = MLI_RELU_NONE
+    .relu.type = MLI_RELU_GEN
 };
 
-static mli_conv2d_cfg L4_conv_cfg = {
+static const mli_conv2d_cfg L4_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
-    .relu.type = MLI_RELU_NONE
+    .relu.type = MLI_RELU_GEN
 };
 
-static mli_conv2d_cfg L5_conv_cfg = {
+static const mli_conv2d_cfg L5_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
-    .relu.type = MLI_RELU_NONE
+    .relu.type = MLI_RELU_GEN
 };
 
-static mli_conv2d_cfg L6_conv_cfg = {
+static const mli_conv2d_cfg L6_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
-    .relu.type = MLI_RELU_NONE
+    .relu.type = MLI_RELU_GEN
 };
 
-static mli_conv2d_cfg L7_conv_cfg = {
+static const mli_conv2d_cfg L7_conv_cfg = {
     .stride_height = 1, .stride_width = 1,
     .padding_bottom = 0, .padding_top = 0,
     .padding_left = 0, .padding_right = 0,
@@ -160,7 +154,7 @@ static mli_tensor ir_tensor_Y = {
 //------------------
 // RESIZE Layer related tensors
 //===================================
-static mli_tensor LR_conv_wt = {
+static const mli_tensor LR_conv_wt = {
     .data = (void *)LR_conv_wt_buf,
     .capacity = RESIZE_W_ELEMENTS * sizeof(w_type),
     .shape = RESIZE_W_SHAPE,
@@ -169,7 +163,7 @@ static mli_tensor LR_conv_wt = {
     .el_params.fx.frac_bits = RESIZE_W_FRAQ,
 };
 
-static mli_tensor LR_conv_bias = {
+static const mli_tensor LR_conv_bias = {
     .data = (void *)LR_conv_bias_buf,
     .capacity = RESIZE_B_ELEMENTS * sizeof(w_type),
     .shape = RESIZE_B_SHAPE,
@@ -181,7 +175,7 @@ static mli_tensor LR_conv_bias = {
 //------------------
 // Conv 0 Layer related tensors
 //===================================
-static mli_tensor L0_conv_wt = {
+static const mli_tensor L0_conv_wt = {
     .data = (void *)L0_conv_wt_buf,
     .capacity = CONV0_W_ELEMENTS * sizeof(w_type),
     .shape = CONV0_W_SHAPE,
@@ -190,7 +184,7 @@ static mli_tensor L0_conv_wt = {
     .el_params.fx.frac_bits = CONV0_W_FRAQ,
 };
 
-static mli_tensor L0_conv_bias = {
+static const mli_tensor L0_conv_bias = {
     .data = (void *)L0_conv_bias_buf,
     .capacity = CONV0_B_ELEMENTS * sizeof(w_type),
     .shape = CONV0_B_SHAPE,
@@ -202,7 +196,7 @@ static mli_tensor L0_conv_bias = {
 //------------------
 // Conv 1 Layer related tensors
 //===================================
-static mli_tensor L1_conv_wt = {
+static const mli_tensor L1_conv_wt = {
     .data = (void *)L1_conv_wt_buf,
     .capacity = CONV1_W_ELEMENTS * sizeof(w_type),
     .shape = CONV1_W_SHAPE,
@@ -211,22 +205,13 @@ static mli_tensor L1_conv_wt = {
     .el_params.fx.frac_bits = CONV1_W_FRAQ,
 };
 
-static mli_tensor L1_conv_bias = {
+static const mli_tensor L1_conv_bias = {
     .data = (void *)L1_conv_bias_buf,
     .capacity = CONV1_B_ELEMENTS * sizeof(w_type),
     .shape = CONV1_B_SHAPE,
     .rank = CONV1_B_RANK,
     .el_type = MLI_EL_FX_16,
     .el_params.fx.frac_bits = CONV1_B_FRAQ,
-};
-
-static mli_tensor L1_conv_prelu = {
-    .data = (void *)L1_conv_prelu_buf,
-    .capacity = CONV1_P_ELEMENTS * sizeof(d_type),
-    .shape = CONV1_P_SHAPE,
-    .rank = CONV1_P_RANK,
-    .el_type = MLI_EL_FX_16,
-    .el_params.fx.frac_bits = CONV1_P_FRAQ,
 };
 //CONV2
 //------------------
@@ -247,15 +232,6 @@ static mli_tensor L2_conv_bias = {
     .el_type = MLI_EL_FX_16,
     .el_params.fx.frac_bits = CONV2_B_FRAQ,
 };
-
-static mli_tensor L2_conv_prelu = {
-    .data = (void *)L2_conv_prelu_buf,
-    .capacity = CONV2_P_ELEMENTS * sizeof(d_type),
-    .shape = CONV2_P_SHAPE,
-    .rank = CONV2_P_RANK,
-    .el_type = MLI_EL_FX_16,
-    .el_params.fx.frac_bits = CONV2_P_FRAQ,
-};
 //CONV3
 //------------------
 static mli_tensor L3_conv_wt = {
@@ -274,15 +250,6 @@ static mli_tensor L3_conv_bias = {
     .rank = CONV3_B_RANK,
     .el_type = MLI_EL_FX_16,
     .el_params.fx.frac_bits = CONV3_B_FRAQ,
-};
-
-static mli_tensor L3_conv_prelu = {
-    .data = (void *)L3_conv_prelu_buf,
-    .capacity = CONV3_P_ELEMENTS * sizeof(d_type),
-    .shape = CONV3_P_SHAPE,
-    .rank = CONV3_P_RANK,
-    .el_type = MLI_EL_FX_16,
-    .el_params.fx.frac_bits = CONV3_P_FRAQ,
 };
 //CONV4
 //------------------
@@ -303,15 +270,6 @@ static mli_tensor L4_conv_bias = {
     .el_type = MLI_EL_FX_16,
     .el_params.fx.frac_bits = CONV4_B_FRAQ,
 };
-
-static mli_tensor L4_conv_prelu = {
-    .data = (void *)L4_conv_prelu_buf,
-    .capacity = CONV4_P_ELEMENTS * sizeof(d_type),
-    .shape = CONV4_P_SHAPE,
-    .rank = CONV4_P_RANK,
-    .el_type = MLI_EL_FX_16,
-    .el_params.fx.frac_bits = CONV4_P_FRAQ,
-};
 //CONV5
 //------------------
 static mli_tensor L5_conv_wt = {
@@ -331,15 +289,6 @@ static mli_tensor L5_conv_bias = {
     .el_type = MLI_EL_FX_16,
     .el_params.fx.frac_bits = CONV5_B_FRAQ,
 };
-
-static mli_tensor L5_conv_prelu = {
-    .data = (void *)L5_conv_prelu_buf,
-    .capacity = CONV5_P_ELEMENTS * sizeof(d_type),
-    .shape = CONV5_P_SHAPE,
-    .rank = CONV5_P_RANK,
-    .el_type = MLI_EL_FX_16,
-    .el_params.fx.frac_bits = CONV5_P_FRAQ,
-};
 //CONV6
 //------------------
 static mli_tensor L6_conv_wt = {
@@ -358,15 +307,6 @@ static mli_tensor L6_conv_bias = {
     .rank = CONV6_B_RANK,
     .el_type = MLI_EL_FX_16,
     .el_params.fx.frac_bits = CONV6_B_FRAQ,
-};
-
-static mli_tensor L6_conv_prelu = {
-    .data = (void *)L6_conv_prelu_buf,
-    .capacity = CONV6_P_ELEMENTS * sizeof(d_type),
-    .shape = CONV6_P_SHAPE,
-    .rank = CONV6_P_RANK,
-    .el_type = MLI_EL_FX_16,
-    .el_params.fx.frac_bits = CONV6_P_FRAQ,
 };
 //CONV7
 //------------------
@@ -399,7 +339,7 @@ static void user_custom_preprocessing(const uint8_t *in_image64x64, mli_tensor *
     int16_t val;
 
     for(int i = 0; i < (64*64*3); i=i+3) {
-        val = in_image64x64[i]*0.299*8 + (in_image64x64[i]+in_image64x64[i+2])*0.587*4 + in_image64x64[i+2]*0.114*8;
+        val = in_image64x64[i]*0.299*8 + in_image64x64[i+1]*0.587*4 + in_image64x64[i+2]*0.114*8;
         vec_out[i/3] = IQ(val);
     }
 
@@ -432,60 +372,66 @@ int mli_face_detection(uint8_t *input_buffer, const char * debug_ir_root)
     ir_tensor_Y.el_params.fx.frac_bits = CONV0_OUT_FRAQ;
     mli_krn_conv2d_chw_fx16(&ir_tensor_X, &L0_conv_wt, &L0_conv_bias, &L0_conv_cfg, &ir_tensor_Y);
 
+    //printf("%d\n", (((int16_t *)ir_tensor_Y.data)[0]));
+
     //Layer1
     //--------------------------------------
     //printf("L1. \n");
     ir_tensor_X.el_params.fx.frac_bits = CONV1_OUT_FRAQ;
     mli_krn_conv2d_chw_fx16(&ir_tensor_Y, &L1_conv_wt, &L1_conv_bias, &L1_conv_cfg, &ir_tensor_X);
-    ir_tensor_Y.el_params.fx.frac_bits = CONV1_POUT_FRAQ;
-    mli_krn_leaky_relu_fx16(&ir_tensor_X, &L1_conv_prelu, &ir_tensor_Y);
-    mli_krn_maxpool_chw_fx16(&ir_tensor_Y, &L1_pool_cfg, &ir_tensor_X);
+
+    //printf("%d\n", (((int16_t *)ir_tensor_X.data)[0]));
+
+    ir_tensor_Y.el_params.fx.frac_bits = CONV1_OUT_FRAQ;
+    mli_krn_maxpool_chw_fx16(&ir_tensor_X, &L1_pool_cfg, &ir_tensor_Y);
 
     //Layer2
     //--------------------------------------
     //printf("L2. \n");
-    ir_tensor_Y.el_params.fx.frac_bits = CONV2_OUT_FRAQ;
-    mli_krn_conv2d_chw_fx16(&ir_tensor_X, &L2_conv_wt, &L2_conv_bias, &L2_conv_cfg, &ir_tensor_Y);
-    ir_tensor_X.el_params.fx.frac_bits = CONV2_POUT_FRAQ;
-    mli_krn_leaky_relu_fx16(&ir_tensor_Y, &L2_conv_prelu, &ir_tensor_X);
+    ir_tensor_X.el_params.fx.frac_bits = CONV2_OUT_FRAQ;
+    mli_krn_conv2d_chw_fx16(&ir_tensor_Y, &L2_conv_wt, &L2_conv_bias, &L2_conv_cfg, &ir_tensor_X);
+
+    //printf("%d\n", (((int16_t *)ir_tensor_X.data)[0]));
 
     //Layer3
     //--------------------------------------
     //printf("L3. \n");
     ir_tensor_Y.el_params.fx.frac_bits = CONV3_OUT_FRAQ;
     mli_krn_conv2d_chw_fx16(&ir_tensor_X, &L3_conv_wt, &L3_conv_bias, &L3_conv_cfg, &ir_tensor_Y);
-    ir_tensor_X.el_params.fx.frac_bits = CONV3_POUT_FRAQ;
-    mli_krn_leaky_relu_fx16(&ir_tensor_Y, &L3_conv_prelu, &ir_tensor_X);
+
+    //printf("%d\n", (((int16_t *)ir_tensor_Y.data)[0]));
 
     //Layer4
     //--------------------------------------
     //printf("L4. \n");
-    ir_tensor_Y.el_params.fx.frac_bits = CONV4_OUT_FRAQ;
-    mli_krn_conv2d_chw_fx16(&ir_tensor_X, &L4_conv_wt, &L4_conv_bias, &L4_conv_cfg, &ir_tensor_Y);
-    ir_tensor_X.el_params.fx.frac_bits = CONV4_POUT_FRAQ;
-    mli_krn_leaky_relu_fx16(&ir_tensor_Y, &L4_conv_prelu, &ir_tensor_X);
+    ir_tensor_X.el_params.fx.frac_bits = CONV4_OUT_FRAQ;
+    mli_krn_conv2d_chw_fx16(&ir_tensor_Y, &L4_conv_wt, &L4_conv_bias, &L4_conv_cfg, &ir_tensor_X);
+
+    //printf("%d\n", (((int16_t *)ir_tensor_X.data)[0]));
 
     //Layer5
     //--------------------------------------
     //printf("L5. \n");
     ir_tensor_Y.el_params.fx.frac_bits = CONV5_OUT_FRAQ;
     mli_krn_conv2d_chw_fx16(&ir_tensor_X, &L5_conv_wt, &L5_conv_bias, &L5_conv_cfg, &ir_tensor_Y);
-    ir_tensor_X.el_params.fx.frac_bits = CONV5_POUT_FRAQ;
-    mli_krn_leaky_relu_fx16(&ir_tensor_Y, &L5_conv_prelu, &ir_tensor_X);
+
+    //printf("%d\n", (((int16_t *)ir_tensor_Y.data)[0]));
+
 
     //Layer6
     //--------------------------------------
     //printf("L6. \n");
-    ir_tensor_Y.el_params.fx.frac_bits = CONV6_OUT_FRAQ;
-    mli_krn_conv2d_chw_fx16(&ir_tensor_X, &L6_conv_wt, &L6_conv_bias, &L6_conv_cfg, &ir_tensor_Y);
-    ir_tensor_X.el_params.fx.frac_bits = CONV6_POUT_FRAQ;
-    mli_krn_leaky_relu_fx16(&ir_tensor_Y, &L6_conv_prelu, &ir_tensor_X);
+    ir_tensor_X.el_params.fx.frac_bits = CONV6_OUT_FRAQ;
+    mli_krn_conv2d_chw_fx16(&ir_tensor_Y, &L6_conv_wt, &L6_conv_bias, &L6_conv_cfg, &ir_tensor_X);
 
+    //printf("%d\n", (((int16_t *)ir_tensor_X.data)[0]));
     //Layer7
     //--------------------------------------
     //printf("L7. \n");
     ir_tensor_Y.el_params.fx.frac_bits = CONV7_OUT_FRAQ;
     mli_krn_conv2d_chw_fx16(&ir_tensor_X, &L7_conv_wt, &L7_conv_bias, &L7_conv_cfg, &ir_tensor_Y);
+
+    //printf("%d\n", (((int16_t *)ir_tensor_Y.data)[0]));
 
     int16_t pos_score, neg_score;
 

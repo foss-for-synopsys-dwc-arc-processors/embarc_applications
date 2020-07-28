@@ -42,44 +42,32 @@ typedef int16_t d_type;
 
 #define CONV1_W_INT   	(-1)
 #define CONV1_B_INT   	(-2)
-#define CONV1_P_INT	  	(0)
-#define CONV1_OUT_INT 	(0)
-#define CONV1_POUT_INT 	(-1)
-
+#define CONV1_OUT_INT 	(-1)
+					   
 #define CONV2_W_INT   	(0)
 #define CONV2_B_INT   	(-3)
-#define CONV2_P_INT	  	(-1)
 #define CONV2_OUT_INT 	(1)
-#define CONV2_POUT_INT 	(0)
-
-#define CONV3_W_INT   	(-1)
-#define CONV3_B_INT   	(-2)
-#define CONV3_P_INT	  	(-2)
+					
+#define CONV3_W_INT   	(0)
+#define CONV3_B_INT   	(-3)
 #define CONV3_OUT_INT 	(2)
-#define CONV3_POUT_INT 	(2)
-
+						
 #define CONV4_W_INT   	(0)
 #define CONV4_B_INT   	(-3)
-#define CONV4_P_INT	  	(-1)
-#define CONV4_OUT_INT 	(3)
-#define CONV4_POUT_INT 	(2)
+#define CONV4_OUT_INT 	(2)
 
 #define CONV5_W_INT   	(-1)
 #define CONV5_B_INT   	(-3)
-#define CONV5_P_INT	  	(-1)
-#define CONV5_OUT_INT 	(4)
-#define CONV5_POUT_INT 	(4)
+#define CONV5_OUT_INT 	(2)
 
-#define CONV6_W_INT   	(-1)
-#define CONV6_B_INT   	(-3)
-#define CONV6_P_INT	  	(0)
-#define CONV6_OUT_INT 	(4)
-#define CONV6_POUT_INT 	(4)
+#define CONV6_W_INT   	(0)
+#define CONV6_B_INT   	(-2)
+#define CONV6_OUT_INT 	(3)
 
-#define CONV7_W_INT   	(0)
+#define CONV7_W_INT   	(1)
 #define CONV7_B_INT   	(-4)
-#define CONV7_OUT_INT 	(6)
-
+#define CONV7_OUT_INT 	(7)
+					  
 //(Co, Ci, h, w)
 //-----------------------------------------------
 //Shape and Fractional bits per layer definitions
@@ -147,7 +135,7 @@ typedef int16_t d_type;
 #define CONV1_P_FRAQ   (FRQ_BITS(CONV1_P_INT, w_type))
 #define L1_PQ(val)   QMN(w_type, CONV1_P_FRAQ, val)
 
-#define CONV1_POUT_FRAQ (FRQ_BITS(CONV1_POUT_INT, d_type))
+#define CONV1_POUT_FRAQ (FRQ_BITS(CONV1_POUT_INT, d_type)) 
 //CONV2
 //-----------------------------------------------
 #define CONV2_W_SHAPE {24,24,3,3}
@@ -173,7 +161,7 @@ typedef int16_t d_type;
 #define CONV2_P_FRAQ   (FRQ_BITS(CONV2_P_INT, w_type))
 #define L2_PQ(val)   QMN(w_type, CONV2_P_FRAQ, val)
 
-#define CONV2_POUT_FRAQ (FRQ_BITS(CONV2_POUT_INT, d_type))
+#define CONV2_POUT_FRAQ (FRQ_BITS(CONV2_POUT_INT, d_type)) 
 
 //CONV3
 //-----------------------------------------------
@@ -200,7 +188,7 @@ typedef int16_t d_type;
 #define CONV3_P_FRAQ   (FRQ_BITS(CONV3_P_INT, w_type))
 #define L3_PQ(val)   QMN(w_type, CONV3_P_FRAQ, val)
 
-#define CONV3_POUT_FRAQ (FRQ_BITS(CONV3_POUT_INT, d_type))
+#define CONV3_POUT_FRAQ (FRQ_BITS(CONV3_POUT_INT, d_type)) 
 
 //CONV4
 //-----------------------------------------------
@@ -227,7 +215,7 @@ typedef int16_t d_type;
 #define CONV4_P_FRAQ   (FRQ_BITS(CONV4_P_INT, w_type))
 #define L4_PQ(val)   QMN(w_type, CONV4_P_FRAQ, val)
 
-#define CONV4_POUT_FRAQ (FRQ_BITS(CONV4_POUT_INT, d_type))
+#define CONV4_POUT_FRAQ (FRQ_BITS(CONV4_POUT_INT, d_type)) 
 
 //CONV5
 //-----------------------------------------------
@@ -254,7 +242,7 @@ typedef int16_t d_type;
 #define CONV5_P_FRAQ   (FRQ_BITS(CONV5_P_INT, w_type))
 #define L5_PQ(val)   QMN(w_type, CONV5_P_FRAQ, val)
 
-#define CONV5_POUT_FRAQ (FRQ_BITS(CONV5_POUT_INT, d_type))
+#define CONV5_POUT_FRAQ (FRQ_BITS(CONV5_POUT_INT, d_type)) 
 
 //CONV6
 //-----------------------------------------------
@@ -281,7 +269,7 @@ typedef int16_t d_type;
 #define CONV6_P_FRAQ   (FRQ_BITS(CONV6_P_INT, w_type))
 #define L6_PQ(val)   QMN(w_type, CONV6_P_FRAQ, val)
 
-#define CONV6_POUT_FRAQ (FRQ_BITS(CONV6_POUT_INT, d_type))
+#define CONV6_POUT_FRAQ (FRQ_BITS(CONV6_POUT_INT, d_type)) 
 
 //CONV7
 //-----------------------------------------------
