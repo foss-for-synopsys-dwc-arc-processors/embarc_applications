@@ -1,0 +1,14 @@
+version: 2.2.8.1.20200728(trial)
+--------------------------------------
+-arcv2em -core2 -Hrgf_banked_regs=32 -HL -Xunaligned -Xcode_density -Xdiv_rem=radix2 -Xswap -Xbitscan -Xmpy_option=mpyd -Xshift_assist -Xbarrel_shifter -Xdsp2 -Xdsp_complex -Xdsp_divsqrt=radix2 -Xdsp_itu -Xdsp_accshift=full -Xagu_small -Xxy -Xfpus_div -Xfpu_mac -Xfpuda -Xfpus_mpy_slow -Xfpus_div_slow -Xtimer0 -Xtimer1 -Xstack_check -Hccm -Xdmac -Wno-int-conversion -Hnosdata  -Hnocopyr  -fslp-vectorize -ffunction-sections -fdata-sections  -O3
+--------------------------------------
+compiler info:
+   DesignWare ARC C/C++ Compiler P-2019.03
+(c) Copyright 2013-2018 Synopsys Corporation
+    Driver Version:        2.03
+    Compiler Version:      6.0.1
+    Revision:               (build 008) (LLVM 6.0.1)
+    Based on LLVM version: 6.0.1
+
+
+

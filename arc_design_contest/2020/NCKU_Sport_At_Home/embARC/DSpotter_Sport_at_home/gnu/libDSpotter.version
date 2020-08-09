@@ -1,0 +1,6 @@
+version: 2.2.8.1.20200728(trial)
+--------------------------------------
+-mcpu=em4_fpuda	-mlittle-endian	-mcode-density	-mdiv-rem -mswap -mnorm	-mmpy-option=6	-mbarrel-shifter -mfpu=fpuda_all -O3 -ffunction-sections -fdata-sections
+--------------------------------------
+target: arc-elf32
+gcc_version: '8.3.1 20190225 (ARCompact/ARCv2 ISA elf32 toolchain 2019.03) '
