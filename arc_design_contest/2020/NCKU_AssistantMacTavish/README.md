@@ -129,4 +129,4 @@ Due to the voice controll feature of this system, user interface needs to handle
 ![](https://i.imgur.com/6U7cBgo_d.webp)
 
 ## Demo Video Link <a name="demovid"></a>
-Link is still on audit
+[Demo Video](https://v.youku.com/v_show/id_XNDc4OTczOTU3Mg==.html)
