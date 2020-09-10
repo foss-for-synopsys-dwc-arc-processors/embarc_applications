@@ -28,9 +28,9 @@ This application is designed basing on BP network and knowledge distillation alg
 
 ### System View
 
-![](.\picture\ARC IOTDK.png)
+<img src=".\picture\ARC IOTDK.png" style="zoom:80%;" />
 
-![](.\picture\System composition diagram.jpg)
+<img src=".\picture\System composition diagram.jpg" style="zoom: 33%;" />
 
 
 
@@ -68,7 +68,7 @@ Necessary Hardware:
 
 ​                                                                                                  Hardware3: Matrix Keyboard
 
-<img src=".\picture\sim900a.png" style="zoom: 67%;" />
+<img src=".\picture\sim900a.png" style="zoom: 50%;" />
 
 ​                                                                              Hardware4: Wireless Communication Module Sim900a
 
@@ -182,15 +182,15 @@ COMMON_COMPILE_PREREQUISITES += makefile
 
 The cloud server upper machine is designed by Visual Studio 2019. Here are running pictures of three parts:
 
-![](.\picture\data-monitor zone.png)
+<img src=".\picture\data-monitor zone.png" style="zoom: 80%;" />
 
 ​                                                                                                   Data-Monitor Zone
 
-![](.\picture\weight-transfer zone.png)
+<img src=".\picture\weight-transfer zone.png" style="zoom:80%;" />
 
 ​                                                                                                    Weight-Transfer Zone
 
-![](.\picture\weight-management zone.png)
+<img src=".\picture\weight-management zone.png" style="zoom:80%;" />
 
 ​                                                                                                Weight-Management Zone
 
