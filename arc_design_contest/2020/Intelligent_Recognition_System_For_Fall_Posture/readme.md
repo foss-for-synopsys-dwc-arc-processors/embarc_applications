@@ -28,9 +28,9 @@ This application is designed basing on BP network and knowledge distillation alg
 
 ### System View
 
-![](\picture\general view.jpg)
+![](.\picture\ARC IOTDK.png)
 
-![](\picture\System composition diagram.jpg)
+![](.\picture\System composition diagram.jpg)
 
 
 
@@ -56,23 +56,23 @@ Necessary Hardware:
 
 5. Buzzer                                                                                                   *1
 
-<img src="\picture\ARC IOTDK.png" style="zoom:80%;" />
+<img src=".\picture\ARC IOTDK.png" style="zoom:80%;" />
 
 ​                                                                                                  Hardware1: ARC IOTDK
 
-<img src="\picture\HC-06.png" style="zoom:130%;" />
+<img src=".\picture\HC-06.png" style="zoom:130%;" />
 
 ​                                                                                                Hardware2: Bluetooth HC-06
 
-<img src="\picture\Matrix%20Keyboard.png" style="zoom:80%;" />
+<img src=".\picture\Matrix%20Keyboard.png" style="zoom:80%;" />
 
 ​                                                                                                  Hardware3: Matrix Keyboard
 
-<img src="\picture\sim900a.png" style="zoom: 67%;" />
+<img src=".\picture\sim900a.png" style="zoom: 67%;" />
 
 ​                                                                              Hardware4: Wireless Communication Module Sim900a
 
-<img src="\picture\buzzer.png" style="zoom: 50%;" />
+<img src=".\picture\buzzer.png" style="zoom: 50%;" />
 
 ​                                                                                                             Hardware5: Buzzer
 
@@ -174,7 +174,7 @@ COMMON_COMPILE_PREREQUISITES += makefile
 
 ## The system block diagram
 
-<img src="\picture\system block diagram.png" style="zoom:150%;" />
+<img src=".\picture\system block diagram.png" style="zoom:150%;" />
 
 ------
 
@@ -182,15 +182,15 @@ COMMON_COMPILE_PREREQUISITES += makefile
 
 The cloud server upper machine is designed by Visual Studio 2019. Here are running pictures of three parts:
 
-![](\picture\data-monitor zone.png)
+![](.\picture\data-monitor zone.png)
 
 ​                                                                                                   Data-Monitor Zone
 
-![](\picture\weight-transfer zone.png)
+![](.\picture\weight-transfer zone.png)
 
 ​                                                                                                    Weight-Transfer Zone
 
-![](\picture\weight-management zone.png)
+![](.\picture\weight-management zone.png)
 
 ​                                                                                                Weight-Management Zone
 
