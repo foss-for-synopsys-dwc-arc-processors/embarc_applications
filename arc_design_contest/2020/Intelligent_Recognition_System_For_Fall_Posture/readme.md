@@ -17,7 +17,6 @@ Intelligent recognition system for fall posture provides various alarm ways. Bas
 - [Introduction](#Introduction)
 - [Appearance](#Appearance)
   - [System View](#System-View)
-  - [Video](#Video)
 - [Hardware and Software Setup](#Hardware-and-Software-Setup)
   - [Required Hardware](#Required-Hardware)
   - [Required Software](#Required-Software)
@@ -48,8 +47,6 @@ This application is designed basing on BP network and knowledge distillation alg
 <img src=".\picture\System composition diagram.jpg" style="zoom: 33%;" />
 
 
-
-### Video
 
 
 
@@ -213,13 +210,15 @@ The cloud server upper machine is designed by Visual Studio 2019. Here are runni
 
 ## File Structure
 
-| File      | Function                                      |
-| --------- | --------------------------------------------- |
-| main.c    | Initialization, Hardware Driver and main loop |
-| B0.h      | including Bias0 data of Neural Network        |
-| B1.h      | including Bias1 data of Neural Network        |
-| W0.h      | including Weight0 data of Neural Network      |
-| W1.h      | including Weight1 data of Neural Network      |
-| NNLayer.c | Algorithm of Neural Network Layer             |
-| NNLayer.h | Head File of Neural Network Layer             |
+| File             | Function                                      |
+| ---------------- | --------------------------------------------- |
+| main.c           | Initialization, Hardware Driver and main loop |
+| B0.h             | including Bias0 data of Neural Network        |
+| B1.h             | including Bias1 data of Neural Network        |
+| W0.h             | including Weight0 data of Neural Network      |
+| W1.h             | including Weight1 data of Neural Network      |
+| NNLayer.c        | Algorithm of Neural Network Layer             |
+| NNLayer.h        | Head File of Neural Network Layer             |
+| train_txt_name.h | Head file of  txt files' name list            |
+| train            | collected-data folder                         |
 

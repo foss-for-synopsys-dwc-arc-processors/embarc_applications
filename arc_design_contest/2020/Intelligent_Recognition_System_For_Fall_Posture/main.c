@@ -1,8 +1,40 @@
+/* ------------------------------------------
+ * Copyright (c) 2017, Synopsys, Inc. All rights reserved.
+
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+
+ * 1) Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+
+ * 2) Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+
+ * 3) Neither the name of the Synopsys, Inc., nor the names of its contributors may
+ * be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+--------------------------------------------- */
 #include "embARC.h"
 #include "embARC_debug.h"
 #include "mpu9250.h"
 #include "stdio.h"
+#include <stdlib.h>
+#include <string.h>
 #include "NNlayer.h"
+#include "train_txt_name.h"
 #include "uart.h"
 
 static DEV_GPIO *port;
@@ -34,19 +66,41 @@ void sim900a_message_copying();
 
 void buzzer_ring();
 
+void weight_download();
+
+void interval_target_init();
+
+void weight_train();
+
+void target_jud_setting();
+
+void converse_target_jud();
+
+void physical_parameter_send();
+
+void write_file();
+
 int k=1;
 double max=0;
 #define N 25
 uint32_t key_state=0;
 uint32_t baudrate = 115200;
-uint32_t flag_send_message=0;
+uint32_t flag_download_weight=0;
 uint32_t flag_buzzer=0;
+uint32_t flag_back_propagation=0;
+uint32_t flag_upload_weight=0;
+uint32_t flag_physical_parameter_send=0;
 uint32_t counter=0;
+uint32_t transfer_index=0;
 
 uint32_t  KeyValue=0;
 uint32_t  Value=0;
+uint32_t  file_counter=28;
 
-extern const double W0[LAYER_0_OUTDIM][LAYER_0_INDIM];
+extern double W0[LAYER_0_OUTDIM][LAYER_0_INDIM];
+extern double W1[LAYER_1_OUTDIM][LAYER_1_INDIM];
+extern double B0[LAYER_0_OUTDIM];
+extern double B1[LAYER_1_OUTDIM];
 
 /*  AT_instruction  */
 char in6[50]="AT\r\n";
@@ -67,10 +121,22 @@ char in19[2000];
 char in20[2000];
 char in21[2000];
 char in22='s';
+char in23[50]="user is applying for weight downloading W0";
+char in24[50];
+char in25[15000];
+char delim[2]=" ";
+char *token;
+char in26[50]="user is applying for weight downloading W1";
+char in27[50]="user is applying for bias downloading B0";
+char in28[50]="user is applying for bias downloading B1";
+char in29[50]="downloading W0 has finished";
+char in30[50]="downloading W1 has finished";
+char in31[50]="downloading B0 has finished";
+char in32[50]="downloading B1 has finished";
 
 NNLayer gMyCalculatorModel[LAYER_TOTAL];
 double gLayer0OutVal[LAYER_0_OUTDIM],gLayer1OutVal[LAYER_1_OUTDIM];
-double inputVal[LAYER_0_INDIM];
+double inputVal_jud[LAYER_0_INDIM];
 double temp1[2],temp2[2],temp3[2],temp4[2],temp5[2],temp6[2],temp7[2],temp8[2],temp9[2],temp10[2];
 
 #if defined(BOARD_IOTDK) || defined(BOARD_EMSDP)
@@ -81,6 +147,21 @@ double temp1[2],temp2[2],temp3[2],temp4[2],temp5[2],temp6[2],temp7[2],temp8[2],t
 static MPU9250_DEFINE(mpu9250_sensor, MPU9250_IIC_ID, MPU9250_IIC_ADDRESS);
 MPU9250_DATA mpu9250_data = { 0 };
 
+FILE *fp;
+char *filename;
+FILE *write_fp;
+char *write_filename;
+
+float  a, b;
+int i = 0, j = 0, count_1 = 0,name_index = 0;
+int epoch = 0;
+double train_loss = 0.0;
+double inputVal_train[50][LAYER_0_INDIM] = { 0.0 };
+double target[50][LAYER_1_OUTDIM] = { 0.0 };
+double target_judgement[LAYER_1_OUTDIM]={ 0.0 };
+double dp_w1[LAYER_1_OUTDIM][LAYER_1_INDIM] = { 0.0 }, dp_b1[LAYER_1_OUTDIM] = {0.0};
+double dp_w0[LAYER_0_OUTDIM][LAYER_0_INDIM] = { 0.0 },dp_b0[LAYER_0_OUTDIM] = { 0.0 };
+
 int main(void)
 {
 	key_state=~key_state;
@@ -89,6 +170,7 @@ int main(void)
 	gpio_buzzer_init();
 	uart_sim900a_init();
 	uart_ble_init();
+	interval_target_init();
     mpu9250_sensor_init(mpu9250_sensor);
 
     sim900a_send_AT_copying();
@@ -98,15 +180,25 @@ int main(void)
 
 	while(1)
 	{
-		if(flag_send_message==1)
+		if(flag_download_weight==1)
 		{
-			sim900a_send();
-			flag_send_message=0;
+			weight_download();
+			flag_download_weight=0;
 		}
 		if(counter>5)
 		{
 			buzzer_ring();
 			counter++;
+		}
+		if(flag_upload_weight==1)
+		{
+			sim900a_send();
+			flag_upload_weight=0;
+		}
+		if(flag_physical_parameter_send==1)
+		{
+			physical_parameter_send();
+			flag_physical_parameter_send=0;
 		}
 		mpu9250_sensor_read(mpu9250_sensor, &mpu9250_data);
 		char datap[20];
@@ -116,10 +208,25 @@ int main(void)
 
 		savedata();
 		transfer_data();
+
 		NNLayerInit();
-		NNLayerPredict(gMyCalculatorModel,inputVal);
+
+        /*     gesture judgement    */
+		NNLayerPredict(gMyCalculatorModel,inputVal_jud);
 		max=max_outval(gMyCalculatorModel[1].outVal[0],gMyCalculatorModel[1].outVal[1]);
+		target_jud_setting();
 		judge_gesture();
+
+	   /*wait for the flag of back propagation*/
+		if(flag_back_propagation==1)
+		{
+			file_counter++;
+            converse_target_jud();
+            write_file();
+            weight_train();
+            flag_back_propagation=0;
+		}
+
 		clean_variable();
 	}
 
@@ -220,7 +327,7 @@ void Key_Process(void)
   }
   case 4:
   {
-	port2->gpio_write(0x0F,0x0F);
+	port2->gpio_write(0x0F,0x0F);     //key4: stop ring of buzzer
 	counter=0;
     break;
   }
@@ -247,7 +354,7 @@ void Key_Process(void)
   }
   case 8:
   {
-	flag_send_message=1;
+	flag_back_propagation=1;           //key8:Back_propagation key
     break;
   }
   case 9:
@@ -273,10 +380,12 @@ void Key_Process(void)
   }
   case 12:
   {
+	flag_download_weight=1;           //key12:download weight
     break;
   }
   case 13:
   {
+	flag_upload_weight=1;             //key13:upload weight
     break;
   }
   case 14:
@@ -292,6 +401,7 @@ void Key_Process(void)
   }
   case 16:
   {
+	flag_physical_parameter_send=1;   //key16:send physical parameter
     break;
   }
 
@@ -394,26 +504,26 @@ void savedata(void)
 
 void transfer_data()
 {
-	inputVal[0]=temp1[0];
-	inputVal[1]=temp1[1];
-	inputVal[2]=temp2[0];
-	inputVal[3]=temp2[1];
-	inputVal[4]=temp3[0];
-	inputVal[5]=temp3[1];
-	inputVal[6]=temp4[0];
-	inputVal[7]=temp4[1];
-	inputVal[8]=temp5[0];
-	inputVal[9]=temp5[1];
-	inputVal[10]=temp6[0];
-	inputVal[11]=temp6[1];
-	inputVal[12]=temp7[0];
-	inputVal[13]=temp7[1];
-	inputVal[14]=temp8[0];
-	inputVal[15]=temp8[1];
-	inputVal[16]=temp9[0];
-	inputVal[17]=temp9[1];
-	inputVal[18]=temp10[0];
-	inputVal[19]=temp10[1];
+	inputVal_jud[0]=temp1[0];
+	inputVal_jud[1]=temp1[1];
+	inputVal_jud[2]=temp2[0];
+	inputVal_jud[3]=temp2[1];
+	inputVal_jud[4]=temp3[0];
+	inputVal_jud[5]=temp3[1];
+	inputVal_jud[6]=temp4[0];
+	inputVal_jud[7]=temp4[1];
+	inputVal_jud[8]=temp5[0];
+	inputVal_jud[9]=temp5[1];
+	inputVal_jud[10]=temp6[0];
+	inputVal_jud[11]=temp6[1];
+	inputVal_jud[12]=temp7[0];
+	inputVal_jud[13]=temp7[1];
+	inputVal_jud[14]=temp8[0];
+	inputVal_jud[15]=temp8[1];
+	inputVal_jud[16]=temp9[0];
+	inputVal_jud[17]=temp9[1];
+	inputVal_jud[18]=temp10[0];
+	inputVal_jud[19]=temp10[1];
 }
 
 double max_outval(double a,double b)
@@ -440,11 +550,10 @@ void judge_gesture(void)
 	{
 		if(counter<=5)
 		{
-	       if(sqrtii(inputVal[0])>N||sqrtii(inputVal[1])>N||sqrtii(inputVal[2])>N||sqrtii(inputVal[3])>N||sqrtii(inputVal[4])>N||sqrtii(inputVal[5])>N||sqrtii(inputVal[6])>N||sqrtii(inputVal[7])>N||sqrtii(inputVal[8])>N||sqrtii(inputVal[9])>N||sqrtii(inputVal[10])>N||sqrtii(inputVal[11])>N||sqrtii(inputVal[12])>N||sqrtii(inputVal[13])>N||sqrtii(inputVal[14])>N||sqrtii(inputVal[15])>N||sqrtii(inputVal[16])>N||sqrtii(inputVal[17])>N||sqrtii(inputVal[18])>N||sqrtii(inputVal[19])>N)
+	       if(sqrtii(inputVal_jud[0])>N||sqrtii(inputVal_jud[1])>N||sqrtii(inputVal_jud[2])>N||sqrtii(inputVal_jud[3])>N||sqrtii(inputVal_jud[4])>N||sqrtii(inputVal_jud[5])>N||sqrtii(inputVal_jud[6])>N||sqrtii(inputVal_jud[7])>N||sqrtii(inputVal_jud[8])>N||sqrtii(inputVal_jud[9])>N||sqrtii(inputVal_jud[10])>N||sqrtii(inputVal_jud[11])>N||sqrtii(inputVal_jud[12])>N||sqrtii(inputVal_jud[13])>N||sqrtii(inputVal_jud[14])>N||sqrtii(inputVal_jud[15])>N||sqrtii(inputVal_jud[16])>N||sqrtii(inputVal_jud[17])>N||sqrtii(inputVal_jud[18])>N||sqrtii(inputVal_jud[19])>N)
 	       {
 	    	   if(max==gMyCalculatorModel[1].outVal[1])
 	    	   {
-
 	    		   buzzer_ring();
 	    		   counter++;
 	    	   }
@@ -454,9 +563,9 @@ void judge_gesture(void)
 		if(counter==20)
 		{
 		    port_uart->uart_write(in10, 80);
-			board_delay_ms(10, 1);
+			board_delay_ms(100, 1);
 			port_uart->uart_write(in12, 100);
-			board_delay_ms(10, 1);
+			board_delay_ms(100, 1);
             counter=0;
 		}
 	}
@@ -671,11 +780,202 @@ void buzzer_ring()
 	board_delay_ms(10, 1);
 }
 
+void weight_download()
+{
+	sprintf(in23, "%s%c",in23,0x1A);
+    port_uart->uart_write(in13, 80);
+  	board_delay_ms(3000, 1);
+	port_uart->uart_write(in14, 50);
+	board_delay_ms(1000, 1);
+ 	/* apply for downloading W0 */
+  	port_uart->uart_write(in23, 50);
+  	board_delay_ms(3000, 1);
+  	port_uart->uart_read(in25, 15000);
+  	board_delay_ms(10000, 1);
+    token=strtok(in25,delim);
+    while(token!=NULL)
+    {
+        int i=transfer_index/LAYER_0_INDIM;
+        int j=transfer_index%LAYER_0_INDIM;
+        W0[i][j]=atof(token);
+        transfer_index++;
+    }
+    transfer_index=0;
+    /*downloading W0 has finished */
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in29, 50);
+  	board_delay_ms(3000, 1);
+ 	/* apply for downloading W1 */
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in26, 50);
+  	board_delay_ms(3000, 1);
+  	port_uart->uart_read(in25, 15000);
+  	board_delay_ms(10000, 1);
+    token=strtok(in25,delim);
+    while(token!=NULL)
+    {
+        int i=transfer_index/LAYER_1_INDIM;
+        int j=transfer_index%LAYER_1_INDIM;
+        W1[i][j]=atof(token);
+        transfer_index++;
+    }
+    transfer_index=0;
+    /*downloading W1 has finished */
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in30, 50);
+  	board_delay_ms(3000, 1);
+ 	/* apply for downloading B0 */
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in27, 50);
+  	board_delay_ms(3000, 1);
+  	port_uart->uart_read(in25, 15000);
+  	board_delay_ms(10000, 1);
+    token=strtok(in25,delim);
+    while(token!=NULL)
+    {
+        B0[transfer_index]=atof(token);
+        transfer_index++;
+    }
+    transfer_index=0;
+    /*downloading B0 has finished */
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in31, 50);
+  	board_delay_ms(3000, 1);
+ 	/* apply for downloading B1 */
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in28, 50);
+  	board_delay_ms(3000, 1);
+  	port_uart->uart_read(in25, 15000);
+  	board_delay_ms(10000, 1);
+    token=strtok(in25,delim);
+    while(token!=NULL)
+    {
+        B1[transfer_index]=atof(token);
+        transfer_index++;
+    }
+    transfer_index=0;
+    /*downloading B1 has finished */
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in32, 50);
+  	board_delay_ms(3000, 1);
+}
 
+void interval_target_init()
+{
+	while (name_index < 28)
+		{
+			filename = train_txt_name[name_index];
+			fp = fopen(filename, "r");
+			fscanf(fp, "%f %f", &a, &b);
+			fscanf(fp, "%f %f", &a, &b);
+			fscanf(fp, "%f %f", &a, &b);
+			fscanf(fp, "%f %f", &a, &b);
+			for (; !feof(fp); i++)
+			{
+				for (j = 0; j < LAYER_0_INDIM && (!feof(fp)); j += 2)
+				{
+					for (count_1 = 0; count_1 < 10 && (!feof(fp)); count_1++)
+					{
+						fscanf(fp, "%f %f", &a, &b);
+					}
+					inputVal_train[name_index][j] = a;
+					inputVal_train[name_index][j + 1] = b;
+				}
+				if(name_index >=12 && name_index <=16)
+				{
+					target[name_index][0] = 0;
+					target[name_index][1] = 1;
+				}
+				else
+				{
+					target[name_index][0] = 1;
+					target[name_index][1] = 0;
+				}
+			}
+			fclose(fp);
+			name_index++ ;
+		}
+}
 
+void weight_train()
+{
+	for (epoch = 0; epoch < EPOCH; epoch++)
+		{
+            for (i = 0; i < file_counter; i++)
+			{
+				NNLayerPredict(gMyCalculatorModel, inputVal_train[i]);
+				train_loss = NNLayerloss(gMyCalculatorModel, target[i]);
+				cal_dp_outlayer(gMyCalculatorModel, target[i], dp_w1, dp_b1);
+				cal_dp_hidlayer(gMyCalculatorModel, inputVal_train[i], target[i], dp_w1, dp_b1, dp_w0, dp_b0);
+				w_b_upgrate(gMyCalculatorModel, dp_w1, dp_b1, dp_w0, dp_b0);
+				for (j = 0; j < LAYER_0_OUTDIM; j++)
+				{
+					gMyCalculatorModel[0].outVal[j] = 0;
+				}
+				gMyCalculatorModel[1].outVal[0] = 0; gMyCalculatorModel[1].outVal[1] = 0;
+				//memset(gMyCalculatorModel[0].outVal, 0, sizeof(gMyCalculatorModel[0].outVal)); memset(gMyCalculatorModel[1].outVal, 0, sizeof(gMyCalculatorModel[1].outVal));
+				//gMyCalculatorModel[0].outVal = gLayer0OutVal;
+				//gMyCalculatorModel[1].outVal = gLayer1OutVal;
+				//memset(dp_w1, 0, sizeof(dp_w1)); memset(dp_w0, 0, sizeof(dp_w0));
+				//memset(dp_b1, 0, sizeof(dp_b1)); memset(dp_b0, 0, sizeof(dp_b0));
 
+			}
+		}
+}
 
+void target_jud_setting()
+{
+	if(max==gMyCalculatorModel[1].outVal[0])
+	{
+		target_judgement[0]=1;
+		target_judgement[1]=0;
+	}
+	if((max==gMyCalculatorModel[1].outVal[1]))
+	{
+		target_judgement[0]=0;
+		target_judgement[1]=1;
+	}
+}
 
+void converse_target_jud()
+{
+	if(max==gMyCalculatorModel[1].outVal[0])
+	{
+		target_judgement[0]=0;
+		target_judgement[1]=1;
+	}
+	if((max==gMyCalculatorModel[1].outVal[1]))
+	{
+		target_judgement[0]=1;
+		target_judgement[1]=0;
+	}
+}
 
+void physical_parameter_send()
+{
+	sprintf(in24,"physic:%d%c",Value,0x1A);
+	port_uart->uart_write(in13, 80);
+	board_delay_ms(3000, 1);
+  	port_uart->uart_write(in14, 50);
+  	board_delay_ms(1000, 1);
+  	port_uart->uart_write(in24, 50);
+  	board_delay_ms(5000, 1);
+  	Value=0;
+}
 
-
+void write_file()
+{
+	sprintf(write_filename,".\\train\\%d.txt",file_counter);
+	write_fp=fopen(write_filename,"w");
+	fwrite(inputVal_jud, sizeof(inputVal_jud) , 1, write_fp );
+	target[file_counter][0]=target_judgement[0];
+	target[file_counter][1]=target_judgement[1];
+	fclose(write_fp);
+}
