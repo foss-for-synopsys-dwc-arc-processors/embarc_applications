@@ -17,6 +17,7 @@ Intelligent recognition system for fall posture provides various alarm ways. Bas
 - [Introduction](#Introduction)
 - [Appearance](#Appearance)
   - [System View](#System-View)
+  - [Video](#Video)
 - [Hardware and Software Setup](#Hardware-and-Software-Setup)
   - [Required Hardware](#Required-Hardware)
   - [Required Software](#Required-Software)
@@ -46,9 +47,9 @@ This application is designed basing on BP network and knowledge distillation alg
 
 <img src=".\picture\System composition diagram.jpg" style="zoom: 33%;" />
 
+### Video
 
-
-
+https://v.youku.com/v_show/id_XNDkwNDY5MDkwMA==.html?spm=a2hzp.8244740.0.0
 
 ------
 
