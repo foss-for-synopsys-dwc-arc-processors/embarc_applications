@@ -29,17 +29,17 @@ Seeeduino receives and processes gesture signals, and send corresponding data to
 After receiving control signals, the system sends corresponding instructions to the Bluetooth audio module, and the smart screen displays the current system operating status, as well as environmental temperature and humidity data and real-time clock.
 The detailed control commands are as followed:
 
-| Command                | Gesture        | Voice(Chinese Pinyin)      | Touch Screen             |
-| ---------------------- | -------------- | -------------------------- | ------------------------ |
-| Switch control mode    | forward        | "qie huan kong zhi mo shi" |                          |
-| Switch play mode       | up             | "qie huan bo fang mo shi"  |                          |
-| Previous song          | left           | "shang yi qu"              | "previous song" button   |
-| Next song              | right          | "xia yi qu"                | "next song" button       |
-| Play song              | down           | "bo fang"                  | "play/pause song" button |
-| Pause song             | down           | "zan ting"                 | "play/pause song" button |
-| Volume up              | clockwise      | "jia da yin liang"         |                          |
-| Volume down            | anti-clockwise | "jian xiao yin liang"      |                          |
-| Enable gesture control | backward       |                            |                          |
+| Command | Gesture | Voice(Chinese Pinyin) | Touch Screen |
+| ------- | ------- | --------------------- | ------------ |
+| Switch control mode | forward | "qie huan kong zhi mo shi" | |
+| Switch play mode | up | "qie huan bo fang mo shi" | |
+| Previous song | left | "shang yi qu" | "previous song" button |
+| Next song | right | "xia yi qu" | "next song" button |
+| Play song | down | "bo fang" | "play/pause song" button |
+| Pause song | down | "zan ting" | "play/pause song" button |
+| Volume up | clockwise | "jia da yin liang" | |
+| Volume down | anti-clockwise | "jian xiao yin liang" | |
+| Enable gesture control | backward | | |
 
 
 
