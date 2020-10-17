@@ -89,6 +89,8 @@ The detailed control commands are as followed:
 EMSK implement speaker node, it can be controlled by touch screen input, Voice recognition and remote gesture recognition, and can execute the following command: next/previous song, play/pause, volume up/down, switch control/play mode, etc.. EMSK is powered by a 5V/4A AC power adapter.
 The smart screen it connect can display current control status and play status.
 
+test
+
 | Device             | Bus    | Connector    | Description                                    |
 | ------------------ | ------ | ------------ | ---------------------------------------------- |
 | HSC025A            | UART_0 | PMOD_1[4:3]  | Bluetooth audio module                         |
@@ -100,6 +102,7 @@ The smart screen it connect can display current control status and play status.
 
 2. **Seeeduino connection**
 Seeeduino implements wearable controller node, it processes received gesture signals and send the gesture number to EMSK through HC-06 Bluetooth transceiver. Seeeduino is powered by a 5V lithium battery through USB type-C port.
+
 
 | Device    | Bus  | Connector | Description                               |
 | --------- | ---- | --------- | ----------------------------------------- |
