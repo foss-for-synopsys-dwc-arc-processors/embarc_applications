@@ -55,9 +55,7 @@
 #include "arc_builtin.h"
 #include "embARC_toolchain.h"
 #include "embARC_error.h"
-
 #include "arc_exception.h"
-
 #include "dw_uart.h"
 #include "dw_uart_obj.h"
 
