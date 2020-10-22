@@ -36,15 +36,15 @@
 //#include "../common.h"
  
 /*
-*   NNLayer变量定义
+*   NNLayer variable definition
 */
 typedef struct 
 {
-    double* weight;             //权重二维矩阵  INDIM * OUTDIM
-    double* bais;               //偏置数组      1 * OUTDIM
-    int inDim;                  //输入维数
-    int outDim;                 //输出维数
-    double* outVal;             //输出数组
+    double* weight;             //Weight two-dimensional matrix  INDIM * OUTDIM
+    double* bais;               //Offset array      1 * OUTDIM
+    int inDim;                  //The input dimension of
+    int outDim;                 //The output of dimension
+    double* outVal;             //The output array
 }NNLayer;
  
  

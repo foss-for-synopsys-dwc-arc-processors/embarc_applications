@@ -11,11 +11,6 @@
 
 extern NNLayer gMyCalculatorModel[LAYER_TOTAL];
 extern double gLayer0OutVal[LAYER_0_OUTDIM],gLayer1OutVal[LAYER_1_OUTDIM];//,gLayer2OutVal[LAYER_2_OUTDIM];
-  
-/*
-*   训练好的模型参数
-*/
-
 
  
 /*
@@ -27,10 +22,10 @@ double _getWeight(const double* arr,int r,int rNum,int c)
 }
  
 /*
-*   NNLayer初始化
-*   绑定每层的权重矩阵、偏置矩阵
-*   设置每层的输入维度，输出维度
-*   绑定每层的输出暂存数组
+*   NNLayer initialization
+*   Bind the weight matrix and bias matrix of each layer
+*   Set the input dimension and output dimension for each layer
+*   Binds the output staging array for each layer
 */
 void NNLayerInit()
 {
@@ -55,9 +50,9 @@ void NNLayerInit()
 }
  
 /*
-*   NNLayer进行预测
-*   model - NNLayer数组
-*   x - 输入向量，数目符合LAYER_0_INDIM
+*   NNLayer makes predictions
+*   Model-nnlayer array
+*   X - input vector with LAYER_0_INDIM
 */
 void NNLayerPredict(NNLayer* model, double* x)
 {
