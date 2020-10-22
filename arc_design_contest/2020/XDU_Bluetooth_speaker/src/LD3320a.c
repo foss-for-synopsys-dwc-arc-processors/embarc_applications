@@ -33,11 +33,15 @@ void AsrErase(void)
 	iic_master_0->iic_write(buf, 1);
 }
 
-/* 设置识别模式
- * 识别模式设置，值范围1~3
- * 1：循环识别模式。状态灯常亮（默认模式）
- * 2：口令模式，以第一个词条为口令。状态灯常灭，当识别到口令词时常亮，等待识别到新的语音,并且读取识别结果后即灭掉
- * 3：按键模式，按下开始识别，不按不识别。支持掉电保存。状态灯随按键按下而亮起，不按不亮
+/*
+ * Recognition mode setting:
+ * Mode 1: Cycle recognition mode. The status LED is always on (default mode).
+ * Mode 2: Password mode, the first entry is the password. When the password is detected, 
+ * 			this module jump into "recognition state", and is ready to recognize the next entry.
+ * 			when the recognition of the next entry is over, this module will quit "recognition state".
+ * 			The status LED is on only when this module is in "recognition mode".
+ * Mode 3: Button mode, recognition is started only when the button is pressed(Support power-down save).
+ * 			The status LED will light up only when the button is pressed.
  */
 void AsrSetMode(uint8_t mode)
 {
@@ -50,13 +54,14 @@ void AsrSetMode(uint8_t mode)
 	iic_master_0->iic_write(buf, 2);
 }
 
- /* 添加词条函数
-  * idNum：词条对应的识别号，1~255随意设置。识别到该号码对应的词条语音时，
-  *        会将识别号存放到ASR_RESULT_ADDR处，等待主机读取，读取后清0
-  * words：要识别汉字词条的拼音，汉字之间用空格隔开
-  * 执行该函数，词条是自动往后排队添加的。
-  * 支持掉电保存
-  */
+/*
+ * Add Entry Function(Support power-down save)
+ * idNum: number corresponding to entry, range from 1 to 255.
+ * 			when one entry is recognized, its number will be written to ASR_RESULT_ADDR.
+ * 			ASR_RESULT_ADDR will be clear after being read.
+ * words: Pinyin of Chinese character entries to be recognized, 
+ * 			separated by spaces between each Chinese characters
+ */
 void AsrAddWords(uint8_t idNum, uint8_t words[], uint8_t len)
 {
 	uint8_t buf[2+len];

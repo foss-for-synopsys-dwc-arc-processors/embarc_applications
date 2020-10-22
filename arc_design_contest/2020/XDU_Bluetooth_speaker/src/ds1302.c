@@ -160,25 +160,25 @@ void rtc_read_time(uint8_t *time_rcv)
 
 void rtc_time_extract(uint8_t *time_rcv, uint8_t *time_extr)
 {
-	time_extr[0]  = (time_rcv[0] >> 4);       //分离出年千位
-	time_extr[1]  = (time_rcv[0] &  0x0F);    //分离出年百位
-	time_extr[2]  = (time_rcv[1] >> 4);       //分离出年十位
-	time_extr[3]  = (time_rcv[1] &  0x0F);    //分离出年个位
+	time_extr[0]  = (time_rcv[0] >> 4);       // seperate thousands of year
+	time_extr[1]  = (time_rcv[0] &  0x0F);    // seperate hundreds of year
+	time_extr[2]  = (time_rcv[1] >> 4);       // seperate tens of year
+	time_extr[3]  = (time_rcv[1] &  0x0F);    // seperate ones of year
 
-	time_extr[4]  = (time_rcv[2] >> 4);       //分离出月十位
-	time_extr[5]  = (time_rcv[2] &  0x0F);    //分离出月个位
+	time_extr[4]  = (time_rcv[2] >> 4);       // seperate tens of month
+	time_extr[5]  = (time_rcv[2] &  0x0F);    // seperate ones of month
 
-	time_extr[6]  = (time_rcv[3] >> 4);       //分离出日十位
-	time_extr[7]  = (time_rcv[3] &  0x0F);    //分离出日个位
+	time_extr[6]  = (time_rcv[3] >> 4);       // seperate tens of day
+	time_extr[7]  = (time_rcv[3] &  0x0F);    // seperate ones of day
 
-	time_extr[8]  = (time_rcv[4] >> 4);       //分离出小时十位
-	time_extr[9]  = (time_rcv[4] &  0x0F);    //分离出小时个位
+	time_extr[8]  = (time_rcv[4] >> 4);       // seperate tens of hour
+	time_extr[9]  = (time_rcv[4] &  0x0F);    // seperate ones of hour
 
-	time_extr[10] = (time_rcv[5] >> 4);       //分离出分钟十位
-	time_extr[11] = (time_rcv[5] &  0x0F);    //分离出分钟个位
+	time_extr[10] = (time_rcv[5] >> 4);       // seperate tens of minute
+	time_extr[11] = (time_rcv[5] &  0x0F);    // seperate ones of minute
 
-	time_extr[12] = (time_rcv[6] >> 4);       //分离出秒钟十位
-	time_extr[13] = (time_rcv[6] &  0x0F);    //分离出秒钟个位
+	time_extr[12] = (time_rcv[6] >> 4);       // seperate tens of second
+	time_extr[13] = (time_rcv[6] &  0x0F);    // seperate ones of second
 	/* weekday don't needs to be extracted*/
 }
 
