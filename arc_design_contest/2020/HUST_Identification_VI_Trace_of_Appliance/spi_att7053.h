@@ -15,7 +15,7 @@
  * \name ATT7053 SPI Commands
  * @{
  */
-// define定义ATT7053内部地址
+// define ATT7053 internal addresses
 #define Current1_Waveform 0x00
 #define Current2_Waveform 0x01
 #define Votage_Waveform 0x02
@@ -42,7 +42,7 @@
 #define SumChecksum_Register 0x18
 #define EMU_Status_Register 0x19
 
-//校表参数寄存器列表
+//List of calibration parameter registers
 #define EMU_Interrupt_Enable_Register 0x30
 #define EMU_Interrupt_Flag_Register 0x31
 #define Written_Protect_Register 0x32

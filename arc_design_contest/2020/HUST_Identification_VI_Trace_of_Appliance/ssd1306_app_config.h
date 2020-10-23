@@ -32,7 +32,7 @@
 
 #include "board.h"
 
-#define SSD1306_I2C_ID		DFSS_IIC_0_ID		//使用IIC0
+#define SSD1306_I2C_ID		DFSS_IIC_0_ID		//use IIC0
 #define SSD1306_RST_GPIO 	DFSS_GPIO_4B2_ID
-#define SSD1306_RST_PIN		0					//Arduino IO0口为Oled的复位引脚
+#define SSD1306_RST_PIN		0					//Arduino IO0:reset pin of oled
 #endif /* _SSD1306_APP_CONFIG_H_ */

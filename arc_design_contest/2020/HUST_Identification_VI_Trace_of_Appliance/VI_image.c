@@ -4,7 +4,6 @@
 #include <math.h>
 
 
-//获取数据点在32*32图像中的位置坐标
 img_coor_t get_coordinate(float vdata,float idata,float v_max,float i_max){
     img_coor_t coordinate;
     coordinate.x_v=vdata/v_max*N+N;

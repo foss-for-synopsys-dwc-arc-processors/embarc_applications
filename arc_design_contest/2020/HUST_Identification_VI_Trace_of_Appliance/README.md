@@ -196,7 +196,7 @@ Placing the C source and header file.
 
 
 [1]: ./doc/pic/system blocks.jpg
-[2]: https://v.youku.com/v_show/id_XNDI5MTM3MjQ4OA==.html?spm=a2h3j.8428770.3416059.1  "Electrical Load Identification"
+[2]: https://https://v.youku.com/v_show/id_XNDkyMDQyNzA3Ng==.html
 [3]: ./doc/pic/practicality picture.jpg
 [4]: https://embarc.org/embarc_mli/doc/build/html/index.html
 [5]: https://github.com/olikraus/u8glib/wiki

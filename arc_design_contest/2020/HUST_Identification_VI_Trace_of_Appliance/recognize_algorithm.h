@@ -23,8 +23,4 @@ extern mli_tensor * const lenet_output;
 void model_init(void);
 int recognize_algorithm(void* input,uint8_t* result);
 
-
-
-
-
 #endif

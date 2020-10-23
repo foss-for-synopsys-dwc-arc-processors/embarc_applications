@@ -125,84 +125,49 @@ void msleep(uint32_t ms)
 
 
 void EMU_Init(ATT7053_DEF_PTR dev) {
-  Write_Reg(dev,Soft_Reset_Register, 0x55);  //软件复位
+  Write_Reg(dev,Soft_Reset_Register, 0x55); 
   msleep(50);
-  //printf("软件复位SRSTREG = 0x%x\r\n", Read_Reg(Soft_Reset_Register));
+
   EMBARC_PRINTF(" SRSTREG = 0x%x\r\n", Read_Reg(dev,Soft_Reset_Register));
 
-  // 0xA6: 写保护打开，只能操作 50H 到 71H 的校表参数寄存器，
-  // 不可操作 40H 到 45H的校表参数寄存器
   Write_Reg(dev,Written_Protect_Register, 0xA6);
   usleep(50);
-  //printf("写保护寄存器WPREG = 0x%x\r\n", Read_Reg(Written_Protect_Register));
-
-  // ADC 通道增益 bit0~bit5表示模拟通道增益
-  // bit6~bit11表示数字增益
+ 
   Write_Reg(dev,ADC_Channel_Gain_Register, 0x00);
   usleep(50);
-  //printf("ADC通道增益ADCCON:0x%x\r\n", Read_Reg(ADC_Channel_Gain_Register));
-
-  //脉冲频率 默认0x0040
-  //Write_Reg(dev,High_Frequency_Impulse_Const_Register, 0x61);
+ 
   usleep(50);
-  //printf("脉冲频率设置 HFConst:0x%x\r\n",
+
   Read_Reg(dev,High_Frequency_Impulse_Const_Register);
 
-
-  // Write_Reg(dev,Active_Power_Gain1_Register, 0x0);
-  // usleep(50);
-
-  // Write_Reg(dev,Power_Offset1, 0xF5);
-  // usleep(50);
-
-  //电流通道1有效值校正寄存器
   Write_Reg(dev,I1_RMS_Offset, 0x00);
   usleep(50);
-  //printf("电流1校正I1RMSOFFSET:0x%x\r\n", Read_Reg(I1_RMS_Offset));
 
-  //电流通道2有效值校正寄存器
   Write_Reg(dev,I2_RMS_Offset, 0x00);
   usleep(50);
-  //printf("电流1校正I1RMSOFFSET:0x%x\r\n", Read_Reg(I2_RMS_Offset));
 
-  // 0xBC: 写保护打开，只能操作 40H 到 45H 的校表参数寄存器，
-  // 不可操作 50H 到 71H的校表参数寄存器
   Write_Reg(dev,Written_Protect_Register, 0xBC);
   usleep(50);
-  //printf("写保护寄存器WPREG = 0x%x\r\n", Read_Reg(Written_Protect_Register));
 
-  // EMU配置,视在电能输出
   Write_Reg(dev,EMUCFG, 0x100);
   usleep(50);
-  //printf("EMUCFG = 0x%x\r\n", Read_Reg(EMUCFG));
 
-  //配置时钟
   Write_Reg(dev,Frequency_Configure_Register, 0x8B);
   usleep(50);
-  //printf("时钟配置FreqCFG = 0x%x\r\n", Read_Reg(Frequency_Configure_Register));
 
-  //打开高通滤波器，脉冲计数开关打开,默认0x7E
   Write_Reg(dev,ModuleEn, 0x7E);
   usleep(50);
-  //printf("模式控制ModuleEN = 0x%x\r\n", Read_Reg(ModuleEn));  // 最低位写不进去
 
-  //打开ADC
   Write_Reg(dev,Analog_Enable_Register, 0x03);
   usleep(50);
-  //printf("ADC开关ANAEN = 0x%x\r\n", Read_Reg(Analog_Enable_Register));
 
-  //中断输出低电平有效
   Write_Reg(dev,IO_Configuration_Register, 0x00);
   usleep(50);
-  //printf("输出引脚配置IOCFG = 0x%x\r\n", Read_Reg(IO_Configuration_Register));
 
-  // 0x40表示波形寄存器的更新中断使能
   Write_Reg(dev,EMU_Interrupt_Enable_Register, 0x04);
   usleep(50);
-  //printf("中断使能EMUIE = 0x%x\r\n", Read_Reg(EMU_Interrupt_Enable_Register));
 
-  //关闭写保护寄存器
   Write_Reg(dev,Written_Protect_Register, 0x00);
   usleep(50);
-  //printf("写保护寄存器WPREG = 0x%x\r\n", Read_Reg(Written_Protect_Register));
+
 }

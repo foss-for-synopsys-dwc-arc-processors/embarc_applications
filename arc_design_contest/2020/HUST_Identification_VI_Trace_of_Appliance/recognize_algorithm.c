@@ -204,5 +204,4 @@ int recognize_algorithm(void* input,uint8_t* result){
 	}
     free(pred_data);
     return 1;
-
 }
