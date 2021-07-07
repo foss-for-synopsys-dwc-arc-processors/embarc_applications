@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "D:\\embarc_osp-master"
+		},
+		{
+			"path": "mbedtls_ssl_client2"
+		},
+		{
+			"path": "Vending_Machine"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"embarc_debug.h": "c",
+			"embarc.h": "c",
+			"emsk_gpio.c": "cpp",
+			"config.h": "c",
+			"openthread.h": "c",
+			"cli.h": "c",
+			"ssd1306_app_config.h": "c",
+			"u8g.h": "c",
+			"adt7420.h": "c",
+			"iosfwd": "c",
+			"xutility": "c"
+		}
+	}
+}
