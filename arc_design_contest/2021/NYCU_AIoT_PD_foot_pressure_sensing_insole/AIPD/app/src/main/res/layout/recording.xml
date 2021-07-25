@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tester"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/round_btn_purple"
+        android:text="@string/start"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/tester"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/foot" />
+
+    <ImageButton
+        android:id="@+id/profileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
+        android:padding="0dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.022"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/user" />
+
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Hi ! John"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.037"
+        app:layout_constraintStart_toEndOf="@+id/profileButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="58dp"
+        android:background="@drawable/left_2"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginBottom="58dp"
+        android:background="@drawable/left_3"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="114dp"
+        android:background="@drawable/left_4"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL5"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginBottom="111dp"
+        android:background="@drawable/left_5"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL6"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="174dp"
+        android:background="@drawable/left_6"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL7"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginBottom="174dp"
+        android:background="@drawable/left_7"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonL8"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="226dp"
+        android:background="@drawable/left_8"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="244dp"
+        android:layout_marginEnd="63dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="201dp"
+        android:layout_marginEnd="84dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="202dp"
+        android:layout_marginEnd="31.5dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="148.5dp"
+        android:layout_marginEnd="84dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR5"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="145dp"
+        android:layout_marginEnd="31.5dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR6"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginEnd="87.3dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR7"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginEnd="27.5dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ButtonR8"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="59dp"
+        android:background="@drawable/left_1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
