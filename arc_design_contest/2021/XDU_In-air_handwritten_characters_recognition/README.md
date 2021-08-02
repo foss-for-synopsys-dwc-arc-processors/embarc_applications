@@ -1,7 +1,21 @@
 ﻿# In-air Handwritten Characters Recognition
 This application is a concrete example of deploying a **neural network** on a wearable device. This application can **recognize air-handwritten characters** through wearable devices and display them on the wearable terminal. In addition, the recognition result can be transmitted to another terminal via **WIFI**, and people can perform simple text editing on this terminal through **gesture control**. And it can also broadcast voice, record temperature and time data, etc. This application can help researchers record data while doing experiments without the need to hold a pen or keyboard to input with gloves.
 
-@[toc](content)
+- [Introduction](#Introduction)
+ - [Function](#Function)
+ - [System Architecture](#System-Architecture)
+  - [Hardware Architecture](#Hardware-Architecture)
+  - [Software Flow](#Software-Flow)
+  - [Neural network structure](#Neural-network-structure)
+  - [UI](#UI)
+- [Hardware and Software Setup](#Hardware-and-Software-Setup)
+ - [Required Hardware](#Required-Hardware)
+ - [Required Software](#Required-Software)
+ - [Hardware Connection](#Hardware-Connection)
+- [User Manual](#User-Manual)
+ - [Before Running This Application](#Before-Running-This-Application)
+ - [Run This Application](#Run-This-Application)
+ - [Makefile](#Makefile)
 
 ## Introduction
 **In-air Handwritten characters Recognition**
@@ -28,14 +42,14 @@ This application is a concrete example of deploying a **neural network** on a we
 | Paste this line | backward       |
 ### System Architecture
 #### Hardware Architecture
-![system_architecture][1]
+![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/System%20Architecture.jpg][1]
 #### Software Flow
-![Software Flow][2]
+![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/Software%20Flow.jpg][2]
 #### Neural network structure
-![Neural network structure][4]
+![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/net.png][4]
 ### UI
 
-![UI][3]
+![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/UI.jpg][3]
 
 ## Hardware and Software Setup
 ### Required Hardware
@@ -90,9 +104,10 @@ This application is a concrete example of deploying a **neural network** on a we
 - Make sure all connection is correct again.
 ### Run This Application
 Here take IoTDK, CUR_CORE = arcem9d with ARC GNU Toolchain 2020.09 for example to show how to run this application.  
-1. To build this applicaiton, use this command `make run` 
-2. Open your serial terminal such as Putty on PC, and configure it to right COM port and 115200bps.  
-3. Wear the sending terminal on the palm of your hand, press the button and write in the air, release the button to see the recognition result of the air handwritten characters.
+1. To build this applicaiton, use this command `make` 
+2. To run this applicaiton, use this command `make run` 
+3. Open your serial terminal such as Putty on PC, and configure it to right COM port and 115200bps.  
+4. Wear the sending terminal on the palm of your hand, press the button and write in the air, release the button to see the recognition result of the air handwritten characters.
 #### Makefile
 
 - Selected embarc_mli here, then you can use [embarc_mli API][4] in your application:
