@@ -2,20 +2,20 @@
 This application is a concrete example of deploying a **neural network** on a wearable device. This application can **recognize air-handwritten characters** through wearable devices and display them on the wearable terminal. In addition, the recognition result can be transmitted to another terminal via **WIFI**, and people can perform simple text editing on this terminal through **gesture control**. And it can also broadcast voice, record temperature and time data, etc. This application can help researchers record data while doing experiments without the need to hold a pen or keyboard to input with gloves.
 
 - [Introduction](#Introduction)
- - [Function](#Function)
- - [System Architecture](#System-Architecture)
-  - [Hardware Architecture](#Hardware-Architecture)
-  - [Software Flow](#Software-Flow)
-  - [Neural network structure](#Neural-network-structure)
-  - [UI](#UI)
+  - [Function](#Function)
+  - [System Architecture](#System-Architecture)
+    - [Hardware Architecture](#Hardware-Architecture)
+    - [Software Flow](#Software-Flow)
+    - [Neural network structure](#Neural-network-structure)
+    - [UI](#UI)
 - [Hardware and Software Setup](#Hardware-and-Software-Setup)
- - [Required Hardware](#Required-Hardware)
- - [Required Software](#Required-Software)
- - [Hardware Connection](#Hardware-Connection)
+  - [Required Hardware](#Required-Hardware)
+  - [Required Software](#Required-Software)
+  - [Hardware Connection](#Hardware-Connection)
 - [User Manual](#User-Manual)
- - [Before Running This Application](#Before-Running-This-Application)
- - [Run This Application](#Run-This-Application)
- - [Makefile](#Makefile)
+  - [Before Running This Application](#Before-Running-This-Application)
+  - [Run This Application](#Run-This-Application)
+  - [Makefile](#Makefile)
 
 ## Introduction
 **In-air Handwritten characters Recognition**
@@ -42,14 +42,13 @@ This application is a concrete example of deploying a **neural network** on a we
 | Paste this line | backward       |
 ### System Architecture
 #### Hardware Architecture
-![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/System%20Architecture.jpg][1]
+![System_Architecture](./doc/imge/System_Architecture.jpg)
 #### Software Flow
-![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/Software%20Flow.jpg][2]
+![Software_Flow](./doc/imge/Software_Flow.jpg)
 #### Neural network structure
-![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/net.png][4]
+![net](./doc/imge/net.png)
 ### UI
-
-![https://github.com/AddSalt8227/embarc_applications/blob/master/arc_design_contest/2021/XDU_In-air_handwritten_characters_recognition/doc/imge/UI.jpg][3]
+![UI](./doc/imge/UI.jpg)
 
 ## Hardware and Software Setup
 ### Required Hardware
