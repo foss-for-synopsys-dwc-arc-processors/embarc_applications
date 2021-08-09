@@ -1,0 +1,8 @@
+Warn : deprecated option: -p/--pipe. Use '-c "gdb_port pipe; log_output openocd.log"' instead.
+adapter speed: 8000 kHz
+Info : clock speed 8000 kHz
+Info : JTAG tap: arc-em.cpu tap/device found: 0x200444b1 (mfg: 0x258, part: 0x0044, ver: 0x2)
+Info : JTAG tap: arc-em.cpu tap/device found: 0x200444b1 (mfg: 0x258, part: 0x0044, ver: 0x2)
+target state: halted
+Info : accepting 'gdb' connection from pipe
+Info : dropped 'gdb' connection
