@@ -5,7 +5,8 @@ void tflm_ini(const tflite::Model *model,
               tflite::MicroInterpreter *interpreter,
               uint8_t *tensor_arena,
               int kTensorArenaSize,
-              tflite::ErrorReporter *error_reporter){
+              tflite::ErrorReporter *error_reporter)
+{
 	/*设置日志记录*/
 	static tflite::MicroErrorReporter micro_error_reporter;
 	error_reporter = &micro_error_reporter;
@@ -56,7 +57,8 @@ void tflm_ini(const tflite::Model *model,
 	EMBARC_PRINTF(" INPUT TENSOR DIMS OK! ");
 };
 
-void run_model(tflite::MicroInterpreter *interpreter, TfLiteTensor *model_output, tflite::ErrorReporter *error_reporter) {
+void run_model(tflite::MicroInterpreter *interpreter, TfLiteTensor *model_output, tflite::ErrorReporter *error_reporter)
+{
 	/*运行模型*/
 	TfLiteStatus invoke_status = interpreter->Invoke();
   	if (invoke_status != kTfLiteOk) {
@@ -66,7 +68,8 @@ void run_model(tflite::MicroInterpreter *interpreter, TfLiteTensor *model_output
 	model_output = interpreter->output(0);
 };
 
-bool is_event(sample_data_node data[], uint32_t winlength, sample_data_node_ptr frontdata){
+bool is_event(sample_data_node data[], uint32_t winlength, sample_data_node_ptr frontdata)
+{
 	/*事件检测算法实现*/
 	//判断窗口中心两个点有效电流之差是否过阈值；
 	int32_t diff=0;
@@ -82,8 +85,9 @@ bool is_event(sample_data_node data[], uint32_t winlength, sample_data_node_ptr 
 	return false;
 }
 
-uint16_t recognize(uint16_t app_state,tflite::MicroInterpreter *interpreter, TfLiteTensor *model_output, tflite::ErrorReporter *error_reporter){
-    run_model(interpreter,model_output,error_reporter);
+uint16_t recognize(uint16_t app_state,tflite::MicroInterpreter *interpreter, TfLiteTensor *model_output, tflite::ErrorReporter *error_reporter)
+{
+	run_model(interpreter,model_output,error_reporter);
 	uint16_t state = 0;
 	uint8_t index = 0;
 	float max = 0.0;
