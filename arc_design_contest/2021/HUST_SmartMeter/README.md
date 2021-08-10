@@ -7,11 +7,11 @@ This application is a prototype of **Smart Meter** designed on ARC IoT DK. It ca
     - [Function](#function)
     - [Appearance](#appearance)
     - [Video](#video)
-  - [Hardware and Software Setup](#hardware-and-software-setup)
-    - [Required Hardware](#required hardware)
-    - [Required Software](#required software)
-    - [Hardware Connection](#hardware connection)
-  - [User Manual](#user manual)
+  - [Hardware and Software Setup](#Hardware and Software Setup)
+    - [Required Hardware](#Required Hardware)
+    - [Required Software](#Required Software)
+    - [Hardware Connection](#Hardware Connection)
+  - [User Manual](#User Manual)
     - [Before Running This Application](#Before Running This Application)
     - [Run This Application](#Run This Application)
 
@@ -26,7 +26,7 @@ The traditional meter can only measure the user's power consumption, but in toda
 
 ### Appearance
 * **System View**
-  ![System Architecture](./doc/pic/system architecture.png)
+<img src="./doc/pic/s=system achitecture.png" alt="System Architecture" style="zoom:60%;" />
 
 ### Video
 
