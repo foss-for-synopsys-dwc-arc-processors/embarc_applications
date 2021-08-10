@@ -60,39 +60,41 @@ int32_t ATT7053_init(ATT7053_DEF_PTR dev, uint32_t freq)
 }
 
 
-uint32_t Read_Reg(ATT7053_DEF_PTR dev,uint8_t cmd) {
-  uint32_t data = 0;
-  uint8_t tmp[3] = {0};
-  DEV_SPI_TRANSFER cmd_xfer;
+uint32_t Read_Reg(ATT7053_DEF_PTR dev,uint8_t cmd) 
+{
+	uint32_t data = 0;
+	uint8_t tmp[3] = {0};
+	DEV_SPI_TRANSFER cmd_xfer;
 
-  DEV_SPI_XFER_SET_TXBUF(&cmd_xfer, &cmd, 0, 1);
-  DEV_SPI_XFER_SET_RXBUF(&cmd_xfer, tmp, 1, 3);
-  DEV_SPI_XFER_SET_NEXT(&cmd_xfer, NULL);
+	DEV_SPI_XFER_SET_TXBUF(&cmd_xfer, &cmd, 0, 1);
+	DEV_SPI_XFER_SET_RXBUF(&cmd_xfer, tmp, 1, 3);
+	DEV_SPI_XFER_SET_NEXT(&cmd_xfer, NULL);
 
-  spi_send_cmd(dev, &cmd_xfer);
+	spi_send_cmd(dev, &cmd_xfer);
 
-  data |= (uint32_t)(tmp[0]) << 16;
-  data |= (uint32_t)(tmp[1]) << 8;
-  data |= (uint32_t)(tmp[2]);
+	data |= (uint32_t)(tmp[0]) << 16;
+	data |= (uint32_t)(tmp[1]) << 8;
+	data |= (uint32_t)(tmp[2]);
 
-  return data;
+	return data;
 }
 
-void Write_Reg(ATT7053_DEF_PTR dev,uint8_t cmd, uint32_t data) {
-  uint8_t tmp[4];
-  DEV_SPI_TRANSFER cmd_xfer;
+void Write_Reg(ATT7053_DEF_PTR dev,uint8_t cmd, uint32_t data) 
+{
+	uint8_t tmp[4];
+	DEV_SPI_TRANSFER cmd_xfer;
 
-  tmp[0] = cmd | 0x80;
-  tmp[1] = (data >> 16) & 255;
-  tmp[2] = (data >> 8) & 255;
-  tmp[3] = (uint8_t)data;
+	tmp[0] = cmd | 0x80;
+	tmp[1] = (data >> 16) & 255;
+	tmp[2] = (data >> 8) & 255;
+	tmp[3] = (uint8_t)data;
 
-  // spi_init(ATT7053_SPI_INDEX, SPI_WORK_MODE_1, SPI_FF_STANDARD, 8, 0);
-  DEV_SPI_XFER_SET_TXBUF(&cmd_xfer, tmp, 0, 4);
-  DEV_SPI_XFER_SET_RXBUF(&cmd_xfer, NULL, 0, 0);
-  DEV_SPI_XFER_SET_NEXT(&cmd_xfer, NULL);
+	// spi_init(ATT7053_SPI_INDEX, SPI_WORK_MODE_1, SPI_FF_STANDARD, 8, 0);
+	DEV_SPI_XFER_SET_TXBUF(&cmd_xfer, tmp, 0, 4);
+	DEV_SPI_XFER_SET_RXBUF(&cmd_xfer, NULL, 0, 0);
+	DEV_SPI_XFER_SET_NEXT(&cmd_xfer, NULL);
 
-  spi_send_cmd(dev, &cmd_xfer);
+	spi_send_cmd(dev, &cmd_xfer);
 }
 
 
@@ -121,16 +123,17 @@ void msleep(uint32_t ms)
 
 
 
-void EMU_Init(ATT7053_DEF_PTR dev) {
-  Write_Reg(dev,Soft_Reset_Register, 0x55);  msleep(50); //软件复位
-  EMBARC_PRINTF(" SRSTREG = 0x%x\r\n", Read_Reg(dev,Soft_Reset_Register));
+void EMU_Init(ATT7053_DEF_PTR dev) 
+{
+	Write_Reg(dev,Soft_Reset_Register, 0x55);  msleep(50); //软件复位
+	EMBARC_PRINTF(" SRSTREG = 0x%x\r\n", Read_Reg(dev,Soft_Reset_Register));
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // 0xA6: 写保护打开，只能操作 50H 到 71H 的校表参数寄存器，不可操作 40H 到 45H的校表参数寄存器
-  Write_Reg(dev,Written_Protect_Register, 0xA6);usleep(50);
-  Write_Reg(dev,ADC_Channel_Gain_Register, 0x00);usleep(50);
-  EMBARC_PRINTF("电流1有效值校正中...\r\n");
-  msleep(1000);
-  int IRM=0;
+	// 0xA6: 写保护打开，只能操作 50H 到 71H 的校表参数寄存器，不可操作 40H 到 45H的校表参数寄存器
+	Write_Reg(dev,Written_Protect_Register, 0xA6);usleep(50);
+	Write_Reg(dev,ADC_Channel_Gain_Register, 0x00);usleep(50);
+	EMBARC_PRINTF("电流1有效值校正中...\r\n");
+	msleep(1000);
+	int IRM=0;
 	for(int i=0;i<100;i++){
 		IRM += Read_Reg(dev,0x06);
 		msleep(50);
@@ -138,19 +141,13 @@ void EMU_Init(ATT7053_DEF_PTR dev) {
 	float avg_IRM = (float)IRM / 100;
 	Write_Reg(dev,I1_RMS_Offset,(uint32_t)(avg_IRM*avg_IRM/(1<<15)));	//电流通道1有效值校正
 	EMBARC_PRINTF("电流1校正I1RMSOFFSET:0x%x\n",Read_Reg(dev,0x69));
-  EMBARC_PRINTF("电流1有效值校正完成！！！\r\n");
-
-  // Write_Reg(dev,ADC_Channel_Gain_Register,0x002);usleep(50);
-  // EMBARC_PRINTF("电压有效值校正中...\n\r");
-  // int volrms=Read_Reg(dev,Voltage_Rms_Register);
-  // Write_Reg(dev,URMS_Offset,(uint32_t)(volrms*volrms/(1<<15)));
-  // EMBARC_PRINTF("电压有效值校正完成！！！\r\n");
+	EMBARC_PRINTF("电流1有效值校正完成！！！\r\n");
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // 0xBC: 写保护打开，只能操作 40H 到 45H 的校表参数寄存器，不可操作 50H 到 71H的校表参数寄存器
-  Write_Reg(dev,Written_Protect_Register, 0xBC);usleep(50);
-  Write_Reg(dev,EMUCFG, 0x10);usleep(50);
-  Write_Reg(dev,Frequency_Configure_Register, 0x8B); usleep(50);
-  Write_Reg(dev,IO_Configuration_Register, 0x00); usleep(50);
-  Write_Reg(dev,EMU_Interrupt_Enable_Register, 0x04); usleep(50);
-  Write_Reg(dev,Written_Protect_Register, 0x00); usleep(50);
+	// 0xBC: 写保护打开，只能操作 40H 到 45H 的校表参数寄存器，不可操作 50H 到 71H的校表参数寄存器
+	Write_Reg(dev,Written_Protect_Register, 0xBC);usleep(50);
+	Write_Reg(dev,EMUCFG, 0x10);usleep(50);
+	Write_Reg(dev,Frequency_Configure_Register, 0x8B); usleep(50);
+	Write_Reg(dev,IO_Configuration_Register, 0x00); usleep(50);
+	Write_Reg(dev,EMU_Interrupt_Enable_Register, 0x04); usleep(50);
+	Write_Reg(dev,Written_Protect_Register, 0x00); usleep(50);
 }
