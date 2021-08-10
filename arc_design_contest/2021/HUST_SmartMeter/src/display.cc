@@ -11,7 +11,7 @@ void u8g_prepare(void) {
 }
 
 void display_app_name(uint16_t kind_index){
-    u8g_prepare();
+	u8g_prepare();
 	switch (kind_index){
 		case 0:
 			u8g_DrawStr(&u8g, 30,20, "ALL OFF");
@@ -45,18 +45,15 @@ void m_u8g_init(void){
 	u8g_Begin(&u8g); /* reset display and put it into default state */
 }
 
-//void display(uint8_t* rgb_image,uint8_t kind_index) {
-void display(uint16_t index,uint16_t display_power) {
+void display(uint16_t index,uint16_t display_power){
 
 
 	u8g_FirstPage(&u8g); /* marks the beginning of the picture loop; it cannot be used inside the picture loop */
 	do {
 
-		u8g_DrawStr(&u8g, 15, 0, "HUST-SandSilicon");//显示title
-	//	Draw_VI_Image(rgb_image);
+		u8g_DrawStr(&u8g, 15, 0, "HUST-SandSilicon");
 		display_app_name(index);
 		display_app_power(display_power);
-
 	} while (u8g_NextPage(&u8g));
 }
 
