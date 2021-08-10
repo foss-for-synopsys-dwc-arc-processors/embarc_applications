@@ -2,18 +2,18 @@
 
 This application is a prototype of **Smart Meter** designed on ARC IoT DK. It can measure household electricity consumption information, and then use **non-intrusive load identification technology** to identify electrical switch status. It uploads message to the **cloud platform**. The analog signal of current and Voltage is collected by **ATT7053AU** (*a power acquisition chip*).
 
-- [Smart Meter](#Smart Meter)
+- [Smart Meter](#smart-meter)
   - [Introduction](#introduction)
     - [Function](#function)
     - [Appearance](#appearance)
     - [Video](#video)
-  - [Hardware and Software Setup](#Hardware and Software Setup)
-    - [Required Hardware](#Required Hardware)
-    - [Required Software](#Required Software)
-    - [Hardware Connection](#Hardware Connection)
-  - [User Manual](#User Manual)
-    - [Before Running This Application](#Before Running This Application)
-    - [Run This Application](#Run This Application)
+  - [Hardware and Software Setup](#hardware-and-software-setup)
+    - [Required Hardware](#required-hardware)
+    - [Required Software](#required-software)
+    - [Hardware Connection](#hardware-connection)
+  - [User Manual](#user-manual)
+    - [Before Running This Application](#before-running-this-application)
+    - [Run This Application](#run-this-application)
 
 ## Introduction
 The traditional meter can only measure the user's power consumption, but in today's more and more intelligent, concepts such as smart grid and smart home are gradually popularized and realized. Non-intrusive load identification uses meter data, combined with machine learning algorithms to analyze the power consumption status of all electrical equipment in the home. It is one of the key technologies for the refined management of power energy and the realization of the intelligentization of the whole house. This application embeds non-intrusive load identification technology into the end of the electric energy measurement equipment, and performs calculations on the end side to avoid waste of resources caused by a large amount of data upload, and at the same time, it can perform real-time load pattern recognition. This application is developed based on the Synopsys IoTDK platform, uses the Tensorflow Lite for Microcontroller neural network model for inference, and realizes the connection of device networking and the mobile phone and web pages of the cloud platform. 
