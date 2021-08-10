@@ -45,7 +45,7 @@ The traditional meter can only measure the user's power consumption, but in toda
 ### Required Software
 * DesignWare ARC MetaWare Development Toolkit 2021.03
 * [embARC open software platform][2]
-* [Tensorflow lite for microcontrollar][3]
+* [Tensorflow lite for microcontrollar][3] (the files have been all added into the projects)
 * Ali Cloud Platform
 * Serial port terminal, such as SecureCRT or Xshell
 * Python3.8
@@ -145,6 +145,7 @@ The traditional meter can only measure the user's power consumption, but in toda
   third_party/arc_mli_iotdk_arcem9d/include \
   third_party/arc_mli_iotdk_arcem9d/include/api \
   third_party/flatbuffers/include \
+  third_party/flatbuffers/include/flatbuffers \
   third_party/gemmlowp \
   third_party/gemmlowp/fixedpoint \
   third_party/gemmlowp/internal \
