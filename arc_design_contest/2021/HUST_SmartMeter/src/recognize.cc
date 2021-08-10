@@ -67,49 +67,48 @@ void run_model(tflite::MicroInterpreter *interpreter, TfLiteTensor *model_output
 };
 
 bool is_event(sample_data_node data[], uint32_t winlength, sample_data_node_ptr frontdata){
-    /*事件检测算法实现*/
-    //判断窗口中心两个点有效电流之差是否过阈值；
-    int32_t diff=0;
-    for(int i=0;i<winlength/2;i++){
-        frontdata = frontdata->next_ptr;
-    }
-    diff =  frontdata->next_ptr->IRMS - frontdata->IRMS;
-    if(abs(diff)>0x1000){
-        EMBARC_PRINTF("***Event happened*** \n");
-           return true;
-    }
-    // EMBARC_PRINTF("  no  Event   \r\n");
-    return false;
+	/*事件检测算法实现*/
+	//判断窗口中心两个点有效电流之差是否过阈值；
+	int32_t diff=0;
+	for(int i=0;i<winlength/2;i++){
+		frontdata = frontdata->next_ptr;
+	}
+	diff =  frontdata->next_ptr->IRMS - frontdata->IRMS;
+	if(abs(diff)>0x1000){
+		EMBARC_PRINTF("***Event happened*** \n");
+		return true;
+	}
+	// EMBARC_PRINTF("  no  Event   \r\n");
+	return false;
 }
 
 uint16_t recognize(uint16_t app_state,tflite::MicroInterpreter *interpreter, TfLiteTensor *model_output, tflite::ErrorReporter *error_reporter){
     run_model(interpreter,model_output,error_reporter);
-    uint16_t state = 0;
-    uint8_t index = 0;
-    float output_f[] = {0.0, 0.0, 0.0, 0.0};
-    float max = 0.0;
+	uint16_t state = 0;
+	uint8_t index = 0;
+	float max = 0.0;
 	for(int i=0; i < CLASS_COUNT; i++){
-		if(output_f[i]>max){
-			max = output_f[i];
+		if(model_output->data.f[i]>max){
+			max = model_output->data.f[i];
 			index = i;
 		}
 	}
-    switch (index)
-    {
-    case 0:
-        state = app_state | (uint16_t)1<<0;
-        break;
-    case 1:
-        state = app_state & ~((uint16_t)1<<0);
-        break;
-    case 2:
-        state = app_state | (uint16_t)1<<1;
-        break;
-    case 3:
-        state = app_state | ~((uint16_t)1<<1);
-        break;
-    default:
-        break;
-    }
-    return state;
+	switch (index)
+	{
+	case 0:
+		state = app_state | (uint16_t)1<<0;
+		break;
+	case 1:
+		state = app_state & ~((uint16_t)1<<0);
+		break;
+	case 2:
+		state = app_state | (uint16_t)1<<1;
+		break;
+	case 3:
+		state = app_state | ~((uint16_t)1<<1);
+		break;
+	default:
+		break;
+	}
+	return state;
 }
