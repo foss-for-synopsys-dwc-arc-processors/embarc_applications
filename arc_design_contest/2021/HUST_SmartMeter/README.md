@@ -26,7 +26,7 @@ The traditional meter can only measure the user's power consumption, but in toda
 
 ### Appearance
 * **System View**
-<img src="./doc/pic/system_achitecture.png" alt="System Architecture" style="zoom:60%;" />
+<img src="./doc/pic/system achitecture.png" alt="System Architecture" style="zoom:60%;" />
 
 ### Video
 
