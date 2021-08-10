@@ -40,7 +40,6 @@ The traditional meter can only measure the user's power consumption, but in toda
     - ATT7053AU                                                     *1
     - ESP8266                                                          *1
     - OLED                                                               *1
-* Practicality picture
 
 ### Required Software
 * DesignWare ARC MetaWare Development Toolkit 2021.03
