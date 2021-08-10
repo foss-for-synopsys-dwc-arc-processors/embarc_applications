@@ -1,6 +1,7 @@
 #include "string_KMP.h"
 
-static void Next(char*T,int *next){
+static void Next(char*T,int *next)
+{
     int i=1;
     next[1]=0;
     int j=0;
@@ -9,7 +10,8 @@ static void Next(char*T,int *next){
             i++;
             j++;
             next[i]=j;
-        }else{
+        }
+        else{
             j=next[j];
         }
     }
