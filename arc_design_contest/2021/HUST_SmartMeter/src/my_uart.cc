@@ -9,8 +9,7 @@ uint16_t UART_RX_STA=0;
 DEV_UART *uart_obj;
 
 
-static void uart_rx_callback(void *ptr)
-{
+static void uart_rx_callback(void *ptr){
 
 	DEV_UART *obj;
 
@@ -27,8 +26,7 @@ static void uart_rx_callback(void *ptr)
 }
 
 
-void UART_Init(uint8_t uart_id,uint32_t baudrate)
-{
+void UART_Init(uint8_t uart_id,uint32_t baudrate){
   uart_obj = uart_get_dev(uart_id);
   int32_t ercd = uart_obj->uart_open(baudrate);
 	if ((ercd != E_OK) && (ercd != E_OPNED))  return ;
@@ -44,8 +42,7 @@ void UART_Init(uint8_t uart_id,uint32_t baudrate)
 }
 
 
-void u1_printf(char* fmt,...)  
-{  
+void u1_printf(char* fmt,...){  
 	uint8_t i; 
 	va_list ap; 
 	va_start(ap,fmt);
@@ -63,8 +60,7 @@ void Uart_SendBuf(char* buf,uint32_t size){
 }
 
 
-uint8_t FindStr(char* dest,char* src,uint16_t retry_nms)
-{
+uint8_t FindStr(char* dest,char* src,uint16_t retry_nms){
     retry_nms/=10;                   //超时时间
 
     while(strstr(dest,src)==0 && retry_nms--)//等待串口接收完毕或超时退出
