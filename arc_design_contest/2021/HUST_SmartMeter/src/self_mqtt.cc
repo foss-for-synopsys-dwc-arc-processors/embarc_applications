@@ -71,20 +71,19 @@ static void Init(uint8_t *prx,uint16_t rxlen,uint8_t *ptx,uint16_t txlen)
 //连接服务器的打包函数
 static uint8_t Connect(char *ClientID,char *Username,char *Password)
 {
-    int ClientIDLen = strlen(ClientID);
-    int UsernameLen = strlen(Username);
-    int PasswordLen = strlen(Password);
-    int DataLen;
+	int ClientIDLen = strlen(ClientID);
+	int UsernameLen = strlen(Username);
+	int PasswordLen = strlen(Password);
+	int DataLen;
 	_mqtt.txlen=0;
 //可变报头+Payload  每个字段包含两个字节的长度标识
-    DataLen = 10 + (ClientIDLen+2) + (UsernameLen+2) + (PasswordLen+2);
+	DataLen = 10 + (ClientIDLen+2) + (UsernameLen+2) + (PasswordLen+2);
 	
 	//固定报头
 	//控制报文类型
-    _mqtt.txbuf[_mqtt.txlen++] = 0x10;		//MQTT Message Type CONNECT
+	_mqtt.txbuf[_mqtt.txlen++] = 0x10;		//MQTT Message Type CONNECT
 	//剩余长度(不包括固定头部)
-	do
-	{
+	do{
 		uint8_t encodedByte = DataLen % 128;
 		DataLen = DataLen / 128;
 		// if there are more data to encode, set the top bit of this byte
@@ -95,44 +94,41 @@ static uint8_t Connect(char *ClientID,char *Username,char *Password)
     	
 	//可变报头
 	//协议名
-    _mqtt.txbuf[_mqtt.txlen++] = 0;        		// Protocol Name Length MSB    
-    _mqtt.txbuf[_mqtt.txlen++] = 4;        		// Protocol Name Length LSB    
-    _mqtt.txbuf[_mqtt.txlen++] = 'M';        	// ASCII Code for M    
-    _mqtt.txbuf[_mqtt.txlen++] = 'Q';        	// ASCII Code for Q    
-    _mqtt.txbuf[_mqtt.txlen++] = 'T';        	// ASCII Code for T    
-    _mqtt.txbuf[_mqtt.txlen++] = 'T';        	// ASCII Code for T    
+	_mqtt.txbuf[_mqtt.txlen++] = 0;        		// Protocol Name Length MSB    
+	_mqtt.txbuf[_mqtt.txlen++] = 4;        		// Protocol Name Length LSB    
+	_mqtt.txbuf[_mqtt.txlen++] = 'M';        	// ASCII Code for M    
+	_mqtt.txbuf[_mqtt.txlen++] = 'Q';        	// ASCII Code for Q    
+	_mqtt.txbuf[_mqtt.txlen++] = 'T';        	// ASCII Code for T    
+	_mqtt.txbuf[_mqtt.txlen++] = 'T';        	// ASCII Code for T    
 	//协议级别
-    _mqtt.txbuf[_mqtt.txlen++] = 4;        		// MQTT Protocol version = 4    
+	_mqtt.txbuf[_mqtt.txlen++] = 4;        		// MQTT Protocol version = 4    
 	//连接标志
-    _mqtt.txbuf[_mqtt.txlen++] = 0xc2;        	// conn flags 
-    _mqtt.txbuf[_mqtt.txlen++] = 0;        		// Keep-alive Time Length MSB    
-    _mqtt.txbuf[_mqtt.txlen++] = 60;        	// Keep-alive Time Length LSB  60S������  
+	_mqtt.txbuf[_mqtt.txlen++] = 0xc2;        	// conn flags 
+	_mqtt.txbuf[_mqtt.txlen++] = 0;        		// Keep-alive Time Length MSB    
+	_mqtt.txbuf[_mqtt.txlen++] = 60;        	// Keep-alive Time Length LSB  60S������  
 	
-    _mqtt.txbuf[_mqtt.txlen++] = BYTE1(ClientIDLen);// Client ID length MSB    
-    _mqtt.txbuf[_mqtt.txlen++] = BYTE0(ClientIDLen);// Client ID length LSB  	
+	_mqtt.txbuf[_mqtt.txlen++] = BYTE1(ClientIDLen);// Client ID length MSB    
+	_mqtt.txbuf[_mqtt.txlen++] = BYTE0(ClientIDLen);// Client ID length LSB  	
 	memcpy(&_mqtt.txbuf[_mqtt.txlen],ClientID,ClientIDLen);
-    _mqtt.txlen += ClientIDLen;
+	_mqtt.txlen += ClientIDLen;
     
-    if(UsernameLen > 0)
-    {   
-        _mqtt.txbuf[_mqtt.txlen++] = BYTE1(UsernameLen);		//username length MSB    
-        _mqtt.txbuf[_mqtt.txlen++] = BYTE0(UsernameLen);    	//username length LSB    
+	if(UsernameLen > 0){   
+		_mqtt.txbuf[_mqtt.txlen++] = BYTE1(UsernameLen);		//username length MSB    
+		 _mqtt.txbuf[_mqtt.txlen++] = BYTE0(UsernameLen);    	//username length LSB    
 		memcpy(&_mqtt.txbuf[_mqtt.txlen],Username,UsernameLen);
-        _mqtt.txlen += UsernameLen;
-    }
+		_mqtt.txlen += UsernameLen;
+	}
     
-    if(PasswordLen > 0)
-    {    
-        _mqtt.txbuf[_mqtt.txlen++] = BYTE1(PasswordLen);		//password length MSB    
-        _mqtt.txbuf[_mqtt.txlen++] = BYTE0(PasswordLen);    	//password length LSB  
+	if(PasswordLen > 0){    
+		_mqtt.txbuf[_mqtt.txlen++] = BYTE1(PasswordLen);		//password length MSB    
+		_mqtt.txbuf[_mqtt.txlen++] = BYTE0(PasswordLen);    	//password length LSB  
 		memcpy(&_mqtt.txbuf[_mqtt.txlen],Password,PasswordLen);
-        _mqtt.txlen += PasswordLen; 
-    }    
+		_mqtt.txlen += PasswordLen; 
+	}    
 	
 	uint8_t cnt=10;
 	uint8_t wait;
-	while(cnt--)
-	{
+	while(cnt--){
 		UART_RX_STA=0;
 		memset(_mqtt.rxbuf,0,_mqtt.rxlen);
 		Mqtt_SendBuf((char *)_mqtt.txbuf,_mqtt.txlen);
@@ -163,16 +159,16 @@ static uint8_t Connect(char *ClientID,char *Username,char *Password)
 static uint8_t SubscribeTopic(char *topic,uint8_t qos,uint8_t whether)
 {    
 	_mqtt.txlen=0;
-    int topiclen = strlen(topic);
+	int topiclen = strlen(topic);
 	
 	int DataLen = 2 + (topiclen+2) + (whether?1:0);//可变报头的长度（2字节）加上有效载荷的长度
 	//固定报头
 	//控制报文类型
-    if(whether) _mqtt.txbuf[_mqtt.txlen++] = 0x82; //消息类型和标志订阅
-    else	_mqtt.txbuf[_mqtt.txlen++] = 0xA2;    //取消订阅
-
-	do
-	{
+	if(whether) 
+		_mqtt.txbuf[_mqtt.txlen++] = 0x82; //消息类型和标志订阅
+	else	
+		_mqtt.txbuf[_mqtt.txlen++] = 0xA2;    //取消订阅
+	do{
 		uint8_t encodedByte = DataLen % 128;
 		DataLen = DataLen / 128;
 		// if there are more data to encode, set the top bit of this byte
@@ -182,18 +178,17 @@ static uint8_t SubscribeTopic(char *topic,uint8_t qos,uint8_t whether)
 	}while ( DataLen > 0 );	
 	
 	//可变报头
-    _mqtt.txbuf[_mqtt.txlen++] = 0;				//消息标识符 MSB
-    _mqtt.txbuf[_mqtt.txlen++] = 0x01;           //消息标识符 LSB
+	_mqtt.txbuf[_mqtt.txlen++] = 0;				//消息标识符 MSB
+	_mqtt.txbuf[_mqtt.txlen++] = 0x01;           //消息标识符 LSB
 	//有效载荷
-    _mqtt.txbuf[_mqtt.txlen++] = BYTE1(topiclen);//主题长度 MSB
-    _mqtt.txbuf[_mqtt.txlen++] = BYTE0(topiclen);//主题长度 LSB  
+	_mqtt.txbuf[_mqtt.txlen++] = BYTE1(topiclen);//主题长度 MSB
+	_mqtt.txbuf[_mqtt.txlen++] = BYTE0(topiclen);//主题长度 LSB  
 	memcpy(&_mqtt.txbuf[_mqtt.txlen],topic,topiclen);
-    _mqtt.txlen += topiclen;
+	_mqtt.txlen += topiclen;
     
-    if(whether)
-    {
-        _mqtt.txbuf[_mqtt.txlen++] = qos;//QoS级别
-    }
+	if(whether){
+		_mqtt.txbuf[_mqtt.txlen++] = qos;//QoS级别
+	}
 	
 	uint8_t cnt=2;
 	uint8_t wait;
@@ -202,10 +197,8 @@ static uint8_t SubscribeTopic(char *topic,uint8_t qos,uint8_t whether)
 		memset(_mqtt.rxbuf,0,_mqtt.rxlen);
 		Mqtt_SendBuf((char *)_mqtt.txbuf,_mqtt.txlen);
 		wait=30;//等待3s时间
-		while(wait--)
-		{
-			if(_mqtt.rxbuf[0]==parket_subAck[0] && _mqtt.rxbuf[1]==parket_subAck[1]) //订阅成功
-			{
+		while(wait--){
+			if(_mqtt.rxbuf[0]==parket_subAck[0] && _mqtt.rxbuf[1]==parket_subAck[1]){
 				return 1;//订阅成功
 			}
 			board_delay_ms(100,1);			
@@ -221,24 +214,24 @@ static uint8_t SubscribeTopic(char *topic,uint8_t qos,uint8_t whether)
 //qos     消息等级 
 static uint8_t PublishData(char *topic, char *message, uint8_t qos)
 {  
-    int topicLength = strlen(topic);    
-    int messageLength = strlen(message);     
-    static uint16_t id=0;
+	int topicLength = strlen(topic);    
+	int messageLength = strlen(message);     
+	static uint16_t id=0;
 	int DataLen;
 	_mqtt.txlen=0;
 	//有效载荷的长度这样计算：用固定报头中的剩余长度字段的值减去可变报头的长度
 	//QOS为0时没有标识符
 	//数据长度             主题名   报文标识符   有效载荷
-    if(qos)	DataLen = (2+topicLength) + 2 + messageLength;       
-    else	DataLen = (2+topicLength) + messageLength;   
-
-    //固定报头
+	if(qos)	
+		DataLen = (2+topicLength) + 2 + messageLength;       
+	else
+		DataLen = (2+topicLength) + messageLength;   
+    	//固定报头
 	//控制报文类型
-    _mqtt.txbuf[_mqtt.txlen++] = 0x30;    // MQTT Message Type PUBLISH  
+	_mqtt.txbuf[_mqtt.txlen++] = 0x30;    // MQTT Message Type PUBLISH  
 
 	//剩余长度
-	do
-	{
+	do{
 		uint8_t encodedByte = DataLen % 128;
 		DataLen = DataLen / 128;
 		// if there are more data to encode, set the top bit of this byte
@@ -248,22 +241,21 @@ static uint8_t PublishData(char *topic, char *message, uint8_t qos)
 	}while ( DataLen > 0 );	
 	
 	_mqtt.txbuf[_mqtt.txlen++] = BYTE1(topicLength);//主题长度MSB
-    _mqtt.txbuf[_mqtt.txlen++] = BYTE0(topicLength);//主题长度LSB 
+	_mqtt.txbuf[_mqtt.txlen++] = BYTE0(topicLength);//主题长度LSB 
 	memcpy(&_mqtt.txbuf[_mqtt.txlen],topic,topicLength);//拷贝主题
-    _mqtt.txlen += topicLength;
+	_mqtt.txlen += topicLength;
         
 	//报文标识符
-    if(qos)
-    {
-        _mqtt.txbuf[_mqtt.txlen++] = BYTE1(id);
-        _mqtt.txbuf[_mqtt.txlen++] = BYTE0(id);
-        id++;
-    }
+	if(qos){
+		_mqtt.txbuf[_mqtt.txlen++] = BYTE1(id);
+		_mqtt.txbuf[_mqtt.txlen++] = BYTE0(id);
+		id++;
+	}
 	memcpy(&_mqtt.txbuf[_mqtt.txlen],message,messageLength);
-    _mqtt.txlen += messageLength;
+	_mqtt.txlen += messageLength;
         
 	Mqtt_SendBuf((char*)_mqtt.txbuf,_mqtt.txlen);
-    return _mqtt.txlen;
+	return _mqtt.txlen;
 }
 
 static void SentHeart(void)
