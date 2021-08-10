@@ -76,14 +76,16 @@ float EnvTemp_High_Threshold=30;
 uint8_t sta;
 //**********************************************************
 
-void PrintEvent(sample_data_node_ptr front){
+void PrintEvent(sample_data_node_ptr front)
+{
 	for(uint32_t i=0;i<WIN_LENGTH;i++){
 		front = front->next_ptr;
 		EMBARC_PRINTF("%d,%d,%d\n",front->IRMS,-(front->active_power),-(front->reactive_power));
 	}
 }
 
-bool connect_cloud(){
+bool connect_cloud()
+{
 	EMBARC_PRINTF("Connnecting to the cloud platform...\r\n");
 	board_delay_ms(500, 1);
 	//检查ESP8266
@@ -119,7 +121,8 @@ bool connect_cloud(){
 	return CONNECT_OK;				
 }
 
-int main(void){
+int main(void)
+{
 //************************初始化*************************
 	EMBARC_PRINTF(" Initialize begin!\r\n");
 	if(ATT7053_init(att7053, 1200000)!=E_OK){
@@ -171,7 +174,7 @@ int main(void){
 		uint8_t DDS_State = (app_state & (uint8_t)1)==1;
 		uint8_t Fan_State = (app_state & (uint8_t)2)==2;
 		uint8_t cnt_2s=0;
-		if(++cnt_2s>=20){//
+		if(++cnt_2s>=20){
 			cnt_2s=0;
 			sprintf(mqtt_message,
 			"{\"method\":\"thing.service.property.set\",\"id\":\"123\",\"params\":{\
@@ -189,7 +192,7 @@ int main(void){
 			Fan_State,
 			DDS_State
 			);
-            EMBARC_PRINTF("massage=%s\r\n",mqtt_message);
+        	EMBARC_PRINTF("massage=%s\r\n",mqtt_message);
 			_mqtt.PublishData("/sys/a1HJbdW0mhX/ARC01/thing/event/property/post",mqtt_message,0);			
 		}
 		if(UART_RX_STA){
@@ -198,14 +201,15 @@ int main(void){
 			memset(_mqtt.rxbuf,0,_mqtt.rxlen);
 			UART_RX_STA = 0;
 		}			
-////********************************************************************************************
+//********************************************************************************************
 		data_buffer = data_buffer->next_ptr;
 		num++;		
 		msleep(100);
     }
 }
 
-float string2float(char *buf){
+float string2float(char *buf)
+{
 	float res=0;
 	int postive=1;
 	if((*buf)=='-'){
