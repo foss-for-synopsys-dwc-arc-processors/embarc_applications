@@ -35,8 +35,7 @@ _typdef_net _net=
  * 参数：None
  * 返回值：初始化结果，非0为初始化成功,0为失败
  */
-static uint8_t Init(uint8_t *prx,uint16_t rxlen,uint8_t *ptx,uint16_t txlen)
-{
+static uint8_t Init(uint8_t *prx,uint16_t rxlen,uint8_t *ptx,uint16_t txlen){
 	_net.rxbuf = prx;_net.rxlen = rxlen;
 	_net.txbuf = ptx;_net.txlen = txlen;
 	
@@ -44,26 +43,22 @@ static uint8_t Init(uint8_t *prx,uint16_t rxlen,uint8_t *ptx,uint16_t txlen)
 	memset(_net.txbuf,0,_net.txlen);
 	
 	_net.CloseTransmission();          //退出透传 
-    board_delay_ms(500,1);
+	board_delay_ms(500,1);
 	UART_RX_STA=0;
 	_net.SendString("AT+RST\r\n");   //重启ESP8266 
 	board_delay_ms(800,1);
 	UART_RX_STA=0;
-    if(_net.Check()==0)              //使用AT指令检查ESP8266是否存在
-    {
-        return 0;
-    }
-	
+	if(_net.Check()==0){              //使用AT指令检查ESP8266是否存在
+        	return 0;
+	}
 	UART_RX_STA=0;
-    memset(_net.rxbuf,0,_net.rxlen);    //清空接收缓冲
-    _net.SendString("ATE0\r\n");     	//关闭回显 
+	memset(_net.rxbuf,0,_net.rxlen);    //清空接收缓冲
+	_net.SendString("ATE0\r\n");     	//关闭回显 
 	board_delay_ms(50,1);
-    if(FindStr((char*)_net.rxbuf,"OK",500)==0)  //设置不成功
-    {
-        return 0;      
-    }
-    return 1;                         //设置成功
-
+	if(FindStr((char*)_net.rxbuf,"OK",500)==0){  //设置不成功
+        	return 0;      
+	}
+	return 1;                         //设置成功
 }
 
 /**
@@ -75,7 +70,7 @@ static uint8_t Init(uint8_t *prx,uint16_t rxlen,uint8_t *ptx,uint16_t txlen)
 static void Restore(void)
 {
 	_net.CloseTransmission();           //退出透传
-    board_delay_ms(500,1);
+	board_delay_ms(500,1);
 	_net.SendString("AT+RESTORE\r\n");//恢复出厂 	 
 }
 
@@ -86,8 +81,7 @@ static void Restore(void)
  *        非0 ESP8266正常
  *        0 ESP8266有问题  
  */
-static uint8_t Check(void)
-{
+static uint8_t Check(void){
 	uint8_t check_cnt=5;
 	while(check_cnt--)
 	{
@@ -115,8 +109,7 @@ static uint8_t Check(void)
  *         1. WIFI名和密码不正确
  *         2. 路由器连接设备太多,未能给ESP8266分配IP
  */
-static uint8_t ConnectAP(char* ssid,char* pswd)
-{
+static uint8_t ConnectAP(char* ssid,char* pswd){
 	uint8_t cnt=5;
 	while(cnt--)
 	{
@@ -129,7 +122,6 @@ static uint8_t ConnectAP(char* ssid,char* pswd)
 	}
 	if(cnt == 0) 
 		return 0;
-
 	cnt=2;
 	while(cnt--)
 	{
@@ -159,8 +151,7 @@ static uint8_t ConnectAP(char* ssid,char* pswd)
  *         2. 未连接AP
  *         3. 服务器端禁止添加(一般不会发生)
  */
-static uint8_t ConnectServer(char* mode,char* ip,uint16_t port)
-{
+static uint8_t ConnectServer(char* mode,char* ip,uint16_t port){
 	uint8_t cnt;
    
     _net.CloseTransmission();                   //多次连接需退出透传
@@ -206,8 +197,7 @@ static uint8_t ConnectServer(char* mode,char* ip,uint16_t port)
  * 返回值：
  *         连接结果,非0断开成功,0断开失败
  */
-static uint8_t DisconnectServer(void)
-{
+static uint8_t DisconnectServer(void){
 	uint8_t cnt=2;
     _net.CloseTransmission();	//退出透传
     board_delay_ms(500,1);
@@ -231,8 +221,7 @@ static uint8_t DisconnectServer(void)
  *      buffer:待发送数据
  * 返回值：None
  */
-static void SendBuf(char* buf,uint32_t len)
-{
+static void SendBuf(char* buf,uint32_t len){
     memset(_net.rxbuf,0,_net.rxlen);	
 	Uart_SendBuf(buf,len);
 }
@@ -244,14 +233,12 @@ static void SendBuf(char* buf,uint32_t len)
  *      buffer:待发送数据
  * 返回值：None
  */
-static void SendString(char* str)
-{
+static void SendString(char* str){
     memset(_net.rxbuf,0,_net.rxlen);
 	Uart_SendString(str);
 }
 
-static uint8_t OpenTransmission(void)
-{
+static uint8_t OpenTransmission(void){
 	//设置透传模式
 	uint8_t cnt=2;
 	while(cnt--)
@@ -267,8 +254,7 @@ static uint8_t OpenTransmission(void)
 	return 0;
 }
 //退出透传
-static void CloseTransmission(void)
-{
+static void CloseTransmission(void){
 	_net.SendString("+++"); board_delay_ms(50,1);;
 	_net.SendString("+++"); board_delay_ms(50,1);;
 }
