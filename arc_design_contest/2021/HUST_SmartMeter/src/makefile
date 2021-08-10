@@ -1,5 +1,5 @@
 # Application name
-APPL ?= NILM_IOTDK
+APPL ?= SmartMeter
 
 APPL_DEFINES = 
 
@@ -53,7 +53,9 @@ tensorflow/lite/micro/testing \
 tensorflow/lite/schema \
 third_party/arc_mli_iotdk_arcem9d/include \
 third_party/arc_mli_iotdk_arcem9d/include/api \
+third_party/flatbuffers/include \
 third_party/flatbuffers/include/flatbuffers \
+third_party/gemmlowp \
 third_party/gemmlowp/fixedpoint \
 third_party/gemmlowp/internal \
 third_party/kissfft \
