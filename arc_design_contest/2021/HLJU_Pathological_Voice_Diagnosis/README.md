@@ -22,13 +22,13 @@ This application is based on the ARC IoT Development Kit which work for Patholog
 
 ### System Architecture
 
-![system_architecture][0]
+![system_architecture](https://github.com/zhodj/embarc_applications/blob/master/arc_design_contest/2021/HLJU_Pathological_Voice_Diagnosis/images/system_architecture.png)
 
 ## Hardware and Software Setup
 ### Required Hardware
 - ARC IoT Development Kit
 
-	![ARC IoT Development Kit](https://github.com/zhodj/embarc_applications/blob/master/arc_design_contest/2021/HLJU_Pathological_Voice_Diagnosis/images/arc_iot_dev_kit.png)
+	![ARC IoT Development Kit](https://github.com/zhodj/embarc_applications/blob/master/arc_design_contest/2021/HLJU_Pathological_Voice_Diagnosis/images/arc_iot_development_kit.jpg)
 
 - WM8978 CODEC module
 
@@ -51,7 +51,7 @@ This application is based on the ARC IoT Development Kit which work for Patholog
 
 2.Connect I2S pins of WM8978 to I2S_RX of IoT DK.**The REF_CLK should not be connected untile the initialization of WM8978 is finished**.
 
-3.MAX7219 pins.
+3.OLED MC096GX pins.
 
 |OLED MC096GX pins|IoT DK pins  |
 |-----------------|-------------|
@@ -72,7 +72,7 @@ This application is based on the ARC IoT Development Kit which work for Patholog
 - Open serial terminal and configure it to right COM port and 115200bps.
 - Download with USB-JTAG or use bootloader to boot the program.
 - Connect the MCLK(REF_CLK) wire when seeing "Please connet the mclk !"at serial terminal.
-- Speak to the Mic.You'll see pathological or healthy result shows on the OLED screen.
+- Speak to the Mic. You'll see pathological or healthy result shows on the OLED screen.
 
 #### Makefile
 
