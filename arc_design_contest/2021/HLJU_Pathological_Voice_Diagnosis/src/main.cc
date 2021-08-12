@@ -34,13 +34,15 @@
 /* middleware level*/
 #include "u8g.h"
 
+extern "C" {
 #include "wm8978.h"
 #include "wm8978i2s.h"
+}
 #include "codec.h"
 #include "mfcc.h"
 
 #include <stdlib.h>
-#include "CppAddWrapper.h"
+#include "tensorflow/lite/micro/examples/voice_detection_experimental/main_functions.h"
 
 u8g_t u8g;
 
@@ -51,86 +53,35 @@ void u8g_prepare(void) {
 	u8g_SetFontPosTop(&u8g);			/* set the reference position for the character and string draw procedure */
 }
 
-/** first page in OLED */
-void u8g_box_frame(uint8_t a) {
-	//u8g_DrawStr(&u8g, 0, 0, "hello lnmm haha!");		/* draws a string at the specified x/y position */
-	u8g_DrawStr(&u8g, 0, 0, "hello Heathy");
-	//u8g_DrawBox(&u8g, 5,10,20,10);			/* draw a box (filled frame), starting at x/y position (upper left edge) */
-	//u8g_DrawBox(&u8g, 10+a,15,30,7);
-	//u8g_DrawStr(&u8g, 0, 30, "drawFrame");
-	//u8g_DrawFrame(&u8g, 5,10+30,20,10);		/* draw a frame, starting at x/y position (upper left edge) */
-	//u8g_DrawFrame(&u8g, 10+a,15+30,30,7);
+void u8g_box_frame_path() {
+        u8g_DrawStr(&u8g, 20, 20, "Detection Result:");         /* draws a string at the specified x/y position */
+        u8g_DrawStr(&u8g, 30, 40, "Pathological");
 }
 
-/** second page in OLED */
-void u8g_string(uint8_t a) {
-	u8g_DrawStr(&u8g, 30+a,31, " 0");
-	u8g_DrawStr90(&u8g, 30,31+a, " 90");		/* rotate string output by 90 degree */
-	u8g_DrawStr180(&u8g, 30-a,31, " 180");		/* rotate string output by 180 degree */
-	u8g_DrawStr270(&u8g, 30,31-a, " 270");		/* rotate string output by 270 degree */
+void u8g_box_frame_heal() {
+        u8g_DrawStr(&u8g, 20, 20, "Detection Result:");         /* draws a string at the specified x/y position */
+        u8g_DrawStr(&u8g, 45, 40, "Healthy");
 }
-
-/** third page in OLED */
-void u8g_line(uint8_t a) {
-	u8g_DrawStr(&u8g, 0, 0, "drawLine");
-	u8g_DrawLine(&u8g, 7+a, 10, 40, 55);		/* draw a line from (x1, y1) to (x2, y2) */
-	u8g_DrawLine(&u8g, 7+a*2, 10, 60, 55);
-	u8g_DrawLine(&u8g, 7+a*3, 10, 80, 55);
-	u8g_DrawLine(&u8g, 7+a*4, 10, 100, 55);
-}
-
-/** forth page in OLED */
-void u8g_ascii_1(void) {
-	char s[2] = " ";
-	uint8_t x, y;
-	u8g_DrawStr(&u8g, 0, 0, "ASCII page 1");
-	for( y = 0; y < 6; y++ ) {
-		for( x = 0; x < 16; x++ ) {
-			s[0] = y*16 + x + 32;
-			u8g_DrawStr(&u8g, x*7, y*10+10, s);
-		}
-	}
-}
-
-/** fifth page in OLED */
-void u8g_ascii_2(void) {
-	char s[2] = " ";
-	uint8_t x, y;
-	u8g_DrawStr(&u8g, 0, 0, "ASCII page 2");
-	for( y = 0; y < 6; y++ ) {
-		for( x = 0; x < 16; x++ ) {
-			s[0] = y*16 + x + 160;
-			u8g_DrawStr(&u8g, x*7, y*10+10, s);
-		}
-	}
-}
-
-uint8_t draw_state = 0;
 
 /** draw five pages in OLED */
-void draw(void) {
+void draw_path() {
 	u8g_prepare();
-	switch(draw_state >> 3) {
-		case 0: u8g_box_frame(draw_state&7); break;
-		//case 1: u8g_string(draw_state&7); break;
-		//case 2: u8g_line(draw_state&7); break;
-		//case 3: u8g_ascii_1(); break;
-		//case 4: u8g_ascii_2(); break;
-	}
+	u8g_box_frame_path();
 }
 
-//extern DEV_BUFFER rx_buffer;
-//static MFCC_STR mfcc_str;
+void draw_heal() {
+	u8g_prepare();
+	u8g_box_frame_heal(); 
+}
+
+static MFCC_STR mfcc_str;
 
 void run_mic(MFCC_STR* mfcc_str, int8_t* mfcc_buffer)
 {
-	mfcc_init(mfcc_str, NUM_MFCC_COEFFS, FRAME_LEN, MFCC_DEC_BITS);
-
- 	//printf("mfcc init\n");
-
+	
 	wm8978_init_func();//Config the WM8978 through I2C.
 
-	//printf("wm8978_init_func init\n");
+	printf("wm8978_init_func init\n");
 
 	int16_t* rx_buffer1 = (int16_t*)malloc(sizeof(int16_t) * 640*18);
 
@@ -145,25 +96,24 @@ void run_mic(MFCC_STR* mfcc_str, int8_t* mfcc_buffer)
 		printf("The audio_buf malloc failed\n");
 	}
 
-  	//printf("codec init\n");
+  	printf("codec init\n");
 
 	CODEC_init(audio_buf, rx_buffer1);//Start I2S transfer and interrupts.
 
-  	//printf("codec end\n");
+  	printf("codec end\n");
 
 	extract_features(mfcc_str, audio_buf, mfcc_buffer);
 
-	//for(int i = 0; i < NUM_FRAMES * NUM_MFCC_COEFFS; i++)
-	//	printf("%d ", mfcc_buffer[i]);
-	//printf("\n");
+	for(int i = 0; i < NUM_FRAMES * NUM_MFCC_COEFFS; i++)
+		printf("%d ", mfcc_buffer[i]);
+	printf("\n");
 
 	
 	free(rx_buffer1);
 	free(audio_buf);
-	
 }
 
-void run_oled()
+void oled_init()
 {
 	EMBARC_PRINTF("oled init\n");
 	u8g_InitComFn(&u8g, &u8g_dev_ssd1306_128x64_2x_i2c, U8G_COM_SSD_I2C);
@@ -171,31 +121,57 @@ void run_oled()
 	EMBARC_PRINTF("Display Width: %u, Display Height: %u\r\n" , u8g_GetWidth(&u8g), u8g_GetHeight(&u8g));
 	u8g_Begin(&u8g); 
 
+}
 
-    printf("draw oled\n");
+void show_pathological_result()
+{
 	u8g_FirstPage(&u8g); 
-	do {
-		draw();
+	do
+	{
+		draw_path();
 	} while (u8g_NextPage(&u8g));
 
 }
 
+void show_healthy_result()
+{
+	u8g_FirstPage(&u8g); 
+	do
+	{
+		draw_heal();
+	} while (u8g_NextPage(&u8g));
+
+}
+
+
 /** main entry for running ntshell */
 int main(void)
-{	
+{
+
+	mfcc_init(&mfcc_str, NUM_MFCC_COEFFS, FRAME_LEN, MFCC_DEC_BITS);
+	printf("mfcc init\n");
+
 	int8_t* mfcc_buffer = (int8_t*)malloc(sizeof(int8_t) * NUM_FRAMES * NUM_MFCC_COEFFS);
 	if (mfcc_buffer == NULL)
 	{
 		printf("The mfcc_buffer malloc failed\n");
 	}
 
-    MFCC_STR mfcc_str;
-
-	cppsetup();
 	run_mic(&mfcc_str, mfcc_buffer);
 
-	cpploop(mfcc_buffer);
-	run_oled();
+	int result = run_model(mfcc_buffer);
+
+	printf("result = %d\n", result);
+	
+	oled_init();
+
+	if(result == 1 )
+	{
+		show_pathological_result();
+	}else if(result == 0)
+	{
+		show_healthy_result();
+	}
 	
 	free(mfcc_buffer);
 
