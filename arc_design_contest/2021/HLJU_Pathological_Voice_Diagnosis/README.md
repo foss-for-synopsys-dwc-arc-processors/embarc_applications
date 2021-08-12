@@ -49,7 +49,7 @@ DEMO VIDEO:[Video presentation](https://v.youku.com/v_show/id_XNTE5MjY4NTIzNg==.
 ### Required Software
 - DesignWare ARC MetaWare Development Toolkit
 - TensorFlow Lite for Microcontrollers 
-- emcARC OSP 
+- emcARC OSP (github master branch)
 - Serial port terminal, such as putty, minicom or cutecom
 
 ### Hardware Connection
@@ -79,14 +79,14 @@ DEMO VIDEO:[Video presentation](https://v.youku.com/v_show/id_XNTE5MjY4NTIzNg==.
 - Download source code of Pathological Voice Diagnosis from github.
 - Make sure all the connections are correct.
 - The link script file has been modified to ensure the heap and stack are large enough and the addresses of program sections have also been redirected.Make sure the link script is correct.
-- Use MWDT compiler tool to compile source code, with some Tensorflow Lite source code and the RBK-NET network model 
+- Use MWDT compiler tool to compile the source code, which includes Tensorflow Lite and the RBK-NET binary model.
 
 ### Run This Application
 
 - Open serial terminal and configure it to right COM port and 115200bps.
 - Download with USB-JTAG or use bootloader to boot the program.
 - Connect the MCLK(REF_CLK) wire when seeing "Please connet the mclk !"at serial terminal.
-- Speak to the Mic. You'll see pathological or healthy result shows on the OLED screen.
+- Speak to the Mic. After some seconds, you'll see pathological or healthy result shows on the OLED screen.
 
 #### Makefile
 
@@ -110,10 +110,13 @@ See [ embARC Example User Guide][40], **"Options to Hard-Code in the Application
 
 |  file               |            Function                      |
 | ------------------- | -----------------------------------------|
-|  main.cc             |  Initialization and main loop            |
-|  mfcc.cc/mfcc.h      |  Algorithm of extracting mfcc features   |
-|  codec.cc/codec.h    |  Recive and store audio frames(interrupt)|
-|  FFT.cc/FFT.h        |  Fast Fourier transform                  |
+|  tensorflow         |  Tensorflow Lite Micro                   |
+|  third_party        |  Tensorflow Lite Micro third party       |
+|  main.cc            |  Initialization and main loop            |
+|  Makefile           |  Makefile                                |
+|  mfcc.cc/mfcc.h     |  Algorithm of extracting mfcc features   |
+|  codec.cc/codec.h   |  Recive and store audio frames(interrupt)|
+|  FFT.cc/FFT.h       |  Fast Fourier transform                  |
 |  wm8978.c/wm8978.h  |  Config wm8978 through I2C               |
 |  wm8978i2s.c/.h     |  I2S driver                              |
 
