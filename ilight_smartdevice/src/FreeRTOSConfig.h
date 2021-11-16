@@ -15,7 +15,7 @@
      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
      *                                                                       *
      *    Thank you!                                                         *
-     *                                                                       *ppppppppppppppppppppp
+     *                                                                       *
     ***************************************************************************
 
     This file is part of the FreeRTOS distribution.
