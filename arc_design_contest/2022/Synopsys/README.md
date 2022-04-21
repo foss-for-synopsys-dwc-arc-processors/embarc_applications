@@ -33,5 +33,19 @@ IoTDK的介绍和主要特性，请参考[这里](https://github.com/foss-for-sy
     - 应用实例，请参考[这里](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_mli/tree/mli_dev/examples/tutorial_emnist_tensorflow)
     - 说明文档，请参考[这里](https://foss-for-synopsys-dwc-arc-processors.github.io/embarc_mli/doc/build/html/index.html )
 - [集成MLI链接库的embARC OSP软件平台](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_osp/tree/embarc_mli )，支持GUN工具链。
+
+#### ARC IoT DK平台学习视频
+- Synopsys ARC处理器嵌入式编程基础, [2019](https://www.moore8.com/courses/2730), [2020](https://www.moore8.com/courses/3018)
+- [基于Synopsys ARC 处理器嵌入式人工智能软硬件入门](https://www.moore8.com/courses/2732)
+- [新思科技 ARC处理器Zephyr编程基础](https://www.moore8.com/courses/3019)
+- [第四届中国研究生创“芯”大赛企业宣讲会 | 新思专场](https://www.moore8.com/courses/3247)
+- [第四届中国研究生创“芯”大赛 |新思企业命题宣讲专场](https://www.moore8.com/courses/3260)
+
 ### ARC AIoT DK开发指南
-![ARC AIoT Development Kit](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/2022/Synopsys/img/AIoT.PNG)
+![ARC AIoT Development Kit](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/blob/master/arc_design_contest/2022/Synopsys/img/AIoT.PNG)
+
+#### ARC AIoT DK平台学习视频
+- [新思科技新一代 ARC EM9D AIoT DK 相关开发环境安装](https://www.bilibili.com/video/BV1yB4y1U7TE?p=2)
+- [ARC EM9D AIoT DK的基本接口实操介绍](https://www.bilibili.com/video/BV1yB4y1U7TE?p=3)
+- [ARC EM9D AIoT DK的TensorFlow相关开发流程](https://www.bilibili.com/video/BV1yB4y1U7TE?p=4)
+- [基于ARC EM9D AIoT DK的智能人员侦测监视器](https://www.bilibili.com/video/BV1yB4y1U7TE?p=1)
