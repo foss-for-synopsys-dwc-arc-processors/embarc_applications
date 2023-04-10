@@ -16,7 +16,7 @@
 - 邮寄地址	
 - 电子邮箱	
 2. 加入技术支持与交流QQ群：927784221
-3. 请参考计划书[模板](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/2023/研电赛-新思科技命题-项目计划书-模板.doc)，于两天内提交一份简要的项目计划书，并以此格式命名：研电赛-新思科技命题X-项目计划书-XXX（大学）-XXX（队伍名称）
+3. 请参考计划书[模板](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/研电赛-新思科技命题-项目计划书-模板.doc)，于两天内提交一份简要的项目计划书，并以此格式命名：研电赛-新思科技命题X-项目计划书-XXX（大学）-XXX（队伍名称）
 
 ### 工具链
 
