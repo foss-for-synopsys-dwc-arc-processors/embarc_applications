@@ -1,0 +1,25 @@
+# Application name
+APPL ?= CSpotter_IC
+BOARD = iotdk
+EXT_DEV_LIST += sensor/imu/mpu9250
+#
+# root dir of embARC
+#
+EMBARC_ROOT = ../
+
+MID_SEL = common 
+
+# application source dirs
+APPL_CSRC_DIR = .
+APPL_ASMSRC_DIR = .
+
+# application include dirs
+APPL_INC_DIR = .
+
+APPL_LIBS= libCSpotter_IC.a
+# include current project makefile
+COMMON_COMPILE_PREREQUISITES += makefile
+
+### Options above must be added before include options.mk ###
+# include key embARC build system makefile
+include $(EMBARC_ROOT)/options/options.mk
