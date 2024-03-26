@@ -15,15 +15,15 @@
 - 联系电话	
 - 邮寄地址	
 - 电子邮箱
-- Metaware及license申请邮件及Mac地址（不申请可不填）	
+- Metaware及license申请邮箱及Mac地址（不申请可不填）
 2. 加入技术支持与交流QQ群：927784221
 3. 请参考计划书[模板](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/研电赛-新思科技命题-项目计划书-模板.doc)，于两天内提交一份简要的项目计划书，并以此格式命名：研电赛-新思科技命题X-项目计划书-XXX（大学）-XXX（队伍名称）
 
 ### 工具链
 
 1. ARC GUN工具链 : [下载地址](https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases)
-2. ARC MetaWare工具链 : [下载地址](https://eval.synopsys.com/Home/MetaWare)、[Metaware软件及License申请步骤](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/2023/Metaware软件及License申请步骤.pdf)
-    - Meteware及license文件由新思美国团队处理，请务必在网站申请时备注`Used for attending ARC Design Contest, approved by Mark Cheng`，并发送邮件至snps_arcc@synopsys.com注明申请邮箱及Mac地址
+2. ARC MetaWare工具链 : [下载地址](https://eval.synopsys.com/Home/MetaWare)、[Metaware软件及License申请步骤](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/2022/Metaware软件及License申请步骤.pdf)
+    - Meteware及license文件由新思美国团队处理，请务必在网站申请时备注 "Apply for MetaWare & 3-month license used for attending ARC design contest, approved by Mark Cheng"，并发送邮件至snps_arcc@synopsys.com注明申请邮箱及Mac地址
 
 > **注意事项**
 >
