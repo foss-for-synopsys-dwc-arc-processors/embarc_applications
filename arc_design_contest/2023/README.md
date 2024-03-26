@@ -21,7 +21,7 @@
 ### 工具链
 
 1. ARC GUN工具链 : [下载地址](https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases)
-2. ARC MetaWare工具链 : [下载地址](https://eval.synopsys.com/Home/MetaWare)、[Metaware软件及License申请步骤](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/2023/Metaware软件及License申请步骤.pdf)
+2. ARC MetaWare工具链 : [下载地址](https://eval.synopsys.com/Home/MetaWare)、[Metaware软件及License申请步骤](https://github.com/foss-for-synopsys-dwc-arc-processors/embarc_applications/tree/master/arc_design_contest/2022/Metaware软件及License申请步骤.pdf)
 
 > **注意事项**
 >
