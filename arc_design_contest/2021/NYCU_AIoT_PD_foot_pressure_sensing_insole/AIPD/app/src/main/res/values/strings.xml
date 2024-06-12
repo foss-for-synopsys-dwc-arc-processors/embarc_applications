@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">AI PD</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="main_menu">Main menu</string>
+    <string name="log_out">Log out</string>
+    <string name="back">Back</string>
+    <string name="past_info">Past Info</string>
+    <string name="final_score">Final Score</string>
+    <string name="start">Start</string>
+    <string name="password">Password</string>
+    <string name="usr_name">Name</string>
+    <string name="register">Register</string>
+    <string name="sign_in">Sign in</string>
+    <string name="data_collecting">Data Collecting...</string>
+
+</resources>
