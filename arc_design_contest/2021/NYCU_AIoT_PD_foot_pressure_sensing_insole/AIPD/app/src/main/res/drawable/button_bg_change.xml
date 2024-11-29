@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transition  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#FF6200EE"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#FFC63E6C"/>
+        </shape>
+    </item>
+</transition >

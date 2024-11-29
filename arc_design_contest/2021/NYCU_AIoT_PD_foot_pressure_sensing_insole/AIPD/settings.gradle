@@ -1,0 +1,2 @@
+rootProject.name = "AI PD"
+include ':app'
