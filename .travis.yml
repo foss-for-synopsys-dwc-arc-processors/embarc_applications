@@ -1,5 +1,5 @@
 language: python
-python: 2.7
+python: 3.6
 
 sudo: required
 dist: trusty
@@ -15,19 +15,36 @@ env:
       "context": "travis-ci/$NAME",
       "target_url": "https://travis-ci.org/$TRAVIS_REPO_SLUG/jobs/$TRAVIS_JOB_ID"
       }\nDATA'
+      
+      COMMENT=none
+      COMMENTS=$'curl -so/dev/null --user "$EMBARC_BOT" --request POST
+      https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$TRAVIS_PULL_REQUEST/comments
+      --data @- << DATA\n{
+      "body": "$COMMENT"
+      }\nDATA'
     - EXPECTED=".ci/expected.ini"
+    - TOOLCHAIN="gnu"
+    - TOOLCHAIN_VER="latest"
+    - EXAMPLES=$(basename ${TRAVIS_REPO_SLUG})
 
 cache:
   pip: true
   directories:
-    - .cache/result
-    - .cache/toolchain 
+    - $HOME/.cache/result
+    - $HOME/.cache/toolchain 
 
 before_install:
-  - bash .ci/before_install.sh
   # setup git
   - git config --global user.name "${U_NAME}"
   - git config --global user.email "${U_EMAIL}"
+  - >
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      diff=$(git diff FETCH_HEAD master .ci)
+      if [ "$diff" == "" ]; then
+        git checkout remotes/origin/master -- .ci
+      fi
+    fi
+  - bash .ci/before_install.sh
 
 after_success:
   - bash -c "$STATUS" success "Local $NAME testing has passed"
@@ -40,21 +57,30 @@ script:
 
 matrix:
   include:
-    - env: NAME="emsk-11-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" TOOLCHAIN_VER="2017.09" EXAMPLES="embarc_applications"
+    - env: NAME="code-style-check"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-11-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="11" TOOLCHAIN_VER="2018.03" EXAMPLES="embarc_applications"
+
+    - env: NAME="emsk-11-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="11"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-22-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" TOOLCHAIN_VER="2017.09" EXAMPLES="embarc_applications"
+
+    - env: NAME="emsk-22-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="22"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-22-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="22" TOOLCHAIN_VER="2018.03" EXAMPLES="embarc_applications"
+
+    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" EXAMPLES="embarc_applications/ilight_smartdevice,embarc_applications/ibaby_smarthome_multinode,embarc_applications/aws_iot_smarthome,embarc_applications/aws_iot_smarthome_multinode,embarc_applications/aws_iot_smarthome_secureshield"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-23-gnu_201709" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" TOOLCHAIN_VER="2017.09" EXAMPLES="embarc_applications"
+
+    - env: NAME="emsk-23-gnu_latest" OSP_ROOT="." BOARD="emsk" BD_VER="23" EXAMPLES="embarc_applications/arc_design_contest,embarc_applications/ot_smarthome_multinode"
       os: linux
       compiler: gcc
-    - env: NAME="emsk-23-gnu_201803" OSP_ROOT="." BOARD="emsk" TOOLCHAIN="gnu" BD_VER="23" TOOLCHAIN_VER="2018.03" EXAMPLES="embarc_applications"
+
+    - env: NAME="hsdk-gnu-latest" OSP_ROOT="." BOARD="hsdk"
       os: linux
-      compiler: gcc    
+      compiler: gcc
+
+    - env: NAME="iotdk-gnu-latest" OSP_ROOT="." BOARD="iotdk"
+      os: linux
+      compiler: gcc
